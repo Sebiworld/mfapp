@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-buttons slot="end">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title translate>articles.title</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ng-progress [color]="'#FC8F00'"></ng-progress>
+
+<ion-content class="ion-padding">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="arrow-dropdown" [pullingText]="'action.refresh' | translate"
+      refreshingSpinner="circles" [refreshingText]="'general.loadingText' | translate">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <ion-list class="articles masonry-grid">
+    <app-article-teaser-tile class="article masonry-grid-item" *ngFor="let article of articlesService.articles | async"
+      [article]="article"></app-article-teaser-tile>
+  </ion-list>
+
+  <ion-infinite-scroll (ionInfinite)="doInfiniteLoad($event)" threshold="100px">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" [loadingText]="'general.loadingText' | translate">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+</ion-content>

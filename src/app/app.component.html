@@ -1,0 +1,56 @@
+<ion-app>
+  <ion-split-pane contentId="menu-content">
+    <ion-menu side="end" contentId="menu-content">
+      <ion-header>
+        <ion-toolbar color="dark">
+          <ion-title><img class="menu-title" src="assets/logo/logo_randlos_weiss.svg" /></ion-title>
+        </ion-toolbar>
+      </ion-header>
+      
+      <ion-content>
+        <ion-list class="pages-section">
+          <ion-menu-toggle auto-hide="true">
+            <ion-item [routerDirection]="'root'" [routerLink]="'/home'">
+              <ion-icon slot="start" name="home"></ion-icon>
+              <ion-label translate>dashboard.title</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+
+          <ion-menu-toggle auto-hide="false">
+            <ion-item [routerDirection]="'root'" [routerLink]="'/articles'">
+              <ion-icon slot="start" name="paper"></ion-icon>
+              <ion-label translate>articles.title</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+
+          <ion-menu-toggle auto-hide="false" *ngIf="authService.hasPermissions(['timetable-view']) | async">
+            <ion-item [routerDirection]="'root'" [routerLink]="'/timetable'">
+              <ion-icon slot="start" name="calendar"></ion-icon>
+              <ion-label translate>timetable.title</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+        </ion-list>
+
+        <div class="auth-section">
+          <ion-menu-toggle auto-hide="false">
+            <ion-button *ngIf="!(authService.isAuthenticated() | async)" color="success"
+              href="/login" fill="outline" translate>action.login</ion-button>
+            <ion-button *ngIf="(authService.isAuthenticated() | async)" color="danger"
+              (click)="authService.logout()" translate>action.logout</ion-button>
+          </ion-menu-toggle>
+        </div>
+
+        <!-- <div class="chat-section">
+          <img src="/assets/img/chatbot.png" />
+          <ion-item class="chat-input">
+            <ion-label position="floating" translate>chat.question</ion-label>
+            <ion-input></ion-input>
+          </ion-item>
+        </div> -->
+
+
+      </ion-content>
+    </ion-menu>
+    <ion-router-outlet id="menu-content"></ion-router-outlet>
+  </ion-split-pane>
+</ion-app>

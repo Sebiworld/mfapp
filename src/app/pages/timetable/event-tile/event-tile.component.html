@@ -1,0 +1,52 @@
+<ion-card class="event-tile" [class.has-main-image]="mainImageDataUrl$|async">
+  <!-- <div class="aspect-ratio ar-2-1">
+    <div class="ar-content main-image" [style.background-image]="mainImageDataUrl$|async">
+    </div>
+  </div> -->
+
+  <ion-card-content [style.border-left-color]="color ? color : ''">
+    <!-- <div class="event-tile-wrapper">
+      <div class="event-date">
+        <span class="weekday datetime_from">{{datetime_from.format('dddd')}}</span>
+        <span class="timestamp datetime_from">{{datetime_from.format('Do
+          MMM')}}</span>
+
+        <span class="spacer" *ngIf="!(datetime_from.isSame(datetime_until, 'day'))">
+          <ion-icon name="remove"></ion-icon>
+        </span>
+        <span class="weekday datetime_from" *ngIf="!(datetime_from.isSame(datetime_until, 'day'))">{{datetime_until.format('dddd')}}</span>
+        <span class="timestamp datetime_until" *ngIf="!(datetime_from.isSame(datetime_until, 'day'))">{{datetime_until.format('Do
+          MMM')}}</span>
+      </div>
+    </div> -->
+
+    <div class="event-content">
+      <ion-card-title class="title" [innerHTML]="event.title"></ion-card-title>
+
+      <p class="intro" [innerHTML]="event.intro"></p>
+
+      <div class="time-period-days" *ngIf="timePeriodsByDay">
+        <div class="time-period-day" *ngFor="let timePeriodDay of timePeriodsByDay">
+          <h3 class="day-label" *ngIf="timePeriodsByDay.length > 1">{{timePeriodDay.date | amFromUnix | amDateFormat:
+            'Do MMM'}}:</h3>
+          <ion-list class="time-periods-list">
+            <ion-item-sliding *ngFor="let timePeriod of timePeriodDay.time_periods">
+              <ion-item>
+                <ion-label class="time-period-item"><span class="time-period-time">{{timePeriod.datetime_from
+                    | amFromUnix |
+                    amDateFormat:'LT'}} - {{timePeriod.datetime_until | amFromUnix
+                    |
+                    amDateFormat:'LT'}}</span><span class="time-period-title"
+                    [innerHTML]="timePeriod.title"></span></ion-label>
+              </ion-item>
+
+              <ion-item-options side="end">
+                <!-- <ion-item-option (click)="unread(item)">Remember</ion-item-option> -->
+              </ion-item-options>
+            </ion-item-sliding>
+          </ion-list>
+        </div>
+      </div>
+    </div>
+  </ion-card-content>
+</ion-card>

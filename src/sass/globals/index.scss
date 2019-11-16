@@ -1,0 +1,12 @@
+/*
+Lädt alle Funktionen und Variablen, die global verwendet werden sollen. Achtung: Hier darf KEINE Html-Ausgabe passieren!
+ */
+// Funktionen
+@import "functions/angular";
+@import "functions/colors";
+
+// Variablen
+@import "settings/variables";
+
+// Mixins
+@import "mixins/font-size";

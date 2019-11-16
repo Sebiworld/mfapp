@@ -1,0 +1,74 @@
+.toast {
+	&.primary {
+		.toast-container,
+		.toast-wrapper,
+		.toast-button {
+			background: var(--ion-color-primary, #262626);
+			color: var(--ion-color-primary-contrast, #fff);
+		}
+	}
+	&.secondary {
+		.toast-container,
+		.toast-wrapper,
+		.toast-button {
+			background: var(--ion-color-secondary, #262626);
+			color: var(--ion-color-secondary-contrast, #fff);
+		}
+	}
+	&.tertiary {
+		.toast-container,
+		.toast-wrapper,
+		.toast-button {
+			background: var(--ion-color-tertiary, #262626);
+			color: var(--ion-color-tertiary-contrast, #fff);
+		}
+	}
+	&.danger {
+		.toast-container,
+		.toast-wrapper,
+		.toast-button {
+			background: var(--ion-color-danger, #262626);
+			color: var(--ion-color-danger-contrast, #fff);
+		}
+	}
+	&.success {
+		.toast-container,
+		.toast-wrapper,
+		.toast-button {
+			background: var(--ion-color-success, #262626);
+			color: var(--ion-color-success-contrast, #fff);
+		}
+	}
+	&.warning {
+		.toast-container,
+		.toast-wrapper,
+		.toast-button {
+			background: var(--ion-color-warning, #262626);
+			color: var(--ion-color-warning-contrast, #fff);
+		}
+	}
+	&.light {
+		.toast-container,
+		.toast-wrapper,
+		.toast-button {
+			background: var(--ion-color-light, #262626);
+			color: var(--ion-color-light-contrast, #fff);
+		}
+	}
+	&.medium {
+		.toast-container,
+		.toast-wrapper,
+		.toast-button {
+			background: var(--ion-color-medium, #262626);
+			color: var(--ion-color-medium-contrast, #fff);
+		}
+	}
+	&.dark {
+		.toast-container,
+		.toast-wrapper,
+		.toast-button {
+			background: var(--ion-color-dark, #262626);
+			color: var(--ion-color-dark-contrast, #fff);
+		}
+	}
+}

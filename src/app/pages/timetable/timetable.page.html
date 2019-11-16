@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-buttons slot="end">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title translate>timetable.title</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ng-progress [color]="'#FC8F00'"></ng-progress>
+
+<ion-content class="ion-padding">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="arrow-dropdown"
+      [pullingText]="'action.refresh' | translate" refreshingSpinner="circles"
+      [refreshingText]="'general.loadingText' | translate">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <ion-list class="events masonry-grid">
+    <app-event-tile class="termin masonry-grid-item"
+      *ngFor="let event of timetableService.events | async" [event]="event">
+    </app-event-tile>
+  </ion-list>
+
+  <ion-infinite-scroll (ionInfinite)="doInfiniteLoad($event)" threshold="100px">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" [loadingText]="'general.loadingText' | translate">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+</ion-content>

@@ -1,0 +1,31 @@
+{
+    "dashboard": {
+        "title": "Dashboard"
+    },
+    "articles": {
+        "title": "Neuigkeiten",
+        "meta": "am {{date}}",
+        "authorsMeta": "Veröffentlicht von {{authorsString}}"
+    },
+    "timetable": {
+        "title": "Probenplan"
+    },
+    "general": {
+        "loadingText": "Inhalte werden geladen...",
+        "splashText": "Please wait a moment."
+    },
+    "login": {
+        "title": "Anmelden",
+        "username": "Benutzername",
+        "password": "Passwort"
+    },
+    "chat": {
+        "question": "Do you have a question?"
+    },
+    "action": {
+        "login": "Login",
+        "logout": "Logout",
+        "more": "Mehr...",
+        "refresh": "Neu laden"
+    }
+}

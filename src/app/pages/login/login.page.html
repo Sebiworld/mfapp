@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-buttons slot="end">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title translate>login.title</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ng-progress [color]="'#FC8F00'"></ng-progress>
+
+<ion-content class="ion-padding">
+  <form class="form-signin" [formGroup]="loginForm" (ngSubmit)="loginSubmit()">
+    <ion-list>
+      <ion-item>
+        <ion-label position="floating" translate>login.username</ion-label>
+        <ion-input formControlName="username" type="text" required="true"
+          autofocus="true"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating" translate>login.password</ion-label>
+        <ion-input formControlName="pass" type="password" required="true"
+          clearInput></ion-input>
+      </ion-item>
+
+      <ion-button class="button-block" type="submit" color="success"
+        [disabled]="!loginForm.valid" translate>action.login</ion-button>
+    </ion-list>
+  </form>
+</ion-content>

@@ -1,0 +1,23 @@
+<ion-card [class.has-main-image]="mainImageDataUrl$|async" class="article-tile">
+  <div class="aspect-ratio ar-2-1">
+    <div class="ar-content main-image"
+      [style.background-image]="mainImageDataUrl$|async">
+    </div>
+  </div>
+
+  <ion-card-content>
+    <ion-card-title class="title" [innerHTML]="article.title"></ion-card-title>
+    <div class="meta" translate [translateParams]="{date: article.datetime_from | amFromUnix | amDateFormat:'d.M.YYYY' }">
+      articles.meta
+    </div>
+
+    <p class="intro" [innerHTML]="article.intro"></p>
+  </ion-card-content>
+
+  <div class="card-footer">
+    <ion-button expand="block" color="light"
+      [routerLink]="[article.id]"
+      [queryParams]="{ id: article.id, title: article.title, datetime_from: article.datetime_from, color: article.color, intro: article.intro }"
+      translate>action.more</ion-button>
+  </div>
+</ion-card>

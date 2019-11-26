@@ -24,6 +24,8 @@ url: "/projekte/der-medicus/aktuelles/der-kartenverkauf-hat-begonnen/"
 */
 
 export class Article extends ApiPage{
+  public authorsString?: string;
+  
   constructor(
     public id: number,
     public name: string,
@@ -32,14 +34,15 @@ export class Article extends ApiPage{
     public created: Date,
     public modified: Date,
     public title: string,
-    public authors: Array<string>,
-    public color: string,
-    public datetime_from: Date,
-    public intro: string,
-    public main_image: ApiImage,
-    public contents: Array<ContentBlock>,
     public project: ApiPage,
-    public tags: Array<ApiPage>
+    public datetime_from: Date,
+    public main_image: ApiImage,
+    public color: string = 'FC8F00',
+    public intro: string = '',
+    public contents: ContentBlock[] = [],
+    public authors: string[] = [],
+    public tags: ApiPage[] = [],
+    public detailsLoaded: Boolean = false
   ) {
     super(id, name, url, template, created, modified, title);
   }
@@ -55,17 +58,18 @@ export class ArticleAdapter {
         item.name, 
         item.url, 
         item.template, 
-        item.created,
-        item.modified,
+        new Date(item.created),
+        new Date(item.modified),
         item.title,
-        item.authors,
-        item.color,
-        item.datetime_from,
-        item.intro,
-        item.main_image,
-        item.contents,
         item.project,
-        item.tags
+        item.datetime_from,
+        item.main_image,
+        item.color,
+        item.intro,
+        item.contents,
+        item.authors,
+        item.tags,
+        item.detailsLoaded
     );
   }
 }

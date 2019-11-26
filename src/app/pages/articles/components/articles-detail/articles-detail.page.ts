@@ -1,81 +1,93 @@
-import { Component, OnInit, OnChanges, ElementRef, Input } from "@angular/core";
+import { Component, OnInit, OnChanges, ElementRef, Input, OnDestroy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { Observable, BehaviorSubject, EMPTY } from "rxjs";
-import { map, tap, switchMap } from "rxjs/operators";
+import { Observable, BehaviorSubject, EMPTY, Subscription } from "rxjs";
+import { map, tap, switchMap, single, filter, find, distinctUntilChanged } from "rxjs/operators";
 import { ApiService } from "@services/api/api.service";
-import { DomSanitizer } from "@angular/platform-browser";
+import { DomSanitizer, SafeStyle } from "@angular/platform-browser";
+import { ArticlesService } from '@app/services/articles/articles.service';
+import { Article } from '@app/models/article.model';
 
 @Component({
-  selector: 'app-articles-detail',
-  templateUrl: './articles-detail.page.html',
-  styleUrls: ['./articles-detail.page.scss'],
+	selector: 'app-articles-detail',
+	templateUrl: './articles-detail.page.html',
+	styleUrls: ['./articles-detail.page.scss'],
 })
-export class ArticlesDetailPage implements OnInit, OnChanges {
+export class ArticlesDetailPage implements OnInit, OnDestroy {
 	private _id;
-	public title: string;
-	public page;
-	public color;
-	public authorsString = '';
+	public article$: Observable<Article>;
 
-	@Input()
-	private mainImageSrc: string;
-	private mainImageSrc$ = new BehaviorSubject(this.mainImageSrc);
+	private subscription: Subscription;
+
+	private mainImageDataUrl$: Observable<SafeStyle> = new BehaviorSubject('');
 
 	constructor(
 		private route: ActivatedRoute,
 		private apiService: ApiService,
 		private domSanitizer: DomSanitizer,
-		private elementRef: ElementRef
+		private elementRef: ElementRef,
+		public articlesService: ArticlesService
 	) { }
 
-	private setPage(page) {
-		this.page = page;
-		this.title = page.title;
-
-		this.color = "#FC8F00";
-		if (this.page.color) {
-			this.color = "#" + this.page.color;
-		}
-
-		this.elementRef.nativeElement.style.setProperty(
-			"--ion-color-primary",
-			this.color
+	ngOnInit(): void {
+		const idObservable$ = this.route.paramMap.pipe(
+			map(params => +params.get('id')),
+			filter(id => id > 0),
+			distinctUntilChanged()
 		);
 
-		this.authorsString = "";
-		if (page.authors && Array.isArray(page.authors)) {
-			if (page.authors.length === 1) {
-				this.authorsString = page.authors[0];
-			} else if (page.authors.length > 1) {
-				const lastAuthor = page.authors.pop();
-				this.authorsString = page.authors.join(', ');
-				this.authorsString += " & " + lastAuthor;
-			}
-		}
+		this.article$ = idObservable$.pipe(
+			switchMap(id => this.articlesService.detail(id)),
+			filter(article => article instanceof Article),
+			map(article => {
+				article.authorsString = '';
+				if (article.authors && Array.isArray(article.authors)) {
+					if (article.authors.length === 1) {
+						article.authorsString = article.authors[0];
+					} else if (article.authors.length > 1) {
+						const lastAuthor = article.authors.pop();
+						article.authorsString = article.authors.join(', ');
+						article.authorsString += " & " + lastAuthor;
+					}
+				}
+				return article;
+			}),
+			tap(article => {
+				this.elementRef.nativeElement.style.setProperty(
+					"--ion-color-primary",
+					'#' + article.color
+				);
+			})
+		);
 
-		if (this.page.id && this.page.main_image && this.page.main_image.basename) {
-			this.mainImageSrc$.next(this.mainImageSrc);
-		}
-	}
+		this.subscription = idObservable$.pipe(
+			switchMap(id => this.articlesService.loadDetail(id))
+		).subscribe();
 
-	ionViewWillEnter() {
-		// Initially, information can be passed from the parent page, which is displayed as long as the detailed information is loaded:
-		if (
-			this.route.snapshot.queryParams.id !== undefined &&
-			this.route.snapshot.queryParams.title !== undefined
-		) {
-			this.setPage(this.route.snapshot.queryParams);
-		}
+		this.mainImageDataUrl$ = this.article$.pipe(
+			switchMap((article) => {
+				if (
+					!article.id ||
+					!article.main_image ||
+					!article.main_image.basename
+				) {
+					return EMPTY;
+				}
 
-		this._id = this.route.snapshot.paramMap.get("id");
-		this.loadData().subscribe(response => {
-			this.setPage(response);
-		});
+				return this.apiService
+					.loadImage(article.id, article.main_image.basename)
+					.pipe(
+						map(image => {
+							return this.domSanitizer.bypassSecurityTrustStyle(
+								"url(" + image + ")"
+							);
+						})
+					);
+			})
+		)
 	}
 
 	doRefresh(event) {
-		this.loadData().subscribe(response => {
-			this.setPage(response);
+		this.articlesService.loadDetail(+this.route.snapshot.paramMap.get("id"), true).subscribe(() => {
 			event.target.complete();
 		});
 	}
@@ -88,31 +100,29 @@ export class ArticlesDetailPage implements OnInit, OnChanges {
 		);
 	}
 
-	public mainImageDataUrl$ = this.mainImageSrc$.pipe(
-		switchMap(() => {
-			if (
-				!this.page.id ||
-				!this.page.main_image ||
-				!this.page.main_image.basename
-			) {
-				return EMPTY;
-			}
-
-			return this.apiService
-				.loadImage(this.page.id, this.page.main_image.basename)
-				.pipe(
-					map(image => {
-						return this.domSanitizer.bypassSecurityTrustStyle(
-							"url(" + image + ")"
-						);
-					})
-				);
-		})
-	);
-
-	ngOnChanges(): void {
-		this.mainImageSrc$.next(this.mainImageSrc);
+	ngOnDestroy() {
+		this.subscription.unsubscribe();
 	}
 
-	ngOnInit(): void { }
+	// public mainImageDataUrl$ = this.mainImageSrc$.pipe(
+	// 	switchMap(() => {
+	// 		if (
+	// 			!this.page.id ||
+	// 			!this.page.main_image ||
+	// 			!this.page.main_image.basename
+	// 		) {
+	// 			return EMPTY;
+	// 		}
+
+	// 		return this.apiService
+	// 			.loadImage(this.page.id, this.page.main_image.basename)
+	// 			.pipe(
+	// 				map(image => {
+	// 					return this.domSanitizer.bypassSecurityTrustStyle(
+	// 						"url(" + image + ")"
+	// 					);
+	// 				})
+	// 			);
+	// 	})
+	// );
 }

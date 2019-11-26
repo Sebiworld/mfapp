@@ -4,7 +4,7 @@ import { List } from "immutable";
 import { Event } from "../../models/event.model";
 import { ApiService } from "../api/api.service";
 import { HttpParams } from "@angular/common/http";
-import { LoadingStatus } from "../../models/loading-status.model";
+import { LoadingStatus, LoadingStatusAdapter } from "../../models/loading-status.model";
 import { map } from "rxjs/operators";
 import * as moment from 'moment';
 
@@ -17,7 +17,7 @@ export class TimetableService {
 	);
 	// The load status of the last API request is saved here. (Are there any unloaded elements? What is the total number?)
 	private _loadingStatus: BehaviorSubject<LoadingStatus> = new BehaviorSubject(
-		new LoadingStatus({})
+		this.loadingStatusAdapter.adapt({})
 	);
 
 	// The two subjects are passed on to the outside via readonly observables:
@@ -28,7 +28,7 @@ export class TimetableService {
 		LoadingStatus
 	> = this._loadingStatus.asObservable();
 
-	constructor(private apiService: ApiService) {
+	constructor(private apiService: ApiService, private loadingStatusAdapter: LoadingStatusAdapter) {
 		this.loadInitialData();
 	}
 
@@ -50,7 +50,7 @@ export class TimetableService {
 	private loadData(overwrite: boolean = false) {
 		if (overwrite) {
 			this._events.next(List([]));
-			this._loadingStatus.next(new LoadingStatus({}));
+			this._loadingStatus.next(this.loadingStatusAdapter.adapt({}));
 		}
 
 		if(!this._loadingStatus.getValue().moreAvailable){
@@ -75,7 +75,7 @@ export class TimetableService {
 					!Array.isArray(response.events)
 				) {
 					this._loadingStatus.next(
-						new LoadingStatus({
+						this.loadingStatusAdapter.adapt({
 							moreAvailable: false,
 							totalNumber: 0,
 							start: 0,
@@ -125,7 +125,7 @@ export class TimetableService {
 				}
 
 				this._loadingStatus.next(
-					new LoadingStatus({
+					this.loadingStatusAdapter.adapt({
 						moreAvailable: response.moreAvailable,
 						totalNumber: response.totalNumber,
 						start: response.lastElementIndex,

@@ -13,30 +13,41 @@
 <ion-content class="ion-padding">
 
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content pullingIcon="arrow-dropdown" [pullingText]="'action.refresh' | translate"
-      refreshingSpinner="circles" [refreshingText]="'general.loadingText' | translate">
+    <ion-refresher-content pullingIcon="arrow-dropdown"
+      [pullingText]="'action.refresh' | translate" refreshingSpinner="circles"
+      [refreshingText]="'general.loadingText' | translate">
     </ion-refresher-content>
   </ion-refresher>
 
-  <ion-card *ngIf="page" [class.has-main-image]="mainImageDataUrl$|async" class="article-tile">
+  <ion-card *ngIf="article$ | async as article; else loading"
+    [class.has-main-image]="mainImageDataUrl$|async" class="article-tile">
     <div class="aspect-ratio ar-2-1">
-      <div class="ar-content main-image" [style.background-image]="mainImageDataUrl$|async">
+      <div class="ar-content main-image"
+        [style.background-image]="mainImageDataUrl$ | async">
       </div>
     </div>
 
     <ion-card-content>
-      <ion-card-title class="title" [innerHTML]="page.title"></ion-card-title>
-      <ion-card-subtitle *ngIf="authorsString" translate [translateParams]="{authorsString: authorsString}">articles.authorsMeta</ion-card-subtitle>
+      <ion-card-title class="title" [innerHTML]="article.title"></ion-card-title>
+      <ion-card-subtitle *ngIf="article.authorsString" translate
+        [translateParams]="{authorsString: article.authorsString}">articles.authorsMeta
+      </ion-card-subtitle>
 
-      <div class="meta" translate [translateParams]="{date: page.datetime_from | amFromUnix | amDateFormat:'d.M.YYYY' }">
+      <div class="meta" translate
+        [translateParams]="{date: article.datetime_from | amFromUnix | amDateFormat:'d.M.YYYY' }">
         articles.meta
       </div>
 
-      <div class="intro" [innerHTML]="page.intro"></div>
+      <div class="intro" [innerHTML]="article.intro"></div>
 
-      <app-content-blocks *ngIf="page.contents" [contents]="page.contents"></app-content-blocks>
+      <app-content-blocks *ngIf="article.contents" [contents]="article.contents">
+      </app-content-blocks>
 
     </ion-card-content>
   </ion-card>
+
+  <ng-template #loading>
+    <div>Loading ...</div>
+  </ng-template>
 
 </ion-content>

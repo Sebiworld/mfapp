@@ -70,7 +70,7 @@ export class ApiService {
 	 * @param filename
 	 */
 	loadImage(
-		page_id: string,
+		page_id: number,
 		filename: string,
 		params: HttpParams = new HttpParams()
 	): Observable<any> {
@@ -112,7 +112,7 @@ export class ApiService {
 		return this.get('current_user', params);
 	}
 
-	getPage(path: string, params: HttpParams = new HttpParams()): Observable<any> {
+	getPage(path: string|number, params: HttpParams = new HttpParams()): Observable<any> {
 		return this.get('page/' + path, params);
 	}
 

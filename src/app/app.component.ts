@@ -29,10 +29,10 @@ export class AppComponent {
 		this.translate.use('de');
 
 		this.platform.ready().then(() => {
-			// this.statusBar.styleDefault();
-			// this.statusBar.styleBlackOpaque();
+			this.statusBar.styleDefault();
+			this.statusBar.styleBlackOpaque();
 			// this.splashScreen.hide();
-			this.presentModal();
+			// this.presentModal();
 		});
 	}
 

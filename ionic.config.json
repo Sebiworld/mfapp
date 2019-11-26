@@ -1,7 +1,8 @@
 {
-  "name": "mfapp",
+  "name": "ninja.sebi.mfapp",
   "integrations": {
-    "cordova": {}
+    "cordova": {},
+    "capacitor": {}
   },
   "type": "angular"
 }

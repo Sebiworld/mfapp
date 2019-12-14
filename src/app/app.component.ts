@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, AfterViewInit } from "@angular/core";
 
 import { Platform, ModalController } from "@ionic/angular";
 import { SplashScreen } from "@ionic-native/splash-screen/ngx";
@@ -12,7 +12,7 @@ import { SplashPage } from "./pages/splash/splash.page";
 	selector: "app-root",
 	templateUrl: "app.component.html",
 })
-export class AppComponent {
+export class AppComponent implements AfterViewInit{
 	constructor(
 		private platform: Platform,
 		private splashScreen: SplashScreen,
@@ -45,5 +45,8 @@ export class AppComponent {
 			cssClass: 'splash-modal'
 		});
 		return await splash.present();
+	}
+
+	ngAfterViewInit() {
 	  }
 }

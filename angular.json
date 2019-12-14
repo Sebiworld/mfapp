@@ -43,7 +43,7 @@
 							},
 							{
 								"input": "src/sass/main/index.scss"
-							}
+              }
             ],
             "scripts": []
           },

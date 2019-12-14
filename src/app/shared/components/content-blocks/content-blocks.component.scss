@@ -1,0 +1,42 @@
+.row {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.content-block {
+  margin-bottom: 24px;
+  max-width: 100%;
+
+  &:first-child,
+  & > *:first-child {
+    margin-top: 0;
+  }
+
+  &:last-child,
+  & > *:last-child {
+    margin-bottom: 0;
+  }
+
+  .block-title {
+    margin-top: 16px;
+    margin-bottom: 8px;
+  }
+}
+
+.content-sub-block {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+p {
+  width: 38em;
+  max-width: 100%;
+}
+
+.center,
+.center > p {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}

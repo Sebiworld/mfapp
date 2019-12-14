@@ -1,1 +1,6 @@
-<p>contents-component works!</p>
+<div class="content-blocks">
+    <div class="content-block" *ngFor="let data of contents">
+        <app-content-text *ngIf="data.type === 'text'" [data]="data"></app-content-text>
+        <app-content-gallery *ngIf="data.type === 'gallery'" [data]="data"></app-content-gallery>
+    </div>
+</div>

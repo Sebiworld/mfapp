@@ -1,5 +1,5 @@
-import { ContentBlocksComponent } from './content-blocks/content-blocks.component';
+import { ImageModalComponent } from './image-modal/image-modal.component';
 
-export const components: any[] = [ContentBlocksComponent];
+export const components: any[] = [ImageModalComponent];
 
-export * from './content-blocks/content-blocks.component';
+export * from './image-modal/image-modal.component';

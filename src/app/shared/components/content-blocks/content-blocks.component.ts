@@ -8,13 +8,22 @@ import { ContentBlock } from 'src/app/models/content/content-block.model';
 })
 export class ContentBlocksComponent implements OnInit {
 
+  private _contents; // private property _item
+
+  get contents(): Array<ContentBlock> {
+    return this._contents;
+  }
+
   @Input()
-  private contents: Array<ContentBlock>;
-  
+  set contents(val: Array<ContentBlock>) {
+    this._contents = val;
+    console.log("contents: ", this._contents);
+  }
+
   constructor() { }
 
   ngOnInit() {
-    console.log("Contents: ", this.contents);
+    // console.log("Contents: ", this.contents);
   }
 
 }

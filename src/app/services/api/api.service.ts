@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpHeaders, HttpClient, HttpParams } from "@angular/common/http";
 import { Observable, throwError } from "rxjs";
-import { catchError, map } from "rxjs/operators";
+import { catchError, map, tap } from "rxjs/operators";
 import { environment } from "../../../environments/environment";
 import { DomSanitizer } from "@angular/platform-browser";
 
@@ -77,7 +77,8 @@ export class ApiService {
 		params = params.append("file", filename);
 
 		return this.get('file/' + page_id, params, { responseType: "blob" }).pipe(
-			map(e => URL.createObjectURL(e))
+			map(e => URL.createObjectURL(e)),
+			// tap(result => console.log("RS: ", filename))
 			// map(e => this.domSanitizer.bypassSecurityTrustUrl(URL.createObjectURL(e)))
 		);
 	}

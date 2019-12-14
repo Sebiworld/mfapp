@@ -6,6 +6,7 @@ import { ApiService } from "@services/api/api.service";
 import { DomSanitizer, SafeStyle } from "@angular/platform-browser";
 import { ArticlesService } from '@app/services/articles/articles.service';
 import { Article } from '@app/models/article.model';
+import { ContentBlocksModule } from '@app/shared/components/content-blocks/content-blocks.module';
 
 @Component({
 	selector: 'app-articles-detail',
@@ -18,7 +19,7 @@ export class ArticlesDetailPage implements OnInit, OnDestroy {
 
 	private subscription: Subscription;
 
-	private mainImageDataUrl$: Observable<SafeStyle> = new BehaviorSubject('');
+	// private mainImageDataUrl$: Observable<SafeStyle> = new BehaviorSubject('');
 
 	constructor(
 		private route: ActivatedRoute,
@@ -63,27 +64,27 @@ export class ArticlesDetailPage implements OnInit, OnDestroy {
 			switchMap(id => this.articlesService.loadDetail(id))
 		).subscribe();
 
-		this.mainImageDataUrl$ = this.article$.pipe(
-			switchMap((article) => {
-				if (
-					!article.id ||
-					!article.main_image ||
-					!article.main_image.basename
-				) {
-					return EMPTY;
-				}
+		// this.mainImageDataUrl$ = this.article$.pipe(
+		// 	switchMap((article) => {
+		// 		if (
+		// 			!article.id ||
+		// 			!article.main_image ||
+		// 			!article.main_image.basename
+		// 		) {
+		// 			return EMPTY;
+		// 		}
 
-				return this.apiService
-					.loadImage(article.id, article.main_image.basename)
-					.pipe(
-						map(image => {
-							return this.domSanitizer.bypassSecurityTrustStyle(
-								"url(" + image + ")"
-							);
-						})
-					);
-			})
-		)
+		// 		return this.apiService
+		// 			.loadImage(article.id, article.main_image.basename)
+		// 			.pipe(
+		// 				map(image => {
+		// 					return this.domSanitizer.bypassSecurityTrustStyle(
+		// 						"url(" + image + ")"
+		// 					);
+		// 				})
+		// 			);
+		// 	})
+		// )
 	}
 
 	doRefresh(event) {

@@ -27,10 +27,7 @@ export class ArticlesService {
 	}
 
 	private loadInitialData() {
-		this.loadArticles(true).subscribe(
-			response => console.log("ArticlesService response: ", response),
-			error => console.log("Error when retrieving articles", error)
-		);
+		this.loadArticles(true).subscribe();
 	}
 
 	public reload() {

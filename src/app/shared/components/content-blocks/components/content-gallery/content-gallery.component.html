@@ -1,0 +1,18 @@
+<div class="content-gallery">
+  <div class="content" [innerHTML]="data.text"></div>
+
+  <div class="gallery-items" #galleryitems>
+    <div class="gallery-sizer"></div>
+    <button class="gallery-item" *ngFor="let imagedata of getImages()" (click)="presentModal(imagedata)"
+      [class.width-2x]="imagedata.dimension_ratio && imagedata.dimension_ratio >= 1"
+      [class.width-4x]="imagedata.dimension_ratio && imagedata.dimension_ratio >= 2">
+      <figure class="gallery-image">
+        <img [defaultImage]="'/assets/placeholder/bg.png'"
+          [lazyLoad]="imagedata.basename + '?page=' + imagedata.page_id + '&width=' + (imagedata.dimension_ratio && imagedata.dimension_ratio >= 2 ? '500' : '250') + ' 1x, ' + imagedata.basename + '?page=' + imagedata.page_id + '&width=' + (imagedata.dimension_ratio && imagedata.dimension_ratio >= 2 ? '1000' : '500') + ' 2x'"
+          [useSrcset]="true" (onLoad)="refreshView($event)" />
+        <figcaption *ngIf="imagedata.caption" [innerHTML]="imagedata.caption">
+        </figcaption>
+      </figure>
+    </button>
+  </div>
+</div>

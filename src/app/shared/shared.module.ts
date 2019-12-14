@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
@@ -8,10 +8,18 @@ import 'moment/locale/de';
 
 import { NgProgressModule } from '@ngx-progressbar/core';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { ContentBlocksModule } from './components/content-blocks/content-blocks.module';
+import { LazyLoadImageModule } from 'ng-lazyload-image';
 import * as fromComponents from './components';
+import { ImageModalComponent } from './components';
 
 @NgModule({
-  declarations: [...fromComponents.components],
+  entryComponents: [
+    ImageModalComponent
+  ],
+  declarations: [
+    ...fromComponents.components
+  ],
   imports: [
     CommonModule,
     MomentModule,
@@ -19,7 +27,9 @@ import * as fromComponents from './components';
     NgxDatatableModule,
     FormsModule,
     ReactiveFormsModule,
-    TranslateModule
+    TranslateModule,
+    ContentBlocksModule,
+    LazyLoadImageModule
   ],
   exports: [
     ...fromComponents.components,
@@ -28,7 +38,10 @@ import * as fromComponents from './components';
     NgxDatatableModule,
     FormsModule,
     ReactiveFormsModule,
-    TranslateModule
-  ]
+    TranslateModule,
+    ContentBlocksModule,
+    LazyLoadImageModule
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class SharedModule { }

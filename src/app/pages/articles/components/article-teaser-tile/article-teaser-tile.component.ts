@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, ElementRef } from "@angular/core";
+import { Component, OnInit, Input, OnChanges, ElementRef, Renderer2 } from "@angular/core";
 import { ApiService } from "@services/api/api.service";
 import { BehaviorSubject, EMPTY, Observable } from "rxjs";
 import { switchMap, map, tap } from "rxjs/operators";
@@ -21,8 +21,9 @@ export class ArticleTeaserTileComponent implements OnInit, OnChanges {
 	constructor(
 		private apiService: ApiService,
 		private domSanitizer: DomSanitizer,
-		private elementRef: ElementRef,
-		private router: Router
+		private el: ElementRef,
+		private router: Router,
+		private renderer: Renderer2
 	) {}
 
 	public mainImageDataUrl$ = this.mainImageSrc$.pipe(
@@ -56,7 +57,7 @@ export class ArticleTeaserTileComponent implements OnInit, OnChanges {
 	ngOnInit(): void {
 		if(this.article.color){
 			this.color = '#' + this.article.color;
-			this.elementRef.nativeElement.style.setProperty('--ion-color-primary', this.color);
+			this.el.nativeElement.style.setProperty('--ion-color-primary', this.color);
 		}
 	}
 }

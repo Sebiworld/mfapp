@@ -42,7 +42,7 @@
     "cordova-ios": "^5.1.0",
     "core-js": "^2.6.10",
     "imagesloaded": "^4.1.4",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "masonry-layout": "^4.2.2",
     "moment": "^2.24.0",
     "ng-lazyload-image": "^7.0.1",

@@ -1,0 +1,91 @@
+{
+  "languages": {
+    "label": "Sprachen"
+  },
+  "not-found": {
+    "title": "404 Seite nicht gefunden",
+    "description": "Diese Seite konnte leider nicht gefunden werden.",
+    "back-to-home": "Zurück zur Startseite"
+  },
+  "footer": {
+    "cta": "Werden Sie Mitglied!",
+    "description": "Jetzt Vereinsmitglied werden, die Ziele unterstützen und das nächste Musical-Projekt fördern.",
+    "external": "Besuchen Sie uns auch hier:",
+    "by": "Entwickelt mit <heart/> von <a>Sebastian Schendel</a>.",
+    "copyright": "© 2023"
+  },
+  "home": {
+    "title": "Home",
+    "menu": "Home"
+  },
+  "user": {
+    "title": "Deine Benutzereinstellungen"
+  },
+  "calendar": {
+    "title": "Kalender",
+    "menu": "Kalender",
+    "loading": "Kalender wird geladen",
+    "event": {
+      "title": "Titel",
+      "description": "Beschreibung",
+      "description-placeholder": "Eine allgemeine Beschreibung hier einfügen (optional)",
+      "project": "Projekt",
+      "add": "Neuen Termin erstellen",
+      "edit": "Termin bearbeiten",
+      "save": "Termin speichern",
+      "save-success": "Der Termin wurde gespeichert.",
+      "delete": "Termin löschen",
+      "delete-confirmation": "Möchtest du diesen Termin wirklich löschen?",
+      "delete-success": "Der Termin wurde gelöscht.",
+      "timespan": {
+        "label": "Zeitblock",
+        "title": "Titel",
+        "time": "Zeit",
+        "time-from": "Von",
+        "time-until": "Bis",
+        "description": "Beschreibung",
+        "description-placeholder": "Inhalt hier einfügen",
+        "participants": "Teilnehmer",
+        "participants-placeholder": "Wer soll teilnehmen?",
+        "add": "Zeitblock hinzufügen"
+      },
+      "loading": "Termin wird geladen"
+    }
+  },
+  "news": {
+    "title": "Neuigkeiten",
+    "menu": "Neuigkeiten",
+    "view-archive": "Archiv ansehen"
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "menu": "Einstellungen",
+    "darkMode": "Dunkler Modus",
+    "on": "an",
+    "off": "aus",
+    "auto": "automatisch",
+    "save": "speichern"
+  },
+  "page-card": {
+    "btn-more": "Mehr dazu..."
+  },
+  "startup": {
+    "go": "Los geht's!"
+  },
+  "general": {
+    "required": "Pflichtfeld",
+    "done": "Ok",
+    "cancel": "Abbrechen",
+    "clear": "Zurücksetzen",
+    "loading": "Daten werden geladen",
+    "no-selection": "Keine Auswahl",
+    "yes": "Ja",
+    "no": "Nein",
+    "close": "Schließen"
+  },
+  "errors": {
+    "title": "Fehler:",
+    "not_found": "Daten nicht gefunden.",
+    "event_not_found": "Der Kalender-Eintrag wurde nicht gefunden."
+  }
+}

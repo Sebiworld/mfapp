@@ -1,0 +1,7 @@
+{
+  "name": "mfapp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "custom"
+}

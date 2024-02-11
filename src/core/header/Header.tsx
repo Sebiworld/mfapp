@@ -1,4 +1,4 @@
-import { Box, IconButton } from '@mui/joy';
+import { Box, IconButton, Sheet } from '@mui/joy';
 import Menu from '@mui/icons-material/Menu';
 import { headerStyles } from './header.styles';
 
@@ -9,18 +9,18 @@ export interface HeaderProps {
 
 export const Header = ({ setSidemenuOpen }: HeaderProps) => {
   return (
-    <Box component="header" sx={headerStyles}>
-      <Box className="container-left"></Box>
+    <Sheet component="header" sx={headerStyles}>
+      <Box component="nav" className="container-left"></Box>
 
-      <Box className="container-middle"></Box>
+      <Box component="nav" className="container-middle"></Box>
 
-      <Box className="container-right">
+      <Box component="nav" className="container-right">
         {setSidemenuOpen && (
           <IconButton variant="outlined" color="neutral" onClick={() => setSidemenuOpen(true)}>
             <Menu />
           </IconButton>
         )}
       </Box>
-    </Box>
+    </Sheet>
   );
 };

@@ -2,6 +2,15 @@ import { Box, Sheet, FormControl, FormLabel, Input, Button, Typography } from '@
 import { Link } from '@tanstack/react-router';
 
 export const DefaultPage = () => {
+
+  console.log('TEST', {
+    __APP_ENV__: process.env.__APP_ENV__,
+    __APP_GIT_COMMIT_REF__: process.env.__APP_GIT_COMMIT_REF__,
+    __APP_GIT_COMMIT_SHA__: process.env.__APP_GIT_COMMIT_SHA__,
+    __APP_APIURL__: process.env.__APP_APIURL__,
+    __APP_APIKEY__: process.env.__APP_APIKEY__,
+    __APP_LGLIC__: process.env.__APP_LGLIC__,
+  });
   return (
     <Box>
       <Sheet

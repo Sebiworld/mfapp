@@ -10,6 +10,7 @@ export const DefaultPage = () => {
     __APP_APIURL__: process.env.__APP_APIURL__,
     __APP_APIKEY__: process.env.__APP_APIKEY__,
     __APP_LGLIC__: process.env.__APP_LGLIC__,
+    VITE_VERCEL_ENV: process.env.VITE_VERCEL_ENV,
   });
   return (
     <Box>

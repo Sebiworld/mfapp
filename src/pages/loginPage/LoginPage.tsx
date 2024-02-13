@@ -34,7 +34,7 @@ export const LoginPage = () => {
         </FormControl>
 
         <Button sx={{ mt: 1 /* margin top */ }}>Log in</Button>
-        <Typography endDecorator={<Link href="/sign-up">Sign up</Link>} fontSize="sm" sx={{ alignSelf: 'center' }}>
+        <Typography endDecorator={<Link to="/">Sign up</Link>} fontSize="sm" sx={{ alignSelf: 'center' }}>
           Don't have an account?
         </Typography>
       </Sheet>

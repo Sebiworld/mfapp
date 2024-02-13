@@ -1,32 +1,27 @@
+import { ApiDefaultPage } from '@models/api-default-page.model';
 import axios from 'axios'
 const instance = axios.create({
-  baseURL: 'https://example.com',
+  baseURL: import.meta.env.VITE_APIURL,
   headers: {
-    'content-type': 'application/octet-stream',
-    'x-rapidapi-host': 'example.com',
-    'x-rapidapi-key': process.env.RAPIDAPI_KEY
+    'content-type': 'application/json',
+    'x-api-key': import.meta.env.VITE_APIKEY
   },
 });
 
 export const api = {
-  getData: () =>
+  getPage: (path: string, params?: { [key: string]: unknown }) =>
     instance({
-      'method': 'GET',
-      'url': '/query',
-      'params': {
-        'search': 'parameter',
-      },
-      transformResponse: [function (data) {
-        // Do whatever you want to transform the data
-        console.log('Transforming data...')
-        const json = JSON.parse(data)
-        // list of nested object keys
-        const dates = Object.keys(json['nested object'])
-        data = {
-          dates
+      method: 'GET',
+      url: `/tpage${(path?.[0] !== '/' ? '/' : '') + path}`,
+      params,
+      transformResponse: (response): ApiDefaultPage => {
+        try {
+          const json = JSON.parse(response);
+          return json as ApiDefaultPage;
+        } catch (e) {
+          throw new Error('Could not parse response')
         }
-        return data;
-      }],
+      }
     }),
   postData: () =>
     instance({

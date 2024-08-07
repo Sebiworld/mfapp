@@ -12,11 +12,13 @@
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
+    "allowJs": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
+    "declaration": true,
     /* Path Aliases */
     "baseUrl": "./",
     "paths": {
@@ -31,6 +33,9 @@
       ],
       "@routes/*": [
         "src/routes/*"
+      ],
+      "@api/*": [
+        "src/api/*"
       ],
       "@models/*": [
         "src/models/*"
@@ -55,7 +60,7 @@
     "noFallthroughCasesInSwitch": true,
   },
   "include": [
-    "src"
+    "src",
   ],
   "references": [
     {

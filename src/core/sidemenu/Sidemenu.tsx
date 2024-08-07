@@ -1,11 +1,9 @@
 import * as React from 'react';
 import Box from '@mui/joy/Box';
 import Drawer from '@mui/joy/Drawer';
-import Input from '@mui/joy/Input';
 import List from '@mui/joy/List';
 import ListItemButton from '@mui/joy/ListItemButton';
 import ModalClose from '@mui/joy/ModalClose';
-import Search from '@mui/icons-material/Search';
 import ThemeSelect from '@components/ThemeSelect';
 import { Stack } from '@mui/joy';
 import { sidemenuStyles } from './sidemenu.styles';
@@ -27,7 +25,8 @@ export const Sidemenu = ({ sidemenuOpen, setSidemenuOpen }: SidemenuProps) => {
           <ModalClose id="close-icon" sx={{ position: 'initial' }} />
         </Stack>
       </Box>
-      <Input
+
+      {/* <Input
         size="sm"
         placeholder="Search"
         variant="plain"
@@ -59,7 +58,7 @@ export const Sidemenu = ({ sidemenuOpen, setSidemenuOpen }: SidemenuProps) => {
             transform: 'scaleX(1)',
           },
         }}
-      />
+      /> */}
       <List
         size="lg"
         component="nav"
@@ -69,10 +68,9 @@ export const Sidemenu = ({ sidemenuOpen, setSidemenuOpen }: SidemenuProps) => {
           '& > div': { justifyContent: 'center' },
         }}
       >
-        <ListItemButton sx={{ fontWeight: 'lg' }}>Home</ListItemButton>
-        <ListItemButton>About</ListItemButton>
-        <ListItemButton>Studio</ListItemButton>
-        <ListItemButton>Contact</ListItemButton>
+        <ListItemButton sx={{ fontWeight: 'lg' }}>Start</ListItemButton>
+        <ListItemButton>Aktuelles</ListItemButton>
+        <ListItemButton>Probenplan</ListItemButton>
       </List>
     </Drawer>
   );

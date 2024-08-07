@@ -1,17 +1,28 @@
-
-import { Box } from '@mui/joy';
+import { Box, useColorScheme } from '@mui/joy';
 import { sectionSpacerStyles } from './sectionSpacer.styles';
 
 interface SectionSpacerProps {
   position?: 'top' | 'bottom';
   logo?: 'auto' | 'wide' | 'mobile';
+  logoColor?: 'auto' | 'original' | 'dark' | 'light';
+  color?: 'auto' | 'dark' | 'light';
 }
 
-export const SectionSpacer = ({ position, logo }: SectionSpacerProps) => {
+export const SectionSpacer = ({ position, logo, logoColor, color }: SectionSpacerProps) => {
+  const { mode } = useColorScheme();
+
+  if (logoColor !== 'original' && logoColor !== 'dark' && logoColor !== 'light') {
+    logoColor = mode === 'light' ? 'dark' : 'light';
+  }
+
+  if (color !== 'dark' && color !== 'light') {
+    color = mode === 'light' ? 'light' : 'dark';
+  }
+
   return (
     <Box
       sx={sectionSpacerStyles}
-      className={`section-spacer ${position ? 'position-' + position : ''} ${logo ? 'logo-' + logo : ''}`}
+      className={`section-spacer ${position ? 'position-' + position : ''} ${logo ? 'logo-' + logo : ''} ${logoColor ? 'logocolor-' + logoColor : ''} ${color ? 'color-' + color : ''}`}
     >
       <svg
         className="spacer-up"
@@ -144,4 +155,4 @@ export const SectionSpacer = ({ position, logo }: SectionSpacerProps) => {
       </svg>
     </Box>
   );
-}
+};

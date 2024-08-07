@@ -2,14 +2,18 @@ import { Box, IconButton, Sheet } from '@mui/joy';
 import Menu from '@mui/icons-material/Menu';
 import { headerStyles } from './header.styles';
 
-export interface HeaderProps {
+export interface HeaderState {
+  color?: 'default' | 'dark' | 'transparent' | 'translucent';
+}
+
+export interface HeaderProps extends HeaderState {
   sidemenuOpen?: boolean;
   setSidemenuOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const Header = ({ setSidemenuOpen }: HeaderProps) => {
+export const Header = ({ setSidemenuOpen, color }: HeaderProps) => {
   return (
-    <Sheet component="header" sx={headerStyles}>
+    <Sheet component="header" className={`color-${color || 'default'}`} sx={headerStyles}>
       <Box component="nav" className="container-left"></Box>
 
       <Box component="nav" className="container-middle"></Box>

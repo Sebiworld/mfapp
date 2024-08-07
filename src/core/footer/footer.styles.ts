@@ -2,15 +2,20 @@ import { SxProps } from "@mui/joy/styles/types";
 import { mfTheme } from "@styles/mfTheme";
 
 export const footerStyles: SxProps = {
+  position: 'relative',
+  marginTop: '6vw',
+
   '.mf-logo': {
     width: '200px',
     maxWidth: '100%',
     margin: '24px auto'
   },
 
-  '.section-spacer': {
-    '--background-color': 'var(--joy-palette-neutral-softBg)',
-    marginTop: '48px'
+  '.section-spacer.section-spacer': {
+    '--background-color': 'var(--variant-softBg, var(--joy-palette-neutral-softBg, var(--joy-palette-neutral-100, #F0F4F8)))',
+    position: 'absolute',
+    top: 'calc(-1 * 6vw)',
+    width: '100%'
   },
 
   '.footer': {

@@ -5,10 +5,22 @@ export const sectionSpacerStyles: SxProps = {
   '--background-color': '#ffffff',
   '--main-color': '#fd8a00',
   '--logo-start-color': 'var(--main-color)',
-  '--logo-end-color': '#ffffff',
+  '--logo-end-color': '#58585A',
 
   position: 'relative',
   display: 'block',
+
+  '&.logocolor-dark': {
+    '--logo-end-color': 'var(--joy-palette-text-primary)',
+  },
+
+  '&.logocolor-light': {
+    '--logo-end-color': '#ffffff',
+  },
+
+  '&.color-dark': {
+    '--background-color': '#000000',
+  },
 
   '.main-color-stripe': {
     fill: 'var(--main-color)'
@@ -82,11 +94,11 @@ export const sectionSpacerStyles: SxProps = {
       },
 
       [mfTheme.breakpoints.up('md')]: {
-        '.logo-wide': {
+        '.logo-wide.logo-wide': {
           display: 'block'
         },
 
-        '.logo-mobile': {
+        '.logo-mobile.logo-mobile': {
           display: 'none'
         }
       }

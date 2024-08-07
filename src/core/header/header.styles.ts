@@ -10,8 +10,18 @@ export const headerStyles: SxProps = {
   justifyContent: 'space-between',
   height: '48px',
   alignItems: 'center',
-  backgroundColor: 'rgba(0, 0, 0, 0.8)',
-  zIndex: 100,
+  backgroundColor: 'transparent',
+  zIndex: 1000,
   backdropFilter: 'blur(10px)',
-  WebkitBackdropFilter: 'blur(10px)'
+  WebkitBackdropFilter: 'blur(10px)',
+
+  'dark-bg': {
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+  },
+
+  '&.transparent-bg': {
+    backgroundColor: 'transparent',
+    backdropFilter: 'none',
+    WebkitBackdropFilter: 'none'
+  }
 }

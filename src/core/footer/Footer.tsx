@@ -24,8 +24,6 @@ export function Footer() {
 
   return (
     <Box className="footer-wrapper" sx={footerStyles}>
-      <SectionSpacer position="top"></SectionSpacer>
-
       <Sheet variant="soft" color="neutral" component="footer" className="footer">
         <MfLogo></MfLogo>
 
@@ -77,6 +75,8 @@ export function Footer() {
           <div className="copyright">{t('footer.copyright')}</div>
         </div>
       </Sheet>
+
+      <SectionSpacer position="top"></SectionSpacer>
     </Box>
   );
 }

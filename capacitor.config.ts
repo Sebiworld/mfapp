@@ -1,9 +1,9 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.mfapp',
+  appId: 'dev.sebi.mf-app',
   appName: 'mfapp',
-  webDir: 'build',
+  webDir: 'dist',
   server: {
     androidScheme: 'https'
   }

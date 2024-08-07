@@ -7,10 +7,24 @@ declare module '@mui/joy/styles' {
 }
 
 export const mfTheme = extendTheme({
-  "colorSchemes": {
-    "light": {
-      "palette": {
-        "primary": {
+  fontFamily: {
+    display: "Aileron, -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans- serif",
+    body: "Aileron, -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans- serif",
+  },
+
+  typography: {
+    h1: {
+      fontSize: '4rem'
+    },
+    h2: {
+      fontSize: '3.4rem'
+    }
+  },
+
+  colorSchemes: {
+    light: {
+      palette: {
+        primary: {
           "50": "#fff7ed",
           "100": "#ffedd5",
           "200": "#fed7aa",
@@ -22,7 +36,7 @@ export const mfTheme = extendTheme({
           "800": "#9a3412",
           "900": "#7c2d12"
         },
-        "danger": {
+        danger: {
           "50": "#fef2f2",
           "100": "#fee2e2",
           "200": "#fecaca",
@@ -34,7 +48,7 @@ export const mfTheme = extendTheme({
           "800": "#991b1b",
           "900": "#7f1d1d"
         },
-        "success": {
+        success: {
           "50": "#f0fdf4",
           "100": "#dcfce7",
           "200": "#bbf7d0",
@@ -46,7 +60,7 @@ export const mfTheme = extendTheme({
           "800": "#166534",
           "900": "#14532d"
         },
-        "warning": {
+        warning: {
           "50": "#fefce8",
           "100": "#fef9c3",
           "200": "#fef08a",
@@ -60,9 +74,9 @@ export const mfTheme = extendTheme({
         }
       }
     },
-    "dark": {
-      "palette": {
-        "primary": {
+    dark: {
+      palette: {
+        primary: {
           "50": "#fff7ed",
           "100": "#ffedd5",
           "200": "#fed7aa",
@@ -74,7 +88,7 @@ export const mfTheme = extendTheme({
           "800": "#9a3412",
           "900": "#7c2d12"
         },
-        "danger": {
+        danger: {
           "50": "#fef2f2",
           "100": "#fee2e2",
           "200": "#fecaca",
@@ -86,7 +100,7 @@ export const mfTheme = extendTheme({
           "800": "#991b1b",
           "900": "#7f1d1d"
         },
-        "success": {
+        success: {
           "50": "#f0fdf4",
           "100": "#dcfce7",
           "200": "#bbf7d0",
@@ -98,7 +112,7 @@ export const mfTheme = extendTheme({
           "800": "#166534",
           "900": "#14532d"
         },
-        "warning": {
+        warning: {
           "50": "#fefce8",
           "100": "#fef9c3",
           "200": "#fef08a",
@@ -110,7 +124,7 @@ export const mfTheme = extendTheme({
           "800": "#854d0e",
           "900": "#713f12"
         },
-        "neutral": {
+        neutral: {
           "50": "#f8f6f3",
           "100": "#f1eeec",
           "200": "#e2e0de",

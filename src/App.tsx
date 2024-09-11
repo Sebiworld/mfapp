@@ -1,20 +1,22 @@
 import { CssVarsProvider } from '@mui/joy';
 
 import CssBaseline from '@mui/joy/CssBaseline';
-import { mfTheme } from './styles/mfTheme';
-// import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import { Layout } from '@core/Layout';
-import { globalStyles } from '@styles/globalStyles';
+import { useInitializeApp } from '@utils/hooks/useInitializeApp';
+import { SplashScreen } from '@core/splashScreen/SplashScreen';
+import { mfTheme } from '@styles/theme/mfTheme';
+import { GlobalStylesElement } from '@styles/global/GlobalStylesElement';
 
 export const App = () => {
+  const { isInitialized } = useInitializeApp();
   return (
     <>
       <CssVarsProvider theme={mfTheme}>
         <CssBaseline />
-        {globalStyles}
+        {GlobalStylesElement}
         <Layout />
+        <SplashScreen visible={!isInitialized}></SplashScreen>
       </CssVarsProvider>
-      {/* <TanStackRouterDevtools position="bottom-right" /> */}
     </>
   );
 };

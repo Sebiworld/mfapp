@@ -1,11 +1,11 @@
 import { SxProps } from "@mui/material";
 
-export const defaultPageStyles: SxProps = {
+export const pageStyles: SxProps = {
   '.page-content': {
-    mx: 'auto', // margin left & right
-    my: 4, // margin top & bottom
-    py: 4, // padding top & bottom
-    px: 2, // padding left & right
+    mx: 'auto',
+    my: 4,
+    py: 4,
+    px: 2,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -17,5 +17,11 @@ export const defaultPageStyles: SxProps = {
       width: 300,
       marginY: '128px'
     }
+  },
+
+  '.alert': {
+    // width: 400,
+    mx: 'auto',
+    marginY: '128px'
   }
 };

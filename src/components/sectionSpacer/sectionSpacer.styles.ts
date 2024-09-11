@@ -1,5 +1,5 @@
 import { SxProps } from "@mui/joy/styles/types";
-import { mfTheme } from "@styles/mfTheme";
+import { mfTheme } from "@styles/theme/mfTheme";
 
 export const sectionSpacerStyles: SxProps = {
   '--background-color': '#ffffff',

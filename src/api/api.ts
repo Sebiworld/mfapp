@@ -1,6 +1,7 @@
 
 import { DefaultPageDto } from '@models/page/default-page-dto.model';
-import axios from 'axios'
+import { ProjectDto } from '@models/project-dto.model';
+import axios, { AxiosResponse } from 'axios'
 // import apiSchema from './schema.json';
 
 const axiosInstance = axios.create({
@@ -12,7 +13,22 @@ const axiosInstance = axios.create({
 });
 
 export const MFApi = {
-  getPage: (path: string, params?: { [key: string]: unknown }) =>
+  getProjects: (params?: { [key: string]: unknown }): Promise<AxiosResponse<ProjectDto[]>> =>
+    axiosInstance({
+      method: 'GET',
+      url: `/projects`,
+      params,
+      transformResponse: (response): ProjectDto => {
+        try {
+          const json = JSON.parse(response);
+          return json as ProjectDto;
+        } catch (e) {
+          throw new Error('Could not parse response')
+        }
+      }
+    }),
+
+  getPage: (path: string, params?: { [key: string]: unknown }): Promise<AxiosResponse<DefaultPageDto>> =>
     axiosInstance({
       method: 'GET',
       url: `/tpage${(path?.[0] !== '/' ? '/' : '') + path}`,
@@ -63,4 +79,18 @@ export const MFApi = {
   //       'content-type': 'application/json' // override instance defaults
   //     },
   //   })
+  getErrorTest: (params?: { [key: string]: unknown }) =>
+    axiosInstance({
+      method: 'GET',
+      url: `/errorTest`,
+      params,
+      transformResponse: (response): ProjectDto => {
+        try {
+          const json = JSON.parse(response);
+          return json as ProjectDto;
+        } catch (e) {
+          throw new Error('Could not parse response')
+        }
+      }
+    }),
 };

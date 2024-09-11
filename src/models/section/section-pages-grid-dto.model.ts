@@ -1,6 +1,7 @@
 
 import { ImageDto } from "@models/image-dto.model";
 import { SectionDto } from "./section-dto.model";
+import { GalleryTypeDto } from "@models/utility-types/gallery-type-dto.model";
 
 export interface SectionPagesGridPageDto {
   id: number;
@@ -14,4 +15,7 @@ export interface SectionPagesGridPageDto {
 export interface SectionPagesGridDto extends SectionDto {
   type: 'pages-grid';
   pages: SectionPagesGridPageDto[];
+  image_ratio?: string,
+  image_factor?: number,
+  gallery_type?: GalleryTypeDto
 }

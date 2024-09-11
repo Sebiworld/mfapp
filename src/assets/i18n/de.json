@@ -2,9 +2,43 @@
   "languages": {
     "label": "Sprachen"
   },
-  "not-found": {
-    "title": "404 Seite nicht gefunden",
-    "description": "Diese Seite konnte leider nicht gefunden werden.",
+  "splash": {
+    "1": "App wird initialisiert...",
+    "2": "Projekte werden geladen...",
+    "3": "Inhalte werden abgerufen...",
+    "4": "Musicals werden geschrieben...",
+    "5": "Kostüme werden geschneidert...",
+    "6": "Kabel werden verlegt...",
+    "7": "Lieder werden komponiert...",
+    "8": "Instrumente werden warmgespielt...",
+    "9": "Kulissen werden bemalt...",
+    "10": "Tänzer werden eingetanzt...",
+    "11": "Stühle werden gerückt...",
+    "12": "Stühle werden wieder entfernt, weil die Technik aufgebaut werden muss...",
+    "13": "Stühle werden erneut gerückt...",
+    "14": "Soundcheck wird gemacht...",
+    "15": "Darsteller werden geschminkt...",
+    "16": "Darsteller werden eingekleidet...",
+    "17": "Töne werden gefunden...",
+    "18": "App wird programmiert...",
+    "19": "Witze werden eingefügt...",
+    "20": "Server werden aufgetankt...",
+    "21": "System wird defragmentiert...",
+    "22": "Bits werden geschubst"
+  },
+  "loading": "Wird geladen",
+  "no-data": "Keine Daten",
+  "errors": {
+    "default_error": {
+      "title": "Fehler",
+      "description": "Beim Laden der Seite ist ein Fehler aufgetreten."
+    },
+    "not_found_exception": {
+      "title": "404 Seite nicht gefunden",
+      "description": "Diese Seite konnte leider nicht gefunden werden."
+    }
+  },
+  "actions": {
     "back-to-home": "Zurück zur Startseite"
   },
   "footer": {
@@ -82,10 +116,5 @@
     "yes": "Ja",
     "no": "Nein",
     "close": "Schließen"
-  },
-  "errors": {
-    "title": "Fehler:",
-    "not_found": "Daten nicht gefunden.",
-    "event_not_found": "Der Kalender-Eintrag wurde nicht gefunden."
   }
 }

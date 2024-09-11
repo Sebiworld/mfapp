@@ -1,6 +1,6 @@
 import { Box } from '@mui/joy';
 import { mfLogoStyles } from './mfLogo.styles';
-import { useColorTheme } from '@utils/hooks/useColorTheme.hook';
+import { useColorTheme } from '@utils/hooks/useColorTheme';
 
 export const MfLogo = () => {
   const theme = useColorTheme();

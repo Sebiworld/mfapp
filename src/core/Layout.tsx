@@ -6,7 +6,7 @@ import { Header } from './header/Header';
 import { Footer } from './footer/Footer';
 import { layoutStyles } from './layout.styles';
 import { Sidemenu } from './sidemenu/Sidemenu';
-import { useColorTheme } from '@utils/hooks/useColorTheme.hook';
+import { useColorTheme } from '@utils/hooks/useColorTheme';
 
 export const Layout = () => {
   const theme = useColorTheme();

@@ -9,10 +9,14 @@ import { SectionDtoVariant } from '@models/section/section-dto-variant.model';
 import { SectionPagesGridDto } from '@models/section/section-pages-grid-dto.model';
 
 interface SectionsContainerProps {
-  sections: SectionDtoVariant[];
+  sections?: SectionDtoVariant[];
 }
 
 export const SectionsContainer: FC<SectionsContainerProps> = ({ sections }) => {
+  if (!sections?.length) {
+    return undefined;
+  }
+
   return (
     <Box className="sections-container" sx={sectionContainerStyles}>
       {sections?.map((section) => {

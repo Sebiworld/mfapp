@@ -8,13 +8,13 @@ export interface SectionDto {
   id: string;
   section_name: string;
   title: string;
-  hide_title: boolean;
-  highlight: boolean;
-  classes: string;
-  title_index: number;
+  hide_title?: boolean;
+  highlight?: boolean;
+  classes?: string;
+  title_index?: number;
   reference?: PageDto;
   reference_label?: string;
-  contents: ContentBlockDtoVariant[];
+  contents?: ContentBlockDtoVariant[];
   main_image?: ImageDto;
   main_image_dark?: ImageDto;
   background_image?: ImageDto;

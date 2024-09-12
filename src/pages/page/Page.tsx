@@ -27,27 +27,10 @@ export const Page = () => {
   const loadPage = useGlobalStore(selectLoadPage);
 
   const isLoading = loadedPage?.status === "loading";
-  console.log("pageLoadingStatus", loadedPage);
 
   useEffect(() => {
     loadPage(currentPath);
   }, [currentPath, loadPage]);
-
-  // useEffect(() => {
-  //   setPage(undefined);
-  //   setIsLoading(true);
-  //   MFApi.getPage(currentPath)
-  //     .then((response) => {
-  //       setPage(response.data);
-  //       console.log('Page', response.data);
-  //     })
-  //     .catch((e) => {
-  //       console.log('ERROR', e);
-  //     })
-  //     .finally(() => {
-  //       setIsLoading(false);
-  //     });
-  // }, [currentPath]);
 
   return (
     <Box className="page" data-testid="page" sx={pageStyles}>

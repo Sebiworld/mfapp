@@ -1,72 +1,94 @@
-
-import { DefaultPageDto } from '@models/page/default-page-dto.model';
-import { ProjectDto } from '@models/project-dto.model';
-import axios, { AxiosResponse } from 'axios'
+import { DefaultPageDto } from "@models/page/default-page-dto.model";
+import { ProjectDto } from "@models/project-dto.model";
+import axios, { AxiosResponse } from "axios";
 // import apiSchema from './schema.json';
 
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_APIURL,
   headers: {
-    'content-type': 'application/json',
-    'x-api-key': import.meta.env.VITE_APIKEY
+    "content-type": "application/json",
+    "x-api-key": import.meta.env.VITE_APIKEY,
   },
 });
 
+export interface GetProjectsResponse {
+  hash?: string;
+  projects: { [key: number]: ProjectDto };
+}
+
 export const MFApi = {
-  getProjects: (params?: { [key: string]: unknown }): Promise<AxiosResponse<ProjectDto[]>> =>
+  getProjects: (params?: {
+    [key: string]: unknown;
+  }): Promise<AxiosResponse<GetProjectsResponse | undefined>> =>
     axiosInstance({
-      method: 'GET',
+      method: "GET",
       url: `/projects`,
       params,
-      transformResponse: (response): ProjectDto => {
+      transformResponse: (response): GetProjectsResponse | undefined => {
+        if (!response) {
+          return;
+        }
+
         try {
           const json = JSON.parse(response);
-          return json as ProjectDto;
+          return json as GetProjectsResponse;
         } catch (e) {
-          throw new Error('Could not parse response')
+          throw new Error("Could not parse response");
         }
-      }
+      },
     }),
 
-  getPage: (path: string, params?: { [key: string]: unknown }): Promise<AxiosResponse<DefaultPageDto>> =>
+  getPage: (
+    path: string,
+    params?: { [key: string]: unknown }
+  ): Promise<AxiosResponse<DefaultPageDto | undefined>> =>
     axiosInstance({
-      method: 'GET',
-      url: `/tpage${(path?.[0] !== '/' ? '/' : '') + path}`,
+      method: "GET",
+      url: `/tpage${(path?.[0] !== "/" ? "/" : "") + path}`,
       params,
-      transformResponse: (response): DefaultPageDto => {
+      transformResponse: (response): DefaultPageDto | undefined => {
+        if (!response) {
+          return;
+        }
+
         try {
           const json = JSON.parse(response);
           return json as DefaultPageDto;
         } catch (e) {
-          throw new Error('Could not parse response')
+          throw new Error("Could not parse response");
         }
-      }
+      },
     }),
-  getFile: (path: string, params?: { file: string, [key: string]: unknown }) =>
+  getFile: (path: string, params?: { file: string; [key: string]: unknown }) =>
     axiosInstance({
-      method: 'GET',
-      url: `/file${(path?.[0] !== '/' ? '/' : '') + path}`,
+      method: "GET",
+      url: `/file${(path?.[0] !== "/" ? "/" : "") + path}`,
       params,
       transformResponse: (response): void => {
-        console.log('RESPONSE', response)
-      }
+        console.log("RESPONSE", response);
+      },
     }),
-  getFileById: (id: number, params?: { file: string, [key: string]: unknown }) =>
+  getFileById: (
+    id: number,
+    params?: { file: string; [key: string]: unknown }
+  ) =>
     axiosInstance({
-      method: 'GET',
+      method: "GET",
       url: `/file/${id}`,
       params,
       transformResponse: (response): void => {
-        console.log('RESPONSE', response)
-      }
+        console.log("RESPONSE", response);
+      },
     }),
-  getFileByIdUrl: (id: number, params: { file: string, [key: string]: unknown }) =>
+  getFileByIdUrl: (
+    id: number,
+    params: { file: string; [key: string]: unknown }
+  ) =>
     `${axiosInstance.getUri({
-      method: 'GET',
+      method: "GET",
       url: `/file/${id}`,
-      params: { ...params, api_key: import.meta.env.VITE_APIKEY }
-    })}`
-  ,
+      params: { ...params, api_key: import.meta.env.VITE_APIKEY },
+    })}`,
   // postData: () =>
   //   instance({
   //     'method': 'POST',
@@ -81,7 +103,7 @@ export const MFApi = {
   //   })
   getErrorTest: (params?: { [key: string]: unknown }) =>
     axiosInstance({
-      method: 'GET',
+      method: "GET",
       url: `/errorTest`,
       params,
       transformResponse: (response): ProjectDto => {
@@ -89,8 +111,8 @@ export const MFApi = {
           const json = JSON.parse(response);
           return json as ProjectDto;
         } catch (e) {
-          throw new Error('Could not parse response')
+          throw new Error("Could not parse response");
         }
-      }
+      },
     }),
 };

@@ -14,6 +14,9 @@ export const useInitializeApp = () => {
   const initializeApp = useCallback(async () => {
     await loadProjects();
     setPartInitialized("projects");
+    setTimeout(() => {
+      loadProjects();
+    }, 1000);
   }, [loadProjects, setPartInitialized]);
 
   useEffect(() => {

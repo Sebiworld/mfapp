@@ -20,12 +20,12 @@ export interface SectionPagesGridProps {
 }
 
 export const SectionPagesGrid: React.FC<SectionPagesGridProps> = ({ section }) => {
-  console.log('SectionPagesGrid', section);
+  // console.log('SectionPagesGrid', section);
 
   const swiperElRef = useRef(null);
 
   const onSwiperInit = (e: Event) => {
-    console.log('INIT', e);
+    // console.log("onSwiperInit", e);
   };
 
   useEffect(() => {

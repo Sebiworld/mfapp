@@ -9,11 +9,10 @@ export const sectionHeroStyles: SxProps = {
 
   ".section-spacer.section-spacer": {
     position: "absolute",
+    left: 0,
     bottom: "-16px",
     display: "block",
     height: "auto",
-    left: 0,
-
     width: "100%",
     zIndex: "100",
   },

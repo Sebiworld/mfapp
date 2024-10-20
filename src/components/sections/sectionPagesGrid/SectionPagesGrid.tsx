@@ -5,6 +5,7 @@ import React from "react";
 import { SectionPagesGridDto } from "@models/section/section-pages-grid-dto.model";
 import { sectionPagesGridStyles } from "./sectionPagesGrid.styles";
 import { FeaturedSlider } from "./featuredSlider/FeaturedSlider";
+import { PagesGrid } from "./pagesGrid/PagesGrid";
 
 export interface SectionPagesGridProps {
   section: SectionPagesGridDto;
@@ -23,12 +24,16 @@ export const SectionPagesGrid: React.FC<SectionPagesGridProps> = ({
       sx={sectionPagesGridStyles}
     >
       {section.title && !section.hide_title && (
-        <Typography level="h2">{section.title}</Typography>
+        <Typography className="section-title" level="h2">
+          {section.title}
+        </Typography>
       )}
       <ContentBlocks blocks={section.contents}></ContentBlocks>
 
-      {section.gallery_type?.value === "featured_slider" && (
+      {section.gallery_type?.value === "featured_slider" ? (
         <FeaturedSlider section={section}></FeaturedSlider>
+      ) : (
+        <PagesGrid section={section}></PagesGrid>
       )}
     </Box>
   );

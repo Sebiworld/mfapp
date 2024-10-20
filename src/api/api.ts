@@ -1,5 +1,5 @@
 import { DefaultPageDto } from "@models/page/default-page-dto.model";
-import { ProjectDto } from "@models/project-dto.model";
+import { ProjectDetailsDto, ProjectDto } from "@models/project-dto.model";
 import axios, { AxiosResponse } from "axios";
 // import apiSchema from './schema.json';
 
@@ -32,6 +32,28 @@ export const MFApi = {
         try {
           const json = JSON.parse(response);
           return json as GetProjectsResponse;
+        } catch (e) {
+          throw new Error("Could not parse response");
+        }
+      },
+    }),
+
+  getProjectDetails: (
+    id: number,
+    params?: { [key: string]: unknown }
+  ): Promise<AxiosResponse<ProjectDetailsDto | undefined>> =>
+    axiosInstance({
+      method: "GET",
+      url: `/projects/${id}`,
+      params,
+      transformResponse: (response): ProjectDetailsDto | undefined => {
+        if (!response) {
+          return;
+        }
+
+        try {
+          const json = JSON.parse(response);
+          return json as ProjectDetailsDto;
         } catch (e) {
           throw new Error("Could not parse response");
         }

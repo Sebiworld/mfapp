@@ -5,9 +5,9 @@ export const swiperStyles: SxProps = {
     // paddingX: '64px',
     "--swiper-navigation-size": "32px",
     "--swiper-navigation-sides-offset": "80px",
-    "--swiper-navigation-color": "var(--joy-palette-contrast-800)",
-    "--swiper-scrollbar-bg-color": "var(--joy-palette-contrast-200)",
-    "--swiper-scrollbar-drag-bg-color": "var(--joy-palette-contrast-800)",
+    "--swiper-navigation-color": "var(--mf-palette-contrast-800)",
+    "--swiper-scrollbar-bg-color": "var(--mf-palette-contrast-200)",
+    "--swiper-scrollbar-drag-bg-color": "var(--mf-palette-contrast-800)",
     "--swiper-scrollbar-sides-offset": "10%",
 
     "&::part(button-prev), &::part(button-next)": {

@@ -24,6 +24,7 @@ export const LazyPicture: React.FC<LazyPictureProps> = ({ image, pictureProps, i
         src={fileUrl}
         width={image.width}
         height={image.height}
+        loading='lazy'
         {...imageProps}
         // src="https://www.musical-fabrik.de/site/assets/files/5359/medicus-ensemble-bg.1000x500.jpg"
       />

@@ -8,14 +8,13 @@ import {
 } from "@mui/joy";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { SectionsContainer } from "@components/sections/SectionsContainer";
-import { ContentBlocks } from "@components/contentBlocks/ContentBlocks";
 import { pageStyles } from "./page.styles";
-import { DefaultPageDto } from "@models/page/default-page-dto.model";
 import WarningIcon from "@mui/icons-material/Warning";
 import { useTranslation } from "react-i18next";
 import { useGlobalStore } from "@src/store/global.store";
 import { selectLoadPage, selectPage } from "@src/store/pages.store";
+import { PageContents } from "./pageContents/PageContents";
+import { ProjectPage } from "./projectPage/ProjectPage";
 
 export const Page = () => {
   const router = useRouterState();
@@ -32,35 +31,15 @@ export const Page = () => {
     loadPage(currentPath);
   }, [currentPath, loadPage]);
 
+  useEffect(() => {
+    console.log("page", { page });
+  }, [page]);
+
   return (
     <Box className="page" data-testid="page" sx={pageStyles}>
-      {page?.id ? (
-        <>
-          {page?.template?.name !== "home" && (
-            <Sheet variant="soft" className="page-content">
-              <Typography level="h1">{page.title}</Typography>
-
-              {!!(page as DefaultPageDto)?.contents?.length && (
-                <ContentBlocks
-                  blocks={(page as DefaultPageDto).contents}
-                ></ContentBlocks>
-              )}
-            </Sheet>
-          )}
-
-          {!!(page as DefaultPageDto)?.sections?.length && (
-            <SectionsContainer sections={(page as DefaultPageDto).sections} />
-          )}
-        </>
-      ) : (
-        <>
-          {loadedPage?.status === "success" && (
-            <Sheet variant="soft" className="page-content message">
-              {t("no-data")}
-            </Sheet>
-          )}
-        </>
-      )}
+      <ProjectPage page={page}>
+        <PageContents page={page}></PageContents>
+      </ProjectPage>
 
       {isLoading && (
         <Sheet variant="soft" className="page-content message">

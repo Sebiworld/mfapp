@@ -11,7 +11,7 @@ export const sectionSpacerStyles: SxProps = {
   display: 'block',
 
   '&.logocolor-dark': {
-    '--logo-end-color': 'var(--joy-palette-text-primary)',
+    '--logo-end-color': 'var(--mf-palette-text-primary)',
   },
 
   '&.logocolor-light': {

@@ -28,11 +28,10 @@ url: "/projekte/der-medicus/aktuelles/der-kartenverkauf-hat-begonnen/"
 */
 
 import { ImageDto } from "@models/image-dto.model";
-import { PageDto } from "./page-dto-model";
+import { PageDto } from "./page-dto.model";
 import { ContentBlockDtoVariant } from "@models/content/content-block-dto-variant.model";
 
 export interface ArticlePageDto extends PageDto {
-  project: PageDto;
   datetime_from: number;
   main_image: ImageDto;
   intro: string;

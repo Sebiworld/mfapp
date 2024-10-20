@@ -1,8 +1,8 @@
-import { Box, LinearProgress, Sheet, Typography } from '@mui/joy';
-import { splashScreenStyles } from './splashScreen.styles';
-import { useEffect, useState } from 'react';
-import { t } from 'i18next';
-import { MfLogo } from '@components/mfLogo/MfLogo';
+import { Box, LinearProgress, Sheet, Typography } from "@mui/joy";
+import { splashScreenStyles } from "./splashScreen.styles";
+import { useEffect, useState } from "react";
+import { MfLogo } from "@components/mfLogo/MfLogo";
+import { useTranslation } from "react-i18next";
 
 export interface SplashScreenProps {
   visible?: boolean;
@@ -13,6 +13,7 @@ const numberOfMessages = 22;
 
 export const SplashScreen = ({ visible }: SplashScreenProps) => {
   const [messageNumber, setMessageNumber] = useState<number>(1);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -35,13 +36,19 @@ export const SplashScreen = ({ visible }: SplashScreenProps) => {
   }
 
   return (
-    <Sheet className="splash-screen" data-testid="splash-screen" sx={splashScreenStyles}>
+    <Sheet
+      className="splash-screen"
+      data-testid="splash-screen"
+      sx={splashScreenStyles}
+    >
       <Box className="logo-container">
         <MfLogo></MfLogo>
         <LinearProgress className="progressbar" />
       </Box>
 
-      <Typography className="loading-message">{t(`splash.${messageNumber}`)}</Typography>
+      <Typography className="loading-message">
+        {t(`splash.${messageNumber}`)}
+      </Typography>
     </Sheet>
   );
 };

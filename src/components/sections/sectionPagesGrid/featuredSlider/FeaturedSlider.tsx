@@ -1,4 +1,4 @@
-import { Box } from "@mui/joy";
+import { Box, Link } from "@mui/joy";
 import React, { useEffect, useRef } from "react";
 
 // Import Swiper React components
@@ -70,25 +70,37 @@ export const FeaturedSlider: React.FC<FeaturedSliderProps> = ({ section }) => {
       sx={featuredSliderStyles}
     >
       <swiper-container ref={swiperElRef} init="false">
-        {section.cards?.map((card) => (
-          <swiper-slide key={card.id}>
-            {!!card?.main_image && (
-              <LazyPicture
-                image={card.main_image}
-                imageProps={{
-                  "data-swiper-material-scale": 1.5,
-                  "data-swiper-material-slide-size": "100%",
-                }}
-              ></LazyPicture>
-            )}
-            {!!card.description && (
-              <Box
-                className="slide-label swiper-material-animate-opacity"
-                dangerouslySetInnerHTML={{ __html: card.description }}
-              ></Box>
-            )}
-          </swiper-slide>
-        ))}
+        {section.cards?.map((card) => {
+          const image = card.card_image || card.main_image;
+          return (
+            <swiper-slide key={card.id}>
+              <Link
+                href={card.url}
+                color="primary"
+                underline="always"
+                variant="plain"
+                className="card-wrapper"
+              >
+                {!!image && (
+                  <LazyPicture
+                    image={image}
+                    imageProps={{
+                      "data-swiper-material-scale": 1.5,
+                      "data-swiper-material-slide-size": "100%",
+                    }}
+                  ></LazyPicture>
+                )}
+
+                {!!card.description && (
+                  <Box
+                    className="slide-label swiper-material-animate-opacity"
+                    dangerouslySetInnerHTML={{ __html: card.description }}
+                  ></Box>
+                )}
+              </Link>
+            </swiper-slide>
+          );
+        })}
       </swiper-container>
     </Box>
   );

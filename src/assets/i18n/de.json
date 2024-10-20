@@ -100,8 +100,19 @@
     "auto": "automatisch",
     "save": "speichern"
   },
-  "page-card": {
-    "btn-more": "Mehr dazu..."
+  "page_card": {
+    "btn_more": "Mehr dazu..."
+  },
+  "project": {
+    "general_data": "Kurzinfos",
+    "events": {
+      "title": "Aufführungen",
+      "get-tickets": "Jetzt Tickets sichern!",
+      "already-passed": "bereits vergangen"
+    },
+    "share": "Weitersagen!",
+    "our-partners": "Unsere Partner",
+    "our-sponsors": "Unsere Förderer"
   },
   "startup": {
     "go": "Los geht's!"
@@ -115,6 +126,7 @@
     "no-selection": "Keine Auswahl",
     "yes": "Ja",
     "no": "Nein",
-    "close": "Schließen"
+    "close": "Schließen",
+    "o-clock": "Uhr"
   }
 }

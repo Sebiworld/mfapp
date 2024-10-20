@@ -7,6 +7,12 @@ export const featuredSliderStyles: SxProps = {
   maxWidth: "100%",
   margin: "0 auto",
 
+  ".card-wrapper": {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+
   ".lazy-picture img": {
     maxHeight: "400px",
   },

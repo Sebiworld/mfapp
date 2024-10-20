@@ -12,7 +12,7 @@ export const footerStyles: SxProps = {
   },
 
   '.section-spacer.section-spacer': {
-    '--background-color': 'var(--variant-softBg, var(--joy-palette-neutral-softBg, var(--joy-palette-neutral-100, #F0F4F8)))',
+    '--background-color': 'var(--variant-softBg, var(--mf-palette-neutral-softBg, var(--mf-palette-neutral-100, #F0F4F8)))',
     position: 'absolute',
     top: 'calc(-1 * 6vw)',
     width: '100%'

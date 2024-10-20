@@ -1,6 +1,6 @@
-import { TemplateDto } from '@models/template-dto.model';
+import { TemplateDto } from "@models/template-dto.model";
 
-export interface PageDto {
+export interface BasicPageDto {
   id: number;
   name: string;
   language: string;

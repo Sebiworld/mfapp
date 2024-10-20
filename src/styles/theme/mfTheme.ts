@@ -3,8 +3,6 @@ import { JoyLinkOverwrites } from "./MuiOverwrites/JoyLink";
 import { JoyAlertOverwrites } from "./MuiOverwrites/JoyAlert";
 import { JoyButtonOverwrites } from "./MuiOverwrites/JoyButton";
 import {
-  mfContrastDark,
-  mfContrastLight,
   mfDanger,
   mfDark,
   mfLight,
@@ -30,6 +28,8 @@ declare module "@mui/joy/styles" {
 }
 
 export const mfTheme = extendTheme({
+  cssVarPrefix: "mf",
+
   fontFamily: {
     display:
       "Aileron, -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans- serif",
@@ -55,7 +55,7 @@ export const mfTheme = extendTheme({
         neutral: mfNeutralLight,
         dark: mfDark,
         light: mfLight,
-        contrast: mfContrastLight,
+        contrast: mfDark,
       },
     },
     dark: {
@@ -67,7 +67,7 @@ export const mfTheme = extendTheme({
         neutral: mfNeutralDark,
         dark: mfDark,
         light: mfLight,
-        contrast: mfContrastDark,
+        contrast: mfLight,
       },
     },
   },

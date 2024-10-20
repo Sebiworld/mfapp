@@ -4,15 +4,18 @@ import { GlobalStore } from "./global.store";
 import { GetProjectsResponse, MFApi } from "@api/api";
 import { LoadingStatus } from "@models/loading-status.model";
 import axios from "axios";
+import { ProjectDetailsDto, ProjectDto } from "@models/project-dto.model";
 
 export interface PagesState {
   pages: { [key: string]: LoadingStatus<PageDtoVariant> };
   projects: LoadingStatus<GetProjectsResponse>;
+  projectDetails: { [key: number]: LoadingStatus<ProjectDetailsDto> };
 }
 
 export interface PagesActions {
   loadPage: (path: string) => Promise<void>;
   loadProjects: () => Promise<void>;
+  loadProjectDetails: (id: number) => Promise<void>;
 }
 
 export type PagesSlice = PagesState & PagesActions;
@@ -25,6 +28,7 @@ export const createPagesSlice: StateCreator<GlobalStore, [], [], PagesSlice> = (
   projects: {
     status: "uninitialized",
   },
+  projectDetails: {},
 
   loadPage: async (path: string) => {
     set((state) => {
@@ -220,6 +224,141 @@ export const createPagesSlice: StateCreator<GlobalStore, [], [], PagesSlice> = (
       }
     }
   },
+
+  loadProjectDetails: async (id: number) => {
+    set((state) => {
+      const stateChanges = {
+        projectDetails: { ...state.projectDetails },
+      };
+      const change = { status: "loading" };
+
+      if (!stateChanges.projectDetails[id]?.status) {
+        stateChanges.projectDetails[id] =
+          change as LoadingStatus<PageDtoVariant>;
+      } else {
+        stateChanges.projectDetails[id] = {
+          ...stateChanges.projectDetails[id],
+          ...(change as LoadingStatus<PageDtoVariant>),
+        };
+      }
+
+      return stateChanges;
+    });
+
+    try {
+      const params: { [key: string]: unknown } = {};
+      const hash = get().projectDetails?.[id]?.data?.hash;
+      if (hash) {
+        params.hash = hash;
+      }
+
+      const response = await MFApi.getProjectDetails(id, params);
+      const page = response.data;
+
+      if (response.status === 204) {
+        set((state) => {
+          const stateChanges = {
+            projectDetails: { ...state.projectDetails },
+          };
+          const change = {
+            status: "success",
+            name: undefined,
+            code: undefined,
+            statusCode: undefined,
+            message: undefined,
+            stack: undefined,
+          };
+
+          if (!stateChanges.projectDetails[id]?.status) {
+            stateChanges.projectDetails[id] =
+              change as LoadingStatus<ProjectDetailsDto>;
+          } else {
+            stateChanges.projectDetails[id] = {
+              ...stateChanges.projectDetails[id],
+              ...(change as LoadingStatus<ProjectDetailsDto>),
+            };
+          }
+          return stateChanges;
+        });
+        return;
+      }
+
+      set((state) => {
+        const stateChanges = {
+          projectDetails: { ...state.projectDetails },
+        };
+        const change = {
+          status: "success",
+          data: page,
+          name: undefined,
+          code: undefined,
+          statusCode: undefined,
+          message: undefined,
+          stack: undefined,
+        };
+
+        if (!stateChanges.projectDetails[id]?.status) {
+          stateChanges.projectDetails[id] =
+            change as LoadingStatus<ProjectDetailsDto>;
+        } else {
+          stateChanges.projectDetails[id] = {
+            ...stateChanges.projectDetails[id],
+            ...(change as LoadingStatus<ProjectDetailsDto>),
+          };
+        }
+        return stateChanges;
+      });
+    } catch (error) {
+      console.error("Error in data fetch:", error);
+      if (axios.isAxiosError(error)) {
+        set((state) => {
+          const stateChanges = {
+            projectDetails: { ...state.projectDetails },
+          };
+          const change = {
+            status: "error",
+            name: error.name,
+            code: error.code,
+            statusCode: error.status,
+            message: error.message,
+            stack: error.stack,
+          };
+
+          if (!stateChanges.projectDetails[id]?.status) {
+            stateChanges.projectDetails[id] =
+              change as LoadingStatus<ProjectDetailsDto>;
+          } else {
+            stateChanges.projectDetails[id] = {
+              ...stateChanges.projectDetails[id],
+              ...(change as LoadingStatus<ProjectDetailsDto>),
+            };
+          }
+          return stateChanges;
+        });
+      } else {
+        set((state) => {
+          const stateChanges = {
+            projectDetails: { ...state.projectDetails },
+          };
+          const change = {
+            status: "error",
+            name: (error as { message?: string })?.message || "Unknown",
+          };
+
+          if (!stateChanges.projectDetails[id]?.status) {
+            stateChanges.projectDetails[id] =
+              change as LoadingStatus<ProjectDetailsDto>;
+          } else {
+            stateChanges.projectDetails[id] = {
+              ...stateChanges.projectDetails[id],
+              ...(change as LoadingStatus<ProjectDetailsDto>),
+            };
+          }
+          return stateChanges;
+        });
+      }
+    }
+  },
 });
 
 export const selectLoadPage = (state: GlobalStore) => state.loadPage;
@@ -228,5 +367,28 @@ export const selectPage = (path: string) => (state: GlobalStore) =>
 export const selectLoadProjects = (state: GlobalStore) => state.loadProjects;
 export const selectProjectsLoadingStatus = (state: GlobalStore) =>
   state.projects;
+export const selectLoadProjectDetails = (state: GlobalStore) =>
+  state.loadProjectDetails;
 export const selectProjects = (state: GlobalStore) =>
   state.projects?.data?.projects;
+export const selectProject = (id?: number) => (state: GlobalStore) => {
+  if (!id) {
+    return;
+  }
+
+  return selectProjects(state)?.[id];
+};
+export const selectProjectPageDetails =
+  (id?: number) =>
+  (state: GlobalStore): ProjectDetailsDto | undefined => {
+    if (!id) {
+      return;
+    }
+
+    const projectDetails = state.projectDetails?.[id];
+    if (projectDetails?.data?.id) {
+      return projectDetails.data;
+    }
+
+    return selectProject(id)?.(state);
+  };

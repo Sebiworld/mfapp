@@ -1,8 +1,9 @@
 import { ImageDto } from "../image-dto.model";
-import { PageDto } from "./page-dto-model";
+import { PageDto } from "./page-dto.model";
 
 export interface PageCardDto extends PageDto {
   main_image?: ImageDto;
+  card_image?: ImageDto;
   intro?: string;
   description?: string;
   datetime_from?: number;

@@ -16,10 +16,10 @@
 //     ]
 // }
 
-import { ContentBlocks } from '@components/contentBlocks/ContentBlocks';
-import { SectionDto } from '@models/section/section-dto.model';
-import { Box, Typography } from '@mui/joy';
-import React from 'react';
+import { ContentBlocks } from "@components/contentBlocks/ContentBlocks";
+import { SectionDto } from "@models/section/section-dto.model";
+import { Box, Typography } from "@mui/joy";
+import React from "react";
 
 export interface SectionPageProps {
   section: SectionDto;
@@ -27,8 +27,16 @@ export interface SectionPageProps {
 
 export const SectionPage: React.FC<SectionPageProps> = ({ section }) => {
   return (
-    <Box component="section" id={section.section_name} className="section section-page">
-      {section.title && !section.hide_title && <Typography level="h2">{section.title}</Typography>}
+    <Box
+      component="section"
+      id={section.section_name}
+      className="section section-page"
+    >
+      {section.title && !section.hide_title && (
+        <Typography level="h2" className="section-title">
+          {section.title}
+        </Typography>
+      )}
       <ContentBlocks blocks={section.contents}></ContentBlocks>
     </Box>
   );

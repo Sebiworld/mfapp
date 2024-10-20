@@ -54,8 +54,8 @@ export const SidebarBoxEvents: React.FC<SidebarBoxEventsProps> = ({ data }) => {
 
   return (
     <Box
-      className="sidebar-box sidebar-box-general"
-      data-testid="sidebar-box-general"
+      className="sidebar-box sidebar-box-events"
+      data-testid="sidebar-box-events"
       sx={sidebarBoxEventsStyles}
     >
       <Typography className="box-title" level="h3">
@@ -92,7 +92,11 @@ export const SidebarBoxEvents: React.FC<SidebarBoxEventsProps> = ({ data }) => {
             </Box>
 
             {data.ticket_page?.url && (
-              <Button color="contrast" component={Link} to={data.ticket_page.url}>
+              <Button
+                color="contrast"
+                component={Link}
+                to={data.ticket_page.url}
+              >
                 {t("project.events.get-tickets")}
               </Button>
             )}

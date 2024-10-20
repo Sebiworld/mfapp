@@ -3,6 +3,7 @@ import { Box } from "@mui/joy";
 import { projectSidebarStyles } from "./projectSidebar.styles";
 import { SidebarBoxGeneral } from "./sidebarBoxGeneral/SidebarBoxGeneral";
 import { SidebarBoxEvents } from "./sidebarBoxEvents/SidebarBoxEvents";
+import { SidebarBoxSponsors } from "./sidebarBoxSponsors/SidebarBoxSponsors";
 
 export interface ProjectSidebarProps {
   project?: ProjectDetailsDto;
@@ -18,6 +19,18 @@ export const ProjectSidebar: React.FC<ProjectSidebarProps> = ({ project }) => {
       <SidebarBoxGeneral data={project?.general}></SidebarBoxGeneral>
 
       <SidebarBoxEvents data={project?.events}></SidebarBoxEvents>
+
+      {/* <SidebarBoxShare data={project?.sharing}></SidebarBoxShare> */}
+
+      <SidebarBoxSponsors
+        data={project?.partners}
+        type="partners"
+      ></SidebarBoxSponsors>
+
+      <SidebarBoxSponsors
+        data={project?.sponsors}
+        type="sponsors"
+      ></SidebarBoxSponsors>
     </Box>
   );
 };

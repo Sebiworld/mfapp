@@ -1,10 +1,19 @@
 import { ProjectGeneralDataBlock } from "@models/project-dto.model";
-import { Box, List, ListItem, ListItemDecorator, Typography } from "@mui/joy";
+import {
+  Box,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemDecorator,
+  Typography,
+} from "@mui/joy";
 import { useTranslation } from "react-i18next";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { IonIcon } from "@ionic/react";
 import { arrowForward, chevronForward } from "ionicons/icons";
 import { sidebarBoxGeneralStyles } from "./sidebarBoxGeneral.styles";
+import { SidebarBoxGeneralItemContent } from "./SidebarBoxGeneralItemContent";
+import { Link } from "@tanstack/react-router";
 
 export interface SidebarBoxGeneralProps {
   data?: ProjectGeneralDataBlock[];
@@ -31,18 +40,23 @@ export const SidebarBoxGeneral: React.FC<SidebarBoxGeneralProps> = ({
 
       <List component="ul">
         {data.map((item) => {
-          let icon = chevronForward;
-          if (item.depth >= 1) {
-            icon = arrowForward;
-          }
-
           return (
             <ListItem key={item.id} className={`list-item level-${item.depth}`}>
-              <ListItemDecorator>
-                <IonIcon aria-hidden="true" icon={icon}></IonIcon>
-              </ListItemDecorator>
-
-              {item.label}
+              {item.link ? (
+                <ListItemButton
+                  component={Link}
+                  to={item.link}
+                  title={item.linktitle}
+                >
+                  <SidebarBoxGeneralItemContent
+                    data={item}
+                  ></SidebarBoxGeneralItemContent>
+                </ListItemButton>
+              ) : (
+                <SidebarBoxGeneralItemContent
+                  data={item}
+                ></SidebarBoxGeneralItemContent>
+              )}
             </ListItem>
           );
         })}

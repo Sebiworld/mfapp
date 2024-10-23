@@ -10,18 +10,21 @@ import YoutubeIcon from "@mui/icons-material/YouTube";
 import { Trans, useTranslation } from "react-i18next";
 import Lottie from "react-lottie";
 import heartAnimation from "@assets/lotties/heart.json";
+import { useCurrentDate } from "@utils/hooks/useCurrentDate";
+
+const heartAnimationOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: heartAnimation,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice",
+  },
+};
 
 export function Footer() {
   const { t } = useTranslation();
 
-  const heartAnimationOptions = {
-    loop: true,
-    autoplay: true,
-    animationData: heartAnimation,
-    rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice",
-    },
-  };
+  const currentDate = useCurrentDate(1000 * 60);
 
   return (
     <Box className="footer-wrapper" sx={footerStyles}>
@@ -100,7 +103,9 @@ export function Footer() {
               }}
             ></Trans>
           </div>
-          <div className="copyright">{t("footer.copyright")}</div>
+          <div className="copyright">
+            {t("footer.copyright", { year: currentDate.getFullYear() })}
+          </div>
         </div>
       </Sheet>
 

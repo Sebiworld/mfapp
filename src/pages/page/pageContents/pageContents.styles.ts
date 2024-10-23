@@ -5,7 +5,7 @@ export const pageContentsStyles: SxProps = {
     mx: 4,
     my: 4,
     py: 4,
-    px: 2,
+    px: 4,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',

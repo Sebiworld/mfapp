@@ -51,7 +51,7 @@
     "description": "Jetzt Vereinsmitglied werden, die Ziele unterstützen und das nächste Musical-Projekt fördern.",
     "external": "Besuchen Sie uns auch hier:",
     "by": "Entwickelt mit <heart/> von <a>Sebastian Schendel</a>",
-    "copyright": "© 2023"
+    "copyright": "© {{year}}"
   },
   "home": {
     "title": "Home",

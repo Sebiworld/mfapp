@@ -10,7 +10,7 @@ import { useEffect, useMemo } from "react";
 import { ProjectSidebar } from "./projectSidebar/ProjectSidebar";
 import { LazyPicture } from "@components/lazyPicture/LazyPicture";
 import { Link } from "@tanstack/react-router";
-import { getProjectCssVars } from "./functions/getProjectCSSVars";
+import { getProjectCssVars } from "./functions/getProjectCssVars";
 import {
   selectResetGlobalCss,
   selectSetGlobalCss,

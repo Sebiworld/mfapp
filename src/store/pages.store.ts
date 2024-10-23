@@ -4,7 +4,7 @@ import { GlobalStore } from "./global.store";
 import { GetProjectsResponse, MFApi } from "@api/api";
 import { LoadingStatus } from "@models/loading-status.model";
 import axios from "axios";
-import { ProjectDetailsDto, ProjectDto } from "@models/project-dto.model";
+import { ProjectDetailsDto } from "@models/project-dto.model";
 
 export interface PagesState {
   pages: { [key: string]: LoadingStatus<PageDtoVariant> };

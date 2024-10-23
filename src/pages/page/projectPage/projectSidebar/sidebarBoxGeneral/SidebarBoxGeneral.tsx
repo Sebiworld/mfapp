@@ -1,16 +1,7 @@
 import { ProjectGeneralDataBlock } from "@models/project-dto.model";
-import {
-  Box,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemDecorator,
-  Typography,
-} from "@mui/joy";
+import { Box, List, ListItem, ListItemButton, Typography } from "@mui/joy";
 import { useTranslation } from "react-i18next";
 import { isValidArray } from "@utils/functions/isValidArray";
-import { IonIcon } from "@ionic/react";
-import { arrowForward, chevronForward } from "ionicons/icons";
 import { sidebarBoxGeneralStyles } from "./sidebarBoxGeneral.styles";
 import { SidebarBoxGeneralItemContent } from "./SidebarBoxGeneralItemContent";
 import { Link } from "@tanstack/react-router";

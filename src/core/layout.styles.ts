@@ -9,6 +9,7 @@ export const layoutStyles: SxProps = {
   '.main-content': {
     position: 'relative',
     overflow: 'auto',
-    flex: '1 1 100px'
+    flex: '1 1 100px',
+    marginTop: '48px'
   }
 }

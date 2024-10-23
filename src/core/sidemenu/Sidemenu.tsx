@@ -1,12 +1,16 @@
-import * as React from 'react';
-import Box from '@mui/joy/Box';
-import Drawer from '@mui/joy/Drawer';
-import List from '@mui/joy/List';
-import ListItemButton from '@mui/joy/ListItemButton';
-import ModalClose from '@mui/joy/ModalClose';
-import ThemeSelect from '@components/ThemeSelect';
-import { Stack } from '@mui/joy';
-import { sidemenuStyles } from './sidemenu.styles';
+import * as React from "react";
+import Box from "@mui/joy/Box";
+import Drawer from "@mui/joy/Drawer";
+import List from "@mui/joy/List";
+import ListItemButton from "@mui/joy/ListItemButton";
+import ModalClose from "@mui/joy/ModalClose";
+import ThemeSelect from "@components/ThemeSelect";
+import { ListItem, Stack } from "@mui/joy";
+import { sidemenuStyles } from "./sidemenu.styles";
+import { useTranslation } from "react-i18next";
+import { Link } from "@tanstack/react-router";
+import { useGlobalStore } from "@src/store/global.store";
+import { selectSetStartupStep } from "@src/store/auth.store";
 
 export interface SidemenuProps {
   sidemenuOpen: boolean;
@@ -14,15 +18,22 @@ export interface SidemenuProps {
 }
 
 export const Sidemenu = ({ sidemenuOpen, setSidemenuOpen }: SidemenuProps) => {
+  const { t } = useTranslation();
+  const setStartupStep = useGlobalStore(selectSetStartupStep);
+
   return (
-    <Drawer open={sidemenuOpen} onClose={() => setSidemenuOpen(false)} sx={sidemenuStyles}>
+    <Drawer
+      open={sidemenuOpen}
+      onClose={() => setSidemenuOpen(false)}
+      sx={sidemenuStyles}
+    >
       <Box className="sidemenu-header">
         <Stack className="header-left">
           <ThemeSelect></ThemeSelect>
         </Stack>
 
         <Stack className="header-right">
-          <ModalClose id="close-icon" sx={{ position: 'initial' }} />
+          <ModalClose id="close-icon" sx={{ position: "initial" }} />
         </Stack>
       </Box>
 
@@ -59,18 +70,43 @@ export const Sidemenu = ({ sidemenuOpen, setSidemenuOpen }: SidemenuProps) => {
           },
         }}
       /> */}
-      <List
-        size="lg"
-        component="nav"
-        sx={{
-          flex: 'none',
-          fontSize: 'xl',
-          '& > div': { justifyContent: 'center' },
-        }}
-      >
-        <ListItemButton sx={{ fontWeight: 'lg' }}>Start</ListItemButton>
-        <ListItemButton>Aktuelles</ListItemButton>
-        <ListItemButton>Probenplan</ListItemButton>
+      <List size="lg" component="nav" className="navigation-list">
+        <ListItem>
+          <ListItemButton component={Link} to="/">
+            {t("sidemenu.home")}
+          </ListItemButton>
+        </ListItem>
+
+        <ListItem>
+          <ListItemButton component={Link} to="/events" disabled>
+            Probenplan
+          </ListItemButton>
+        </ListItem>
+
+        <ListItem>
+          <ListItemButton component={Link} to="/shop" disabled>
+            Shop
+          </ListItemButton>
+        </ListItem>
+      </List>
+
+      <List size="lg" component="nav" className="navigation-list">
+        <ListItem>
+          <ListItemButton component={Link} to="/settings">
+            {t("sidemenu.settings")}
+          </ListItemButton>
+        </ListItem>
+
+        <ListItem>
+          <ListItemButton
+            onClick={() => {
+              setStartupStep("startup");
+              setSidemenuOpen(false);
+            }}
+          >
+            {t("sidemenu.login")}
+          </ListItemButton>
+        </ListItem>
       </List>
     </Drawer>
   );

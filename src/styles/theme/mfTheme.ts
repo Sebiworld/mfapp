@@ -5,25 +5,35 @@ import { JoyButtonOverwrites } from "./MuiOverwrites/JoyButton";
 import {
   mfDanger,
   mfDark,
+  mfInfoDark,
+  mfInfoLight,
   mfLight,
   mfNeutralDark,
   mfNeutralLight,
-  mfOrange,
+  mfPrimaryDark,
+  mfPrimaryLight,
+  mfProjectPrimaryDark,
+  mfProjectPrimaryLight,
   mfSuccess,
   mfWarning,
 } from "./colors";
+import { JoyModalOverwrites } from "./MuiOverwrites/JoyModal";
 
 declare module "@mui/joy/styles" {
   interface ColorPalettePropOverrides {
+    info: true;
     light: true;
     dark: true;
     contrast: true;
+    projectPrimary: true;
   }
 
   interface Palette {
+    info: PaletteRange;
     light: PaletteRange;
     dark: PaletteRange;
     contrast: PaletteRange;
+    projectPrimary: PaletteRange;
   }
 }
 
@@ -34,6 +44,8 @@ export const mfTheme = extendTheme({
     display:
       "Aileron, -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans- serif",
     body: "Aileron, -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans- serif",
+    fallback: "Cardo, Georgia, Times New Roman, Times, serif",
+    code: "Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
   },
 
   typography: {
@@ -48,26 +60,30 @@ export const mfTheme = extendTheme({
   colorSchemes: {
     light: {
       palette: {
-        primary: mfOrange,
+        primary: mfPrimaryLight,
         danger: mfDanger,
         success: mfSuccess,
         warning: mfWarning,
         neutral: mfNeutralLight,
+        info: mfInfoLight,
         dark: mfDark,
         light: mfLight,
         contrast: mfDark,
+        projectPrimary: mfProjectPrimaryLight,
       },
     },
     dark: {
       palette: {
-        primary: mfOrange,
+        primary: mfPrimaryDark,
         danger: mfDanger,
         success: mfSuccess,
         warning: mfWarning,
         neutral: mfNeutralDark,
+        info: mfInfoDark,
         dark: mfDark,
         light: mfLight,
         contrast: mfLight,
+        projectPrimary: mfProjectPrimaryDark,
       },
     },
   },
@@ -75,5 +91,6 @@ export const mfTheme = extendTheme({
     ...JoyLinkOverwrites,
     ...JoyAlertOverwrites,
     ...JoyButtonOverwrites,
+    ...JoyModalOverwrites,
   },
 });

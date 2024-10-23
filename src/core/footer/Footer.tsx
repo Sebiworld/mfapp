@@ -31,7 +31,7 @@ export function Footer() {
         component="footer"
         className="footer"
       >
-        <MfLogo></MfLogo>
+        <MfLogo layout="vertical"></MfLogo>
 
         <p>{t("footer.description")}</p>
         <Button component="a" target="_blank" href="/#mitglied-werden">

@@ -41,6 +41,11 @@
   "actions": {
     "back-to-home": "Zurück zur Startseite"
   },
+  "sidemenu": {
+    "home": "Startseite",
+    "settings": "Einstellungen",
+    "login": "Anmelden"
+  },
   "footer": {
     "cta": "Werden Sie Mitglied!",
     "description": "Jetzt Vereinsmitglied werden, die Ziele unterstützen und das nächste Musical-Projekt fördern.",

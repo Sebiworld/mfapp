@@ -23,7 +23,9 @@ export const PageContents: React.FC<PagesContentsProps> = ({ page }) => {
         <>
           {page?.template?.name !== "home" && (
             <Sheet variant="soft" className="page-content">
-              <Typography level="h1">{page.title}</Typography>
+              {page?.template?.name !== "project" && (
+                <Typography level="h1">{page.title}</Typography>
+              )}
 
               {!!(page as DefaultPageDto)?.contents?.length && (
                 <ContentBlocks

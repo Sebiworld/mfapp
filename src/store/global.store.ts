@@ -7,8 +7,12 @@ import {
 } from "./initialization.store";
 import { AuthSlice, createAuthSlice } from "./auth.store";
 import { createPagesSlice, PagesSlice } from "./pages.store";
+import { createSettingsSlice, SettingsSlice } from "./settings.store";
 
-export type GlobalStore = InitializationSlice & AuthSlice & PagesSlice;
+export type GlobalStore = InitializationSlice &
+  AuthSlice &
+  PagesSlice &
+  SettingsSlice;
 
 export const useGlobalStore = create<GlobalStore>()(
   devtools(
@@ -17,6 +21,7 @@ export const useGlobalStore = create<GlobalStore>()(
         ...createInitializationSlice(...a),
         ...createAuthSlice(...a),
         ...createPagesSlice(...a),
+        ...createSettingsSlice(...a),
       })),
       { name: "mfStore" }
     )

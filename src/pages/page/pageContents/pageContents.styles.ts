@@ -2,7 +2,7 @@ import { SxProps } from "@mui/material";
 
 export const pageContentsStyles: SxProps = {
   '.page-content': {
-    mx: 'auto',
+    mx: 4,
     my: 4,
     py: 4,
     px: 2,

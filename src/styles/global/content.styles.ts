@@ -23,6 +23,17 @@ export const globalContentStyles: Interpolation<Theme>[] = [
         alignSelf: "center",
       },
 
+      "p.capital-letter, .capital-letter P:first-of-type, &.capital-letter P:first-of-type":
+        {
+          "&:first-letter": {
+            fontFamily: mfTheme.fontFamily.fallback,
+            fontSize: "5.5rem",
+            float: "left",
+            lineHeight: "0.6",
+            marginRight: "0.05em",
+          },
+        },
+
       a: {
         color: "inherit",
         transition: "color 0.2s",
@@ -39,9 +50,9 @@ export const globalContentStyles: Interpolation<Theme>[] = [
       },
 
       ".btn": {
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
         backgroundColor:
           "var(--variant-solidBg, var(--mf-palette-primary-solidBg, var(--mf-palette-primary-500, #0B6BCB)))",
         color: "var(--mf-palette-common-white, #FFF)",
@@ -55,11 +66,12 @@ export const globalContentStyles: Interpolation<Theme>[] = [
         fontFamily: "var(--mf-fontFamily-body)",
         fontWeight: "var(--mf-fontWeight-lg)",
         lineHeight: "var(--mf-lineHeight-md)",
+        margin: "2px",
 
         "&:hover, &:focus": {
           backgroundColor: "var(--mf-palette-primary-600, #185EA5)",
           color: "var(--mf-palette-common-white, #FFF)",
-        }
+        },
       },
     },
   },

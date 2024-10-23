@@ -22,5 +22,11 @@ module.exports = {
       { allowConstantExport: true },
     ],
     "@typescript-eslint/no-unused-vars": ["warn"],
+    // "no-restricted-imports": [
+    //   "error",
+    //   {
+    //     patterns: ["@mui/*/*/*"],
+    //   },
+    // ],
   },
 };

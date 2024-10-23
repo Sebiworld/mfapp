@@ -42,7 +42,7 @@ export const SplashScreen = ({ visible }: SplashScreenProps) => {
       sx={splashScreenStyles}
     >
       <Box className="logo-container">
-        <MfLogo></MfLogo>
+        <MfLogo layout="vertical"></MfLogo>
         <LinearProgress className="progressbar" />
       </Box>
 

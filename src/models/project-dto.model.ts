@@ -11,6 +11,8 @@ export interface ProjectDto extends BasicPageDto {
   logo_square?: ImageDto;
   color?: string;
   theme_vars?: { name: string; value: string }[];
+  info_overlay?: string;
+  short_description?: string;
 }
 
 export interface ProjectDetailsDto extends ProjectDto {

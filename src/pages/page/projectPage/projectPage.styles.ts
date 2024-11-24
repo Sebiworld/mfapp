@@ -90,8 +90,4 @@ export const projectPageStyles: SxProps = {
       flexShrink: 1,
     },
   },
-
-  ":root:root:root": {
-    "--mf-palette-projectPrimary-500": "green"
-  }
 };

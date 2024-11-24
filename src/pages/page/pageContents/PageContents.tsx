@@ -3,7 +3,6 @@ import { SectionsContainer } from "@components/sections/SectionsContainer";
 import { ContentBlocks } from "@components/contentBlocks/ContentBlocks";
 import { pageContentsStyles } from "./pageContents.styles";
 import { DefaultPageDto } from "@models/page/default-page-dto.model";
-import { useTranslation } from "react-i18next";
 import { PageDtoVariant } from "@models/page/page-dto-variant.model";
 
 export interface PagesContentsProps {
@@ -11,7 +10,9 @@ export interface PagesContentsProps {
 }
 
 export const PageContents: React.FC<PagesContentsProps> = ({ page }) => {
-  const { t } = useTranslation();
+  if (!page?.id) {
+    return null;
+  }
 
   return (
     <Box
@@ -19,30 +20,22 @@ export const PageContents: React.FC<PagesContentsProps> = ({ page }) => {
       data-testid="page-contents"
       sx={pageContentsStyles}
     >
-      {page?.id ? (
-        <>
-          {page?.template?.name !== "home" && (
-            <Sheet variant="soft" className="page-content">
-              {page?.template?.name !== "project" && (
-                <Typography level="h1">{page.title}</Typography>
-              )}
-
-              {!!(page as DefaultPageDto)?.contents?.length && (
-                <ContentBlocks
-                  blocks={(page as DefaultPageDto).contents}
-                ></ContentBlocks>
-              )}
-            </Sheet>
+      {page?.template?.name !== "home" && (
+        <Sheet variant="soft" className="page-content">
+          {page?.template?.name !== "project" && (
+            <Typography level="h1">{page.title}</Typography>
           )}
 
-          {!!(page as DefaultPageDto)?.sections?.length && (
-            <SectionsContainer sections={(page as DefaultPageDto).sections} />
+          {!!(page as DefaultPageDto)?.contents?.length && (
+            <ContentBlocks
+              blocks={(page as DefaultPageDto).contents}
+            ></ContentBlocks>
           )}
-        </>
-      ) : (
-        <Sheet variant="soft" className="page-content message">
-          {t("no-data")}
         </Sheet>
+      )}
+
+      {!!(page as DefaultPageDto)?.sections?.length && (
+        <SectionsContainer sections={(page as DefaultPageDto).sections} />
       )}
     </Box>
   );

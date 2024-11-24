@@ -8,7 +8,7 @@ export const pageContentsStyles: SxProps = {
     px: 4,
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     gap: 2,
     borderRadius: 'sm',
     boxShadow: 'md',

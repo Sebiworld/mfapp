@@ -1,26 +1,64 @@
-import { Box, Button, Modal, ModalClose, Sheet, Typography } from "@mui/joy";
-import { selectSetStartupStep } from "@src/store/auth.store";
+import { Modal, Sheet } from "@mui/joy";
+import { selectIsLoggedIn, selectNickname } from "@src/store/auth.store";
 import { useGlobalStore } from "@src/store/global.store";
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { startupModalStyles } from "./startupModalStyles";
+import { StartupModalIntro } from "./components/StartupModalIntro";
+import { StartupModalNickname } from "./components/StartupModalNickname";
+import { StartupModalLogout } from "./components/StartupModalLogout";
+import { selectDidReceiveWelcomeMessage } from "@src/store/initialization.store";
+import { StartupModalLogin } from "./components/startupModalLogin/StartupModalLogin";
 
 export interface StartupModalProps {
-  open?: boolean;
+  setIsStartupModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const StartupModal = ({ open }: StartupModalProps) => {
-  const [openState, setOpenState] = useState<boolean>(false);
-  const setStartupStep = useGlobalStore(selectSetStartupStep);
-  const { t } = useTranslation();
+export interface StartupModalContentProps {
+  closeModal?: () => void;
+}
+
+export const StartupModal = ({ setIsStartupModalOpen }: StartupModalProps) => {
+  const [openState, setOpenState] = useState<boolean>(true);
+
+  const didReceiveWelcomeMessage = useGlobalStore(
+    selectDidReceiveWelcomeMessage
+  );
+  const nickname = useGlobalStore(selectNickname);
+  const isLoggedIn = useGlobalStore(selectIsLoggedIn);
+
+  const closeModal = useCallback(() => {
+    setOpenState(false);
+  }, []);
 
   useEffect(() => {
-    if (typeof open !== "boolean") {
+    if (!setIsStartupModalOpen || typeof setIsStartupModalOpen !== "function") {
       return;
     }
+    setIsStartupModalOpen(openState);
+  }, [openState, setIsStartupModalOpen]);
 
-    setOpenState(open);
-  }, [open, setStartupStep]);
+  const modalComponent = useMemo(() => {
+    if (!didReceiveWelcomeMessage) {
+      return <StartupModalIntro closeModal={closeModal}></StartupModalIntro>;
+    }
+
+    if (!nickname || typeof nickname !== "string") {
+      return (
+        <StartupModalNickname closeModal={closeModal}></StartupModalNickname>
+      );
+    }
+
+    if (isLoggedIn) {
+      return <StartupModalLogout closeModal={closeModal}></StartupModalLogout>;
+    }
+
+    return <StartupModalLogin closeModal={closeModal}></StartupModalLogin>;
+  }, [
+    closeModal,
+    didReceiveWelcomeMessage,
+    isLoggedIn,
+    nickname,
+  ]);
 
   return (
     <Modal
@@ -29,48 +67,11 @@ export const StartupModal = ({ open }: StartupModalProps) => {
       open={openState}
       onClose={() => {
         setOpenState(false);
-        setStartupStep(undefined);
       }}
       sx={startupModalStyles}
     >
       <Sheet className="modal-container" variant="outlined">
-        <ModalClose variant="plain" />
-
-        <Box className="modal-content">
-          <Typography
-            level="body-lg"
-            sx={{ fontSize: "48px", fontWeight: "bold" }}
-          >
-            Hallo!
-          </Typography>
-
-          <Typography level="body-lg">
-            Wir sind die{" "}
-            <Typography sx={{ fontWeight: "bold" }}>
-              <Typography color="primary">Musical</Typography>-Fabrik
-            </Typography>
-            !
-          </Typography>
-          <br />
-
-          <Typography level="body-lg">
-            Herzlich Willkommen in unserer App -
-          </Typography>
-          <Typography level="body-lg" sx={{ fontWeight: "bold" }}>
-            Schön, dass du hier bist!
-          </Typography>
-        </Box>
-
-        <Box className="modal-footer">
-          <Button
-            color="primary"
-            onClick={() => {
-              setStartupStep("nickname");
-            }}
-          >
-            {t("startup.go")}
-          </Button>
-        </Box>
+        {modalComponent}
       </Sheet>
     </Modal>
   );

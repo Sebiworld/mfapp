@@ -1,12 +1,40 @@
 import { SxProps } from "@mui/joy/styles/types";
 
 export const sidemenuStyles: SxProps = {
+  ".MuiDrawer-content": {
+    display: "flex",
+    flexDirection: "column",
+    gap: "32px",
+  },
+
   ".sidemenu-header": {
     position: "relative",
     display: "flex",
-    flexDirection: "row",
+    flexDirection: "column",
     justifyContent: "space-between",
+
+    ".header-left": {
+      position: "absolute",
+      top: 0,
+      left: 0,
+    },
+
+    ".header-right": {
+      position: "absolute",
+      top: 0,
+      right: 0,
+    },
+  },
+
+  ".user-box": {
+    paddingTop: "16px",
     alignItems: "center",
+    gap: "8px",
+
+    "&>.name": {
+      textTransform: "capitalize",
+      fontWeight: "bold",
+    },
   },
 
   ".navigation-list": {

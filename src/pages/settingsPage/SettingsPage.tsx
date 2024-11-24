@@ -6,6 +6,7 @@ export const SettingsPage = () => {
       <Card
         sx={{
           margin: "0 auto",
+          minHeight: "200px",
         }}
         variant="soft"
       >

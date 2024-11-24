@@ -1,4 +1,4 @@
-import { MFApi } from '@api/api';
+import { MFApi } from '@api/mfApi';
 import { ImageDto } from '@models/image-dto.model';
 import { Box } from '@mui/joy';
 import { lazyPictureStyles } from './lazyPicture.styles';

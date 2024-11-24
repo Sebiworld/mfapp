@@ -1,11 +1,4 @@
-import {
-  Alert,
-  Box,
-  Button,
-  CircularProgress,
-  Sheet,
-  Typography,
-} from "@mui/joy";
+import { Alert, Box, Button, Typography } from "@mui/joy";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { pageStyles } from "./page.styles";
@@ -15,6 +8,7 @@ import { useGlobalStore } from "@src/store/global.store";
 import { selectLoadPage, selectPage } from "@src/store/pages.store";
 import { PageContents } from "./pageContents/PageContents";
 import { ProjectPage } from "./projectPage/ProjectPage";
+import { LoadingOverlay } from "@components/loadingOverlay/LoadingOverlay";
 
 export const Page = () => {
   const router = useRouterState();
@@ -28,8 +22,12 @@ export const Page = () => {
   const isLoading = loadedPage?.status === "loading";
 
   useEffect(() => {
+    if (loadedPage?.data?.id) {
+      return;
+    }
+
     loadPage(currentPath);
-  }, [currentPath, loadPage]);
+  }, [currentPath, loadPage, loadedPage?.data?.id]);
 
   useEffect(() => {
     console.log("page", { page });
@@ -39,14 +37,8 @@ export const Page = () => {
     <Box className="page" data-testid="page" sx={pageStyles}>
       <ProjectPage page={page}>
         <PageContents page={page}></PageContents>
+        {isLoading && <LoadingOverlay overlay={!!page?.id}></LoadingOverlay>}
       </ProjectPage>
-
-      {isLoading && (
-        <Sheet variant="soft" className="page-content message">
-          <CircularProgress />
-          {t("loading")}
-        </Sheet>
-      )}
 
       {loadedPage?.status === "error" && (
         <Alert

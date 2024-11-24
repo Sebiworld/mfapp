@@ -1,7 +1,49 @@
 {
+  "general": {
+    "required": "Pflichtfeld",
+    "loading": "Wird geladen...",
+    "no-data": "Keine Daten",
+    "no-selection": "Keine Auswahl",
+    "yes": "Ja",
+    "no": "Nein",
+    "o-clock": "Uhr",
+
+    "actions": {
+      "back-to-home": "Zurück zur Startseite",
+      "lets-go": "Los geht's!",
+      "confirm": "Bestätigen",
+      "back": "Zurück",
+      "forward": "Weiter",
+      "cancel": "Abbrechen",
+      "submit": "Abschicken",
+      "to-left": "Nach links",
+      "to-right": "Nach rechts",
+      "close": "Schließen",
+      "done": "Ok",
+      "clear": "Zurücksetzen",
+      "login": "Anmelden"
+    }
+  },
+
+  "error": {
+    "title": "Fehler",
+    "general": "Ein Fehler ist aufgetreten",
+    "general_label_x": "Fehler: {{x}}",
+
+    "default_error": {
+      "title": "Fehler",
+      "description": "Beim Laden der Seite ist ein Fehler aufgetreten."
+    },
+    "not_found_exception": {
+      "title": "404 Seite nicht gefunden",
+      "description": "Diese Seite konnte leider nicht gefunden werden."
+    }
+  },
+
   "languages": {
     "label": "Sprachen"
   },
+
   "splash": {
     "1": "App wird initialisiert...",
     "2": "Projekte werden geladen...",
@@ -26,26 +68,25 @@
     "21": "System wird defragmentiert...",
     "22": "Bits werden geschubst"
   },
-  "loading": "Wird geladen",
-  "no-data": "Keine Daten",
-  "errors": {
-    "default_error": {
-      "title": "Fehler",
-      "description": "Beim Laden der Seite ist ein Fehler aufgetreten."
-    },
-    "not_found_exception": {
-      "title": "404 Seite nicht gefunden",
-      "description": "Diese Seite konnte leider nicht gefunden werden."
-    }
+
+  "auth": {
+    "login": "Anmelden",
+    "login-successful": "Du bist jetzt eingeloggt. Herzlich Willkommen, {{name}}",
+    "login-error": "Die Anmeldung ist fehlgeschlagen. {{message}} [Fehlercode {{code}}]",
+    "logout": "Abmelden",
+    "logout-successful": "Du bist jetzt ausgeloggt.",
+    "logout-error": "Die Abmeldung ist fehlgeschlagen. {{message}} [Fehlercode {{code}}]",
+    "registration-successful": "Deine Registrierung wurde abgeschickt. Bitte halte in deinem Email-Postfach nach unserer Bestätigungs-Email Ausschau!",
+    "registration-error": "Die Registrierung ist fehlgeschlagen. {{message}} [Fehlercode {{code}}]",
+    "registration-confirm-successful": "Deine Registrierung war erfolgreich. Du kannst dich jetzt mit deiner Emailadresse und dem gewählten Passwort anmelden. Es kann allerdings ein paar Tage dauern, bis auch deine Benutzerrollen für die Projekte richtig angelegt sind. Sobald das geschafft ist, hast du auch Zugriff auf die Mitwirkenden-Bereiche der ensprechenden Projekte.",
+    "registration-confirm-error": "Die Registrierung konnte nicht abgeschlossen werden. {{message}} [Fehlercode {{code}}]"
   },
-  "actions": {
-    "back-to-home": "Zurück zur Startseite"
-  },
+
   "sidemenu": {
     "home": "Startseite",
-    "settings": "Einstellungen",
-    "login": "Anmelden"
+    "settings": "Einstellungen"
   },
+
   "footer": {
     "cta": "Werden Sie Mitglied!",
     "description": "Jetzt Vereinsmitglied werden, die Ziele unterstützen und das nächste Musical-Projekt fördern.",
@@ -53,13 +94,16 @@
     "by": "Entwickelt mit <heart/> von <a>Sebastian Schendel</a>",
     "copyright": "© {{year}}"
   },
+
   "home": {
     "title": "Home",
     "menu": "Home"
   },
+
   "user": {
     "title": "Deine Benutzereinstellungen"
   },
+
   "calendar": {
     "title": "Kalender",
     "menu": "Kalender",
@@ -96,6 +140,7 @@
     "menu": "Neuigkeiten",
     "view-archive": "Archiv ansehen"
   },
+
   "settings": {
     "title": "Einstellungen",
     "menu": "Einstellungen",
@@ -105,9 +150,11 @@
     "auto": "automatisch",
     "save": "speichern"
   },
+
   "page_card": {
     "btn_more": "Mehr dazu..."
   },
+
   "project": {
     "general_data": "Kurzinfos",
     "events": {
@@ -119,19 +166,34 @@
     "partners": "Unsere Partner",
     "sponsors": "Unsere Förderer"
   },
+
   "startup": {
-    "go": "Los geht's!"
-  },
-  "general": {
-    "required": "Pflichtfeld",
-    "done": "Ok",
-    "cancel": "Abbrechen",
-    "clear": "Zurücksetzen",
-    "loading": "Daten werden geladen",
-    "no-selection": "Keine Auswahl",
-    "yes": "Ja",
-    "no": "Nein",
-    "close": "Schließen",
-    "o-clock": "Uhr"
+    "error-no-nickname": "Bitte gib einen Spitznamen an!",
+    "nickname-success": "Danke dir! Herzlich Willkommen, {{name}}!",
+    "error-no-email-password": "Bitte trag deine Email-Adresse und dein Passwort ein.",
+    "email": "Email",
+    "password": "Passwort",
+    "error-wrong-credentials": "Entweder die Email-Adresse oder das Passwort sind nicht korrekt.",
+    "password-repeat": "Passwort wiederholen",
+    "firstname": "Vorname",
+    "lastname": "Nachname",
+    "nickname": "Spitzname",
+    "birthdate": "Geburtstag",
+    "roles": "Rollen",
+
+    "error": {
+      "invalid_email": "Keine valide Email-Adresse",
+      "email_required": "Bitte gib eine Email-Adresse ein!",
+      "password_required": "Bitte gib ein Passwort ein!",
+      "password_min_6_chars": "Das Passwort muss mindestens 6 Zeichen lang sein.",
+      "password_uppercase_letters": "Das Passwort muss Großbuchstaben enthalten",
+      "password_lowercase_letters": "Das Passwort muss Kleinbuchstaben enthalten",
+      "password_numbers": "Das Passwort muss Zahlen enthalten",
+      "passwordrepeat_required": "Bitte wiederhole das eingegebene Passwort.",
+      "passwords_dont_match": "Die beiden eingegebenen Passwörter stimmen nicht überein.",
+      "firstname_required": "Bitte gib deinen Vornamen ein.",
+      "lastname_required": "Bitte gib deinen Nachnamen ein.",
+      "birthdate_required": "Bitte gib deinen Geburtstag ein."
+    }
   }
 }

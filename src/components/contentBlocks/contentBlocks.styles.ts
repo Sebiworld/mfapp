@@ -17,6 +17,8 @@ export const contentBlocksStyles: SxProps = {
 
     "&.center": {
       textAlign: "center",
+      marginLeft: 'auto',
+      marginRight: 'auto'
     },
 
     p: {

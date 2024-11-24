@@ -11,6 +11,7 @@ import { Trans, useTranslation } from "react-i18next";
 import Lottie from "react-lottie";
 import heartAnimation from "@assets/lotties/heart.json";
 import { useCurrentDate } from "@utils/hooks/useCurrentDate";
+import { Link as TanstackLink } from "@tanstack/react-router";
 
 const heartAnimationOptions = {
   loop: true,
@@ -34,10 +35,12 @@ export function Footer() {
         component="footer"
         className="footer"
       >
-        <MfLogo layout="vertical"></MfLogo>
+        <Box component={TanstackLink} to="/">
+          <MfLogo layout="vertical"></MfLogo>
+        </Box>
 
         <p>{t("footer.description")}</p>
-        <Button component="a" target="_blank" href="/#mitglied-werden">
+        <Button component="a" href="#mitglied-werden">
           {t("footer.cta")}
         </Button>
 
@@ -45,11 +48,7 @@ export function Footer() {
           <strong>{t("footer.external")}</strong>
 
           <div className="social-actions">
-            <IconButton
-              component="a"
-              target="_blank"
-              href="https://www.musical-fabrik.de"
-            >
+            <IconButton component="a" href="https://www.musical-fabrik.de">
               <LanguageIcon></LanguageIcon>
             </IconButton>
             <IconButton

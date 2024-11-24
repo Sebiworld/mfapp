@@ -1,6 +1,3 @@
-
-import { ProjectDto } from "./project-dto.model";
-
 export interface PermissionDto {
   id: number;
   name: string;
@@ -17,8 +14,9 @@ export interface RoleDto {
 export interface UserDto {
   id: string;
   name: string;
-  email: string;
+  nickname?: string;
+  isLoggedIn?: boolean;
   roles?: RoleDto[];
   permissions?: PermissionDto[];
-  projects?: ProjectDto[];
+  hash?: string;
 }

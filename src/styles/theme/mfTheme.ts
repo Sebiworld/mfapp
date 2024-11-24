@@ -4,12 +4,10 @@ import { JoyAlertOverwrites } from "./MuiOverwrites/JoyAlert";
 import { JoyButtonOverwrites } from "./MuiOverwrites/JoyButton";
 import {
   mfDanger,
-  mfDark,
   mfDarkDark,
   mfDarkLight,
   mfInfoDark,
   mfInfoLight,
-  mfLight,
   mfLightDark,
   mfLightLight,
   mfNeutralDark,
@@ -22,6 +20,7 @@ import {
   mfWarning,
 } from "./colors";
 import { JoyModalOverwrites } from "./MuiOverwrites/JoyModal";
+import { JoyFormControl } from "./MuiOverwrites/JoyFormControl";
 
 declare module "@mui/joy/styles" {
   interface ColorPalettePropOverrides {
@@ -96,5 +95,6 @@ export const mfTheme = extendTheme({
     ...JoyAlertOverwrites,
     ...JoyButtonOverwrites,
     ...JoyModalOverwrites,
+    ...JoyFormControl,
   },
 });

@@ -56,6 +56,25 @@ export const JoyModalOverwrites: Components<Theme> = {
             flex: "1 1 auto",
             padding: "16px",
             overflow: "auto",
+            postition: "relative",
+            display: "flex",
+            flexDirection: "column",
+            gap: "32px",
+
+            section: {
+              postition: "relative",
+              display: "flex",
+              flexDirection: "column",
+              gap: "8px",
+
+              "&>p": {
+                margin: 0,
+              },
+
+              "&.center": {
+                alignItems: "center",
+              },
+            },
           },
 
           "&>.modal-footer": {},

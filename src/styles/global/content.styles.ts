@@ -22,6 +22,10 @@ export const globalContentStyles: Interpolation<Theme>[] = [
         maxWidth: "100%",
         width: "38em",
         alignSelf: "center",
+
+        "&.center": {
+          textAlign: "center",
+        },
       },
 
       hr: {

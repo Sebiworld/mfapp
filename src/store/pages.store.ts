@@ -1,10 +1,11 @@
 import { PageDtoVariant } from "@models/page/page-dto-variant.model";
 import { StateCreator } from "zustand";
 import { GlobalStore } from "./global.store";
-import { GetProjectsResponse, MFApi } from "@api/api";
+import { MFApi } from "@api/mfApi";
 import { LoadingStatus } from "@models/loading-status.model";
 import axios from "axios";
 import { ProjectDetailsDto } from "@models/project-dto.model";
+import { GetProjectsResponse } from "@api/projectsApi";
 
 export interface PagesState {
   pages: { [key: string]: LoadingStatus<PageDtoVariant> };
@@ -16,6 +17,9 @@ export interface PagesActions {
   loadPage: (path: string) => Promise<void>;
   loadProjects: () => Promise<void>;
   loadProjectDetails: (id: number) => Promise<void>;
+
+  initializePages: () => Promise<void>;
+  resetPages: () => Promise<void>;
 }
 
 export type PagesSlice = PagesState & PagesActions;
@@ -358,6 +362,28 @@ export const createPagesSlice: StateCreator<GlobalStore, [], [], PagesSlice> = (
         });
       }
     }
+  },
+
+  initializePages: async () => {
+    const loadProjects = get().loadProjects;
+    await loadProjects();
+
+    const setPartInitialized = get().setPartInitialized;
+    setPartInitialized("projects");
+  },
+
+  resetPages: async () => {
+    set((state) => {
+      state.pages = {};
+      state.projects = {
+        status: "uninitialized",
+      };
+      state.projectDetails = {};
+      return state;
+    });
+
+    const initializePages = get().initializePages;
+    await initializePages();
   },
 });
 

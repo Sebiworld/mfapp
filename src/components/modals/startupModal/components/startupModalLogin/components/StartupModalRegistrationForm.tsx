@@ -7,11 +7,10 @@ import {
   Input,
   Textarea,
 } from "@mui/joy";
-import { selectLogin, selectRegistration } from "@src/store/auth.store";
+import { selectRegistration } from "@src/store/auth.store";
 import { useGlobalStore } from "@src/store/global.store";
 import { Dispatch, SetStateAction } from "react";
 import { useTranslation } from "react-i18next";
-import { toast } from "react-toastify";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { StartupModalContentProps } from "../../../StartupModal";
 import { DatePicker } from "@mui/x-date-pickers";

@@ -9,6 +9,7 @@ import { selectLoadPage, selectPage } from "@src/store/pages.store";
 import { PageContents } from "./pageContents/PageContents";
 import { ProjectPage } from "./projectPage/ProjectPage";
 import { LoadingOverlay } from "@components/loadingOverlay/LoadingOverlay";
+import { AlertTitle } from "@mui/material";
 
 export const Page = () => {
   const router = useRouterState();
@@ -22,16 +23,12 @@ export const Page = () => {
   const isLoading = loadedPage?.status === "loading";
 
   useEffect(() => {
-    if (loadedPage?.data?.id) {
-      return;
-    }
-
     loadPage(currentPath);
   }, [currentPath, loadPage, loadedPage?.data?.id]);
 
-  useEffect(() => {
-    console.log("page", { page });
-  }, [page]);
+  // useEffect(() => {
+  //   console.log("page", { page });
+  // }, [page]);
 
   return (
     <Box className="page" data-testid="page" sx={pageStyles}>
@@ -42,7 +39,7 @@ export const Page = () => {
 
       {loadedPage?.status === "error" && (
         <Alert
-          startDecorator={<WarningIcon />}
+          startDecorator={<WarningIcon fontSize="large" />}
           variant="solid"
           className="alert"
           color="danger"
@@ -50,27 +47,35 @@ export const Page = () => {
           <Box className="alert-content">
             {i18n.exists(`errors.${loadedPage?.code}`) ? (
               <>
-                <Typography className="alert-title" level="h2">
+                <AlertTitle className="alert-title">
                   {t(`errors.${loadedPage?.code}.title`)}
-                </Typography>
+                </AlertTitle>
+
                 <Typography className="alert-content">
                   {t(`errors.${loadedPage?.code}.description`)}
                 </Typography>
-                <Button color="light" component={Link} to="/">
-                  {t("actions.back-to-home")}
-                </Button>
+
+                <Box className="alert-footer">
+                  <Button color="light" component={Link} to="/">
+                    {t("actions.back-to-home")}
+                  </Button>
+                </Box>
               </>
             ) : (
               <>
-                <Typography className="alert-title" level="h2">
-                  {t(`errors.default_error.title`)}
-                </Typography>
+                <AlertTitle className="alert-title">
+                  {t(`error.default_error.title`)}
+                </AlertTitle>
+
                 <Typography className="alert-content">
-                  {t(`errors.default_error.description`)}
+                  {t(`error.default_error.description`)}
                 </Typography>
-                <Button color="light" component={Link} to="/">
-                  {t("actions.back-to-home")}
-                </Button>
+
+                <Box className="alert-footer">
+                  <Button color="light" component={Link} to="/">
+                    {t("general.actions.back-to-home")}
+                  </Button>
+                </Box>
               </>
             )}
           </Box>

@@ -15,10 +15,14 @@ export const contentBlocksStyles: SxProps = {
     width: "38em",
     textAlign: "left",
 
+    "&.content-form": {
+      width: "100%",
+    },
+
     "&.center": {
       textAlign: "center",
-      marginLeft: 'auto',
-      marginRight: 'auto'
+      marginLeft: "auto",
+      marginRight: "auto",
     },
 
     p: {

@@ -2,7 +2,7 @@ import React from "react";
 import { ContentText } from "./variants/ContentText";
 import { ContentBlockTextDto } from "@models/content/content-block-text-dto.model";
 import { ContentBlockDtoVariant } from "@models/content/content-block-dto-variant.model";
-import { ContentForm } from "./variants/ContentForm";
+import { ContentForm } from "./variants/contentForm/ContentForm";
 import { ContentBlockFormDto } from "@models/content/content-block-form-dto.model";
 
 export interface ContentBlocksProps {
@@ -10,7 +10,7 @@ export interface ContentBlocksProps {
 }
 
 export const ContentBlock: React.FC<ContentBlocksProps> = ({ block }) => {
-  console.log('CONTENT BLOCK', block.type, block)
+  // console.log('CONTENT BLOCK', block.type, block)
   if (block.type === "text") {
     return (
       <ContentText

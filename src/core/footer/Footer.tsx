@@ -1,5 +1,4 @@
 import { MfLogo } from "@components/mfLogo/MfLogo";
-import { Box, Button, IconButton, Link, Sheet } from "@mui/joy";
 import { footerStyles } from "./footer.styles";
 import { SectionSpacer } from "@components/sectionSpacer/SectionSpacer";
 import LanguageIcon from "@mui/icons-material/Language";
@@ -12,6 +11,7 @@ import Lottie from "react-lottie";
 import heartAnimation from "@assets/lotties/heart.json";
 import { useCurrentDate } from "@utils/hooks/useCurrentDate";
 import { Link as TanstackLink } from "@tanstack/react-router";
+import { Box, Button, IconButton, Link, Paper } from "@mui/material";
 
 const heartAnimationOptions = {
   loop: true,
@@ -29,10 +29,10 @@ export function Footer() {
 
   return (
     <Box className="footer-wrapper" sx={footerStyles}>
-      <Sheet
-        variant="soft"
+      <Paper
         color="neutral"
         component="footer"
+        role="footer"
         className="footer"
       >
         <Box component={TanstackLink} to="/">
@@ -40,7 +40,12 @@ export function Footer() {
         </Box>
 
         <p>{t("footer.description")}</p>
-        <Button component="a" href="#mitglied-werden">
+        <Button
+          variant="contained"
+          color="primary"
+          size="large"
+          href="#mitglied-werden"
+        >
           {t("footer.cta")}
         </Button>
 
@@ -86,7 +91,6 @@ export function Footer() {
                     className="ext-link"
                     color="primary"
                     underline="always"
-                    variant="plain"
                     href="https://www.sebi.dev"
                     target="_blank"
                   />
@@ -106,7 +110,7 @@ export function Footer() {
             {t("footer.copyright", { year: currentDate.getFullYear() })}
           </div>
         </div>
-      </Sheet>
+      </Paper>
 
       <SectionSpacer position="top"></SectionSpacer>
     </Box>

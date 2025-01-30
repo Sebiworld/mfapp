@@ -1,4 +1,4 @@
-import { Box, Card } from "@mui/joy";
+import { Box, Card } from "@mui/material";
 
 export const SettingsPage = () => {
   return (
@@ -8,7 +8,6 @@ export const SettingsPage = () => {
           margin: "0 auto",
           minHeight: "200px",
         }}
-        variant="soft"
       >
         Settings
       </Card>

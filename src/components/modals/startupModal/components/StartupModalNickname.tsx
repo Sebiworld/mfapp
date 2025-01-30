@@ -1,10 +1,11 @@
-import { Box, Button, Input, ModalClose, Typography } from "@mui/joy";
 import { selectSetNickname } from "@src/store/auth.store";
 import { useGlobalStore } from "@src/store/global.store";
 import { FormEventHandler, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { StartupModalContentProps } from "../StartupModal";
+import CloseIcon from "@mui/icons-material/Close";
+import { Box, Button, IconButton, Input, Typography } from "@mui/material";
 
 interface FormElements extends HTMLFormControlsCollection {
   nickname: HTMLInputElement;
@@ -34,11 +35,13 @@ export const StartupModalNickname = ({
 
   return (
     <>
-      <ModalClose variant="plain" sx={{ m: 1 }} />
+      <IconButton onClick={closeModal}>
+        <CloseIcon></CloseIcon>
+      </IconButton>
 
       <Box className="modal-content">
         <form onSubmit={handleSubmit}>
-          <Typography level="body-lg">
+          <Typography>
             Aber zuerst...
             <br />
             <strong>Wie heißt du eigentlich?</strong>

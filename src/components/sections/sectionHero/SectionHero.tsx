@@ -22,12 +22,12 @@
 //     "contents": []
 // }
 
-import { SectionSpacer } from '@components/sectionSpacer/SectionSpacer';
-import { Box } from '@mui/joy';
-import React from 'react';
-import { sectionHeroStyles } from './section-hero.styles';
-import { SectionDto } from '@models/section/section-dto.model';
-import { LazyPicture } from '@components/lazyPicture/LazyPicture';
+import { SectionSpacer } from "@components/sectionSpacer/SectionSpacer";
+import React from "react";
+import { sectionHeroStyles } from "./section-hero.styles";
+import { SectionDto } from "@models/section/section-dto.model";
+import { LazyPicture } from "@components/lazyPicture/LazyPicture";
+import { Box } from "@mui/material";
 
 export interface SectionHeroProps {
   section: SectionDto;
@@ -35,7 +35,12 @@ export interface SectionHeroProps {
 
 export const SectionHero: React.FC<SectionHeroProps> = ({ section }) => {
   return (
-    <Box component="section" id={section.section_name} className="section section-hero" sx={sectionHeroStyles}>
+    <Box
+      component="section"
+      id={section.section_name}
+      className="section section-hero"
+      sx={sectionHeroStyles}
+    >
       {section.title && !section.hide_title && section.title}
 
       {section.main_image?.basename && (
@@ -44,7 +49,11 @@ export const SectionHero: React.FC<SectionHeroProps> = ({ section }) => {
         </Box>
       )}
 
-      <SectionSpacer position="bottom" logo="auto" logoColor="light"></SectionSpacer>
+      <SectionSpacer
+        position="bottom"
+        logo="auto"
+        logoColor="light"
+      ></SectionSpacer>
     </Box>
   );
 };

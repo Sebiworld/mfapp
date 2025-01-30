@@ -1,12 +1,4 @@
 import { ProjectEventsData } from "@models/project-dto.model";
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  CardOverflow,
-  Typography,
-} from "@mui/joy";
 import { useTranslation } from "react-i18next";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { sidebarBoxEventsStyles } from "./sidebarBoxEvents.styles";
@@ -15,6 +7,7 @@ import { useMemo } from "react";
 import { PerformanceDto } from "@models/utility-types/performance-dto.model";
 import { useCurrentDate } from "@utils/hooks/useCurrentDate";
 import { Link } from "@tanstack/react-router";
+import { Box, Button, Card, CardContent, Typography } from "@mui/material";
 
 export interface SidebarBoxEventsProps {
   data?: ProjectEventsData;
@@ -58,7 +51,7 @@ export const SidebarBoxEvents: React.FC<SidebarBoxEventsProps> = ({ data }) => {
       data-testid="sidebar-box-events"
       sx={sidebarBoxEventsStyles}
     >
-      <Typography className="box-title" level="h3">
+      <Typography className="box-title" variant="h3">
         {t("project.events.title")}
       </Typography>
 
@@ -83,9 +76,9 @@ export const SidebarBoxEvents: React.FC<SidebarBoxEventsProps> = ({ data }) => {
                       </Typography>
                     </CardContent>
 
-                    <CardOverflow className="cast" variant="soft">
+                    {/* <CardOverflow className="cast" variant="soft">
                       {item.casts?.map((cast) => cast.title).join(", ")}
-                    </CardOverflow>
+                    </CardOverflow> */}
                   </Card>
                 );
               })}
@@ -105,7 +98,7 @@ export const SidebarBoxEvents: React.FC<SidebarBoxEventsProps> = ({ data }) => {
 
         {!!sortedPerformances.past?.length && (
           <Box className="performances-wrapper past">
-            <Typography level="body-xs" className="description">
+            <Typography variant="bodyXS" className="description">
               {t("project.events.already-passed")}:
             </Typography>
 
@@ -127,9 +120,9 @@ export const SidebarBoxEvents: React.FC<SidebarBoxEventsProps> = ({ data }) => {
                       </Typography>
                     </CardContent>
 
-                    <CardOverflow className="cast" variant="soft">
+                    {/* TODO <CardOverflow className="cast" variant="soft">
                       {item.casts?.map((cast) => cast.title).join(", ")}
-                    </CardOverflow>
+                    </CardOverflow> */}
                   </Card>
                 );
               })}

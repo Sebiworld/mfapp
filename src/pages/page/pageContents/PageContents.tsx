@@ -1,9 +1,9 @@
-import { Box, Sheet, Typography } from "@mui/joy";
 import { SectionsContainer } from "@components/sections/SectionsContainer";
 import { ContentBlocks } from "@components/contentBlocks/ContentBlocks";
 import { pageContentsStyles } from "./pageContents.styles";
 import { DefaultPageDto } from "@models/page/default-page-dto.model";
 import { PageDtoVariant } from "@models/page/page-dto-variant.model";
+import { Box, Paper, Typography } from "@mui/material";
 
 export interface PagesContentsProps {
   page?: PageDtoVariant;
@@ -16,14 +16,16 @@ export const PageContents: React.FC<PagesContentsProps> = ({ page }) => {
 
   return (
     <Box
+      component="main"
+      role="main"
       className="page-contents"
       data-testid="page-contents"
       sx={pageContentsStyles}
     >
       {page?.template?.name !== "home" && (
-        <Sheet variant="soft" className="page-content">
+        <Paper className="page-content">
           {page?.template?.name !== "project" && (
-            <Typography level="h1">{page.title}</Typography>
+            <Typography variant="h1">{page.title}</Typography>
           )}
 
           {!!(page as DefaultPageDto)?.contents?.length && (
@@ -31,7 +33,7 @@ export const PageContents: React.FC<PagesContentsProps> = ({ page }) => {
               blocks={(page as DefaultPageDto).contents}
             ></ContentBlocks>
           )}
-        </Sheet>
+        </Paper>
       )}
 
       {!!(page as DefaultPageDto)?.sections?.length && (

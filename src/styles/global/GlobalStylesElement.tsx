@@ -1,4 +1,3 @@
-import { GlobalStyles } from "@mui/joy";
 import { globalFontsStyles } from "./fonts.styles";
 import { globalContentStyles } from "./content.styles";
 import { globalVariablesStyles } from "./variables.styles";
@@ -6,6 +5,7 @@ import { toastifyStyles } from "./vendors/toastify.styles";
 import { useGlobalStore } from "@src/store/global.store";
 import { selectGlobalCss } from "@src/store/settings.store";
 import { useMemo } from "react";
+import { GlobalStyles } from "@mui/material";
 
 export const GlobalStylesElement = () => {
   const globalCss = useGlobalStore(selectGlobalCss);

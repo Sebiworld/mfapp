@@ -1,4 +1,3 @@
-import { Modal, Sheet } from "@mui/joy";
 import { selectIsLoggedIn, selectNickname } from "@src/store/auth.store";
 import { useGlobalStore } from "@src/store/global.store";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -8,6 +7,7 @@ import { StartupModalNickname } from "./components/StartupModalNickname";
 import { StartupModalLogout } from "./components/StartupModalLogout";
 import { selectDidReceiveWelcomeMessage } from "@src/store/initialization.store";
 import { StartupModalLogin } from "./components/startupModalLogin/StartupModalLogin";
+import { Modal, Paper } from "@mui/material";
 
 export interface StartupModalProps {
   setIsStartupModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -53,12 +53,7 @@ export const StartupModal = ({ setIsStartupModalOpen }: StartupModalProps) => {
     }
 
     return <StartupModalLogin closeModal={closeModal}></StartupModalLogin>;
-  }, [
-    closeModal,
-    didReceiveWelcomeMessage,
-    isLoggedIn,
-    nickname,
-  ]);
+  }, [closeModal, didReceiveWelcomeMessage, isLoggedIn, nickname]);
 
   return (
     <Modal
@@ -70,9 +65,9 @@ export const StartupModal = ({ setIsStartupModalOpen }: StartupModalProps) => {
       }}
       sx={startupModalStyles}
     >
-      <Sheet className="modal-container" variant="outlined">
+      <Paper className="modal-container" variant="outlined">
         {modalComponent}
-      </Sheet>
+      </Paper>
     </Modal>
   );
 };

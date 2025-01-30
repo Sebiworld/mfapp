@@ -1,17 +1,22 @@
 import * as React from "react";
-import Box from "@mui/joy/Box";
-import Drawer from "@mui/joy/Drawer";
-import List from "@mui/joy/List";
-import ListItemButton from "@mui/joy/ListItemButton";
-import ModalClose from "@mui/joy/ModalClose";
 import ThemeSelect from "@components/ThemeSelect";
-import { Avatar, ListItem, Stack } from "@mui/joy";
 import { sidemenuStyles } from "./sidemenu.styles";
 import { useTranslation } from "react-i18next";
 import { Link } from "@tanstack/react-router";
 import { useGlobalStore } from "@src/store/global.store";
 import { selectCurrentUser, selectLogout } from "@src/store/auth.store";
 import { StartupModal } from "@components/modals/startupModal/StartupModal";
+import {
+  Avatar,
+  Box,
+  Drawer,
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  Stack,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 export interface SidemenuProps {
   sidemenuOpen: boolean;
@@ -38,7 +43,7 @@ export const Sidemenu = ({ sidemenuOpen, setSidemenuOpen }: SidemenuProps) => {
 
           {!!currentUser?.data?.isLoggedIn && (
             <Stack className="header-center user-box">
-              <Avatar variant="solid" size="lg" />
+              <Avatar />
               <Box className="name">
                 {currentUser.data.nickname || currentUser.data.name}
               </Box>
@@ -46,7 +51,13 @@ export const Sidemenu = ({ sidemenuOpen, setSidemenuOpen }: SidemenuProps) => {
           )}
 
           <Stack className="header-right">
-            <ModalClose id="close-icon" sx={{ position: "initial" }} />
+            <IconButton
+              id="close-icon"
+              sx={{ position: "initial" }}
+              onClick={() => setSidemenuOpen(false)}
+            >
+              <CloseIcon></CloseIcon>
+            </IconButton>
           </Stack>
         </Box>
 
@@ -83,7 +94,7 @@ export const Sidemenu = ({ sidemenuOpen, setSidemenuOpen }: SidemenuProps) => {
           },
         }}
       /> */}
-        <List size="lg" component="nav" className="navigation-list">
+        <List component="nav" className="navigation-list">
           <ListItem>
             <ListItemButton component={Link} to="/">
               {t("sidemenu.home")}
@@ -103,7 +114,7 @@ export const Sidemenu = ({ sidemenuOpen, setSidemenuOpen }: SidemenuProps) => {
           </ListItem>
         </List>
 
-        <List size="lg" component="nav" className="navigation-list">
+        <List  component="nav" className="navigation-list">
           <ListItem>
             <ListItemButton component={Link} to="/settings">
               {t("sidemenu.settings")}

@@ -1,4 +1,3 @@
-import { Box, Link } from "@mui/joy";
 import React, { useEffect, useRef } from "react";
 
 // Import Swiper React components
@@ -13,6 +12,7 @@ import { LazyPicture } from "@components/lazyPicture/LazyPicture";
 // import EffectMaterial from '@components/swiper/effects/effect-material.esm';
 import { SwiperOptions } from "swiper/types";
 import { featuredSliderStyles } from "./featuredSlider.styles";
+import { Box, Link } from "@mui/material";
 
 export interface FeaturedSliderProps {
   section: SectionPagesGridDto;
@@ -78,7 +78,6 @@ export const FeaturedSlider: React.FC<FeaturedSliderProps> = ({ section }) => {
                 href={card.url}
                 color="primary"
                 underline="always"
-                variant="plain"
                 className="card-wrapper"
               >
                 {!!image && (

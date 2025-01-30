@@ -1,4 +1,4 @@
-import { SxProps } from "@mui/joy/styles/types";
+import { SxProps } from "@mui/material";
 
 export const sidemenuStyles: SxProps = {
   ".MuiDrawer-content": {
@@ -12,6 +12,7 @@ export const sidemenuStyles: SxProps = {
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
+    minHeight: '42px',
 
     ".header-left": {
       position: "absolute",

@@ -1,4 +1,4 @@
-import { useColorScheme } from "@mui/joy";
+import { useColorScheme } from "@mui/material";
 
 export const useColorTheme = () => {
   const { mode, systemMode } = useColorScheme();

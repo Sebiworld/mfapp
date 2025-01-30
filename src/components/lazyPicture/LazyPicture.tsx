@@ -1,16 +1,24 @@
-import { MFApi } from '@api/mfApi';
-import { ImageDto } from '@models/image-dto.model';
-import { Box } from '@mui/joy';
-import { lazyPictureStyles } from './lazyPicture.styles';
-import { ComponentPropsWithoutRef } from 'react';
+import { MFApi } from "@api/mfApi";
+import { ImageDto } from "@models/image-dto.model";
+import { lazyPictureStyles } from "./lazyPicture.styles";
+import { ComponentPropsWithoutRef } from "react";
+import { Box } from "@mui/material";
 
 export interface LazyPictureProps {
   image: ImageDto;
-  pictureProps?: Partial<ComponentPropsWithoutRef<'picture'> & { [key: string]: unknown }>;
-  imageProps?: Partial<ComponentPropsWithoutRef<'img'> & { [key: string]: unknown }>;
+  pictureProps?: Partial<
+    ComponentPropsWithoutRef<"picture"> & { [key: string]: unknown }
+  >;
+  imageProps?: Partial<
+    ComponentPropsWithoutRef<"img"> & { [key: string]: unknown }
+  >;
 }
 
-export const LazyPicture: React.FC<LazyPictureProps> = ({ image, pictureProps, imageProps }) => {
+export const LazyPicture: React.FC<LazyPictureProps> = ({
+  image,
+  pictureProps,
+  imageProps,
+}) => {
   if (!image?.basename) {
     return;
   }
@@ -18,13 +26,18 @@ export const LazyPicture: React.FC<LazyPictureProps> = ({ image, pictureProps, i
   const fileUrl = MFApi.getFileByIdUrl(image.page_id, { file: image.basename });
 
   return (
-    <Box component="picture" className="lazy-picture" sx={lazyPictureStyles} {...pictureProps}>
+    <Box
+      component="picture"
+      className="lazy-picture"
+      sx={lazyPictureStyles}
+      {...pictureProps}
+    >
       <img
         alt={image.description}
         src={fileUrl}
         width={image.width}
         height={image.height}
-        loading='lazy'
+        loading="lazy"
         {...imageProps}
         // src="https://www.musical-fabrik.de/site/assets/files/5359/medicus-ensemble-bg.1000x500.jpg"
       />

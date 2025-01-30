@@ -1,45 +1,112 @@
-import {
-  Box,
-  Checkbox,
-  FormControl,
-  FormLabel,
-  Input,
-  Option,
-  Radio,
-  RadioGroup,
-  Select,
-  Textarea,
-} from "@mui/joy";
-import React, { useMemo } from "react";
+import React, { ReactNode, useMemo } from "react";
 import {
   FormElementDto,
   FormInputVariant,
 } from "@models/utility-types/form-dto.model";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { useTranslation } from "react-i18next";
-import { Control, Controller, FieldValues } from "react-hook-form";
+import { Control, Controller, FieldErrors, FieldValues } from "react-hook-form";
+import {
+  Box,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  InputAdornment,
+  MenuItem,
+  Radio,
+  RadioGroup,
+  Select,
+  TextField,
+} from "@mui/material";
+import { FormValidationResponseDto } from "@models/utility-types/form-validation-response-dto.model";
+import Check from "@mui/icons-material/Check";
 
 export interface ContentFormInputProps {
   item: FormInputVariant | FormElementDto;
   control?: Control<FieldValues>;
+  errors?: FieldErrors;
+  formValidationResponse?: FormValidationResponseDto;
 }
 
 export const ContentFormInput: React.FC<ContentFormInputProps> = ({
   item,
   control,
+  errors,
+  formValidationResponse,
 }) => {
   const { t } = useTranslation();
+  const fieldValidationState = useMemo(
+    () => formValidationResponse?.fields?.[item.name],
+    [formValidationResponse?.fields, item.name]
+  );
+
+  const fieldError = useMemo((): ReactNode => {
+    // Local zod validation errors
+    if (errors?.[item.name]?.message) {
+      return errors?.[item.name]?.message as string;
+    }
+
+    // Server side errors
+    if (
+      isValidArray(fieldValidationState?.error) &&
+      fieldValidationState.error.length
+    ) {
+      return fieldValidationState.error.map((error, index) => (
+        <>
+          {index !== 0 && <br />}
+          {error}
+        </>
+      ));
+    }
+
+    return "";
+  }, [errors, fieldValidationState, item.name]);
+
+  const fieldSuccess = useMemo(() => {
+    return fieldValidationState?.isSuccessful;
+  }, [fieldValidationState]);
 
   const inputElement = useMemo(() => {
     if (item.type === "antispam_code") {
       if (!control) {
-        return <Input name={item.name}></Input>;
+        return (
+          <TextField
+            name={item.name}
+            error={!!fieldError}
+            helperText={fieldError}
+            className={`${fieldSuccess ? "successful" : ""}`}
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <InputAdornment position="end" className="success-marker">
+                    <Check color="success" />
+                  </InputAdornment>
+                ),
+              },
+            }}
+          ></TextField>
+        );
       }
 
       return (
         <Controller
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Input onBlur={onBlur} onChange={onChange} value={value}></Input>
+          render={({ field }) => (
+            <TextField
+              {...field}
+              error={!!fieldError}
+              helperText={fieldError}
+              className={`${fieldSuccess ? "successful" : ""}`}
+              slotProps={{
+                input: {
+                  endAdornment: (
+                    <InputAdornment position="end" className="success-marker">
+                      <Check color="success" />
+                    </InputAdornment>
+                  ),
+                },
+              }}
+            ></TextField>
           )}
           control={control}
           name={item.name}
@@ -49,13 +116,43 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
 
     if (item.type === "text") {
       if (!control) {
-        return <Input name={item.name}></Input>;
+        return (
+          <TextField
+            name={item.name}
+            error={!!fieldError}
+            helperText={fieldError}
+            className={`${fieldSuccess ? "successful" : ""}`}
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <InputAdornment position="end" className="success-marker">
+                    <Check color="success" />
+                  </InputAdornment>
+                ),
+              },
+            }}
+          ></TextField>
+        );
       }
 
       return (
         <Controller
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Input onBlur={onBlur} onChange={onChange} value={value}></Input>
+          render={({ field }) => (
+            <TextField
+              {...field}
+              error={!!fieldError}
+              helperText={fieldError}
+              className={`${fieldSuccess ? "successful" : ""}`}
+              slotProps={{
+                input: {
+                  endAdornment: (
+                    <InputAdornment position="end" className="success-marker">
+                      <Check color="success" />
+                    </InputAdornment>
+                  ),
+                },
+              }}
+            ></TextField>
           )}
           control={control}
           name={item.name}
@@ -65,18 +162,45 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
 
     if (item.type === "email") {
       if (!control) {
-        return <Input type="email" name={item.name}></Input>;
+        return (
+          <TextField
+            type="email"
+            name={item.name}
+            error={!!fieldError}
+            helperText={fieldError}
+            className={`${fieldSuccess ? "successful" : ""}`}
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <InputAdornment position="end" className="success-marker">
+                    <Check color="success" />
+                  </InputAdornment>
+                ),
+              },
+            }}
+          ></TextField>
+        );
       }
 
       return (
         <Controller
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Input
+          render={({ field }) => (
+            <TextField
+              {...field}
               type="email"
-              onBlur={onBlur}
-              onChange={onChange}
-              value={value}
-            ></Input>
+              error={!!fieldError}
+              helperText={fieldError}
+              className={`${fieldSuccess ? "successful" : ""}`}
+              slotProps={{
+                input: {
+                  endAdornment: (
+                    <InputAdornment position="end" className="success-marker">
+                      <Check color="success" />
+                    </InputAdornment>
+                  ),
+                },
+              }}
+            ></TextField>
           )}
           control={control}
           name={item.name}
@@ -86,18 +210,47 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
 
     if (item.type === "textarea") {
       if (!control) {
-        return <Textarea name={item.name} minRows={2}></Textarea>;
+        return (
+          <TextField
+            name={item.name}
+            minRows={2}
+            multiline
+            error={!!fieldError}
+            helperText={fieldError}
+            className={`${fieldSuccess ? "successful" : ""}`}
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <InputAdornment position="end" className="success-marker">
+                    <Check color="success" />
+                  </InputAdornment>
+                ),
+              },
+            }}
+          ></TextField>
+        );
       }
 
       return (
         <Controller
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Textarea
-              onBlur={onBlur}
-              onChange={onChange}
-              value={value}
+          render={({ field }) => (
+            <TextField
+              {...field}
               minRows={2}
-            ></Textarea>
+              multiline
+              error={!!fieldError}
+              helperText={fieldError}
+              className={`${fieldSuccess ? "successful" : ""}`}
+              slotProps={{
+                input: {
+                  endAdornment: (
+                    <InputAdornment position="end" className="success-marker">
+                      <Check color="success" />
+                    </InputAdornment>
+                  ),
+                },
+              }}
+            ></TextField>
           )}
           control={control}
           name={item.name}
@@ -107,16 +260,20 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
 
     if (item.type === "checkbox") {
       if (!control) {
-        return <Checkbox name={item.name}></Checkbox>;
+        return (
+          <Checkbox
+            name={item.name}
+            className={`${fieldSuccess ? "successful" : ""}`}
+          ></Checkbox>
+        );
       }
 
       return (
         <Controller
-          render={({ field: { onChange, onBlur, value } }) => (
+          render={({ field }) => (
             <Checkbox
-              onBlur={onBlur}
-              onChange={onChange}
-              value={value}
+              {...field}
+              className={`${fieldSuccess ? "successful" : ""}`}
             ></Checkbox>
           )}
           control={control}
@@ -152,11 +309,13 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
               // }}
               name={item.name}
               value={v}
+              error={Boolean(errors?.[item.name])}
+              className={`${fieldSuccess ? "successful" : ""}`}
             >
               {item.options?.map((option) => (
-                <Option key={option.id} value={option.id}>
+                <MenuItem key={option.id} value={option.id}>
                   {option.title}
-                </Option>
+                </MenuItem>
               ))}
             </Select>
           );
@@ -185,6 +344,8 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
                   multiple
                   defaultValue={[]}
                   value={v}
+                  error={Boolean(errors?.[item.name])}
+                  className={`${fieldSuccess ? "successful" : ""}`}
                   // sx={{ minWidth: "13rem" }}
                   // slotProps={{
                   //   listbox: {
@@ -195,9 +356,9 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
                   // }}
                 >
                   {item?.options?.map((option) => (
-                    <Option key={option.id} value={option.id}>
+                    <MenuItem key={option.id} value={option.id}>
                       {option.title}
-                    </Option>
+                    </MenuItem>
                   ))}
                 </Select>
               );
@@ -210,9 +371,16 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
 
       if (!control) {
         return (
-          <RadioGroup name={item.name}>
+          <RadioGroup
+            name={item.name}
+            className={`${fieldSuccess ? "successful" : ""}`}
+          >
             {item.options?.map((option) => (
-              <Radio value={option.value} label={option.title}></Radio>
+              <FormControlLabel
+                value={option.value}
+                label={option.title}
+                control={<Radio />}
+              />
             ))}
           </RadioGroup>
         );
@@ -221,9 +389,18 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
       return (
         <Controller
           render={({ field: { onChange, onBlur, value } }) => (
-            <RadioGroup onBlur={onBlur} onChange={onChange} value={value}>
+            <RadioGroup
+              onBlur={onBlur}
+              onChange={onChange}
+              value={value}
+              className={`${fieldSuccess ? "successful" : ""}`}
+            >
               {item.options?.map((option) => (
-                <Radio value={option.value} label={option.title}></Radio>
+                <FormControlLabel
+                  value={option.value}
+                  label={option.title}
+                  control={<Radio />}
+                />
               ))}
             </RadioGroup>
           )}
@@ -235,13 +412,43 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
 
     if (item.type === "input") {
       if (!control) {
-        return <Input name={item.name}></Input>;
+        return (
+          <TextField
+            name={item.name}
+            className={`${fieldSuccess ? "successful" : ""}`}
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <InputAdornment position="end" className="success-marker">
+                    <Check color="success" />
+                  </InputAdornment>
+                ),
+              },
+            }}
+          ></TextField>
+        );
       }
 
       return (
         <Controller
           render={({ field: { onChange, onBlur, value } }) => (
-            <Input onBlur={onBlur} onChange={onChange} value={value}></Input>
+            <TextField
+              onBlur={onBlur}
+              onChange={onChange}
+              value={value}
+              error={Boolean(errors?.[item.name])}
+              helperText={(errors?.[item.name]?.message as string) || ""}
+              className={`${fieldSuccess ? "successful" : ""}`}
+              slotProps={{
+                input: {
+                  endAdornment: (
+                    <InputAdornment position="end" className="success-marker">
+                      <Check color="success" />
+                    </InputAdornment>
+                  ),
+                },
+              }}
+            ></TextField>
           )}
           control={control}
           name={item.name}
@@ -250,13 +457,21 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
     }
 
     return <Box>{t("error.title")}</Box>;
-  }, [control, item, t]);
+  }, [control, errors, fieldError, fieldSuccess, item, t]);
 
   return (
-    <FormControl required={item?.required}>
-      <FormLabel slotProps={{ asterisk: { title: t("general.required") } }}>
+    <FormControl
+      required={item?.required}
+      error={Boolean(errors?.[item.name])}
+      className={`content-form-input type-${item.type} ${fieldSuccess ? "successful" : ""}`}
+      // helperText={(errors?.[item.name]?.message as string) || ""}
+    >
+      <FormLabel
+      // slotProps={{ asterisk: { title: t("general.required") } }}
+      >
         {item.label}
       </FormLabel>
+
       {inputElement}
     </FormControl>
   );

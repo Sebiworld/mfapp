@@ -29,6 +29,7 @@
     "title": "Fehler",
     "general": "Ein Fehler ist aufgetreten",
     "general_label_x": "Fehler: {{x}}",
+    "general_message_code": "Ein Fehler ist aufgetreten. {{message}} [Fehlercode {{code}}]",
 
     "default_error": {
       "title": "Fehler",

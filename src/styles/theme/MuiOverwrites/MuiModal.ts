@@ -1,7 +1,7 @@
-import { Components, Theme } from "@mui/joy";
+import { Components, Theme } from "@mui/material/styles";
 
-export const JoyModalOverwrites: Components<Theme> = {
-  JoyModal: {
+export const MuiModalOverwrites: Components<Theme> = {
+  MuiModal: {
     styleOverrides: {
       root: () => ({
         display: "flex",

@@ -1,8 +1,9 @@
-import { Box, Button, ModalClose } from "@mui/joy";
 import { selectLogout } from "@src/store/auth.store";
 import { useGlobalStore } from "@src/store/global.store";
 import { useTranslation } from "react-i18next";
 import { StartupModalContentProps } from "../StartupModal";
+import { Box, Button, IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 export const StartupModalLogout = ({
   closeModal,
@@ -12,7 +13,9 @@ export const StartupModalLogout = ({
 
   return (
     <>
-      <ModalClose variant="plain" sx={{ m: 1 }} />
+      <IconButton onClick={closeModal}>
+        <CloseIcon></CloseIcon>
+      </IconButton>
 
       <Box className="modal-content">
         <p>
@@ -22,7 +25,7 @@ export const StartupModalLogout = ({
         </p>
 
         <Button
-          color="danger"
+          color="error"
           onClick={() => {
             logout();
           }}

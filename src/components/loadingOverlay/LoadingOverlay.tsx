@@ -1,6 +1,6 @@
-import { Box, Card, CircularProgress, Typography } from "@mui/joy";
 import { useTranslation } from "react-i18next";
 import { loadingOverlayStyles } from "./loadingOverlay.styles";
+import { Box, Card, CircularProgress, Typography } from "@mui/material";
 
 interface LoadingOverlayProps {
   overlay?: boolean;

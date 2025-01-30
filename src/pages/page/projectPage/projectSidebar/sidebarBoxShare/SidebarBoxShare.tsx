@@ -1,8 +1,8 @@
-import { Box, Typography } from "@mui/joy";
 import { useTranslation } from "react-i18next";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { sidebarBoxShareStyles } from "./sidebarBoxShare.styles";
 import { IconLinkDto } from "@models/utility-types/icon-link-dto.model";
+import { Box, Typography } from "@mui/material";
 
 export interface SidebarBoxShareProps {
   data?: IconLinkDto[];
@@ -21,7 +21,7 @@ export const SidebarBoxShare: React.FC<SidebarBoxShareProps> = ({ data }) => {
       data-testid={`sidebar-box-share`}
       sx={sidebarBoxShareStyles}
     >
-      <Typography className="box-title" level="h3">
+      <Typography className="box-title" variant="h3">
         {t(`project.share`)}
       </Typography>
 

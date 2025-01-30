@@ -1,10 +1,10 @@
 import { ProjectGeneralDataBlock } from "@models/project-dto.model";
-import { Box, List, ListItem, ListItemButton, Typography } from "@mui/joy";
 import { useTranslation } from "react-i18next";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { sidebarBoxGeneralStyles } from "./sidebarBoxGeneral.styles";
 import { SidebarBoxGeneralItemContent } from "./SidebarBoxGeneralItemContent";
 import { Link } from "@tanstack/react-router";
+import { Box, List, ListItem, ListItemButton, Typography } from "@mui/material";
 
 export interface SidebarBoxGeneralProps {
   data?: ProjectGeneralDataBlock[];
@@ -25,7 +25,7 @@ export const SidebarBoxGeneral: React.FC<SidebarBoxGeneralProps> = ({
       data-testid="sidebar-box-general"
       sx={sidebarBoxGeneralStyles}
     >
-      <Typography className="box-title" level="h3">
+      <Typography className="box-title" variant="h3">
         {t("project.general_data")}
       </Typography>
 

@@ -1,27 +1,30 @@
 import { SxProps } from "@mui/material";
+import { mfTheme } from "@styles/theme/mfTheme";
 
 export const pageContentsStyles: SxProps = {
-  '.page-content': {
+  background: mfTheme.vars.palette.background.default,
+
+  ".page-content": {
     mx: 4,
     my: 4,
     py: 4,
     px: 4,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-start',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-start",
     gap: 2,
-    borderRadius: 'sm',
-    boxShadow: 'md',
+    borderRadius: "sm",
+    boxShadow: "md",
 
-    '&.message': {
+    "&.message": {
       width: 300,
-      marginY: '128px'
-    }
+      marginY: "128px",
+    },
   },
 
-  '.alert': {
+  ".alert": {
     // width: 400,
-    mx: 'auto',
-    marginY: '128px'
-  }
+    mx: "auto",
+    marginY: "128px",
+  },
 };

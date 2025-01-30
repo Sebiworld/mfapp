@@ -1,20 +1,12 @@
-import {
-  AspectRatio,
-  Box,
-  Button,
-  Card,
-  CardContent,
-  CardOverflow,
-  Typography,
-} from "@mui/joy";
 import React from "react";
 import Masonry from "@mui/lab/Masonry";
 
 import { SectionPagesGridDto } from "@models/section/section-pages-grid-dto.model";
-import { LazyPicture } from "@components/lazyPicture/LazyPicture";
+// import { LazyPicture } from "@components/lazyPicture/LazyPicture";
 import { pagesGridStyles } from "./pagesGrid.styles";
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
+import { Box, Button, Card, CardContent, Typography } from "@mui/material";
 
 export interface PagesGridProps {
   section: SectionPagesGridDto;
@@ -37,18 +29,18 @@ export const PagesGrid: React.FC<PagesGridProps> = ({ section }) => {
           const image = card.card_image || card.main_image;
           return (
             <Card key={card.id} className="page-card" variant="outlined">
-              {!!image && (
+              {/* {!!image && (
                 <CardOverflow>
                   <AspectRatio>
                     <LazyPicture image={image}></LazyPicture>
                   </AspectRatio>
                 </CardOverflow>
-              )}
+              )} */}
 
               {(!!card.title || !!card.intro || !!card.description) && (
                 <CardContent className="card-content">
                   {!!card.title && (
-                    <Typography level="title-lg" component="h3">
+                    <Typography variant="h3">
                       <Box
                         className="card-title"
                         dangerouslySetInnerHTML={{ __html: card.title }}
@@ -57,7 +49,7 @@ export const PagesGrid: React.FC<PagesGridProps> = ({ section }) => {
                   )}
 
                   {!!card.intro && (
-                    <Typography level="body-sm">
+                    <Typography variant="body2">
                       <Box
                         className="card-intro"
                         dangerouslySetInnerHTML={{ __html: card.intro }}
@@ -66,7 +58,7 @@ export const PagesGrid: React.FC<PagesGridProps> = ({ section }) => {
                   )}
 
                   {!!card.description && (
-                    <Typography level="body-sm">
+                    <Typography variant="body2">
                       <Box
                         className="card-description"
                         dangerouslySetInnerHTML={{ __html: card.description }}
@@ -76,17 +68,17 @@ export const PagesGrid: React.FC<PagesGridProps> = ({ section }) => {
                 </CardContent>
               )}
 
-              <CardOverflow>
-                <Button
-                  variant="solid"
-                  color="neutral"
-                  // size="lg"
-                  component={Link}
-                  to={card.url}
-                >
-                  {t("page_card.btn_more")}
-                </Button>
-              </CardOverflow>
+              {/* <CardOverflow> */}
+              <Button
+                variant="contained"
+                color="secondary"
+                // size="lg"
+                component={Link}
+                to={card.url}
+              >
+                {t("page_card.btn_more")}
+              </Button>
+              {/* </CardOverflow> */}
             </Card>
           );
         })}

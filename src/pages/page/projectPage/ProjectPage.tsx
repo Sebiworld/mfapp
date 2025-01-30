@@ -1,6 +1,5 @@
 import { PageDtoVariant } from "@models/page/page-dto-variant.model";
 import { projectPageStyles } from "./projectPage.styles";
-import { AspectRatio, Box, Card, Typography } from "@mui/joy";
 import { useGlobalStore } from "@src/store/global.store";
 import {
   selectLoadProjectDetails,
@@ -8,13 +7,14 @@ import {
 } from "@src/store/pages.store";
 import { useEffect, useMemo } from "react";
 import { ProjectSidebar } from "./projectSidebar/ProjectSidebar";
-import { LazyPicture } from "@components/lazyPicture/LazyPicture";
+// import { LazyPicture } from "@components/lazyPicture/LazyPicture";
 import { Link } from "@tanstack/react-router";
 import { getProjectCssVars } from "./functions/getProjectCssVars";
 import {
   selectResetGlobalCss,
   selectSetGlobalCss,
 } from "@src/store/settings.store";
+import { Box, Card, Typography } from "@mui/material";
 
 export interface ProjectPageProps {
   page?: PageDtoVariant;
@@ -64,27 +64,26 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({ page, children }) => {
     >
       <Box className="project-header" data-testid="project-header">
         <Box className="main-image" component={Link} to={projectPage.url}>
-          <AspectRatio ratio="11/4" variant="soft">
+          {/* <AspectRatio ratio="11/4" variant="soft">
             {projectPage?.main_image?.basename ? (
               <LazyPicture image={projectPage.main_image}></LazyPicture>
             ) : (
               <img src="/img/mf-bg.jpg"></img>
             )}
-          </AspectRatio>
+          </AspectRatio> */}
         </Box>
 
         <Box className="project-subheader">
           {projectPage?.info_overlay && (
             <Card
               color="projectPrimary"
-              variant="solid"
               className="project-teaser"
               dangerouslySetInnerHTML={{ __html: projectPage.info_overlay }}
             ></Card>
           )}
 
           <Box className="project-meta">
-            <Typography className="project-title" level="h3">
+            <Typography className="project-title" variant="h3">
               {projectPage.title}
             </Typography>
             <Typography className="project-description">

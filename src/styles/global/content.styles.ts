@@ -1,5 +1,5 @@
 import { Interpolation } from "@emotion/react";
-import { Theme } from "@mui/joy";
+import { Theme } from "@mui/material";
 import { mfTheme } from "@styles/theme/mfTheme";
 
 export const globalContentStyles: Interpolation<Theme>[] = [
@@ -36,7 +36,7 @@ export const globalContentStyles: Interpolation<Theme>[] = [
       "p.capital-letter, .capital-letter P:first-of-type, &.capital-letter P:first-of-type":
         {
           "&:first-letter": {
-            fontFamily: mfTheme.fontFamily.fallback,
+            fontFamily: mfTheme.vars.font.serif,
             fontSize: "5.5rem",
             float: "left",
             lineHeight: "0.6",
@@ -49,12 +49,12 @@ export const globalContentStyles: Interpolation<Theme>[] = [
         transition: "color 0.2s",
 
         "&:hover, &:focus": {
-          color: mfTheme.palette.primary[500],
+          color: "var(--mf-palette-primary-200)",
         },
       },
 
       "a:not(.btn):not(.nav-link):not(.no-underline), .btn-link": {
-        textDecorationColor: mfTheme.palette.primary[500],
+        textDecorationColor: "var(--mf-palette-primary-500)",
         textDecorationThickness: "0.125em",
         textUnderlineOffset: "1.5px",
       },
@@ -68,11 +68,12 @@ export const globalContentStyles: Interpolation<Theme>[] = [
         paddingBlock: "var(--Button-paddingBlock, 0.375rem)",
         paddingInline: "1rem",
         boxSizing: "border-box",
-        borderRadius: "var(--Button-radius, var(--mf-radius-sm))",
+        borderRadius: "var(--mf-shape-borderRadius)",
         textDecoration: "none",
         fontFamily: "var(--mf-fontFamily-body)",
-        fontWeight: "var(--mf-fontWeight-lg)",
+        fontWeight: "bold",
         lineHeight: "var(--mf-lineHeight-md)",
+        boxShadow: "var(--mf-shadows-2)",
         margin: "2px",
         backgroundColor:
           "var(--variant-solidBg, var(--mf-palette-primary-solidBg, var(--mf-palette-primary-500, #0B6BCB)))",

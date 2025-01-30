@@ -1,8 +1,8 @@
-import { Box, LinearProgress, Sheet, Typography } from "@mui/joy";
 import { splashScreenStyles } from "./splashScreen.styles";
 import { useEffect, useState } from "react";
 import { MfLogo } from "@components/mfLogo/MfLogo";
 import { useTranslation } from "react-i18next";
+import { Box, LinearProgress, Paper, Typography } from "@mui/material";
 
 export interface SplashScreenProps {
   visible?: boolean;
@@ -36,7 +36,7 @@ export const SplashScreen = ({ visible }: SplashScreenProps) => {
   }
 
   return (
-    <Sheet
+    <Paper
       className="splash-screen"
       data-testid="splash-screen"
       sx={splashScreenStyles}
@@ -49,6 +49,6 @@ export const SplashScreen = ({ visible }: SplashScreenProps) => {
       <Typography className="loading-message">
         {t(`splash.${messageNumber}`)}
       </Typography>
-    </Sheet>
+    </Paper>
   );
 };

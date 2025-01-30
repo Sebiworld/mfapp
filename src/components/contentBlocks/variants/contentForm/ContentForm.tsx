@@ -1,15 +1,20 @@
 import { ContentBlockFormDto } from "@models/content/content-block-form-dto.model";
-import { Box, Button } from "@mui/joy";
-import React, { FormEvent, useCallback, useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { contentFormStyles } from "./contentForm.styles";
 import { FormGroupedElement } from "@models/utility-types/form-dto.model";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { ContentFormGroup } from "./components/ContentFormGroup";
 import { useTranslation } from "react-i18next";
 import { pageApi } from "@api/pageApi";
-import { z, ZodTypeAny } from "zod";
+import { ZodTypeAny } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { Box, Button } from "@mui/material";
+import { FormValidationResponseDto } from "@models/utility-types/form-validation-response-dto.model";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { zod } from "@utils/i18n/i18n";
+import { superRefineIsNotEmpty } from "@utils/functions/zod/superRefineIsNotEmpty";
 
 export interface ContentTextProps {
   block: ContentBlockFormDto;
@@ -76,35 +81,38 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
         }
 
         if (fieldData.type === "checkbox") {
-          fieldValidations[fieldData.id] = z.optional(z.boolean());
+          fieldValidations[fieldData.id] = zod.optional(zod.boolean());
 
           if (fieldData.required) {
-            fieldValidations[fieldData.id] = z.boolean();
+            fieldValidations[fieldData.id] = zod.boolean();
           }
         } else if (fieldData.type === "options") {
-          fieldValidations[fieldData.id] = z.nullable(
-            z.array(z.union([z.string(), z.number()]))
+          fieldValidations[fieldData.id] = zod.nullable(
+            zod.array(zod.union([zod.string(), zod.number()]))
           );
 
           if (fieldData.required) {
-            fieldValidations[fieldData.id] = z
-              .array(z.union([z.string(), z.number()]))
+            fieldValidations[fieldData.id] = zod
+              .array(zod.union([zod.string(), zod.number()]))
               .min(1);
           }
         } else {
-          fieldValidations[fieldData.id] = z.string();
+          fieldValidations[fieldData.id] = zod.string();
 
           if (fieldData.required) {
-            fieldValidations[fieldData.id] = z.string().min(1);
+            fieldValidations[fieldData.id] = zod
+              .string()
+              // .min(1)
+              .superRefine(superRefineIsNotEmpty);
           }
         }
       }
     }
 
-    return z.object(fieldValidations);
+    return zod.object(fieldValidations);
   }, [block?.form?.fields]);
 
-  type FormData = z.infer<typeof validationSchema>;
+  type FormData = zod.infer<typeof validationSchema>;
 
   const formDataDefaults: FormData = useMemo(() => {
     const output: FormData = {};
@@ -146,10 +154,6 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
   //   console.log("groupedFields", groupedFields);
   // }, [groupedFields]);
 
-  useEffect(() => {
-    console.log("state", errors);
-  }, [errors]);
-
   // const submitForm = useCallback(
   //   async (event: FormEvent<HTMLFormElement>) => {
   //     event.preventDefault();
@@ -165,9 +169,51 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
   //   [block.form.form_origin]
   // );
 
-  const onSubmit: SubmitHandler<FormData> = useCallback(async (data) => {
-    console.log("submit2", data);
-  }, []);
+  const [formValidationResponse, setFormValidationResponse] = useState<
+    FormValidationResponseDto | undefined
+  >(undefined);
+
+  const [loading, setLoading] = useState<boolean>(false);
+  const onSubmit: SubmitHandler<FormData> = useCallback(
+    async (data) => {
+      setLoading(true);
+      try {
+        const response = await pageApi.submitPageForm(
+          "kontakt",
+          block.form.form_origin,
+          data
+        );
+        console.log("response", response);
+        setFormValidationResponse(response.data);
+      } catch (error) {
+        console.log("ERROR", error);
+        if (axios.isAxiosError(error)) {
+          toast.error(
+            t("error.general_message_code", {
+              message: error.message,
+              code: error.code,
+            }),
+            { toastId: "form_submit_error" }
+          );
+          setFormValidationResponse(error.response?.data);
+        } else {
+          toast.error(
+            t("error.general_message_code", {
+              message: (error as { message?: string })?.message || "Unknown",
+              code: "unknown",
+            }),
+            { toastId: "form_submit_error" }
+          );
+        }
+      }
+      setLoading(false);
+    },
+    [block.form.form_origin, t]
+  );
+
+  React.useEffect(() => {
+    console.log("ERRORS---", errors);
+  }, [errors]);
 
   if (!groupedFields?.fields?.length) {
     return null;
@@ -185,10 +231,17 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
         item={groupedFields}
         isRoot={true}
         control={control}
+        errors={errors}
+        formValidationResponse={formValidationResponse}
       ></ContentFormGroup>
 
       <Box className="form-actions">
-        <Button type="submit" size="lg">
+        <Button
+          variant="contained"
+          size="large"
+          type="submit"
+          loading={loading}
+        >
           {t("general.actions.submit")}
         </Button>
       </Box>

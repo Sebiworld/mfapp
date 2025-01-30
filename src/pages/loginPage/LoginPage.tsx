@@ -1,22 +1,21 @@
-import { Box, Sheet, FormControl, FormLabel, Input, Button, Typography } from '@mui/joy';
-import { Link } from '@tanstack/react-router';
+import { Box, Button, FormControl, FormLabel, Input, Paper, Typography } from "@mui/material";
+import { Link } from "@tanstack/react-router";
 
 export const LoginPage = () => {
   return (
     <Box>
-      <Sheet
-        variant="soft"
+      <Paper
         sx={{
           width: 300,
-          mx: 'auto', // margin left & right
+          mx: "auto", // margin left & right
           my: 4, // margin top & bottom
           py: 3, // padding top & bottom
           px: 2, // padding left & right
-          display: 'flex',
-          flexDirection: 'column',
+          display: "flex",
+          flexDirection: "column",
           gap: 2,
-          borderRadius: 'sm',
-          boxShadow: 'md',
+          borderRadius: "sm",
+          boxShadow: "md",
         }}
       >
         <FormControl>
@@ -34,10 +33,14 @@ export const LoginPage = () => {
         </FormControl>
 
         <Button sx={{ mt: 1 /* margin top */ }}>Log in</Button>
-        <Typography endDecorator={<Link to="/">Sign up</Link>} fontSize="sm" sx={{ alignSelf: 'center' }}>
+        {/* <Typography
+          endDecorator={<Link to="/">Sign up</Link>}
+          fontSize="sm"
+          sx={{ alignSelf: "center" }}
+        >
           Don't have an account?
-        </Typography>
-      </Sheet>
+        </Typography> */}
+      </Paper>
     </Box>
   );
 };

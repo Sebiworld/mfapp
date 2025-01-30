@@ -1,4 +1,4 @@
-import { SxProps } from "@mui/joy/styles/types";
+import { SxProps } from "@mui/material";
 import { mfTheme } from "@styles/theme/mfTheme";
 
 export const sectionContainerStyles: SxProps = {

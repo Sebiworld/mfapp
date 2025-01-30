@@ -1,42 +1,53 @@
-import { SxProps } from "@mui/joy/styles/types";
+import { SxProps } from "@mui/material";
 
 export const headerStyles: SxProps = {
-  position: "fixed",
-  top: "0",
-  left: "0",
-  right: "0",
-  display: "flex",
-  flexDirection: "row",
-  justifyContent: "space-between",
-  gap: "16px",
-  minHeight: "48px",
-  alignItems: "center",
-  // backgroundColor: 'transparent',
-  zIndex: 1000,
-  // backdropFilter: 'blur(10px)',
-  // WebkitBackdropFilter: 'blur(10px)',
-
-  "&.dark-bg": {
-    backgroundColor: "rgba(0, 0, 0, 0.8)",
-  },
-
-  "&.transparent-bg": {
+  "&.translucent": {
     backgroundColor: "transparent",
     backdropFilter: "none",
     WebkitBackdropFilter: "none",
+
+    ".hide-when-translucent": {
+      visibility: "hidden",
+    },
   },
 
-  ".container-left": {
-    paddingLeft: "16px",
-    paddingY: "8px",
-  },
+  "&>.toolbar": {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: "16px",
+    minHeight: "64px",
+    alignItems: "center",
+    // backgroundColor: 'transparent',
+    // backdropFilter: 'blur(10px)',
+    // WebkitBackdropFilter: 'blur(10px)',
 
-  ".container-right": {
-    paddingRight: "8px",
-    paddingY: "8px",
-  },
+    "&.dark-bg": {
+      backgroundColor: "rgba(0, 0, 0, 0.8)",
+    },
 
-  ".mf-logo": {
-    height: "30px",
+    "&.translucent": {
+      backgroundColor: "transparent",
+      backdropFilter: "none",
+      WebkitBackdropFilter: "none",
+    },
+
+    ".container-left": {
+      paddingLeft: "16px",
+      paddingY: "8px",
+    },
+
+    ".container-right": {
+      paddingRight: "8px",
+      paddingY: "8px",
+    },
+
+    ".mf-logo": {
+      height: "30px",
+    },
+
+    ".MuiIconButton-root": {
+      color: "inherit",
+    },
   },
 };

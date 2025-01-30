@@ -1,8 +1,9 @@
-import { Box, Button, ModalClose, Typography } from "@mui/joy";
 import { useGlobalStore } from "@src/store/global.store";
 import { useTranslation } from "react-i18next";
 import { StartupModalContentProps } from "../StartupModal";
 import { selectSetDidReceiveWelcomeMessage } from "@src/store/initialization.store";
+import { Box, Button, IconButton, Typography } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 export const StartupModalIntro = ({ closeModal }: StartupModalContentProps) => {
   const { t } = useTranslation();
@@ -12,17 +13,16 @@ export const StartupModalIntro = ({ closeModal }: StartupModalContentProps) => {
 
   return (
     <>
-      <ModalClose variant="plain" />
+      <IconButton onClick={closeModal}>
+        <CloseIcon></CloseIcon>
+      </IconButton>
 
       <Box className="modal-content">
-        <Typography
-          level="body-lg"
-          sx={{ fontSize: "48px", fontWeight: "bold" }}
-        >
+        <Typography sx={{ fontSize: "48px", fontWeight: "bold" }}>
           Hallo!
         </Typography>
 
-        <Typography level="body-lg">
+        <Typography>
           Wir sind die{" "}
           <Typography sx={{ fontWeight: "bold" }}>
             <Typography color="primary">Musical</Typography>-Fabrik
@@ -31,10 +31,8 @@ export const StartupModalIntro = ({ closeModal }: StartupModalContentProps) => {
         </Typography>
         <br />
 
-        <Typography level="body-lg">
-          Herzlich Willkommen in unserer App -
-        </Typography>
-        <Typography level="body-lg" sx={{ fontWeight: "bold" }}>
+        <Typography>Herzlich Willkommen in unserer App -</Typography>
+        <Typography sx={{ fontWeight: "bold" }}>
           Schön, dass du hier bist!
         </Typography>
       </Box>

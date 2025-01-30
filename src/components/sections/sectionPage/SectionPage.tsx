@@ -18,7 +18,7 @@
 
 import { ContentBlocks } from "@components/contentBlocks/ContentBlocks";
 import { SectionDto } from "@models/section/section-dto.model";
-import { Box, Typography } from "@mui/joy";
+import { Box, Typography } from "@mui/material";
 import React from "react";
 
 export interface SectionPageProps {
@@ -33,7 +33,7 @@ export const SectionPage: React.FC<SectionPageProps> = ({ section }) => {
       className="section section-page"
     >
       {section.title && !section.hide_title && (
-        <Typography level="h2" className="section-title">
+        <Typography variant="h2" className="section-title">
           {section.title}
         </Typography>
       )}

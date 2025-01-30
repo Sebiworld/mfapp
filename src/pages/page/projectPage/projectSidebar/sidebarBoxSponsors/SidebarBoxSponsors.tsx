@@ -1,8 +1,8 @@
-import { Box, Typography } from "@mui/joy";
 import { useTranslation } from "react-i18next";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { sidebarBoxSponsorsStyles } from "./sidebarBoxSponsors.styles";
 import { SponsorDto } from "@models/utility-types/sponsor-dto.model";
+import { Box, Typography } from "@mui/material";
 
 export interface SidebarBoxSponsorsProps {
   data?: SponsorDto[];
@@ -25,7 +25,7 @@ export const SidebarBoxSponsors: React.FC<SidebarBoxSponsorsProps> = ({
       data-testid={`sidebar-box-${type}`}
       sx={sidebarBoxSponsorsStyles}
     >
-      <Typography className="box-title" level="h3">
+      <Typography className="box-title" variant="h3">
         {t(`project.${type}`)}
       </Typography>
 

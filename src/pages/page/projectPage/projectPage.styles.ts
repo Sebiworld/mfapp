@@ -1,5 +1,5 @@
-import { SxProps } from "@mui/joy/styles/types";
 import { mfTheme } from "@styles/theme/mfTheme";
+import { SxProps } from "@mui/material";
 
 export const projectPageStyles: SxProps = {
   ".project-header": {

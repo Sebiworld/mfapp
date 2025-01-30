@@ -43,14 +43,14 @@ export const pageApi = {
         "Content-Type": "application/x-www-form-urlencoded",
       },
 
-      transformResponse: (response): DefaultPageDto | undefined => {
+      transformResponse: (response): FormValidationResponseDto | undefined => {
         if (!response) {
           return;
         }
 
         try {
           const json = JSON.parse(response);
-          return json as DefaultPageDto;
+          return json as FormValidationResponseDto;
         } catch (e) {
           throw new Error("Could not parse response");
         }

@@ -1,8 +1,8 @@
-import { Box } from "@mui/joy";
 import React from "react";
 import { ContentBlock } from "./ContentBlock";
 import { contentBlocksStyles } from "./contentBlocks.styles";
 import { ContentBlockDtoVariant } from "@models/content/content-block-dto-variant.model";
+import { Box } from "@mui/material";
 
 export interface ContentBlocksProps {
   blocks?: ContentBlockDtoVariant[];

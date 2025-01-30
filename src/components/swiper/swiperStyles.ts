@@ -1,4 +1,4 @@
-import { SxProps } from "@mui/joy/styles/types";
+import { SxProps } from "@mui/material";
 
 export const swiperStyles: SxProps = {
   "swiper-container": {

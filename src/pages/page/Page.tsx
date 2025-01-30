@@ -1,15 +1,14 @@
-import { Alert, Box, Button, Typography } from "@mui/joy";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { pageStyles } from "./page.styles";
-import WarningIcon from "@mui/icons-material/Warning";
+// import WarningIcon from "@mui/icons-material/Warning";
 import { useTranslation } from "react-i18next";
 import { useGlobalStore } from "@src/store/global.store";
 import { selectLoadPage, selectPage } from "@src/store/pages.store";
 import { PageContents } from "./pageContents/PageContents";
 import { ProjectPage } from "./projectPage/ProjectPage";
 import { LoadingOverlay } from "@components/loadingOverlay/LoadingOverlay";
-import { AlertTitle } from "@mui/material";
+import { Alert, AlertTitle, Box, Button, Typography } from "@mui/material";
 
 export const Page = () => {
   const router = useRouterState();
@@ -39,10 +38,9 @@ export const Page = () => {
 
       {loadedPage?.status === "error" && (
         <Alert
-          startDecorator={<WarningIcon fontSize="large" />}
-          variant="solid"
+          // startDecorator={<WarningIcon fontSize="large" />}
           className="alert"
-          color="danger"
+          color="error"
         >
           <Box className="alert-content">
             {i18n.exists(`errors.${loadedPage?.code}`) ? (

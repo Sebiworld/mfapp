@@ -1,12 +1,3 @@
-import {
-  Box,
-  Button,
-  FormControl,
-  FormHelperText,
-  FormLabel,
-  Input,
-  Textarea,
-} from "@mui/joy";
 import { selectRegistration } from "@src/store/auth.store";
 import { useGlobalStore } from "@src/store/global.store";
 import { Dispatch, SetStateAction } from "react";
@@ -18,6 +9,15 @@ import dayjs, { Dayjs } from "dayjs";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import InfoOutlined from "@mui/icons-material/InfoOutlined";
+import {
+  Box,
+  Button,
+  FormControl,
+  FormHelperText,
+  FormLabel,
+  Input,
+  TextField,
+} from "@mui/material";
 
 const registrationSchema = z
   .object({
@@ -308,12 +308,13 @@ export const StartupModalRegistrationForm = ({
 
             <Controller
               render={({ field: { onChange, onBlur, value } }) => (
-                <Textarea
+                <TextField
                   className="rolestext-input"
                   onBlur={onBlur}
                   onChange={onChange}
                   value={value}
                   minRows={2}
+                  multiline
                 />
               )}
               control={control}
@@ -334,7 +335,6 @@ export const StartupModalRegistrationForm = ({
         <section className="center">
           <p>oder:</p>
           <Button
-            variant="plain"
             onClick={() => {
               setIsRegistrationActive(false);
             }}

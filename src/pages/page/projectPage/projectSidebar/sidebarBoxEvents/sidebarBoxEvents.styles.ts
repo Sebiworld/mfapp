@@ -1,4 +1,4 @@
-import { SxProps } from "@mui/joy/styles/types";
+import { SxProps } from "@mui/material";
 
 export const sidebarBoxEventsStyles: SxProps = {
   ".lists-wrapper": {
@@ -14,7 +14,7 @@ export const sidebarBoxEventsStyles: SxProps = {
 
     ".description": {
       fontStyle: "italic",
-      paddingX: '16px'
+      paddingX: "16px",
     },
   },
 

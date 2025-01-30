@@ -26,6 +26,7 @@ const plugins = [
     },
     "icons",
   ],
+  ["lodash"],
 ];
 
 module.exports = { plugins };

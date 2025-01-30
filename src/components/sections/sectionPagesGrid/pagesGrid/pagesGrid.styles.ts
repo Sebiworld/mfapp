@@ -1,4 +1,4 @@
-import { SxProps } from "@mui/joy/styles/types";
+import { SxProps } from "@mui/material";
 
 export const pagesGridStyles: SxProps = {
   ".page-card": {
@@ -6,8 +6,8 @@ export const pagesGridStyles: SxProps = {
       fontWeight: "xl",
     },
     ".card-content": {
-      marginTop: '4px',
-      marginBottom: '8px'
+      marginTop: "4px",
+      marginBottom: "8px",
     },
   },
 };

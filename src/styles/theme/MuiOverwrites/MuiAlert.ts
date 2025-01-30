@@ -1,15 +1,14 @@
-import { Components, Theme } from "@mui/joy";
+import { Components, Theme } from "@mui/material/styles";
 
-export const JoyAlertOverwrites: Components<Theme> = {
-  JoyAlert: {
+export const MuiAlertOverwrites: Components<Theme> = {
+  MuiAlert: {
     styleOverrides: {
-      root: ({ theme }) => ({
+      root: {
         width: "450px",
         gap: "16px",
 
         ".alert-content": {
           ".alert-title": {
-            ...theme.typography["title-lg"],
             color: "var(--variant-solidColor)",
           },
           p: {
@@ -24,7 +23,7 @@ export const JoyAlertOverwrites: Components<Theme> = {
           flexWrap: "wrap",
           marginTop: "8px",
         },
-      }),
+      },
     },
   },
 };

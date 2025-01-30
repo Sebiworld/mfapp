@@ -1,6 +1,5 @@
 import { ProjectGeneralDataBlock } from "@models/project-dto.model";
-import { ListItemDecorator } from "@mui/joy";
-import { IonIcon } from "@ionic/react";
+// import { IonIcon } from "@ionic/react";
 import { arrowForward, chevronForward } from "ionicons/icons";
 import { useMemo } from "react";
 
@@ -20,9 +19,9 @@ export const SidebarBoxGeneralItemContent: React.FC<
 
   return (
     <>
-      <ListItemDecorator>
+      {/* TODO <ListItemDecorator>
         <IonIcon aria-hidden="true" icon={icon}></IonIcon>
-      </ListItemDecorator>
+      </ListItemDecorator> */}
 
       {data.label}
     </>

@@ -7,7 +7,7 @@ export interface FormValidationFieldResponseDto {
     code: string;
     message: string;
   }[];
-  success: string[];
+  isSuccessful: boolean;
 }
 
 export interface FormValidationResponseDto {

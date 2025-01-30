@@ -1,6 +1,6 @@
-import { SxProps } from "@mui/joy/styles/types";
+import { SxProps, Theme } from "@mui/material";
 
-export const contentFormStyles: SxProps = {
+export const contentFormStyles: SxProps<Theme> = (theme) => ({
   position: "relative",
   display: "grid",
   gap: "16px",
@@ -22,7 +22,15 @@ export const contentFormStyles: SxProps = {
 
     "&.root": {
       "&>.form-group": {
-        gridColumn: "span 6",
+        gridColumn: "span 4",
+
+        [theme.breakpoints.down("lg")]: {
+          gridColumn: "span 6",
+        },
+
+        [theme.breakpoints.down("sm")]: {
+          gridColumn: "span 12",
+        },
       },
     },
 
@@ -62,6 +70,12 @@ export const contentFormStyles: SxProps = {
     },
   },
 
+  ".content-form-input": {
+    ".MuiFormHelperText-root": {
+      alignSelf: "flex-start",
+    },
+  },
+
   ".form-actions": {
     position: "relative",
     display: "flex",
@@ -69,4 +83,4 @@ export const contentFormStyles: SxProps = {
     gap: "8px",
     justifyContent: "flex-end",
   },
-};
+});

@@ -1,9 +1,10 @@
 import { ProjectDetailsDto } from "@models/project-dto.model";
-import { Box } from "@mui/joy";
+
 import { projectSidebarStyles } from "./projectSidebar.styles";
 import { SidebarBoxGeneral } from "./sidebarBoxGeneral/SidebarBoxGeneral";
 import { SidebarBoxEvents } from "./sidebarBoxEvents/SidebarBoxEvents";
 import { SidebarBoxSponsors } from "./sidebarBoxSponsors/SidebarBoxSponsors";
+import { Box } from "@mui/material";
 
 export interface ProjectSidebarProps {
   project?: ProjectDetailsDto;

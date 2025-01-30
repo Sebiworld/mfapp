@@ -1,4 +1,4 @@
-import { SxProps } from "@mui/joy/styles/types";
+import { SxProps } from "@mui/material";
 import { mfTheme } from "@styles/theme/mfTheme";
 
 export const projectSidebarStyles: SxProps = {
@@ -18,15 +18,16 @@ export const projectSidebarStyles: SxProps = {
     },
   },
 
-  "&.project-sidebar": (theme) => ({
-    ...theme.applyStyles("dark", {
-      borderColor: `var(--mf-palette-contrast-600)`,
+  // TODO
+  // "&.project-sidebar": (theme) => ({
+  //   ...theme.applyStyles("dark", {
+  //     borderColor: `var(--mf-palette-contrast-600)`,
 
-      ".sidebar-box": {
-        "&>.box-title": {
-          borderColor: `var(--mf-palette-contrast-600)`,
-        },
-      },
-    }),
-  }),
+  //     ".sidebar-box": {
+  //       "&>.box-title": {
+  //         borderColor: `var(--mf-palette-contrast-600)`,
+  //       },
+  //     },
+  //   }),
+  // }),
 };

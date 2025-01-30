@@ -1,5 +1,5 @@
 import { swiperStyles } from "@components/swiper/swiperStyles";
-import { SxProps } from "@mui/joy/styles/types";
+import { SxProps } from "@mui/material";
 
 export const featuredSliderStyles: SxProps = {
   ...swiperStyles,

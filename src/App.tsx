@@ -1,15 +1,9 @@
-import { CssVarsProvider } from "@mui/joy";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import {
-  ThemeProvider as MaterialThemeProvider,
-  THEME_ID as MATERIAL_THEME_ID,
-} from "@mui/material/styles";
+import { ThemeProvider, THEME_ID } from "@mui/material/styles";
 
-import CssBaseline from "@mui/joy/CssBaseline";
 import { Layout } from "@core/Layout";
 import { SplashScreen } from "@core/splashScreen/SplashScreen";
-import { mfTheme } from "@styles/theme/mfTheme";
 import { GlobalStylesElement } from "@styles/global/GlobalStylesElement";
 
 import "react-toastify/dist/ReactToastify.css";
@@ -19,8 +13,9 @@ import {
   selectIsInitialized,
 } from "./store/initialization.store";
 import { useEffect } from "react";
-import { mfMaterialTheme } from "@styles/theme/mfMaterialTheme";
 import { useHandleRegistrationConfirm } from "@utils/hooks/useHandleRegistrationConfirm";
+import { mfTheme } from "@styles/theme/mfTheme";
+import { CssBaseline } from "@mui/material";
 
 export const App = () => {
   const isInitialized = useGlobalStore(selectIsInitialized);
@@ -37,16 +32,14 @@ export const App = () => {
 
   return (
     <>
-      <MaterialThemeProvider theme={{ [MATERIAL_THEME_ID]: mfMaterialTheme }}>
-        <CssVarsProvider theme={mfTheme}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <CssBaseline />
-            <GlobalStylesElement></GlobalStylesElement>
-            <Layout />
-            <SplashScreen visible={!isInitialized}></SplashScreen>
-          </LocalizationProvider>
-        </CssVarsProvider>
-      </MaterialThemeProvider>
+      <ThemeProvider theme={{ [THEME_ID]: mfTheme }}>
+        <CssBaseline />
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <GlobalStylesElement></GlobalStylesElement>
+          <Layout />
+          <SplashScreen visible={!isInitialized}></SplashScreen>
+        </LocalizationProvider>
+      </ThemeProvider>
     </>
   );
 };

@@ -26,7 +26,7 @@ export const PagesGrid: React.FC<PagesGridProps> = ({ section }) => {
         columns-md={3}
       >
         {section.cards?.map((card) => {
-          const image = card.card_image || card.main_image;
+          // const image = card.card_image || card.main_image;
           return (
             <Card key={card.id} className="page-card" variant="outlined">
               {/* {!!image && (

@@ -1,5 +1,12 @@
-import { Box, Button, FormControl, FormLabel, Input, Paper, Typography } from "@mui/material";
-import { Link } from "@tanstack/react-router";
+import {
+  Box,
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+  Paper,
+} from "@mui/material";
+// import { Link } from "@tanstack/react-router";
 
 export const LoginPage = () => {
   return (

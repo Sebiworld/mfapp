@@ -10,7 +10,7 @@ export const splashScreenStyles: SxProps = {
   flexDirection: "column",
   justifyContent: "flex-start",
   alignItems: "center",
-  zIndex: 1000,
+  zIndex: 10000,
   gap: "32px",
   padding: "32px",
 

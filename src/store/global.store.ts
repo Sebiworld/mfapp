@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
-import { devtools, persist } from "zustand/middleware";
+import { devtools } from "zustand/middleware";
 import {
   createInitializationSlice,
   InitializationSlice,
@@ -16,14 +16,14 @@ export type GlobalStore = InitializationSlice &
 
 export const useGlobalStore = create<GlobalStore>()(
   devtools(
-    persist(
-      immer((...a) => ({
-        ...createInitializationSlice(...a),
-        ...createAuthSlice(...a),
-        ...createPagesSlice(...a),
-        ...createSettingsSlice(...a),
-      })),
-      { name: "mfStore" }
-    )
+    // persist(
+    immer((...a) => ({
+      ...createInitializationSlice(...a),
+      ...createAuthSlice(...a),
+      ...createPagesSlice(...a),
+      ...createSettingsSlice(...a),
+    }))
+    // { name: "mfStore" }
+    // )
   )
 );

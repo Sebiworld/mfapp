@@ -4,12 +4,17 @@ import { pageContentsStyles } from "./pageContents.styles";
 import { DefaultPageDto } from "@models/page/default-page-dto.model";
 import { PageDtoVariant } from "@models/page/page-dto-variant.model";
 import { Box, Paper, Typography } from "@mui/material";
+import { useEffect } from "react";
 
 export interface PagesContentsProps {
   page?: PageDtoVariant;
 }
 
 export const PageContents: React.FC<PagesContentsProps> = ({ page }) => {
+  useEffect(() => {
+    console.log("page", page);
+  }, [page]);
+
   if (!page?.id) {
     return null;
   }

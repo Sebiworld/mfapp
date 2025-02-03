@@ -137,8 +137,8 @@ export const createAuthSlice: StateCreator<GlobalStore, [], [], AuthSlice> = (
       const renewAccess = get().renewAccess;
       await renewAccess();
 
-      const resetPages = get().resetPages;
-      await resetPages();
+      const resetApp = get().resetApp;
+      await resetApp(false);
 
       toast.success(
         t("auth.login-successful", {
@@ -147,11 +147,8 @@ export const createAuthSlice: StateCreator<GlobalStore, [], [], AuthSlice> = (
       );
     } catch (error) {
       console.error("Error while trying to login: ", error);
-      const resetAuth = get().resetAuth;
-      await resetAuth();
-
-      const resetPages = get().resetPages;
-      await resetPages();
+      const resetApp = get().resetApp;
+      await resetApp();
 
       if (axios.isAxiosError(error)) {
         toast.error(
@@ -195,11 +192,8 @@ export const createAuthSlice: StateCreator<GlobalStore, [], [], AuthSlice> = (
       console.log("LOGIN Renew Success.", response);
     } catch (error) {
       console.error("Error while trying to renew access: ", error);
-      const resetAuth = get().resetAuth;
-      await resetAuth();
-
-      const resetPages = get().resetPages;
-      await resetPages();
+      const resetApp = get().resetApp;
+      await resetApp();
     }
   },
 
@@ -228,11 +222,8 @@ export const createAuthSlice: StateCreator<GlobalStore, [], [], AuthSlice> = (
       }
     }
 
-    const resetAuth = get().resetAuth;
-    await resetAuth();
-
-    const resetPages = get().resetPages;
-    await resetPages();
+    const resetApp = get().resetApp;
+    await resetApp();
   },
 
   resetAuth: async () => {

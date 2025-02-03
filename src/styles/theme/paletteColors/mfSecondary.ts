@@ -1,12 +1,12 @@
 import { PaletteColorOptions } from "@mui/material";
-import { mfTeal } from "./colors/mfTeal";
+import { mfLimedSpruceBlue } from "./colors/mfLimedSpruceBlue";
 
 export const mfSecondary: PaletteColorOptions = {
-  ...mfTeal,
-  light: mfTeal[300],
-  main: mfTeal[500],
-  dark: mfTeal[700],
-  contrastText: "var(--mf-palette-common-black)",
+  ...mfLimedSpruceBlue,
+  light: mfLimedSpruceBlue[300],
+  main: mfLimedSpruceBlue[500],
+  dark: mfLimedSpruceBlue[700],
+  contrastText: "var(--mf-palette-common-white)",
 };
 
 export const mfSecondaryLight: PaletteColorOptions = {

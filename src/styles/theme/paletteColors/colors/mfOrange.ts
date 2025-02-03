@@ -16,7 +16,7 @@ export const mfOrange: Color = {
   A400: "#fd8e00",
   A700: "#fd8e00",
 
-  lightChannel: "254 215 170",
-  mainChannel: "253 142 0",
-  darkChannel: "194 65 12",
+  lightChannel: "254 215 170", // RGB of 200
+  mainChannel: "253 142 0", // RGB of 500
+  darkChannel: "194 65 12", // RGB of 700
 };

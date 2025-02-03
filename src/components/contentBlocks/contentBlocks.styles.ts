@@ -30,6 +30,10 @@ export const contentBlocksStyles: SxProps = {
       maxWidth: "100%",
       width: "38em",
       alignSelf: "center",
+
+      "&:first-of-type": {
+        marginTop: 0,
+      }
     },
   },
 };

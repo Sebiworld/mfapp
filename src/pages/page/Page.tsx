@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { pageStyles } from "./page.styles";
 // import WarningIcon from "@mui/icons-material/Warning";
 import { useTranslation } from "react-i18next";
@@ -9,6 +9,7 @@ import { PageContents } from "./pageContents/PageContents";
 import { ProjectPage } from "./projectPage/ProjectPage";
 import { LoadingOverlay } from "@components/loadingOverlay/LoadingOverlay";
 import { Alert, AlertTitle, Box, Button, Typography } from "@mui/material";
+import { Helmet } from "react-helmet";
 
 export const Page = () => {
   const router = useRouterState();
@@ -29,8 +30,16 @@ export const Page = () => {
   //   console.log("page", { page });
   // }, [page]);
 
+  const title = useMemo(() => {
+    return page?.title ? `${page?.title} | Musical-Fabrik` : "Musical-Fabrik";
+  }, [page?.title]);
+
   return (
     <Box className="page" data-testid="page" sx={pageStyles}>
+      <Helmet>
+        <title>{title}</title>
+      </Helmet>
+
       <ProjectPage page={page}>
         <PageContents page={page}></PageContents>
         {isLoading && <LoadingOverlay overlay={!!page?.id}></LoadingOverlay>}

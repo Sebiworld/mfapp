@@ -1,0 +1,1 @@
+export type ConfigurationDto = {[key: string]: unknown};

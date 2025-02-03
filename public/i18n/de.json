@@ -7,6 +7,9 @@
     "description": "Diese Seite konnte leider nicht gefunden werden.",
     "back-to-home": "Zurück zur Startseite"
   },
+  "header": {
+    "menue": "Menü"
+  },
   "footer": {
     "cta": "Werden Sie Mitglied!",
     "description": "Jetzt Vereinsmitglied werden, die Ziele unterstützen und das nächste Musical-Projekt fördern.",

@@ -1,22 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Masonry from "@mui/lab/Masonry";
 
 import { SectionPagesGridDto } from "@models/section/section-pages-grid-dto.model";
-// import { LazyPicture } from "@components/lazyPicture/LazyPicture";
 import { pagesGridStyles } from "./pagesGrid.styles";
-import { Link } from "@tanstack/react-router";
-import { useTranslation } from "react-i18next";
-import { Box, Button, Card, CardContent, Typography } from "@mui/material";
+import { Box } from "@mui/material";
+import { PageCard } from "@components/pageCard/PageCard";
 
 export interface PagesGridProps {
   section: SectionPagesGridDto;
 }
 
 export const PagesGrid: React.FC<PagesGridProps> = ({ section }) => {
-  // useEffect(() => {
-  //   console.log("PagesGrid", section);
-  // }, [section]);
-  const { t } = useTranslation();
+  useEffect(() => {
+    console.log("PagesGrid", section);
+  }, [section]);
 
   return (
     <Box className="pages-grid" data-testid="pages-grid" sx={pagesGridStyles}>
@@ -25,63 +22,9 @@ export const PagesGrid: React.FC<PagesGridProps> = ({ section }) => {
         spacing={2}
         columns-md={3}
       >
-        {section.cards?.map((card) => {
-          // const image = card.card_image || card.main_image;
-          return (
-            <Card key={card.id} className="page-card" variant="outlined">
-              {/* {!!image && (
-                <CardOverflow>
-                  <AspectRatio>
-                    <LazyPicture image={image}></LazyPicture>
-                  </AspectRatio>
-                </CardOverflow>
-              )} */}
-
-              {(!!card.title || !!card.intro || !!card.description) && (
-                <CardContent className="card-content">
-                  {!!card.title && (
-                    <Typography variant="h3">
-                      <Box
-                        className="card-title"
-                        dangerouslySetInnerHTML={{ __html: card.title }}
-                      ></Box>
-                    </Typography>
-                  )}
-
-                  {!!card.intro && (
-                    <Typography variant="body2">
-                      <Box
-                        className="card-intro"
-                        dangerouslySetInnerHTML={{ __html: card.intro }}
-                      ></Box>
-                    </Typography>
-                  )}
-
-                  {!!card.description && (
-                    <Typography variant="body2">
-                      <Box
-                        className="card-description"
-                        dangerouslySetInnerHTML={{ __html: card.description }}
-                      ></Box>
-                    </Typography>
-                  )}
-                </CardContent>
-              )}
-
-              {/* <CardOverflow> */}
-              <Button
-                variant="contained"
-                color="secondary"
-                // size="lg"
-                component={Link}
-                to={card.url}
-              >
-                {t("page_card.btn_more")}
-              </Button>
-              {/* </CardOverflow> */}
-            </Card>
-          );
-        })}
+        {section.cards?.map((card) => (
+          <PageCard key={card.id} card={card} headingLevel={3}></PageCard>
+        ))}
       </Masonry>
     </Box>
   );

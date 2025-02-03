@@ -11,6 +11,7 @@ export interface InitializationActions {
   setPartInitialized: (key: string) => void;
   setDidReceiveWelcomeMessage: (value: boolean) => void;
   initializeApp: () => Promise<void>;
+  resetApp: (includeAuth?: boolean) => Promise<void>;
 }
 
 export type InitializationSlice = InitializationState & InitializationActions;
@@ -22,6 +23,8 @@ export const createInitializationSlice: StateCreator<
   InitializationSlice
 > = (set, get) => ({
   intializedParts: {
+    configuration: false,
+    pages: false,
     projects: false,
   },
 
@@ -53,11 +56,30 @@ export const createInitializationSlice: StateCreator<
   },
 
   initializeApp: async () => {
-    const loadProjects = get().loadProjects;
-    await loadProjects();
+    const initializeConfiguration = get().initializeConfiguration;
+    await initializeConfiguration();
 
-    const setPartInitialized = get().setPartInitialized;
-    setPartInitialized("projects");
+    const initializePages = get().initializePages;
+    await initializePages();
+
+    const initializeProjects = get().initializeProjects;
+    await initializeProjects();
+  },
+
+  resetApp: async (includeAuth) => {
+    if (includeAuth !== false) {
+      const resetAuth = get().resetAuth;
+      await resetAuth();
+    }
+
+    const resetConfiguration = get().resetConfiguration;
+    await resetConfiguration();
+
+    const resetPages = get().resetPages;
+    await resetPages();
+
+    const resetProjects = get().resetProjects;
+    await resetProjects();
   },
 });
 

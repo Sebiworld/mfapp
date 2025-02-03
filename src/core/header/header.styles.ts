@@ -1,6 +1,6 @@
-import { SxProps } from "@mui/material";
+import { SxProps, Theme } from "@mui/material";
 
-export const headerStyles: SxProps = {
+export const headerStyles: SxProps<Theme> = theme => ({
   "&.translucent": {
     backgroundColor: "transparent",
     backdropFilter: "none",
@@ -32,6 +32,20 @@ export const headerStyles: SxProps = {
       WebkitBackdropFilter: "none",
     },
 
+    ".container-left, .container-middle, .container-right": {
+      display: "flex",
+      flexDirection: "row",
+
+      "&>.nav-list": {
+        display: "none",
+        flexDirection: "row",
+
+        [theme.breakpoints.up("md")]: {
+          display: "flex",
+        }
+      },
+    },
+
     ".container-left": {
       paddingLeft: "16px",
       paddingY: "8px",
@@ -49,5 +63,9 @@ export const headerStyles: SxProps = {
     ".MuiIconButton-root": {
       color: "inherit",
     },
+
+    ".nav-item-title": {
+      whiteSpace: "nowrap",
+    },
   },
-};
+});

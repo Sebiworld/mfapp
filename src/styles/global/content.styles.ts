@@ -26,6 +26,14 @@ export const globalContentStyles: Interpolation<Theme>[] = [
         "&.center": {
           textAlign: "center",
         },
+
+        "&:first-of-type": {
+          marginTop: 0,
+        },
+
+        "&:last-of-type": {
+          marginBottom: 0,
+        },
       },
 
       hr: {

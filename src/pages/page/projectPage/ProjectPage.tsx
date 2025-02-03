@@ -1,10 +1,6 @@
 import { PageDtoVariant } from "@models/page/page-dto-variant.model";
 import { projectPageStyles } from "./projectPage.styles";
 import { useGlobalStore } from "@src/store/global.store";
-import {
-  selectLoadProjectDetails,
-  selectProjectPageDetails,
-} from "@src/store/pages.store";
 import { useEffect, useMemo } from "react";
 import { ProjectSidebar } from "./projectSidebar/ProjectSidebar";
 // import { LazyPicture } from "@components/lazyPicture/LazyPicture";
@@ -15,6 +11,10 @@ import {
   selectSetGlobalCss,
 } from "@src/store/settings.store";
 import { Box, Card, Typography } from "@mui/material";
+import {
+  selectLoadProjectDetails,
+  selectProjectPageDetails,
+} from "@src/store/projects.store";
 
 export interface ProjectPageProps {
   page?: PageDtoVariant;

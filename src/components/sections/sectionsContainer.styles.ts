@@ -6,7 +6,7 @@ export const sectionContainerStyles: SxProps = {
     position: "relative",
     display: "flex",
     flexDirection: "column",
-    gap: "64px",
+    gap: "32px",
     // background- color: $body-bg;
     padding: "64px",
 

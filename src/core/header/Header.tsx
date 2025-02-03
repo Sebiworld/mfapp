@@ -6,38 +6,19 @@ import {
   AppBar,
   Box,
   IconButton,
+  List,
+  ListItem,
+  ListItemButton,
   Toolbar,
-  useScrollTrigger,
 } from "@mui/material";
-import React, { ReactElement, useMemo } from "react";
+import React, { useMemo } from "react";
 import { Sidemenu } from "@core/sidemenu/Sidemenu";
 import { useGlobalStore } from "@src/store/global.store";
 import { selectPage } from "@src/store/pages.store";
 import { DefaultPageDto } from "@models/page/default-page-dto.model";
-
-export const ElevationScroll = ({
-  children,
-  supportsTranslucentHeader,
-}: {
-  children?: ReactElement;
-  supportsTranslucentHeader?: boolean;
-}) => {
-  const trigger = useScrollTrigger({
-    disableHysteresis: true,
-    threshold: 100,
-  });
-
-  if (!supportsTranslucentHeader) {
-    return children;
-  }
-
-  return children
-    ? React.cloneElement(children, {
-        // elevation: trigger ? 2 : 0,
-        className: trigger ? "elevated" : "translucent",
-      })
-    : null;
-};
+import { ElevationScroll } from "./components/ElevationScroll";
+import { selectMenues } from "@src/store/configuration.store";
+import { isValidArray } from "@utils/functions/isValidArray";
 
 export const Header = () => {
   const [sidemenuOpen, setSidemenuOpen] = React.useState(false);
@@ -46,6 +27,8 @@ export const Header = () => {
   const currentPath = router.location.pathname;
   const loadedPage = useGlobalStore(selectPage(currentPath));
   const page = loadedPage?.data as DefaultPageDto;
+  const loadedMenues = useGlobalStore(selectMenues);
+  const primaryNavigation = loadedMenues?.main_navigation;
 
   const supportsTranslucentHeader = useMemo(() => {
     return page?.sections?.[0]?.type === "hero";
@@ -58,7 +41,6 @@ export const Header = () => {
           component="header"
           role="header"
           position={supportsTranslucentHeader ? "fixed" : "sticky"}
-          // className={`color-${color || "default"}`}
           color="dark"
           elevation={0}
           sx={headerStyles}
@@ -74,6 +56,29 @@ export const Header = () => {
             <Box component="nav" className="container-middle"></Box>
 
             <Box component="nav" className="container-right">
+              {isValidArray(primaryNavigation) &&
+                !!primaryNavigation.length && (
+                  <List className="nav-list">
+                    {primaryNavigation.map((item, index) => (
+                      <ListItem key={index} disablePadding>
+                        <ListItemButton
+                          component={Link}
+                          to={item?.page?.url || item.link}
+                          hash={item.section}
+                        >
+                          <Box
+                            component="span"
+                            className="nav-item-title"
+                            dangerouslySetInnerHTML={{
+                              __html: item.title || item?.page?.title || "",
+                            }}
+                          />
+                        </ListItemButton>
+                      </ListItem>
+                    ))}
+                  </List>
+                )}
+
               {setSidemenuOpen && (
                 <IconButton onClick={() => setSidemenuOpen(true)}>
                   <Menu />

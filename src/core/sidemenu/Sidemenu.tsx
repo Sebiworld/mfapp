@@ -15,8 +15,12 @@ import {
   ListItem,
   ListItemButton,
   Stack,
+  Typography,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { selectMenues } from "@src/store/configuration.store";
+import { isValidArray } from "@utils/functions/isValidArray";
+import { MenueItem } from "./components/MenueItem";
 
 export interface SidemenuProps {
   sidemenuOpen: boolean;
@@ -28,6 +32,21 @@ export const Sidemenu = ({ sidemenuOpen, setSidemenuOpen }: SidemenuProps) => {
   const logout = useGlobalStore(selectLogout);
   const currentUser = useGlobalStore(selectCurrentUser);
   const [isStartupModalOpen, setIsStartupModalOpen] = React.useState(false);
+  const loadedMenues = useGlobalStore(selectMenues);
+
+  const menueItems = React.useMemo(() => {
+    const items = [];
+
+    if (isValidArray(loadedMenues?.main_navigation)) {
+      items.push(...loadedMenues.main_navigation);
+    }
+
+    if (isValidArray(loadedMenues?.secondary_navigation)) {
+      items.push(...loadedMenues.secondary_navigation);
+    }
+
+    return items;
+  }, [loadedMenues?.main_navigation, loadedMenues?.secondary_navigation]);
 
   return (
     <>
@@ -94,27 +113,22 @@ export const Sidemenu = ({ sidemenuOpen, setSidemenuOpen }: SidemenuProps) => {
           },
         }}
       /> */}
+
+        {!!menueItems?.length && (
+          <Box className="nav-container">
+            <Typography className="nav-title">{t("header.menue")}</Typography>
+
+            <List component="nav" className="navigation-list">
+              {menueItems.map((item) => (
+                <MenueItem key={item.id} item={item}></MenueItem>
+              ))}
+            </List>
+          </Box>
+        )}
+
+        <hr />
+
         <List component="nav" className="navigation-list">
-          <ListItem>
-            <ListItemButton component={Link} to="/">
-              {t("sidemenu.home")}
-            </ListItemButton>
-          </ListItem>
-
-          <ListItem>
-            <ListItemButton component={Link} to="/events" disabled>
-              Probenplan
-            </ListItemButton>
-          </ListItem>
-
-          <ListItem>
-            <ListItemButton component={Link} to="/shop" disabled>
-              Shop
-            </ListItemButton>
-          </ListItem>
-        </List>
-
-        <List  component="nav" className="navigation-list">
           <ListItem>
             <ListItemButton component={Link} to="/settings">
               {t("sidemenu.settings")}

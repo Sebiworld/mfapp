@@ -1,6 +1,12 @@
-import { SxProps } from "@mui/material";
+import { SxProps, Theme } from "@mui/material";
 
-export const sidemenuStyles: SxProps = {
+export const sidemenuStyles: SxProps<Theme> = (theme) => ({
+  ".MuiPaper-root": {
+    width: "275px",
+    maxWidth: "100%",
+    background: theme.vars.palette.background.paper,
+  },
+
   ".MuiDrawer-content": {
     display: "flex",
     flexDirection: "column",
@@ -12,7 +18,7 @@ export const sidemenuStyles: SxProps = {
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
-    minHeight: '42px',
+    minHeight: "42px",
 
     ".header-left": {
       position: "absolute",
@@ -38,15 +44,39 @@ export const sidemenuStyles: SxProps = {
     },
   },
 
+  ".nav-container": {
+    "&>.nav-title": {
+      padding: "32px 16px 0 16px",
+      fontSize: theme.typography.body2.fontSize,
+      opacity: 0.5,
+    },
+  },
+
   ".navigation-list": {
     fontSize: "xl",
 
+    "&>li": {
+      paddingY: "0",
+    },
+
+    ".MuiListItemIcon-root": {
+      minWidth: "40px",
+    },
+
     ".MuiListItemButton-root": {
-      justifyContent: "center",
+      justifyContent: "flex-start",
 
       "&.active": {
         fontWeight: "lg",
       },
     },
   },
-};
+
+  hr: {
+    margin: "32px 16px",
+    width: "64px",
+    maxWidth: "calc(100% - 32px)",
+    opacity: 0.5,
+    backgroundColor: theme.vars.palette.primary.main,
+  },
+});

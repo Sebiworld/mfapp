@@ -1,7 +1,7 @@
-import { SxProps } from "@mui/material";
+import { SxProps, Theme } from "@mui/material";
 import { mfTheme } from "@styles/theme/mfTheme";
 
-export const footerStyles: SxProps = {
+export const footerStyles: SxProps<Theme> = (theme) => ({
   position: "relative",
   marginTop: "6vw",
 
@@ -19,7 +19,7 @@ export const footerStyles: SxProps = {
   },
 
   ".footer": {
-    padding: "64px 32px 32px 32px",
+    padding: "64px 32px 16px 32px",
     textAlign: "center",
     backgroundImage: "none",
 
@@ -99,11 +99,44 @@ export const footerStyles: SxProps = {
     },
   },
 
-  hr: {
+  ".tertiary-navigation": {
+    display: "flex",
+    flexDirection: "row",
     marginTop: "64px",
+    flexWrap: "wrap",
+    width: "100%",
+    justifyContent: "space-around",
+
+    "&>li": {
+      width: "auto",
+    },
+
+    ".MuiListItemButton-root": {
+      justifyContent: "center",
+      fontSize: theme.typography.body2.fontSize,
+    },
+  },
+
+  hr: {
+    marginTop: "0",
     marginLeft: "32px",
     marginRight: "32px",
     marginBottom: "16px",
+  },
+
+  ".bottom-wrapper": {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    flexWrap: "wrap",
+    gap: "8px",
+    padding: "0 48px",
+    fontSize: theme.typography.body2.fontSize,
+
+    [theme.breakpoints.down("md")]: {
+      flexDirection: "column",
+    },
   },
 
   ".from-container": {
@@ -112,14 +145,9 @@ export const footerStyles: SxProps = {
     alignItems: "center",
     justifyContent: "center",
     gap: "0.5em",
-
-    "&>div": {
-      margin: "0!important",
-    },
   },
 
   ".copyright": {
-    marginTop: "4px",
     display: "block",
   },
-};
+});

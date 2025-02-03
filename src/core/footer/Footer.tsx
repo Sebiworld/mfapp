@@ -11,7 +11,19 @@ import Lottie from "react-lottie";
 import heartAnimation from "@assets/lotties/heart.json";
 import { useCurrentDate } from "@utils/hooks/useCurrentDate";
 import { Link as TanstackLink } from "@tanstack/react-router";
-import { Box, Button, IconButton, Link, Paper } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  Link,
+  List,
+  ListItem,
+  ListItemButton,
+  Paper,
+} from "@mui/material";
+import { useGlobalStore } from "@src/store/global.store";
+import { selectMenues } from "@src/store/configuration.store";
+import { isValidArray } from "@utils/functions/isValidArray";
 
 const heartAnimationOptions = {
   loop: true,
@@ -26,6 +38,9 @@ export function Footer() {
   const { t } = useTranslation();
 
   const currentDate = useCurrentDate(1000 * 60);
+
+  const loadedMenues = useGlobalStore(selectMenues);
+  const tertiaryNavigation = loadedMenues?.tertiary_navigation;
 
   return (
     <Box className="footer-wrapper" sx={footerStyles}>
@@ -80,7 +95,30 @@ export function Footer() {
           </div>
         </div>
 
+        {isValidArray(tertiaryNavigation) && !!tertiaryNavigation.length && (
+          <List className="nav-list tertiary-navigation">
+            {tertiaryNavigation.map((item, index) => (
+              <ListItem key={index} disablePadding>
+                <ListItemButton
+                  component={TanstackLink}
+                  to={item?.page?.url || item.link}
+                  hash={item.section}
+                >
+                  <Box
+                    component="span"
+                    className="nav-item-title"
+                    dangerouslySetInnerHTML={{
+                      __html: item.title || item?.page?.title || "",
+                    }}
+                  />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+        )}
+
         <hr />
+
         <div className="bottom-wrapper">
           <div className="from-container">
             <Trans
@@ -100,7 +138,7 @@ export function Footer() {
                   <Lottie
                     options={heartAnimationOptions}
                     height={"3em"}
-                    width={"2em"}
+                    width={"1.5em"}
                   />
                 ),
               }}

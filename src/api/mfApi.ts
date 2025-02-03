@@ -3,12 +3,14 @@ import { pageApi } from "./pageApi";
 import { projectsApi } from "./projectsApi";
 import { fileApi } from "./fileApi";
 import { authApi } from "./authApi";
+import { configApi } from "./configApi";
 
 export const MFApi = {
   ...pageApi,
   ...projectsApi,
   ...fileApi,
   ...authApi,
+  ...configApi,
 
   getErrorTest: (params?: { [key: string]: unknown }) =>
     axiosInstance({

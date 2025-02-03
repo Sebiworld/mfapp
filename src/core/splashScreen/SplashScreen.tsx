@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { MfLogo } from "@components/mfLogo/MfLogo";
 import { useTranslation } from "react-i18next";
 import { Box, LinearProgress, Paper, Typography } from "@mui/material";
+import { RemoveScroll } from "react-remove-scroll";
 
 export interface SplashScreenProps {
   visible?: boolean;
@@ -36,19 +37,21 @@ export const SplashScreen = ({ visible }: SplashScreenProps) => {
   }
 
   return (
-    <Paper
-      className="splash-screen"
-      data-testid="splash-screen"
-      sx={splashScreenStyles}
-    >
-      <Box className="logo-container">
-        <MfLogo layout="vertical"></MfLogo>
-        <LinearProgress className="progressbar" />
-      </Box>
+    <RemoveScroll>
+      <Paper
+        className="splash-screen"
+        data-testid="splash-screen"
+        sx={splashScreenStyles}
+      >
+        <Box className="logo-container">
+          <MfLogo layout="vertical"></MfLogo>
+          <LinearProgress className="progressbar" />
+        </Box>
 
-      <Typography className="loading-message">
-        {t(`splash.${messageNumber}`)}
-      </Typography>
-    </Paper>
+        <Typography className="loading-message">
+          {t(`splash.${messageNumber}`)}
+        </Typography>
+      </Paper>
+    </RemoveScroll>
   );
 };

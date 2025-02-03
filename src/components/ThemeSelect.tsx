@@ -30,7 +30,9 @@ export default function ThemeSelect() {
         },
         "&:hover": {
           ".hover-container": {
-            display: "inline-block",
+            display: "inline-flex",
+            flexDirection: "row",
+            alignItems: "center"
           },
         },
       }}

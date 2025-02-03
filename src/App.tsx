@@ -17,6 +17,10 @@ import { useHandleRegistrationConfirm } from "@utils/hooks/useHandleRegistration
 import { mfTheme } from "@styles/theme/mfTheme";
 import { CssBaseline } from "@mui/material";
 
+import * as ionIcons from "ionicons/icons";
+import { addIcons } from "ionicons";
+addIcons(ionIcons);
+
 export const App = () => {
   const isInitialized = useGlobalStore(selectIsInitialized);
   const initializeApp = useGlobalStore(selectInitializeApp);

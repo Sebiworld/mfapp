@@ -99,29 +99,27 @@ export const footerStyles: SxProps<Theme> = (theme) => ({
     },
   },
 
-  ".tertiary-navigation": {
+  ".from-container": {
+    position: "relative",
     display: "flex",
-    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    gap: "0.4em",
+    overflow: "visible",
     marginTop: "64px",
-    flexWrap: "wrap",
-    width: "100%",
-    justifyContent: "space-around",
+    padding: "0 48px",
 
-    "&>li": {
-      width: "auto",
-    },
-
-    ".MuiListItemButton-root": {
+    [theme.breakpoints.down("md")]: {
       justifyContent: "center",
-      fontSize: theme.typography.body2.fontSize,
+      padding: 0,
     },
   },
 
   hr: {
-    marginTop: "0",
+    marginTop: "8px",
     marginLeft: "32px",
     marginRight: "32px",
-    marginBottom: "16px",
+    marginBottom: "8px",
   },
 
   ".bottom-wrapper": {
@@ -131,7 +129,7 @@ export const footerStyles: SxProps<Theme> = (theme) => ({
     alignItems: "center",
     flexWrap: "wrap",
     gap: "8px",
-    padding: "0 48px",
+    padding: "0 48px 0 32px",
     fontSize: theme.typography.body2.fontSize,
 
     [theme.breakpoints.down("md")]: {
@@ -139,12 +137,24 @@ export const footerStyles: SxProps<Theme> = (theme) => ({
     },
   },
 
-  ".from-container": {
-    position: "relative",
+  ".tertiary-navigation": {
     display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: "0.5em",
+    flexDirection: "row",
+    // marginTop: "64px",
+    flexWrap: "wrap",
+    // width: "100%",
+    justifyContent: "flex-start",
+    // gap: '8px',
+    padding: 0,
+
+    "&>li": {
+      width: "auto",
+    },
+
+    ".MuiListItemButton-root": {
+      justifyContent: "center",
+      fontSize: theme.typography.body2.fontSize,
+    },
   },
 
   ".copyright": {

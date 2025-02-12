@@ -18,7 +18,7 @@ export const Layout = () => {
       <Box sx={layoutStyles} className={`main theme-${theme}`} key={userHash}>
         <Header />
 
-        <Box className="main-content">
+        <Box className="main-content" id="top">
           <Outlet />
           <Footer />
         </Box>

@@ -95,55 +95,57 @@ export function Footer() {
           </div>
         </div>
 
-        {isValidArray(tertiaryNavigation) && !!tertiaryNavigation.length && (
-          <List className="nav-list tertiary-navigation">
-            {tertiaryNavigation.map((item, index) => (
-              <ListItem key={index} disablePadding>
-                <ListItemButton
-                  component={TanstackLink}
-                  to={item?.page?.url || item.link}
-                  hash={item.section}
-                >
-                  <Box
-                    component="span"
-                    className="nav-item-title"
-                    dangerouslySetInnerHTML={{
-                      __html: item.title || item?.page?.title || "",
-                    }}
-                  />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
-        )}
+        <div className="from-container">
+          <Trans
+            i18nKey="footer.by"
+            components={{
+              a: (
+                <Link
+                  className="ext-link"
+                  color="primary"
+                  underline="always"
+                  href="https://www.sebi.dev"
+                  target="_blank"
+                />
+              ),
+              // heart: <FavoriteBorderIcon />,
+              heart: (
+                <Lottie
+                  options={heartAnimationOptions}
+                  height={"3em"}
+                  width={"3.5em"}
+                  style={{ margin: " 0 -16px 0 -16px" }}
+                />
+              ),
+            }}
+          ></Trans>
+        </div>
 
         <hr />
 
         <div className="bottom-wrapper">
-          <div className="from-container">
-            <Trans
-              i18nKey="footer.by"
-              components={{
-                a: (
-                  <Link
-                    className="ext-link"
-                    color="primary"
-                    underline="always"
-                    href="https://www.sebi.dev"
-                    target="_blank"
-                  />
-                ),
-                // heart: <FavoriteBorderIcon />,
-                heart: (
-                  <Lottie
-                    options={heartAnimationOptions}
-                    height={"3em"}
-                    width={"1.5em"}
-                  />
-                ),
-              }}
-            ></Trans>
-          </div>
+          {isValidArray(tertiaryNavigation) && !!tertiaryNavigation.length && (
+            <List className="nav-list tertiary-navigation">
+              {tertiaryNavigation.map((item, index) => (
+                <ListItem key={index} disablePadding>
+                  <ListItemButton
+                    component={TanstackLink}
+                    to={item?.page?.url || item.link}
+                    hash={item.section}
+                  >
+                    <Box
+                      component="span"
+                      className="nav-item-title"
+                      dangerouslySetInnerHTML={{
+                        __html: item.title || item?.page?.title || "",
+                      }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+          )}
+
           <div className="copyright">
             {t("footer.copyright", { year: currentDate.getFullYear() })}
           </div>

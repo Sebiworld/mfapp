@@ -38,7 +38,7 @@ export const SectionHero: React.FC<SectionHeroProps> = ({ section }) => {
     <Box
       component="section"
       id={section.section_name}
-      className="section section-hero"
+      className="section section-hero np"
       sx={sectionHeroStyles}
     >
       {section.title && !section.hide_title && section.title}

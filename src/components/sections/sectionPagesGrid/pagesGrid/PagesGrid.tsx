@@ -11,9 +11,9 @@ export interface PagesGridProps {
 }
 
 export const PagesGrid: React.FC<PagesGridProps> = ({ section }) => {
-  useEffect(() => {
-    console.log("PagesGrid", section);
-  }, [section]);
+  // useEffect(() => {
+  //   console.log("PagesGrid", section);
+  // }, [section]);
 
   return (
     <Box className="pages-grid" data-testid="pages-grid" sx={pagesGridStyles}>

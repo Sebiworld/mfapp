@@ -20,12 +20,14 @@ import { mfInfoDark, mfInfoLight } from "./paletteColors/mfInfo";
 import { mfDarkDark, mfDarkLight } from "./paletteColors/mfDark";
 import { MuiToolbarOverwrites } from "./MuiOverwrites/MuiToolbar";
 import { MuiCardOverwrites } from "./MuiOverwrites/MuiCard";
+import { mfBgDark, mfBgLight } from "./paletteColors/mfBg";
 
 declare module "@mui/material/styles" {
   interface Palette {
     muted: Palette["primary"];
     light: Palette["primary"];
     dark: Palette["primary"];
+    bg: Palette["primary"];
     contrast: Palette["primary"];
     projectPrimary: Palette["primary"];
     gradient?: string;
@@ -35,6 +37,7 @@ declare module "@mui/material/styles" {
     muted?: PaletteOptions["primary"];
     light?: PaletteOptions["primary"];
     dark?: PaletteOptions["primary"];
+    bg?: PaletteOptions["primary"];
     contrast?: PaletteOptions["primary"];
     projectPrimary?: PaletteOptions["primary"];
     gradient?: string;
@@ -157,6 +160,7 @@ export const mfTheme = createTheme({
         muted: mfMutedLight,
         light: mfLightLight,
         dark: mfDarkLight,
+        bg: mfBgLight,
         contrast: mfContrastLight,
         projectPrimary: mfPrimaryLight,
         gradient:
@@ -174,6 +178,7 @@ export const mfTheme = createTheme({
         muted: mfMutedDark,
         light: mfLightDark,
         dark: mfDarkDark,
+        bg: mfBgDark,
         contrast: mfContrastDark,
         projectPrimary: mfPrimaryDark,
         gradient:

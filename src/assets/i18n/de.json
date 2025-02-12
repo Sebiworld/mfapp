@@ -85,7 +85,8 @@
 
   "sidemenu": {
     "home": "Startseite",
-    "settings": "Einstellungen"
+    "settings": "Einstellungen",
+    "menu": "Menü"
   },
 
   "footer": {

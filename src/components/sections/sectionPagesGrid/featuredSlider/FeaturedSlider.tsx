@@ -21,13 +21,13 @@ export interface FeaturedSliderProps {
 export const FeaturedSlider: React.FC<FeaturedSliderProps> = ({ section }) => {
   const swiperElRef = useRef(null);
 
-  useEffect(() => {
-    console.log("FeaturedSlider", section);
-  }, [section]);
+  // useEffect(() => {
+  //   console.log("FeaturedSlider", section);
+  // }, [section]);
 
-  const onSwiperInit = (e: Event) => {
-    console.log("onSwiperInit", e);
-  };
+  // const onSwiperInit = (e: Event) => {
+  //   console.log("onSwiperInit", e);
+  // };
 
   useEffect(() => {
     if (!swiperElRef?.current) {
@@ -54,12 +54,12 @@ export const FeaturedSlider: React.FC<FeaturedSliderProps> = ({ section }) => {
     };
     Object.assign(swiperContainer, params);
 
-    swiperContainer.addEventListener("swiperinit", onSwiperInit);
+    // swiperContainer.addEventListener("swiperinit", onSwiperInit);
 
     swiperContainer.initialize();
 
     return () => {
-      swiperContainer.removeEventListener("swiperinit", onSwiperInit);
+      // swiperContainer.removeEventListener("swiperinit", onSwiperInit);
     };
   }, []);
 

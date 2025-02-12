@@ -3,7 +3,6 @@ import React from "react";
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import {
-  Box,
   Button,
   Card,
   CardActions,
@@ -54,25 +53,26 @@ export const PageCard: React.FC<PageCardProps> = ({ card, headingLevel }) => {
               gutterBottom
               dangerouslySetInnerHTML={{ __html: card.title }}
               className="card-title"
+              component="div"
             ></Typography>
           )}
 
           {!!card.intro && (
-            <Typography variant="body2">
-              <Box
-                className="card-intro"
-                dangerouslySetInnerHTML={{ __html: card.intro }}
-              ></Box>
-            </Typography>
+            <Typography
+              variant="body2"
+              component="div"
+              className="card-intro"
+              dangerouslySetInnerHTML={{ __html: card.intro }}
+            ></Typography>
           )}
 
           {!!card.description && (
-            <Typography variant="body2">
-              <Box
-                className="card-description"
-                dangerouslySetInnerHTML={{ __html: card.description }}
-              ></Box>
-            </Typography>
+            <Typography
+              variant="body2"
+              component="div"
+              className="card-description"
+              dangerouslySetInnerHTML={{ __html: card.description }}
+            ></Typography>
           )}
         </CardContent>
       )}
@@ -82,7 +82,7 @@ export const PageCard: React.FC<PageCardProps> = ({ card, headingLevel }) => {
           component={Link}
           to={card.url}
           variant="contained"
-          color="secondary"
+          color="contrast"
         >
           {t("page_card.btn_more")}
         </Button>

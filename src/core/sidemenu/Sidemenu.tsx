@@ -116,7 +116,7 @@ export const Sidemenu = ({ sidemenuOpen, setSidemenuOpen }: SidemenuProps) => {
 
         {!!menueItems?.length && (
           <Box className="nav-container">
-            <Typography className="nav-title">{t("header.menue")}</Typography>
+            <Typography className="nav-title">{t("sidemenu.menu")}</Typography>
 
             <List component="nav" className="navigation-list">
               {menueItems.map((item) => (

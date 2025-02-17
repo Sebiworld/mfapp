@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Masonry from "@mui/lab/Masonry";
 
 import { SectionPagesGridDto } from "@models/section/section-pages-grid-dto.model";

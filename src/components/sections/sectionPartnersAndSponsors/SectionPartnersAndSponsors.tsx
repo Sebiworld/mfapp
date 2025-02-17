@@ -1,6 +1,6 @@
 import { ContentBlocks } from "@components/contentBlocks/ContentBlocks";
 import { SectionPartnersAndSponsorsDto } from "@models/section/section-partners-and-sponsors-dto.model";
-import { Box, Card, Paper, Typography } from "@mui/material";
+import { Box, Card, Typography } from "@mui/material";
 import React from "react";
 import { sectionPartnersAndSponsorsStyles } from "./sectionPartnersAndSponsors.styles";
 import { LazyPicture } from "@components/lazyPicture/LazyPicture";

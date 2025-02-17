@@ -2,14 +2,13 @@ import React, { useEffect, useRef } from "react";
 
 // Import Swiper React components
 import { SwiperContainer, register } from "swiper/element/bundle";
-import { Scrollbar, Thumbs } from "swiper/modules";
+import { Thumbs, Pagination } from "swiper/modules";
 
 // Import Swiper styles
 import "swiper/css/bundle";
 
 import { SectionPagesGridDto } from "@models/section/section-pages-grid-dto.model";
 import { LazyPicture } from "@components/lazyPicture/LazyPicture";
-// import EffectMaterial from '@components/swiper/effects/effect-material.esm';
 import { SwiperOptions } from "swiper/types";
 import { featuredSliderStyles } from "./featuredSlider.styles";
 import { Box, Link } from "@mui/material";
@@ -20,14 +19,6 @@ export interface FeaturedSliderProps {
 
 export const FeaturedSlider: React.FC<FeaturedSliderProps> = ({ section }) => {
   const swiperElRef = useRef(null);
-
-  // useEffect(() => {
-  //   console.log("FeaturedSlider", section);
-  // }, [section]);
-
-  // const onSwiperInit = (e: Event) => {
-  //   console.log("onSwiperInit", e);
-  // };
 
   useEffect(() => {
     if (!swiperElRef?.current) {
@@ -43,24 +34,17 @@ export const FeaturedSlider: React.FC<FeaturedSliderProps> = ({ section }) => {
       centeredSlides: true,
       navigation: true,
       effect: "coverflow",
-      modules: [Scrollbar, Thumbs],
-      scrollbar: {
-        hide: false,
+      modules: [Thumbs, Pagination],
+      pagination: {
+        clickable: true,
       },
       coverflowEffect: {
         // scale: 2,
       },
-      // injectStylesUrls: ['swiper/modules/scrollbar.min.css'],
     };
     Object.assign(swiperContainer, params);
 
-    // swiperContainer.addEventListener("swiperinit", onSwiperInit);
-
     swiperContainer.initialize();
-
-    return () => {
-      // swiperContainer.removeEventListener("swiperinit", onSwiperInit);
-    };
   }, []);
 
   return (

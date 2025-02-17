@@ -1,7 +1,7 @@
 import { swiperStyles } from "@components/swiper/swiperStyles";
-import { SxProps } from "@mui/material";
+import { SxProps, Theme } from "@mui/material";
 
-export const featuredSliderStyles: SxProps = {
+export const featuredSliderStyles: SxProps<Theme> = {
   ...swiperStyles,
   width: "1000px",
   maxWidth: "100%",

@@ -25,29 +25,14 @@ export const SectionArticlesCarousel: React.FC<
     const swiperContainer = swiperElRef.current as SwiperContainer;
 
     const params: SwiperOptions = {
-      slidesPerView: 3,
+      slidesPerView: "auto",
       spaceBetween: 16,
       centeredSlides: false,
-      navigation: true,
-      // effect: "coverflow",
-      // modules: [Scrollbar, Thumbs],
-      scrollbar: {
-        hide: false,
-      },
-      coverflowEffect: {
-        // scale: 2,
-      },
-      // injectStylesUrls: ['swiper/modules/scrollbar.min.css'],
+      navigation: true
     };
     Object.assign(swiperContainer, params);
 
-    // swiperContainer.addEventListener("swiperinit", onSwiperInit);
-
     swiperContainer.initialize();
-
-    return () => {
-      // swiperContainer.removeEventListener("swiperinit", onSwiperInit);
-    };
   }, []);
 
   return (

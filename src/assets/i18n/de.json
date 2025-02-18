@@ -154,7 +154,9 @@
   },
 
   "page_card": {
-    "btn_more": "Mehr dazu..."
+    "facebook_title": "Musical-Fabrik e.V. auf Facebook:",
+    "btn_more": "Mehr dazu...",
+    "btn_more_on_facebook": "Mehr dazu auf Facebook..."
   },
 
   "project": {

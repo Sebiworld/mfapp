@@ -14,6 +14,7 @@ import { PageCardDto } from "@models/page/page-card-dto.model";
 import { pageCardStyles } from "./pageCard.styles";
 import { HeadingLevel } from "@models/utility-types/heading-level.model";
 import { LazyPicture } from "@components/lazyPicture/LazyPicture";
+import { IonIcon } from "@ionic/react";
 
 export interface PageCardProps {
   card: PageCardDto;
@@ -39,14 +40,25 @@ export const PageCard: React.FC<PageCardProps> = ({ card, headingLevel }) => {
 
       {(!!card.title || !!card.intro || !!card.description) && (
         <CardContent className="card-content">
-          {!!card.title && (
+          {card.external_type === "Facebook" ? (
             <Typography
               variant={`h${headingLevel || 2}`}
               gutterBottom
-              dangerouslySetInnerHTML={{ __html: card.title }}
-              className="card-title"
+              className="card-title subtle"
               component="div"
-            ></Typography>
+            >
+              {t("page_card.facebook_title")}
+            </Typography>
+          ) : (
+            !!card.title && (
+              <Typography
+                variant={`h${headingLevel || 2}`}
+                gutterBottom
+                dangerouslySetInnerHTML={{ __html: card.title }}
+                className="card-title"
+                component="div"
+              ></Typography>
+            )
           )}
 
           {!!card.intro && (
@@ -70,14 +82,29 @@ export const PageCard: React.FC<PageCardProps> = ({ card, headingLevel }) => {
       )}
 
       <CardActions disableSpacing={true}>
-        <Button
-          component={Link}
-          to={card.url}
-          variant="contained"
-          color="contrast"
-        >
-          {t("page_card.btn_more")}
-        </Button>
+        {card.external_type === "Facebook" ? (
+          <Button
+            component={Link}
+            to={card.external_link}
+            variant="contained"
+            color="contrast"
+            target="_blank"
+            startIcon={
+              <IonIcon aria-hidden="true" icon={"logo-facebook"}></IonIcon>
+            }
+          >
+            {t("page_card.btn_more_on_facebook")}
+          </Button>
+        ) : (
+          <Button
+            component={Link}
+            to={card.url}
+            variant="contained"
+            color="contrast"
+          >
+            {t("page_card.btn_more")}
+          </Button>
+        )}
       </CardActions>
     </Card>
   );

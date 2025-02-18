@@ -1,8 +1,13 @@
 import { SxProps, Theme } from "@mui/material";
 
 export const swiperStyles: SxProps<Theme> = {
-  "swiper-container": {
-    // paddingX: '64px',
+  "swiper-container": (theme) => ({
+    marginLeft: "-24px",
+    marginRight: "-24px",
+    paddingLeft: "24px",
+    paddingRight: "24px",
+    position: "relative",
+
     "--swiper-navigation-size": "32px",
     "--swiper-navigation-sides-offset": "80px",
     "--swiper-navigation-color": "var(--mf-palette-contrast-500)",
@@ -18,6 +23,7 @@ export const swiperStyles: SxProps<Theme> = {
     "--swiper-pagination-color": "var(--mf-palette-contrast-500)",
 
     "&::part(button-prev), &::part(button-next)": {
+      backgroundColor: "rgba(var(--mf-palette-contrast-mainChannel) / 0.15)",
       backdropFilter: "blur(10px)",
       WebkitBackdropFilter: "blur(10px)",
       padding: "8px",
@@ -27,11 +33,32 @@ export const swiperStyles: SxProps<Theme> = {
       // marginBottom: '60px'
     },
 
-    "&::part(button-prev)": {
-      left: 0,
+    "&::part(container)": {
+      position: "unset",
     },
+
+    "&::part(button-prev)": {
+      left: "0",
+
+      [theme.breakpoints.up("md")]: {
+        left: "-24px",
+      },
+
+      "&:hover, &:focus": {
+        background: "rgba(var(--mf-palette-contrast-mainChannel) / 0.25)",
+      },
+    },
+
     "&::part(button-next)": {
-      right: 0,
+      right: "0",
+
+      [theme.breakpoints.up("md")]: {
+        right: "-24px",
+      },
+
+      "&:hover, &:focus": {
+        background: "rgba(var(--mf-palette-contrast-mainChannel) / 0.25)",
+      },
     },
 
     "&::part(scrollbar)": {
@@ -65,5 +92,5 @@ export const swiperStyles: SxProps<Theme> = {
     // "&.swiper-watch-progress": {
     //   marginBottom: "50px",
     // },
-  },
+  }),
 };

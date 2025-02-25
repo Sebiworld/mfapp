@@ -1,6 +1,6 @@
-import { Color } from "@mui/material/styles";
+import { ExtendedPaletteColor } from "@styles/theme/mfTheme";
 
-export const mfWhite: Color = {
+export const mfWhite: ExtendedPaletteColor = {
   50: "#fefefe",
   100: "#fdfdfd",
   200: "#fcfcfc",

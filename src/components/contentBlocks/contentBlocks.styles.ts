@@ -5,6 +5,7 @@ export const contentBlocksStyles: SxProps = {
   display: "flex",
   flexWrap: "wrap",
   width: "100%",
+  gap: '16px',
 
   ".content-block": {
     position: "relative",

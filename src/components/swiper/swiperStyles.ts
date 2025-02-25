@@ -31,10 +31,15 @@ export const swiperStyles: SxProps<Theme> = {
 
     "&::part(wrapper)": {
       // marginBottom: '60px'
+      alignItems: "center",
     },
 
     "&::part(container)": {
       position: "unset",
+    },
+
+    "&::slotted(swiper-slide)": {
+      textAlign: "center",
     },
 
     "&::part(button-prev)": {

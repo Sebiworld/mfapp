@@ -4,6 +4,10 @@ import { ContentBlockTextDto } from "@models/content/content-block-text-dto.mode
 import { ContentBlockDtoVariant } from "@models/content/content-block-dto-variant.model";
 import { ContentForm } from "./variants/contentForm/ContentForm";
 import { ContentBlockFormDto } from "@models/content/content-block-form-dto.model";
+import { ContentBlockYoutubeVideoDto } from "@models/content/content-block-youtube-video-dto.model";
+import { ContentYoutubeVideo } from "./variants/contentYoutubeVideo/ContentYoutubeVideo";
+import { ContentBlockGalleryDto } from "@models/content/content-block-gallery-dto.model";
+import { ContentGallery } from "./variants/contentGallery/ContentGallery";
 
 export interface ContentBlocksProps {
   block: ContentBlockDtoVariant;
@@ -11,6 +15,7 @@ export interface ContentBlocksProps {
 
 export const ContentBlock: React.FC<ContentBlocksProps> = ({ block }) => {
   // console.log('CONTENT BLOCK', block.type, block)
+
   if (block.type === "text") {
     return (
       <ContentText
@@ -19,6 +24,16 @@ export const ContentBlock: React.FC<ContentBlocksProps> = ({ block }) => {
       ></ContentText>
     );
   }
+
+  if (block.type === "gallery") {
+    return (
+      <ContentGallery
+        key={block.id}
+        block={block as ContentBlockGalleryDto}
+      ></ContentGallery>
+    );
+  }
+
   if (block.type === "form") {
     return (
       <ContentForm
@@ -27,5 +42,15 @@ export const ContentBlock: React.FC<ContentBlocksProps> = ({ block }) => {
       ></ContentForm>
     );
   }
-  return <></>;
+
+  if (block.type === "youtube-video") {
+    return (
+      <ContentYoutubeVideo
+        key={block.id}
+        block={block as ContentBlockYoutubeVideoDto}
+      ></ContentYoutubeVideo>
+    );
+  }
+
+  return <>TODO: {block.type}</>;
 };

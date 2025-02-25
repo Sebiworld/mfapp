@@ -9,7 +9,7 @@ export interface ContentTextProps {
 export const ContentText: React.FC<ContentTextProps> = ({ block }) => {
   return (
     <Box
-      className={`content-block ${block.classes}`}
+      className={`content-block content-text ${block.classes}`}
       dangerouslySetInnerHTML={{ __html: block.text }}
     ></Box>
   );

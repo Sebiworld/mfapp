@@ -1,18 +1,19 @@
-import { PaletteColorOptions } from "@mui/material";
 import { mfOrange } from "./colors/mfOrange";
+import { ExtendedPaletteColor } from "../mfTheme";
 
-export const mfPrimary: PaletteColorOptions = {
+export const mfPrimary: ExtendedPaletteColor = {
   ...mfOrange,
+
   light: mfOrange[300],
   main: mfOrange[500],
   dark: mfOrange[700],
   contrastText: "var(--mf-palette-common-white)",
 };
 
-export const mfPrimaryLight: PaletteColorOptions = {
+export const mfPrimaryLight: ExtendedPaletteColor = {
   ...mfPrimary,
 };
 
-export const mfPrimaryDark: PaletteColorOptions = {
+export const mfPrimaryDark: ExtendedPaletteColor = {
   ...mfPrimary,
 };

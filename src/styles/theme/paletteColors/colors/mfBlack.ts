@@ -1,6 +1,6 @@
-import { Color } from "@mui/material/styles";
+import { ExtendedPaletteColor } from "@styles/theme/mfTheme";
 
-export const mfBlack: Color = {
+export const mfBlack: ExtendedPaletteColor = {
   50: "#eeeeee",
   100: "#d3d3d3",
   200: "#ababab",

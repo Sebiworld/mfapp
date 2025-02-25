@@ -10,6 +10,7 @@ export const fileApi = {
         console.log("RESPONSE", response);
       },
     }),
+
   getFileById: (
     id: number,
     params?: { file: string; [key: string]: unknown }
@@ -22,6 +23,7 @@ export const fileApi = {
         console.log("RESPONSE", response);
       },
     }),
+
   getFileByIdUrl: (
     id: number,
     params: { file: string; [key: string]: unknown }

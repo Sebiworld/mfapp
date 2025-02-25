@@ -13,7 +13,7 @@ import { routeTree } from "./routeTree.gen";
 const router = createRouter({
   routeTree,
   scrollToTopSelectors: ["#top"],
-  scrollRestoration: false
+  scrollRestoration: false,
 });
 
 // Register the router instance for type safety

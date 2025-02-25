@@ -1,16 +1,11 @@
-
-import { ImageDto } from '@models/image-dto.model';
-import { ContentBlockDto } from './content-block-dto.model';
+import { ImageDto } from "@models/image-dto.model";
+import { ContentBlockDto } from "./content-block-dto.model";
 
 export interface ContentBlockGalleryDto extends ContentBlockDto {
+  type: "gallery";
   title: string;
   hide_title: boolean;
-  gallery_type: {
-    id: number;
-    title: string;
-    value: string;
-  }[];
+  text?: string;
   images: ImageDto[];
-  description: string;
-  text: string;
+  gallery_type?: string; // masonry, slider, grid
 }

@@ -1,8 +1,18 @@
 import { MFApi } from "@api/mfApi";
 import { ImageDto } from "@models/image-dto.model";
 import { lazyPictureStyles } from "./lazyPicture.styles";
-import { ComponentPropsWithoutRef } from "react";
+import { ComponentPropsWithoutRef, useMemo } from "react";
 import { Box } from "@mui/material";
+import React from "react";
+import { getMimetypeForExtension } from "@utils/functions/mimetype/getMimetypeForExtension";
+import { isValidArray } from "@utils/functions/isValidArray";
+import { uniqBy } from "lodash";
+
+export interface LazyPictureSize {
+  media?: string;
+  width?: number;
+  height?: number;
+}
 
 export interface LazyPictureProps {
   image: ImageDto;
@@ -12,18 +22,85 @@ export interface LazyPictureProps {
   imageProps?: Partial<
     ComponentPropsWithoutRef<"img"> & { [key: string]: unknown }
   >;
+  sizes?: LazyPictureSize[];
+  defaultSize?: LazyPictureSize;
+  children?: React.ReactNode;
 }
 
 export const LazyPicture: React.FC<LazyPictureProps> = ({
   image,
   pictureProps,
   imageProps,
+  sizes,
+  defaultSize,
+  children,
 }) => {
+  const sources = useMemo(() => {
+    if (!sizes || !isValidArray(sizes)) {
+      return;
+    }
+
+    return uniqBy(sizes, "media").map((size) => {
+      const urlWebp = MFApi.getFileByIdUrl(image.page_id, {
+        file: image.basename,
+        width: size.width,
+        height: size.height,
+        webp: true,
+      });
+      const urlWebp2x = MFApi.getFileByIdUrl(image.page_id, {
+        file: image.basename,
+        width: size.width ? size.width * 2 : undefined,
+        height: size.height ? size.height * 2 : undefined,
+        webp: true,
+      });
+      const url = MFApi.getFileByIdUrl(image.page_id, {
+        file: image.basename,
+        width: size.width,
+        height: size.height,
+      });
+      const url2x = MFApi.getFileByIdUrl(image.page_id, {
+        file: image.basename,
+        width: size.width ? size.width * 2 : undefined,
+        height: size.height ? size.height * 2 : undefined,
+      });
+
+      return (
+        <React.Fragment key={size.media || "default"}>
+          <source
+            media={size.media}
+            srcSet={`${urlWebp} 1x, ${urlWebp2x} 2x`}
+            type="image/webp"
+          />
+          <source
+            media={size.media}
+            srcSet={`${url} 1x, ${url2x} 2x`}
+            type={getMimetypeForExtension(image.ext)}
+          />
+        </React.Fragment>
+      );
+    });
+  }, [image.basename, image.ext, image.page_id, sizes]);
+
+  const fileUrl = useMemo(() => {
+    if (!image?.basename) {
+      return;
+    }
+
+    const sizeWithoutMedia = sizes?.find((size) => !size.media);
+
+    const width = defaultSize ? defaultSize?.width : sizeWithoutMedia?.width;
+    const height = defaultSize ? defaultSize?.height : sizeWithoutMedia?.height;
+
+    return MFApi.getFileByIdUrl(image.page_id, {
+      file: image.basename,
+      width,
+      height,
+    });
+  }, [defaultSize, image.basename, image.page_id, sizes]);
+
   if (!image?.basename) {
     return;
   }
-
-  const fileUrl = MFApi.getFileByIdUrl(image.page_id, { file: image.basename });
 
   return (
     <Box
@@ -32,6 +109,8 @@ export const LazyPicture: React.FC<LazyPictureProps> = ({
       sx={lazyPictureStyles}
       {...pictureProps}
     >
+      {sources}
+      {children}
       <img
         alt={image.description}
         src={fileUrl}
@@ -45,15 +124,3 @@ export const LazyPicture: React.FC<LazyPictureProps> = ({
     </Box>
   );
 };
-
-{
-  /* <picture class="img-fluid">
-    <source media="(max-width: 500px)" srcset="/site/assets/files/5359/medicus-ensemble-bg.500x350.webp 1x, /site/assets/files/5359/medicus-ensemble-bg.1000x700.webp 2x" data-srcset="/site/assets/files/5359/medicus-ensemble-bg.500x350.webp 1x, /site/assets/files/5359/medicus-ensemble-bg.1000x700.webp 2x" type="image/webp">
-    <source media="(max-width: 500px)" srcset="/site/assets/files/5359/medicus-ensemble-bg.500x350.jpg 1x, /site/assets/files/5359/medicus-ensemble-bg.1000x700.jpg 2x" data-srcset="/site/assets/files/5359/medicus-ensemble-bg.500x350.jpg 1x, /site/assets/files/5359/medicus-ensemble-bg.1000x700.jpg 2x" type="image/jpeg">
-    <source media="(min-width: 1100px)" srcset="/site/assets/files/5359/medicus-ensemble-bg.1100x400.webp 1x, /site/assets/files/5359/medicus-ensemble-bg.2200x800.webp 2x" data-srcset="/site/assets/files/5359/medicus-ensemble-bg.1100x400.webp 1x, /site/assets/files/5359/medicus-ensemble-bg.2200x800.webp 2x" type="image/webp">
-    <source media="(min-width: 1100px)" srcset="/site/assets/files/5359/medicus-ensemble-bg.1100x400.jpg 1x, /site/assets/files/5359/medicus-ensemble-bg.2200x800.jpg 2x" data-srcset="/site/assets/files/5359/medicus-ensemble-bg.1100x400.jpg 1x, /site/assets/files/5359/medicus-ensemble-bg.2200x800.jpg 2x" type="image/jpeg">
-    <source srcset="/site/assets/files/5359/medicus-ensemble-bg.1000x500.webp 1x, /site/assets/files/5359/medicus-ensemble-bg.2000x1000.webp 2x" data-srcset="/site/assets/files/5359/medicus-ensemble-bg.1000x500.webp 1x, /site/assets/files/5359/medicus-ensemble-bg.2000x1000.webp 2x" type="image/webp">
-    <source srcset="/site/assets/files/5359/medicus-ensemble-bg.1000x500.jpg 1x, /site/assets/files/5359/medicus-ensemble-bg.2000x1000.jpg 2x" data-srcset="/site/assets/files/5359/medicus-ensemble-bg.1000x500.jpg 1x, /site/assets/files/5359/medicus-ensemble-bg.2000x1000.jpg 2x" type="image/jpeg">
-    <img alt="Musical-Fabrik Hero" data-src="/site/assets/files/5359/medicus-ensemble-bg.1000x500.jpg" src="/site/assets/files/5359/medicus-ensemble-bg.1000x500.jpg" class="lazy-image ls-is-cached lazyloaded">
-  </picture> */
-}

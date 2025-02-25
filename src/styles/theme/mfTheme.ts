@@ -21,25 +21,34 @@ import { mfDarkDark, mfDarkLight } from "./paletteColors/mfDark";
 import { MuiToolbarOverwrites } from "./MuiOverwrites/MuiToolbar";
 import { MuiCardOverwrites } from "./MuiOverwrites/MuiCard";
 import { mfBgDark, mfBgLight } from "./paletteColors/mfBg";
+import {
+  Channels,
+  ColorPartial,
+  SimplePaletteColorOptions,
+} from "@mui/material/styles/createPalette";
+
+export type ExtendedPaletteColor = Partial<SimplePaletteColorOptions> &
+  ColorPartial &
+  Partial<Channels> & { contrastText?: string };
 
 declare module "@mui/material/styles" {
   interface Palette {
-    muted: Palette["primary"];
-    light: Palette["primary"];
-    dark: Palette["primary"];
-    bg: Palette["primary"];
-    contrast: Palette["primary"];
-    projectPrimary: Palette["primary"];
+    muted: ExtendedPaletteColor;
+    light: ExtendedPaletteColor;
+    dark: ExtendedPaletteColor;
+    bg: ExtendedPaletteColor;
+    contrast: ExtendedPaletteColor;
+    projectPrimary: ExtendedPaletteColor;
     gradient?: string;
   }
 
   interface PaletteOptions {
-    muted?: PaletteOptions["primary"];
-    light?: PaletteOptions["primary"];
-    dark?: PaletteOptions["primary"];
-    bg?: PaletteOptions["primary"];
-    contrast?: PaletteOptions["primary"];
-    projectPrimary?: PaletteOptions["primary"];
+    muted?: ExtendedPaletteColor;
+    light?: ExtendedPaletteColor;
+    dark?: ExtendedPaletteColor;
+    bg?: ExtendedPaletteColor;
+    contrast?: ExtendedPaletteColor;
+    projectPrimary?: ExtendedPaletteColor;
     gradient?: string;
   }
 

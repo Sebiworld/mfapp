@@ -3,6 +3,7 @@ import { SxProps, Theme } from "@mui/material";
 
 export const featuredSliderStyles: SxProps<Theme> = {
   ...swiperStyles,
+
   width: "1000px",
   maxWidth: "100%",
   margin: "0 auto",

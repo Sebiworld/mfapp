@@ -1,6 +1,6 @@
-import { Color } from "@mui/material/styles";
+import { ExtendedPaletteColor } from "@styles/theme/mfTheme";
 
-export const mfLightGray: Color = {
+export const mfLightGray: ExtendedPaletteColor = {
   50: "#FBFCFE",
   100: "#F0F4F8",
   200: "#DDE7EE",

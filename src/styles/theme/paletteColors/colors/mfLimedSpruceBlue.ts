@@ -1,6 +1,6 @@
-import { Color } from "@mui/material/styles";
+import { ExtendedPaletteColor } from "@styles/theme/mfTheme";
 
-export const mfLimedSpruceBlue: Color = {
+export const mfLimedSpruceBlue: ExtendedPaletteColor = {
   50: "#edf4f7",
   100: "#d3e1e8",
   200: "#acc5d1",

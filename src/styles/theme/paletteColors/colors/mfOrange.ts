@@ -1,6 +1,6 @@
-import { Color } from "@mui/material";
+import { ExtendedPaletteColor } from "@styles/theme/mfTheme";
 
-export const mfOrange: Color = {
+export const mfOrange: ExtendedPaletteColor = {
   50: "#fff7ed",
   100: "#ffedd5",
   200: "#fed7aa",

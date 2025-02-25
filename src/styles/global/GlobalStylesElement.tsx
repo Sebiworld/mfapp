@@ -7,6 +7,7 @@ import { selectGlobalCss } from "@src/store/settings.store";
 import { useMemo } from "react";
 import { GlobalStyles } from "@mui/material";
 import { globalAspectRatioStyles } from "./aspect-ratio.styles";
+import { lightgalleryStyles } from "./vendors/lightgallery.styles";
 
 export const GlobalStylesElement = () => {
   const globalCss = useGlobalStore(selectGlobalCss);
@@ -18,6 +19,7 @@ export const GlobalStylesElement = () => {
       ...globalFontsStyles,
       ...globalAspectRatioStyles,
       ...toastifyStyles,
+      ...lightgalleryStyles,
     ];
 
     // Add global Css variables if set:

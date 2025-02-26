@@ -16,8 +16,20 @@ export const contentGalleryStyles: SxProps<Theme> = (theme) => ({
 
     "&.content-gallery-grid": {
       display: "grid",
-      gridTemplateColumns: "repeat(auto-fill, 260px)",
+      gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
       gap: "8px",
+
+      [theme.breakpoints.up("sm")]: {
+        gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+      },
+
+      [theme.breakpoints.up("lg")]: {
+        gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+      },
+
+      ".image-button": {
+        display: "block",
+      },
     },
 
     "&.content-gallery-slider": {
@@ -40,6 +52,7 @@ export const contentGalleryStyles: SxProps<Theme> = (theme) => ({
         height: "100%",
         marginLeft: 0,
         marginRight: 0,
+        alignItems: "center",
         // padding: "0 24px",
 
         ...swiperStyles,

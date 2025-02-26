@@ -31,7 +31,7 @@ export const swiperStyles: SxProps<Theme> = {
 
     "&::part(wrapper)": {
       // marginBottom: '60px'
-      alignItems: "center",
+      // alignItems: "center",
     },
 
     "&::part(container)": {

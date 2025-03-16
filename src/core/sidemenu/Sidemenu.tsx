@@ -119,6 +119,18 @@ export const Sidemenu = ({ sidemenuOpen, setSidemenuOpen }: SidemenuProps) => {
             <Typography className="nav-title">{t("sidemenu.menu")}</Typography>
 
             <List component="nav" className="navigation-list">
+              <ListItem>
+                <ListItemButton component={Link} to="/shop">
+                  Merch-Shop
+                </ListItemButton>
+              </ListItem>
+
+              <ListItem>
+                <ListItemButton component={Link} to="/events">
+                  Probenplan
+                </ListItemButton>
+              </ListItem>
+
               {menueItems.map((item) => (
                 <MenueItem key={item.id} item={item}></MenueItem>
               ))}

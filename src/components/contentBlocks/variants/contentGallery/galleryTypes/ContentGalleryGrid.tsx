@@ -29,7 +29,18 @@ export const ContentGalleryGrid: React.FC<ContentGalleryGridProps> = ({
               lightGalleryRef?.current?.openGallery(index);
             }}
           >
-            <LazyPicture image={image} />
+            <LazyPicture
+              image={image}
+              sizes={[
+                {
+                  media: "sm-down",
+                  width: 220,
+                },
+                {
+                  width: 310,
+                },
+              ]}
+            />
           </Button>
         ))}
       </Box>

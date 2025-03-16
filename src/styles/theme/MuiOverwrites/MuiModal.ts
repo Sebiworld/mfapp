@@ -18,6 +18,7 @@ export const MuiModalOverwrites: Components<Theme> = {
           padding: 0,
           height: "auto",
           maxHeight: "90%",
+          gap: "16px",
 
           "&.width-xs": {
             width: "300px",
@@ -41,25 +42,40 @@ export const MuiModalOverwrites: Components<Theme> = {
             height: "100%",
           },
 
+          ".actions": {
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "flex-start",
+            gap: "4px",
+          },
+
           "&>.modal-header, &>.modal-footer": {
             flex: "0 0 auto",
-            padding: "16px",
+            padding: "16px 32px",
             display: "flex",
             flexDirection: "row",
             flexWrap: "wrap",
             gap: "8px",
+            justifyContent: "space-between",
           },
 
-          "&>.modal-header": {},
+          "&>.modal-header": {
+            paddingBottom: 0,
+
+            ".actions": {
+              alignSelf: "flex-end",
+            },
+          },
 
           "&>.modal-content": {
             flex: "1 1 auto",
-            padding: "16px",
+            padding: "16px 32px",
             overflow: "auto",
             postition: "relative",
             display: "flex",
             flexDirection: "column",
             gap: "32px",
+            paddingTop: 0,
 
             section: {
               postition: "relative",
@@ -77,7 +93,15 @@ export const MuiModalOverwrites: Components<Theme> = {
             },
           },
 
-          "&>.modal-footer": {},
+          "&:has.modal-footer": {
+            ".modal-content": {
+              paddingBottom: 0,
+            },
+          },
+
+          "&>.modal-footer": {
+            paddingTop: 0,
+          },
 
           ".MuiModalClose-root": {
             margin: 0,

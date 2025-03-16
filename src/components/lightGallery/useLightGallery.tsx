@@ -18,7 +18,7 @@ import {
   InitDetail,
 } from "lightgallery/lg-events";
 import { LightGallery } from "lightgallery/lightgallery";
-import { getGalleryItemsFromImages } from "./functions/getGalleryItemsFromImages";
+import { getGalleryItemsFromImages } from "./getGalleryItemsFromImages";
 
 export interface UseLightGalleryProps {
   images: ImageDto[];

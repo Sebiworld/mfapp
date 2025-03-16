@@ -34,7 +34,18 @@ export const ContentGalleryMasonry: React.FC<ContentGalleryMasonryProps> = ({
                 lightGalleryRef?.current?.openGallery(index);
               }}
             >
-              <LazyPicture image={image} />
+              <LazyPicture
+                image={image}
+                sizes={[
+                  {
+                    media: "sm-down",
+                    width: 220,
+                  },
+                  {
+                    width: 310,
+                  },
+                ]}
+              />
             </Button>
           ))}
         </Masonry>

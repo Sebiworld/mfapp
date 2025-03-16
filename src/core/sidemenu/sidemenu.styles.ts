@@ -2,7 +2,7 @@ import { SxProps, Theme } from "@mui/material";
 
 export const sidemenuStyles: SxProps<Theme> = (theme) => ({
   ".MuiPaper-root": {
-    width: "275px",
+    width: "340px",
     maxWidth: "100%",
     background: theme.vars.palette.background.paper,
   },
@@ -46,7 +46,7 @@ export const sidemenuStyles: SxProps<Theme> = (theme) => ({
 
   ".nav-container": {
     "&>.nav-title": {
-      padding: "32px 16px 0 16px",
+      padding: "32px 32px 0 32px",
       fontSize: theme.typography.body2.fontSize,
       opacity: 0.5,
     },
@@ -56,7 +56,7 @@ export const sidemenuStyles: SxProps<Theme> = (theme) => ({
     fontSize: "xl",
 
     "&>li": {
-      paddingY: "0",
+      padding: "0 32px",
     },
 
     ".MuiListItemIcon-root": {
@@ -73,7 +73,7 @@ export const sidemenuStyles: SxProps<Theme> = (theme) => ({
   },
 
   hr: {
-    margin: "32px 16px",
+    margin: "32px",
     width: "64px",
     maxWidth: "calc(100% - 32px)",
     opacity: 0.5,

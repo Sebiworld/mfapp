@@ -7,6 +7,7 @@ import React from "react";
 import { getMimetypeForExtension } from "@utils/functions/mimetype/getMimetypeForExtension";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { uniqBy } from "lodash";
+import { mediaPlaceholders } from "./mediaPlaceholders";
 
 export interface LazyPictureSize {
   media?: string;
@@ -64,15 +65,19 @@ export const LazyPicture: React.FC<LazyPictureProps> = ({
         height: size.height ? size.height * 2 : undefined,
       });
 
+      const media = size.media
+        ? (mediaPlaceholders[size.media] ?? size.media)
+        : undefined;
+
       return (
         <React.Fragment key={size.media || "default"}>
           <source
-            media={size.media}
+            media={media}
             srcSet={`${urlWebp} 1x, ${urlWebp2x} 2x`}
             type="image/webp"
           />
           <source
-            media={size.media}
+            media={media}
             srcSet={`${url} 1x, ${url2x} 2x`}
             type={getMimetypeForExtension(image.ext)}
           />

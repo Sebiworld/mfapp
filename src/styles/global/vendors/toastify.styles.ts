@@ -4,12 +4,12 @@ import { Theme } from "@mui/material";
 export const toastifyStyles: Interpolation<Theme>[] = [
   {
     ":root": {
-      "--toastify-color-light": "var(--mf-palette-light-900)",
-      "--toastify-color-dark": "var(--mf-palette-dark-900)",
+      "--toastify-color-light": "var(--mf-palette-light-500)",
+      "--toastify-color-dark": "var(--mf-palette-dark-500)",
       "--toastify-color-info": "var(--mf-palette-info-500)",
       "--toastify-color-success": "var(--mf-palette-success-500)",
       "--toastify-color-warning": "var(--mf-palette-warning-500)",
-      "--toastify-color-error": "var(--mf-palette-danger-500)",
+      "--toastify-color-error": "var(--mf-palette-error-500)",
       "--toastify-color-transparent": "rgba(255, 255, 255, 0.7)",
 
       "--toastify-icon-color-info": "var(--toastify-color-info)",

@@ -269,17 +269,34 @@ export const createAuthSlice: StateCreator<GlobalStore, [], [], AuthSlice> = (
 
       if (axios.isAxiosError(error)) {
         toast.error(
-          t("auth.registration-error", {
-            message: error.message,
-            code: error.code,
-          })
+          <>
+            {t("auth.registration-error", {
+              code: error.code,
+            })}
+
+            {!!error.message && (
+              <>
+                <br />
+                {error.message}
+              </>
+            )}
+          </>
         );
       } else {
+        const errorMessage = (error as { message?: string })?.message;
         toast.error(
-          t("auth.registration-error", {
-            message: (error as { message?: string })?.message || "Unknown",
-            code: "unknown",
-          })
+          <>
+            {t("auth.registration-error", {
+              code: "unknown",
+            })}
+
+            {!!errorMessage && (
+              <>
+                <br />
+                {errorMessage}
+              </>
+            )}
+          </>
         );
       }
     }
@@ -305,17 +322,34 @@ export const createAuthSlice: StateCreator<GlobalStore, [], [], AuthSlice> = (
 
       if (axios.isAxiosError(error)) {
         toast.error(
-          t("auth.registration-confirm-error", {
-            message: error.message,
-            code: error.code,
-          })
+          <>
+            {t("auth.registration-confirm-error", {
+              code: error.code,
+            })}
+
+            {!!error.message && (
+              <>
+                <p>{error.message}</p>
+              </>
+            )}
+          </>,
+          { autoClose: false, theme: "colored" }
         );
       } else {
+        const errorMessage = (error as { message?: string })?.message;
         toast.error(
-          t("auth.registration-confirm-error", {
-            message: (error as { message?: string })?.message || "Unknown",
-            code: "unknown",
-          })
+          <>
+            {t("auth.registration-confirm-error", {
+              code: "unknown",
+            })}
+
+            {!!errorMessage && (
+              <>
+                <br />
+                {errorMessage}
+              </>
+            )}
+          </>
         );
       }
     }

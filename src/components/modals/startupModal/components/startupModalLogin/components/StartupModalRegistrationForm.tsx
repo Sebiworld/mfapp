@@ -15,7 +15,6 @@ import {
   FormControl,
   FormHelperText,
   FormLabel,
-  Input,
   TextField,
 } from "@mui/material";
 
@@ -126,7 +125,8 @@ export const StartupModalRegistrationForm = ({
 
             <Controller
               render={({ field: { onChange, onBlur, value } }) => (
-                <Input
+                <TextField
+                  variant="outlined"
                   type="email"
                   className="email-input"
                   onBlur={onBlur}
@@ -151,7 +151,8 @@ export const StartupModalRegistrationForm = ({
 
             <Controller
               render={({ field: { onChange, onBlur, value } }) => (
-                <Input
+                <TextField
+                  variant="outlined"
                   type="password"
                   className="password-input"
                   onBlur={onBlur}
@@ -176,7 +177,8 @@ export const StartupModalRegistrationForm = ({
 
             <Controller
               render={({ field: { onChange, onBlur, value } }) => (
-                <Input
+                <TextField
+                  variant="outlined"
                   type="password"
                   className="password-repeat-input"
                   onBlur={onBlur}
@@ -201,7 +203,8 @@ export const StartupModalRegistrationForm = ({
 
             <Controller
               render={({ field: { onChange, onBlur, value } }) => (
-                <Input
+                <TextField
+                  variant="outlined"
                   type="text"
                   className="firstname-input"
                   onBlur={onBlur}
@@ -226,7 +229,8 @@ export const StartupModalRegistrationForm = ({
 
             <Controller
               render={({ field: { onChange, onBlur, value } }) => (
-                <Input
+                <TextField
+                  variant="outlined"
                   type="text"
                   className="lastname-input"
                   onBlur={onBlur}
@@ -251,7 +255,8 @@ export const StartupModalRegistrationForm = ({
 
             <Controller
               render={({ field: { onChange, onBlur, value } }) => (
-                <Input
+                <TextField
+                  variant="outlined"
                   type="text"
                   className="nickname-input"
                   onBlur={onBlur}
@@ -309,6 +314,7 @@ export const StartupModalRegistrationForm = ({
             <Controller
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextField
+                  variant="outlined"
                   className="rolestext-input"
                   onBlur={onBlur}
                   onChange={onChange}
@@ -329,12 +335,15 @@ export const StartupModalRegistrationForm = ({
             )}
           </FormControl>
 
-          <Button type="submit">{t("general.actions.submit")}</Button>
+          <Button color="primary" variant="contained" type="submit">
+            {t("general.actions.submit")}
+          </Button>
         </section>
 
         <section className="center">
           <p>oder:</p>
           <Button
+            color="primary"
             onClick={() => {
               setIsRegistrationActive(false);
             }}

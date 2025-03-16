@@ -11,6 +11,18 @@ export const startupModalStyles: SxProps = {
     position: "relative",
     display: "flex",
     flexDirection: "column",
-    gap: "16px",
+    gap: "32px",
+  },
+
+  "label+.css-dxpoqr-MuiInputBase-root-MuiInput-root": {
+    marginTop: 0,
+  },
+
+  ".modal-content": {
+    paddingTop: 0,
+
+    ".actions": {
+      marginTop: "8px",
+    },
   },
 };

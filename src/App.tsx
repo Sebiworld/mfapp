@@ -1,5 +1,6 @@
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import "dayjs/locale/de";
 import { ThemeProvider, THEME_ID } from "@mui/material/styles";
 
 import { Layout } from "@core/Layout";
@@ -26,6 +27,8 @@ export const App = () => {
   const initializeApp = useGlobalStore(selectInitializeApp);
   useHandleRegistrationConfirm();
 
+  // TODO: Modal mit Konfetti nach Registrierung
+
   useEffect(() => {
     if (!initializeApp || typeof initializeApp !== "function") {
       return;
@@ -38,7 +41,7 @@ export const App = () => {
     <>
       <ThemeProvider theme={{ [THEME_ID]: mfTheme }}>
         <CssBaseline />
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="de">
           <GlobalStylesElement></GlobalStylesElement>
           <Layout />
           <SplashScreen visible={!isInitialized}></SplashScreen>

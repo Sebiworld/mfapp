@@ -7,7 +7,15 @@ import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { StartupModalContentProps } from "../../../StartupModal";
-import { Box, Button, FormControl, FormHelperText, FormLabel, Input } from "@mui/material";
+import {
+  Box,
+  Button,
+  FormControl,
+  FormHelperText,
+  FormLabel,
+  Input,
+  TextField,
+} from "@mui/material";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email").min(1, "Email is required"),
@@ -58,7 +66,7 @@ export const StartupModalLoginForm = ({
       component="form"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <section>
+      <section className="form-section">
         <p className="content-block">
           <strong>Bist du bereits ein Mitglied der Musical-Fabrik?</strong>
           <br />
@@ -67,6 +75,8 @@ export const StartupModalLoginForm = ({
         </p>
 
         <Button
+          color="primary"
+          variant="outlined"
           onClick={() => {
             setIsRegistrationActive(true);
           }}
@@ -77,7 +87,7 @@ export const StartupModalLoginForm = ({
         <p className="content-block center">oder einloggen:</p>
       </section>
 
-      <section>
+      <section className="form-section">
         <FormControl>
           <FormLabel>{t("startup.email")}</FormLabel>
           <Controller
@@ -89,7 +99,8 @@ export const StartupModalLoginForm = ({
             render={({
               field: { onChange, onBlur, value, disabled, name, ref },
             }) => (
-              <Input
+              <TextField
+                variant="outlined"
                 type="email"
                 className="email-input"
                 name={name}
@@ -114,7 +125,8 @@ export const StartupModalLoginForm = ({
             render={({
               field: { onChange, onBlur, value, disabled, name, ref },
             }) => (
-              <Input
+              <TextField
+                variant="outlined"
                 type="password"
                 className="password-input"
                 name={name}
@@ -133,9 +145,13 @@ export const StartupModalLoginForm = ({
             </FormHelperText>
           )}
         </FormControl>
-
-        <Button type="submit">{t("general.actions.login")}</Button>
       </section>
+
+      <Box className="actions">
+        <Button color="primary" variant="contained" type="submit">
+          {t("general.actions.login")}
+        </Button>
+      </Box>
     </Box>
   );
 };

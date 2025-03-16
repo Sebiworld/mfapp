@@ -73,14 +73,14 @@
   "auth": {
     "login": "Anmelden",
     "login-successful": "Du bist jetzt eingeloggt. Herzlich Willkommen, {{name}}",
-    "login-error": "Die Anmeldung ist fehlgeschlagen. {{message}} [Fehlercode {{code}}]",
+    "login-error": "Die Anmeldung ist fehlgeschlagen. [Fehlercode {{code}}]",
     "logout": "Abmelden",
     "logout-successful": "Du bist jetzt ausgeloggt.",
-    "logout-error": "Die Abmeldung ist fehlgeschlagen. {{message}} [Fehlercode {{code}}]",
+    "logout-error": "Die Abmeldung ist fehlgeschlagen. [Fehlercode {{code}}]",
     "registration-successful": "Deine Registrierung wurde abgeschickt. Bitte halte in deinem Email-Postfach nach unserer Bestätigungs-Email Ausschau!",
-    "registration-error": "Die Registrierung ist fehlgeschlagen. {{message}} [Fehlercode {{code}}]",
+    "registration-error": "Die Registrierung ist fehlgeschlagen. [Fehlercode {{code}}]",
     "registration-confirm-successful": "Deine Registrierung war erfolgreich. Du kannst dich jetzt mit deiner Emailadresse und dem gewählten Passwort anmelden. Es kann allerdings ein paar Tage dauern, bis auch deine Benutzerrollen für die Projekte richtig angelegt sind. Sobald das geschafft ist, hast du auch Zugriff auf die Mitwirkenden-Bereiche der ensprechenden Projekte.",
-    "registration-confirm-error": "Die Registrierung konnte nicht abgeschlossen werden. {{message}} [Fehlercode {{code}}]"
+    "registration-confirm-error": "Die Registrierung konnte nicht abgeschlossen werden. [Fehlercode {{code}}]"
   },
 
   "sidemenu": {

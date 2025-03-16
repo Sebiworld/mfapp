@@ -35,31 +35,46 @@ export const StartupModalNickname = ({
 
   return (
     <>
-      <IconButton onClick={closeModal}>
-        <CloseIcon></CloseIcon>
-      </IconButton>
+      <Box className="modal-header">
+        <Box className="title"></Box>
+        <Box className="actions">
+          <IconButton onClick={closeModal}>
+            <CloseIcon></CloseIcon>
+          </IconButton>
+        </Box>
+      </Box>
 
       <Box className="modal-content">
         <form onSubmit={handleSubmit}>
-          <Typography>
-            Aber zuerst...
-            <br />
-            <strong>Wie heißt du eigentlich?</strong>
-          </Typography>
+          <Box className="form-section">
+            <Typography>
+              Aber zuerst...
+              <br />
+              <strong>Wie heißt du eigentlich?</strong>
+            </Typography>
 
-          <Input
-            type="text"
-            className="nickname-input"
-            name="nickname"
-            value={nicknameInput}
-            onChange={(event) => {
-              setNicknameInput(event.target.value);
-            }}
-          />
+            <Input
+              type="text"
+              className="nickname-input"
+              name="nickname"
+              value={nicknameInput}
+              onChange={(event) => {
+                setNicknameInput(event.target.value);
+              }}
+              sx={{ fontSize: "32px" }}
+            />
+          </Box>
 
-          <Button type="submit" disabled={!nicknameInput?.length}>
-            {t("general.actions.confirm")}
-          </Button>
+          <Box className="actions" sx={{ marginTop: "32px" }}>
+            <Button
+              color="primary"
+              variant="contained"
+              type="submit"
+              disabled={!nicknameInput?.length}
+            >
+              {t("general.actions.confirm")}
+            </Button>
+          </Box>
         </form>
       </Box>
     </>

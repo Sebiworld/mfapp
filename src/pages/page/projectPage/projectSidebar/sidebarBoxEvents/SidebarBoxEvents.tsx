@@ -41,6 +41,8 @@ export const SidebarBoxEvents: React.FC<SidebarBoxEventsProps> = ({ data }) => {
     return output;
   }, [data?.performances, currentDate]);
 
+  console.log('sortedPerformances', sortedPerformances);
+
   if (!isValidArray(data?.performances) || !data.performances.length) {
     return null;
   }

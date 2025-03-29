@@ -17,7 +17,7 @@ export const toastifyStyles: Interpolation<Theme>[] = [
       "--toastify-icon-color-warning": "var(--toastify-color-warning)",
       "--toastify-icon-color-error": "var(--toastify-color-error)",
 
-      "--toastify-toast-width": "320px",
+      "--toastify-toast-width": "360px",
       "--toastify-toast-background": "#fff",
       "--toastify-toast-min-height": "64px",
       "--toastify-toast-max-height": "800px",

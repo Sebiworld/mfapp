@@ -35,25 +35,27 @@ export interface SectionHeroProps {
 
 export const SectionHero: React.FC<SectionHeroProps> = ({ section }) => {
   return (
-    <Box
-      component="section"
-      id={section.section_name}
-      className="section section-hero np"
-      sx={sectionHeroStyles}
-    >
-      {section.title && !section.hide_title && section.title}
+    <>
+      <Box
+        component="section"
+        id={section.section_name}
+        className="section section-hero np"
+        sx={sectionHeroStyles}
+      >
+        {section.title && !section.hide_title && section.title}
 
-      {section.main_image?.basename && (
-        <Box className="hero-image">
-          <LazyPicture image={section.main_image}></LazyPicture>
-        </Box>
-      )}
+        {section.main_image?.basename && (
+          <Box className="hero-image">
+            <LazyPicture image={section.main_image}></LazyPicture>
+          </Box>
+        )}
 
-      <SectionSpacer
-        position="bottom"
-        logo="auto"
-        logoColor="light"
-      ></SectionSpacer>
-    </Box>
+        <SectionSpacer
+          position="bottom"
+          logo="auto"
+          logoColor="light"
+        ></SectionSpacer>
+      </Box>
+    </>
   );
 };

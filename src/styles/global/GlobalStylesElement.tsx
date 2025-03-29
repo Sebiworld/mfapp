@@ -5,7 +5,7 @@ import { toastifyStyles } from "./vendors/toastify.styles";
 import { useGlobalStore } from "@src/store/global.store";
 import { selectGlobalCss } from "@src/store/settings.store";
 import { useMemo } from "react";
-import { GlobalStyles } from "@mui/material";
+import { GlobalStyles, Interpolation, Theme } from "@mui/material";
 import { globalAspectRatioStyles } from "./aspect-ratio.styles";
 import { lightgalleryStyles } from "./vendors/lightgallery.styles";
 
@@ -13,19 +13,17 @@ export const GlobalStylesElement = () => {
   const globalCss = useGlobalStore(selectGlobalCss);
 
   const styles = useMemo(() => {
-    const output = [
+    const output: Interpolation<Theme> = [
       ...globalVariablesStyles,
       ...globalContentStyles,
       ...globalFontsStyles,
       ...globalAspectRatioStyles,
       ...toastifyStyles,
       ...lightgalleryStyles,
-    ];
 
-    // Add global Css variables if set:
-    if (globalCss) {
-      output.push({ ":root": globalCss });
-    }
+      // Add global Css variables if set:
+      globalCss ? { ":root": globalCss } : {},
+    ];
 
     return output;
   }, [globalCss]);

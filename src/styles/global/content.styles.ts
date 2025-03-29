@@ -27,11 +27,11 @@ export const globalContentStyles: Interpolation<Theme>[] = [
           textAlign: "center",
         },
 
-        "&:first-of-type": {
+        "&:first-child": {
           marginTop: 0,
         },
 
-        "&:last-of-type": {
+        "&:last-child": {
           marginBottom: 0,
         },
       },
@@ -57,7 +57,7 @@ export const globalContentStyles: Interpolation<Theme>[] = [
         transition: "color 0.2s",
 
         "&:hover, &:focus": {
-          color: "var(--mf-palette-primary-200)",
+          color: "var(--mf-palette-primary-500)",
         },
       },
 
@@ -189,6 +189,19 @@ export const globalContentStyles: Interpolation<Theme>[] = [
             backgroundColor: "var(--mf-palette-projectPrimary-600, #185EA5)",
             color: "var(--mf-palette-projectPrimary-solidColor, #FFF)",
           },
+        },
+      },
+
+      ".p-4": {
+        padding: "16px",
+      },
+
+      ".alert-box": {
+        ".alert-title": {
+          fontSize: "24px",
+          fontWeight: "bold",
+          marginBottom: "4px",
+          marginBlockEnd: "4px",
         },
       },
     },

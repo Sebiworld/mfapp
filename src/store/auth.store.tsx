@@ -329,7 +329,8 @@ export const createAuthSlice: StateCreator<GlobalStore, [], [], AuthSlice> = (
 
             {!!error.message && (
               <>
-                <p>{error.message}</p>
+                <br />
+                {error.message}
               </>
             )}
           </>,

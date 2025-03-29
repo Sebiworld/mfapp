@@ -1,4 +1,8 @@
-import { createTheme } from "@mui/material";
+import {
+  createTheme,
+  PaletteColorChannel,
+  SimplePaletteColorOptions,
+} from "@mui/material";
 import type {} from "@mui/x-date-pickers/themeAugmentation";
 import type {} from "@mui/material/themeCssVarsAugmentation";
 import { MuiAlertOverwrites } from "./MuiOverwrites/MuiAlert";
@@ -21,15 +25,11 @@ import { mfDarkDark, mfDarkLight } from "./paletteColors/mfDark";
 import { MuiToolbarOverwrites } from "./MuiOverwrites/MuiToolbar";
 import { MuiCardOverwrites } from "./MuiOverwrites/MuiCard";
 import { mfBgDark, mfBgLight } from "./paletteColors/mfBg";
-import {
-  Channels,
-  ColorPartial,
-  SimplePaletteColorOptions,
-} from "@mui/material/styles/createPalette";
+import { ColorPartial } from "node_modules/@mui/material/esm/styles/createPalette";
 
 export type ExtendedPaletteColor = Partial<SimplePaletteColorOptions> &
-  ColorPartial &
-  Partial<Channels> & { contrastText?: string };
+  Partial<ColorPartial> &
+  Partial<PaletteColorChannel> & { contrastText?: string };
 
 declare module "@mui/material/styles" {
   interface Palette {

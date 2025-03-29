@@ -27,20 +27,37 @@ export const sidebarBoxEventsStyles: SxProps = {
   },
 
   ".performance-card": {
-    paddingTop: "8px",
-    fontSize: "xs",
+    overflow: "visible",
+
+    ".MuiCardContent-root": {
+      paddingTop: "8px",
+      paddingBottom: "8px",
+      fontSize: "13px",
+    },
+  },
+
+  ".season": {
+    opacity: 0.5,
+    fontSize: "14px",
   },
 
   ".date": {
-    fontWeight: "xl",
-    lineHeight: "1.2",
+    fontWeight: "bold",
+    fontSize: "14px",
   },
 
-  ".cast": {
-    justifyContent: "center",
-    fontSize: "xs",
-    // fontWeight: "xl",
-    letterSpacing: "1px",
+  ".casts-container": {
+    display: "flex",
+    gap: "4px",
+    flexWrap: "wrap",
     textTransform: "uppercase",
+    marginTop: "4px",
+    marginLeft: "-8px",
+    marginRight: "-8px",
+    fontSize: "13px",
+
+    ".cast": {
+      fontSize: "14px",
+    },
   },
 };

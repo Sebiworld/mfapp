@@ -9,8 +9,13 @@ export const sidebarBoxGeneralStyles: SxProps = {
       paddingLeft: 0,
       minBlockSize: "28px",
 
-      ".MuiListItemDecorator-root": {
-        minInlineSize: "24px",
+      "&>a": {
+        paddingTop: "0",
+        paddingBottom: "0",
+      },
+
+      ".MuiListItemIcon-root": {
+        minWidth: "24px",
       },
 
       "&.level-1": {

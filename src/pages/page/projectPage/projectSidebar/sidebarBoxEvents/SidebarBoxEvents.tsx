@@ -7,7 +7,14 @@ import { useMemo } from "react";
 import { PerformanceDto } from "@models/utility-types/performance-dto.model";
 import { useCurrentDate } from "@utils/hooks/useCurrentDate";
 import { Link } from "@tanstack/react-router";
-import { Box, Button, Card, CardContent, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Chip,
+  Typography,
+} from "@mui/material";
 
 export interface SidebarBoxEventsProps {
   data?: ProjectEventsData;
@@ -41,7 +48,7 @@ export const SidebarBoxEvents: React.FC<SidebarBoxEventsProps> = ({ data }) => {
     return output;
   }, [data?.performances, currentDate]);
 
-  console.log('sortedPerformances', sortedPerformances);
+  console.log("sortedPerformances", sortedPerformances);
 
   if (!isValidArray(data?.performances) || !data.performances.length) {
     return null;
@@ -120,6 +127,19 @@ export const SidebarBoxEvents: React.FC<SidebarBoxEventsProps> = ({ data }) => {
                       <Typography className="date">
                         {`${formatDate(item.timestamp * 1000, "EEEE, P - p")}`}
                       </Typography>
+
+                      <Box className="casts-container">
+                        {item.casts?.map((cast) => (
+                          <Chip
+                            key={cast.id}
+                            className="cast"
+                            label={cast.title}
+                            color="primary"
+                            size="small"
+                            variant="outlined"
+                          />
+                        ))}
+                      </Box>
                     </CardContent>
 
                     {/* TODO <CardOverflow className="cast" variant="soft">

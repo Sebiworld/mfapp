@@ -10,7 +10,7 @@ export const projectSidebarStyles: SxProps = {
 
   ".sidebar-box": {
     "&>.box-title": {
-      ...mfTheme.typography.h4,
+      ...mfTheme.typography.h5,
       paddingBottom: "4px",
       borderBottom: `4px solid var(--mf-palette-contrast-900)`,
       marginBottom: "12px",

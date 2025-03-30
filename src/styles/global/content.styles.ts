@@ -1,6 +1,5 @@
 import { Interpolation } from "@emotion/react";
 import { Theme } from "@mui/material";
-import { mfTheme } from "@styles/theme/mfTheme";
 
 export const globalContentStyles: Interpolation<Theme>[] = [
   {

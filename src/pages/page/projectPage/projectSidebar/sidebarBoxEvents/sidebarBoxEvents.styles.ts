@@ -7,7 +7,7 @@ export const sidebarBoxEventsStyles: SxProps = {
     gap: "32px",
   },
 
-  ".performances-wrapper": {
+  ".events-section": {
     display: "flex",
     flexDirection: "column",
     gap: "12px",
@@ -18,27 +18,35 @@ export const sidebarBoxEventsStyles: SxProps = {
     },
   },
 
-  ".performances-container": {
+  ".events-container": {
     display: "flex",
     flexDirection: "column",
-    gap: "8px",
+    gap: "24px",
     maxHeight: "260px",
     overflow: "auto",
   },
 
-  ".performance-card": {
+  ".event-item": {
     overflow: "visible",
+    paddingLeft: "16px",
+    // paddingRight: '16px',
 
-    ".MuiCardContent-root": {
-      paddingTop: "8px",
-      paddingBottom: "8px",
-      fontSize: "13px",
-    },
+    // ".MuiCardContent-root": {
+    //   paddingTop: "8px",
+    //   paddingBottom: "8px",
+    //   fontSize: "13px",
+    // },
   },
 
-  ".season": {
-    opacity: 0.5,
+  ".seasons-container": {
+    // opacity: 0.5,
     fontSize: "14px",
+    // marginLeft: "-8px",
+    // marginRight: "-8px",
+
+    ".season": {
+      borderRadius: "0px",
+    },
   },
 
   ".date": {
@@ -51,9 +59,9 @@ export const sidebarBoxEventsStyles: SxProps = {
     gap: "4px",
     flexWrap: "wrap",
     textTransform: "uppercase",
-    marginTop: "4px",
-    marginLeft: "-8px",
-    marginRight: "-8px",
+    // marginTop: "4px",
+    // marginLeft: "-8px",
+    // marginRight: "-8px",
     fontSize: "13px",
 
     ".cast": {

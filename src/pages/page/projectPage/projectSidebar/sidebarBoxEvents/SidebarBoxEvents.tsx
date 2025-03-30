@@ -2,19 +2,12 @@ import { ProjectEventsData } from "@models/project-dto.model";
 import { useTranslation } from "react-i18next";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { sidebarBoxEventsStyles } from "./sidebarBoxEvents.styles";
-import { formatDate } from "@utils/functions/formatDate";
 import { useMemo } from "react";
 import { PerformanceDto } from "@models/utility-types/performance-dto.model";
 import { useCurrentDate } from "@utils/hooks/useCurrentDate";
 import { Link } from "@tanstack/react-router";
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Chip,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
+import { SidebarBoxEventsEventItem } from "./SidebarBoxEventsEventItem";
 
 export interface SidebarBoxEventsProps {
   data?: ProjectEventsData;
@@ -48,8 +41,6 @@ export const SidebarBoxEvents: React.FC<SidebarBoxEventsProps> = ({ data }) => {
     return output;
   }, [data?.performances, currentDate]);
 
-  console.log("sortedPerformances", sortedPerformances);
-
   if (!isValidArray(data?.performances) || !data.performances.length) {
     return null;
   }
@@ -66,31 +57,11 @@ export const SidebarBoxEvents: React.FC<SidebarBoxEventsProps> = ({ data }) => {
 
       <Box className="lists-wrapper">
         {!!sortedPerformances.future?.length && (
-          <Box className="performances-wrapper future">
-            <Box className="performances-container">
-              {sortedPerformances.future.map((item) => {
-                return (
-                  <Card
-                    key={item.id}
-                    variant="outlined"
-                    className="performance-card"
-                  >
-                    <CardContent>
-                      <Typography className="season">
-                        {item.seasons?.map((season) => season.title).join(", ")}
-                      </Typography>
-
-                      <Typography className="date">
-                        {`${formatDate(item.timestamp * 1000, "EEEE, P - p")}`}
-                      </Typography>
-                    </CardContent>
-
-                    {/* <CardOverflow className="cast" variant="soft">
-                      {item.casts?.map((cast) => cast.title).join(", ")}
-                    </CardOverflow> */}
-                  </Card>
-                );
-              })}
+          <Box component="section" className="events-section future">
+            <Box className="events-container">
+              {sortedPerformances.future.map((item) => (
+                <SidebarBoxEventsEventItem key={item.id} item={item} />
+              ))}
             </Box>
 
             {data.ticket_page?.url && (
@@ -106,48 +77,15 @@ export const SidebarBoxEvents: React.FC<SidebarBoxEventsProps> = ({ data }) => {
         )}
 
         {!!sortedPerformances.past?.length && (
-          <Box className="performances-wrapper past">
+          <Box component="section" className="events-section past">
             <Typography variant="bodyXS" className="description">
               {t("project.events.already-passed")}:
             </Typography>
 
-            <Box className="performances-container ">
-              {sortedPerformances.past.map((item) => {
-                return (
-                  <Card
-                    key={item.id}
-                    variant="outlined"
-                    className="performance-card"
-                  >
-                    <CardContent>
-                      <Typography className="season">
-                        {item.seasons?.map((season) => season.title).join(", ")}
-                      </Typography>
-
-                      <Typography className="date">
-                        {`${formatDate(item.timestamp * 1000, "EEEE, P - p")}`}
-                      </Typography>
-
-                      <Box className="casts-container">
-                        {item.casts?.map((cast) => (
-                          <Chip
-                            key={cast.id}
-                            className="cast"
-                            label={cast.title}
-                            color="primary"
-                            size="small"
-                            variant="outlined"
-                          />
-                        ))}
-                      </Box>
-                    </CardContent>
-
-                    {/* TODO <CardOverflow className="cast" variant="soft">
-                      {item.casts?.map((cast) => cast.title).join(", ")}
-                    </CardOverflow> */}
-                  </Card>
-                );
-              })}
+            <Box className="events-container ">
+              {sortedPerformances.past.map((item) => (
+                <SidebarBoxEventsEventItem key={item.id} item={item} />
+              ))}
             </Box>
           </Box>
         )}

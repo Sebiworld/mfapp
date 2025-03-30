@@ -39,6 +39,7 @@ export const projectPageStyles = (theme: Theme): SystemStyleObject<Theme> => ({
 
     ".project-teaser": {
       display: "block",
+
       [theme.breakpoints.down("md")]: {
         backgroundColor: "transparent",
         boxShadow: "none",

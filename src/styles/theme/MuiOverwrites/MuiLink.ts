@@ -3,11 +3,12 @@ import { Components, Theme } from "@mui/material/styles";
 export const MuiLinkOverwrites: Components<Theme> = {
   MuiLink: {
     styleOverrides: {
-      root: ({ ownerState, theme }) => ({
+      root: ({ ownerState }) => ({
         ...(ownerState.underline === "always" && {
           "&:not(:hover)": {
-            color: theme.palette.text.primary,
+            color: "inherit",
           },
+
           "&:hover": {
             backgroundColor: "transparent",
           },

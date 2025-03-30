@@ -1,131 +1,61 @@
-import { MFApi } from "@api/mfApi";
 import { ImageDto } from "@models/image-dto.model";
-import { lazyPictureStyles } from "./lazyPicture.styles";
-import { ComponentPropsWithoutRef, useMemo } from "react";
+import React, { ComponentPropsWithoutRef, useMemo } from "react";
+import {
+  LazyPictureWithoutFallback,
+  LazyPictureWithoutFallbackProps,
+} from "./LazyPictureWithoutFallback";
 import { Box } from "@mui/material";
-import React from "react";
-import { getMimetypeForExtension } from "@utils/functions/mimetype/getMimetypeForExtension";
-import { isValidArray } from "@utils/functions/isValidArray";
-import { uniqBy } from "lodash";
-import { mediaPlaceholders } from "./mediaPlaceholders";
+import { lazyPictureStyles } from "./lazyPicture.styles";
 
-export interface LazyPictureSize {
-  media?: string;
-  width?: number;
-  height?: number;
-}
-
-export interface LazyPictureProps {
-  image: ImageDto;
-  pictureProps?: Partial<
-    ComponentPropsWithoutRef<"picture"> & { [key: string]: unknown }
+export interface LazyPictureProps extends LazyPictureWithoutFallbackProps {
+  placeholder?: false | string | ImageDto;
+  figureProps?: Partial<
+    ComponentPropsWithoutRef<"figure"> & { [key: string]: unknown }
   >;
-  imageProps?: Partial<
-    ComponentPropsWithoutRef<"img"> & { [key: string]: unknown }
-  >;
-  sizes?: LazyPictureSize[];
-  defaultSize?: LazyPictureSize;
-  children?: React.ReactNode;
 }
 
 export const LazyPicture: React.FC<LazyPictureProps> = ({
   image,
-  pictureProps,
-  imageProps,
-  sizes,
-  defaultSize,
-  children,
+  placeholder,
+  figureProps,
+  className,
+  ...props
 }) => {
-  const sources = useMemo(() => {
-    if (!sizes || !isValidArray(sizes)) {
-      return;
+  const classes = useMemo(() => {
+    const output = ["lazy-picture"];
+    if (className && typeof className === "string") {
+      output.push(...className.split(" "));
     }
-
-    return uniqBy(sizes, "media").map((size) => {
-      const urlWebp = MFApi.getFileByIdUrl(image.page_id, {
-        file: image.basename,
-        width: size.width,
-        height: size.height,
-        webp: true,
-      });
-      const urlWebp2x = MFApi.getFileByIdUrl(image.page_id, {
-        file: image.basename,
-        width: size.width ? size.width * 2 : undefined,
-        height: size.height ? size.height * 2 : undefined,
-        webp: true,
-      });
-      const url = MFApi.getFileByIdUrl(image.page_id, {
-        file: image.basename,
-        width: size.width,
-        height: size.height,
-      });
-      const url2x = MFApi.getFileByIdUrl(image.page_id, {
-        file: image.basename,
-        width: size.width ? size.width * 2 : undefined,
-        height: size.height ? size.height * 2 : undefined,
-      });
-
-      const media = size.media
-        ? (mediaPlaceholders[size.media] ?? size.media)
-        : undefined;
-
-      return (
-        <React.Fragment key={size.media || "default"}>
-          <source
-            media={media}
-            srcSet={`${urlWebp} 1x, ${urlWebp2x} 2x`}
-            type="image/webp"
-          />
-          <source
-            media={media}
-            srcSet={`${url} 1x, ${url2x} 2x`}
-            type={getMimetypeForExtension(image.ext)}
-          />
-        </React.Fragment>
-      );
-    });
-  }, [image.basename, image.ext, image.page_id, sizes]);
-
-  const fileUrl = useMemo(() => {
-    if (!image?.basename) {
-      return;
-    }
-
-    const sizeWithoutMedia = sizes?.find((size) => !size.media);
-
-    const width = defaultSize ? defaultSize?.width : sizeWithoutMedia?.width;
-    const height = defaultSize ? defaultSize?.height : sizeWithoutMedia?.height;
-
-    return MFApi.getFileByIdUrl(image.page_id, {
-      file: image.basename,
-      width,
-      height,
-    });
-  }, [defaultSize, image.basename, image.page_id, sizes]);
+    return output.join(" ");
+  }, [className]);
 
   if (!image?.basename) {
-    return;
+    if (placeholder === false) {
+      return;
+    }
+
+    if (typeof placeholder === "string") {
+      return <img src={placeholder} className={classes} loading="lazy" />;
+    }
+
+    if (placeholder?.basename) {
+      return (
+        <LazyPictureWithoutFallback className={classes} image={placeholder} />
+      );
+    }
+
+    return <img src="/img/mf-bg.jpg" className={classes} loading="lazy" />;
   }
 
   return (
     <Box
-      component="picture"
-      className="lazy-picture"
+      component="figure"
+      className={classes}
       sx={lazyPictureStyles}
-      {...pictureProps}
+      {...figureProps}
     >
-      {sources}
-      {children}
-      <img
-        alt={image.description}
-        src={fileUrl}
-        width={image.width}
-        height={image.height}
-        loading="lazy"
-        {...imageProps}
-        // src="https://www.musical-fabrik.de/site/assets/files/5359/medicus-ensemble-bg.1000x500.jpg"
-      />
-      {/* <img alt="" src="https://www.musical-fabrik.de/site/assets/files/5359/medicus-ensemble-bg.600x0.jpg"></img> */}
+      <LazyPictureWithoutFallback image={image} {...props} />
+      {image?.caption && <Box component="figcaption">{image.caption}</Box>}
     </Box>
   );
 };

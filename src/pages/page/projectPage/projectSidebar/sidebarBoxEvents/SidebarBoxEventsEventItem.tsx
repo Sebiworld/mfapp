@@ -11,7 +11,7 @@ export const SidebarBoxEventsEventItem: React.FC<
 > = ({ item }) => {
   return (
     <Box className="event-item" data-testid="event-item">
-      <Typography className="seasons-container">
+      <Box className="seasons-container">
         {item.seasons?.map((season) => (
           <Chip
             key={season.id}
@@ -21,7 +21,7 @@ export const SidebarBoxEventsEventItem: React.FC<
             size="small"
           />
         ))}
-      </Typography>
+      </Box>
 
       <Typography className="date">
         {`${formatDate(item.timestamp * 1000, "EEEE, P - p")}`}

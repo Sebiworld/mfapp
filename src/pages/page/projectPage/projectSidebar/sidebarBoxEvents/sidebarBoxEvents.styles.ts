@@ -12,7 +12,7 @@ export const sidebarBoxEventsStyles: SxProps = {
     flexDirection: "column",
     gap: "12px",
 
-    ".description": {
+    "&>.description": {
       fontStyle: "italic",
       paddingX: "16px",
     },

@@ -3,18 +3,18 @@ import { projectPageStyles } from "./projectPage.styles";
 import { useGlobalStore } from "@src/store/global.store";
 import { useEffect, useMemo } from "react";
 import { ProjectSidebar } from "./projectSidebar/ProjectSidebar";
-// import { LazyPicture } from "@components/lazyPicture/LazyPicture";
 import { Link } from "@tanstack/react-router";
 import { getProjectCssVars } from "./functions/getProjectCssVars";
 import {
   selectResetGlobalCss,
   selectSetGlobalCss,
 } from "@src/store/settings.store";
-import { Box, Card, Typography } from "@mui/material";
+import { Box, Paper, Typography } from "@mui/material";
 import {
   selectLoadProjectDetails,
   selectProjectPageDetails,
 } from "@src/store/projects.store";
+import { LazyPicture } from "@components/lazyPicture/LazyPicture";
 
 export interface ProjectPageProps {
   page?: PageDtoVariant;
@@ -41,9 +41,9 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({ page, children }) => {
     };
   }, [cssVars, resetGlobalCss, setGlobalCss]);
 
-  // useEffect(() => {
-  //   console.log("projectPage", { projectPage });
-  // }, [projectPage]);
+  useEffect(() => {
+    console.log("projectPage", { projectPage });
+  }, [projectPage]);
 
   useEffect(() => {
     if (!projectPage?.id) {
@@ -60,26 +60,27 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({ page, children }) => {
     <Box
       className="project-page"
       data-testid="project-page"
-      sx={{ ...projectPageStyles, ...cssVars }}
+      sx={[projectPageStyles, cssVars]}
     >
       <Box className="project-header" data-testid="project-header">
-        <Box className="main-image" component={Link} to={projectPage.url}>
-          {/* <AspectRatio ratio="11/4" variant="soft">
-            {projectPage?.main_image?.basename ? (
-              <LazyPicture image={projectPage.main_image}></LazyPicture>
-            ) : (
-              <img src="/img/mf-bg.jpg"></img>
-            )}
-          </AspectRatio> */}
+        <Box
+          className="main-image aspect-ratio ar-3-1"
+          component={Link}
+          to={projectPage.url}
+        >
+          <LazyPicture
+            image={projectPage.main_image}
+            className="ar-content"
+          ></LazyPicture>
         </Box>
 
         <Box className="project-subheader">
           {projectPage?.info_overlay && (
-            <Card
+            <Paper
               color="projectPrimary"
               className="project-teaser"
               dangerouslySetInnerHTML={{ __html: projectPage.info_overlay }}
-            ></Card>
+            ></Paper>
           )}
 
           <Box className="project-meta">

@@ -1,7 +1,8 @@
 import { mfTheme } from "@styles/theme/mfTheme";
-import { SxProps } from "@mui/material";
+import { Theme } from "@mui/material";
+import { SystemStyleObject } from "@mui/system";
 
-export const projectPageStyles: SxProps = {
+export const projectPageStyles = (theme: Theme): SystemStyleObject<Theme> => ({
   ".project-header": {
     gridArea: "header",
 
@@ -29,6 +30,9 @@ export const projectPageStyles: SxProps = {
       top: "-28px",
       left: 0,
       borderRadius: 0,
+      padding: "16px",
+      backgroundColor: theme.vars.palette.projectPrimary.main,
+      color: theme.vars.palette.projectPrimary.contrastText,
     },
   },
 
@@ -90,4 +94,4 @@ export const projectPageStyles: SxProps = {
       flexShrink: 1,
     },
   },
-};
+});

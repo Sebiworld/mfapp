@@ -55,7 +55,12 @@ export const LazyPicture: React.FC<LazyPictureProps> = ({
       {...figureProps}
     >
       <LazyPictureWithoutFallback image={image} {...props} />
-      {image?.caption && <Box component="figcaption">{image.caption}</Box>}
+
+      {image?.caption && (
+        <Box component="figcaption" className="image-caption">
+          {image.caption}
+        </Box>
+      )}
     </Box>
   );
 };

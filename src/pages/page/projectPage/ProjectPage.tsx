@@ -87,12 +87,15 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({ page, children }) => {
             <Typography className="project-title" variant="h3">
               {projectPage.title}
             </Typography>
-            <Typography className="project-description">
-              {projectPage.short_description}
-            </Typography>
+
+            {projectPage.short_description && (
+              <Typography className="project-description">
+                {projectPage.short_description}
+              </Typography>
+            )}
           </Box>
 
-          <Box className="project-menu"></Box>
+          <Box className="project-menu empty"></Box>
         </Box>
       </Box>
 

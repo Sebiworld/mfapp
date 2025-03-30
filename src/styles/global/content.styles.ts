@@ -26,7 +26,7 @@ export const globalContentStyles: Interpolation<Theme>[] = [
           textAlign: "center",
         },
 
-        "&:first-child": {
+        "&:not(:not(:last-child) ~ *)": {
           marginTop: 0,
         },
 

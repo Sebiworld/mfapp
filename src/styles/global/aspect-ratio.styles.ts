@@ -34,7 +34,7 @@ export const globalAspectRatioStyles: Interpolation<Theme>[] = [
         marginLeft: 0,
         marginRight: 0,
 
-        "&>img, &>picture, &.img-fluid": {
+        "&>img, &>picture, &>picture>img, &.img-fluid": {
           width: "100%",
           height: "100%",
           objectFit: "cover",

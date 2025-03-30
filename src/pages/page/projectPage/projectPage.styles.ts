@@ -1,4 +1,3 @@
-import { mfTheme } from "@styles/theme/mfTheme";
 import { Theme } from "@mui/material";
 import { SystemStyleObject } from "@mui/system";
 
@@ -18,21 +17,33 @@ export const projectPageStyles = (theme: Theme): SystemStyleObject<Theme> => ({
 
     ".project-subheader": {
       position: "relative",
-      minHeight: "90px",
-      paddingTop: "56px",
+      // minHeight: "90px",
+      paddingTop: "20px",
+      paddingLeft: "64px",
+      paddingRight: "64px",
       display: "flex",
       flexDirection: "column",
-      gap: "16px",
+      gap: "4px",
+
+      ".project-menu": {
+        display: "flex",
+        flexDirection: "row",
+        gap: "16px",
+        // marginTop: "16px",
+
+        "&.empty": {
+          display: "none",
+        },
+      },
     },
 
     ".project-teaser": {
-      position: "absolute",
-      top: "-28px",
-      left: 0,
-      borderRadius: 0,
-      padding: "16px",
-      backgroundColor: theme.vars.palette.projectPrimary.main,
-      color: theme.vars.palette.projectPrimary.contrastText,
+      display: "block",
+      [theme.breakpoints.down("md")]: {
+        backgroundColor: "transparent",
+        boxShadow: "none",
+        backgroundImage: "none",
+      },
     },
   },
 
@@ -50,11 +61,23 @@ export const projectPageStyles = (theme: Theme): SystemStyleObject<Theme> => ({
     },
   },
 
+  ".project-title": {
+    fontSize: "32px",
+    lineHeight: "1.0",
+    fontWeight: 700,
+  },
+
   ".project-main-content": {
     position: "relative",
   },
 
-  [mfTheme.breakpoints.up("md")]: {
+  [theme.breakpoints.up("sm")]: {
+    ".project-subheader.project-subheader": {
+      flexDirection: "row",
+    },
+  },
+
+  [theme.breakpoints.up("md")]: {
     ".layout-wrapper.layout-wrapper": {
       display: "flex",
       flexDirection: "row",
@@ -73,6 +96,20 @@ export const projectPageStyles = (theme: Theme): SystemStyleObject<Theme> => ({
 
     ".project-subheader.project-subheader.project-subheader": {
       flexDirection: "row",
+      paddingTop: "42px",
+      paddingLeft: "0",
+      paddingRight: "0",
+
+      ".project-teaser.project-teaser": {
+        position: "absolute",
+        display: "block",
+        top: "-28px",
+        left: 0,
+        padding: "16px",
+        backgroundColor: theme.vars.palette.projectPrimary.main,
+        color: theme.vars.palette.projectPrimary.contrastText,
+        borderRadius: 0,
+      },
 
       ".project-meta": {
         padding: "20px 40px",

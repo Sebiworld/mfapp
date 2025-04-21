@@ -1,13 +1,16 @@
 import { MFApi } from "@api/mfApi";
 import { ImageDto } from "@models/image-dto.model";
-import { lazyPictureWithoutFallbackStyles } from "./lazyPicture.styles";
-import { ComponentPropsWithoutRef, useMemo } from "react";
+import { ComponentPropsWithoutRef, useEffect, useMemo, useState } from "react";
 import { Box } from "@mui/material";
 import React from "react";
 import { getMimetypeForExtension } from "@utils/functions/mimetype/getMimetypeForExtension";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { uniqBy } from "lodash";
-import { mediaPlaceholders } from "./mediaPlaceholders";
+import { lazyPictureWithoutFallbackStyles } from "./lazyPictureWithoutFallback.styles";
+import { mediaPlaceholders } from "../mediaPlaceholders";
+import { LazyPictureSecureWithoutFallback } from "./LazyPictureSecureWithoutFallback";
+// import { useGlobalStore } from "@src/store/global.store";
+// import { selectAccessToken } from "@src/store/auth.store";
 
 export interface LazyPictureSize {
   media?: string;
@@ -40,6 +43,8 @@ export const LazyPictureWithoutFallback: React.FC<
   className,
   children,
 }) => {
+  const [hasError, setHasError] = useState(false);
+
   const sources = useMemo(() => {
     if (!image?.basename || !sizes || !isValidArray(sizes)) {
       return;
@@ -90,7 +95,7 @@ export const LazyPictureWithoutFallback: React.FC<
     });
   }, [image?.basename, image?.ext, image?.page_id, sizes]);
 
-  const fileUrl = useMemo(() => {
+  const fileUrl = useMemo((): string | undefined => {
     if (!image?.basename) {
       return;
     }
@@ -104,11 +109,26 @@ export const LazyPictureWithoutFallback: React.FC<
       file: image.basename,
       width,
       height,
+      // authorization: "Bearer " + accessToken,
     });
   }, [defaultSize, image?.basename, image?.page_id, sizes]);
 
   if (!image?.basename) {
     return;
+  }
+
+  if (hasError && image?.secure) {
+    return (
+      <LazyPictureSecureWithoutFallback
+        image={image}
+        pictureProps={pictureProps}
+        imageProps={imageProps}
+        sizes={sizes}
+        defaultSize={defaultSize}
+        className={className}
+        children={children}
+      />
+    );
   }
 
   return (
@@ -127,10 +147,14 @@ export const LazyPictureWithoutFallback: React.FC<
         width={image.width}
         height={image.height}
         loading="lazy"
+        onLoad={() => {
+          setHasError(false);
+        }}
+        onError={() => {
+          setHasError(true);
+        }}
         {...imageProps}
-        // src="https://www.musical-fabrik.de/site/assets/files/5359/medicus-ensemble-bg.1000x500.jpg"
       />
-      {/* <img alt="" src="https://www.musical-fabrik.de/site/assets/files/5359/medicus-ensemble-bg.600x0.jpg"></img> */}
     </Box>
   );
 };

@@ -33,6 +33,7 @@
     "@tanstack/react-router": "^1.114.29",
     "@tanstack/zod-adapter": "^1.114.29",
     "axios": "^1.8.4",
+    "buffer": "^6.0.3",
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.13",
     "i18next": "^23.16.8",

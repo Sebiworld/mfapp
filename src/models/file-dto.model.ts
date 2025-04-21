@@ -22,4 +22,5 @@ export interface FileDto {
   page_id: number;
   caption?: string;
   http_url: string;
+  secure?: boolean;
 }

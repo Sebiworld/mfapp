@@ -1,5 +1,6 @@
+import { ErrorResponseDto } from "@models/error-response-dto.model";
 import { useGlobalStore } from "@src/store/global.store";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 export const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_APIURL,
@@ -24,6 +25,28 @@ axiosInstance.interceptors.request.use(
   }
 );
 
+const isRenewableRequest = (error: AxiosError): boolean => {
+  if ((error.config as unknown as { _retry?: boolean })._retry) {
+    return false;
+  }
+
+  console.log("isRenewableRequest", error);
+
+  if (error?.response?.status === 401) {
+    return true;
+  }
+
+  // if (
+  //   error?.response?.status === 400 &&
+  //   (error?.response?.data as ErrorResponseDto)?.errorcode ===
+  //     "access_token_invalid"
+  // ) {
+  //   return true;
+  // }
+
+  return false;
+};
+
 axiosInstance.interceptors.response.use(
   (response) => {
     return response;
@@ -31,7 +54,7 @@ axiosInstance.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    if (error.response.status === 401 && !originalRequest._retry) {
+    if (isRenewableRequest(error)) {
       // TODO Add additionals.can_renew === true
       originalRequest._retry = true;
 

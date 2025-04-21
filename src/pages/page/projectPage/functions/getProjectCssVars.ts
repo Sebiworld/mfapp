@@ -15,6 +15,13 @@ export const getProjectCssVars = (
       continue;
     }
     output[`--mf-palette-projectPrimary-${item.name}`] = item.value;
+
+    if (
+      item.name === "solidColor" &&
+      !output["--mf-palette-projectPrimary-contrastText"]
+    ) {
+      output["--mf-palette-projectPrimary-contrastText"] = item.value;
+    }
   }
 
   return output;

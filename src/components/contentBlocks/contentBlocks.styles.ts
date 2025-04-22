@@ -1,23 +1,36 @@
-import { SxProps } from "@mui/material";
+import { SxProps, Theme } from "@mui/material";
 
-export const contentBlocksStyles: SxProps = {
+export const contentBlocksStyles: SxProps<Theme> = (theme) => ({
   position: "relative",
-  display: "flex",
-  flexWrap: "wrap",
+  display: "grid",
+  gridTemplateColumns: "repeat(12, 1fr)",
+  gridAutoFlow: "dense",
   width: "100%",
-  gap: '16px',
+  gap: "32px",
+
+  [theme.breakpoints.down("md")]: {
+    gridTemplateColumns: "repeat(6, 1fr)",
+  },
 
   ".content-block": {
     position: "relative",
-    // display: 'flex',
-    // flexDirection: 'column',
-    // flex: '1 1 auto',
-    maxWidth: "100%",
-    width: "38em",
     textAlign: "left",
+    gridColumnEnd: "span 12",
+
+    [theme.breakpoints.down("md")]: {
+      gridColumnEnd: "span 6",
+    },
+
+    "&.depth-1": {
+      gridColumnEnd: "span 6",
+    },
+
+    "&.depth-2": {
+      gridColumnEnd: "span 3",
+    },
 
     "&.content-form": {
-      width: "100%",
+      gridColumnEnd: "span 12",
     },
 
     "&.center": {
@@ -25,16 +38,5 @@ export const contentBlocksStyles: SxProps = {
       marginLeft: "auto",
       marginRight: "auto",
     },
-
-    p: {
-      position: "relative",
-      maxWidth: "100%",
-      width: "38em",
-      alignSelf: "center",
-
-      "&:first-of-type": {
-        marginTop: 0,
-      }
-    },
   },
-};
+});

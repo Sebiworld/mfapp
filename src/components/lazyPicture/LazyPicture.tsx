@@ -6,7 +6,6 @@ import {
   LazyPictureWithoutFallback,
   LazyPictureWithoutFallbackProps,
 } from "./components/LazyPictureWithoutFallback";
-import { LazyPictureSecureWithoutFallback } from "./components/LazyPictureSecureWithoutFallback";
 
 export interface LazyPictureProps extends LazyPictureWithoutFallbackProps {
   placeholder?: false | string | ImageDto;
@@ -55,11 +54,6 @@ export const LazyPicture: React.FC<LazyPictureProps> = ({
       sx={lazyPictureStyles}
       {...figureProps}
     >
-      {/* {image?.secure ? (
-        <LazyPictureSecureWithoutFallback image={image} {...props} />
-      ) : (
-        <LazyPictureWithoutFallback image={image} {...props} />
-      )} */}
       <LazyPictureWithoutFallback image={image} {...props} />
 
       {image?.caption && (

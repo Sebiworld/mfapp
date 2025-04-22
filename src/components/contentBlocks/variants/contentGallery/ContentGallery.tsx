@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
 import { contentGalleryStyles } from "./contentGallery.styles";
 import { ContentBlockGalleryDto } from "@models/content/content-block-gallery-dto.model";
 import { ContentGallerySlider } from "./galleryTypes/ContentGallerySlider";
@@ -11,9 +11,23 @@ export interface ContentGalleryProps {
 }
 
 export const ContentGallery: React.FC<ContentGalleryProps> = ({ block }) => {
-  useEffect(() => {
-    console.log("ContentGallery", block);
-  }, [block]);
+  const classes: string = useMemo(() => {
+    if (!block?.id) {
+      return "";
+    }
+
+    const output: string[] = [
+      "content-block",
+      "content-gallery",
+      `depth-${block.depth}`,
+    ];
+
+    if (block.classes && typeof block.classes === "string") {
+      output.push(...block.classes.split(" "));
+    }
+
+    return output.join(" ");
+  }, [block?.classes, block?.depth, block?.id]);
 
   const gallery = useMemo(() => {
     if (!block?.id) {
@@ -36,10 +50,7 @@ export const ContentGallery: React.FC<ContentGalleryProps> = ({ block }) => {
   }
 
   return (
-    <Box
-      className={`content-block content-gallery ${block.classes}`}
-      sx={contentGalleryStyles}
-    >
+    <Box className={classes} sx={contentGalleryStyles}>
       {gallery}
     </Box>
   );

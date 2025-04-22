@@ -5,7 +5,8 @@ import { isValidObject } from "@utils/functions/isValidObject";
 export const fileApi = {
   getFile: (
     path: string,
-    params?: { file: string; [key: string]: unknown }, // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
+    params?: { file: string; [key: string]: unknown },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     config?: AxiosRequestConfig<any>
   ) => {
     if (!isValidObject(config)) {
@@ -27,7 +28,7 @@ export const fileApi = {
   getFileById: (
     id: number,
     params?: { file: string; [key: string]: unknown },
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     config?: AxiosRequestConfig<any>
   ) => {
     if (!isValidObject(config)) {

@@ -1,6 +1,6 @@
 import { MFApi } from "@api/mfApi";
 import { ImageDto } from "@models/image-dto.model";
-import { ComponentPropsWithoutRef, useEffect, useMemo, useState } from "react";
+import { ComponentPropsWithoutRef, useMemo, useState } from "react";
 import { Box } from "@mui/material";
 import React from "react";
 import { getMimetypeForExtension } from "@utils/functions/mimetype/getMimetypeForExtension";

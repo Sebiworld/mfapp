@@ -20,7 +20,7 @@ export const ContentYoutubeVideo: React.FC<ContentYoutubeVideoProps> = ({
     const output: string[] = [
       "content-block",
       "content-youtube-video",
-      `depth-${block.depth}`,
+      `block-depth-${block.depth}`,
     ];
 
     if (block.classes && typeof block.classes === "string") {

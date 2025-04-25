@@ -19,7 +19,7 @@ export const ContentGallery: React.FC<ContentGalleryProps> = ({ block }) => {
     const output: string[] = [
       "content-block",
       "content-gallery",
-      `depth-${block.depth}`,
+      `block-depth-${block.depth}`,
     ];
 
     if (block.classes && typeof block.classes === "string") {

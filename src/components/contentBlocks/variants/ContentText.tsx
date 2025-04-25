@@ -15,7 +15,7 @@ export const ContentText: React.FC<ContentTextProps> = ({ block }) => {
     const output: string[] = [
       "content-block",
       "content-text",
-      `depth-${block.depth}`,
+      `block-depth-${block.depth}`,
     ];
 
     if (block.classes && typeof block.classes === "string") {

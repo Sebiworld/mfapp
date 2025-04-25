@@ -21,11 +21,11 @@ export const contentBlocksStyles: SxProps<Theme> = (theme) => ({
       gridColumnEnd: "span 6",
     },
 
-    "&.depth-1": {
+    "&.block-depth-1": {
       gridColumnEnd: "span 6",
     },
 
-    "&.depth-2": {
+    "&.block-depth-2": {
       gridColumnEnd: "span 3",
     },
 

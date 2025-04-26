@@ -6,6 +6,11 @@ export const contentGalleryStyles: SxProps<Theme> = (theme) => ({
     width: "100%",
   },
 
+  "&.gallery-type-slider": {
+    paddingLeft: "48px",
+    paddingRight: "48px",
+  },
+
   ".gallery-container": {
     position: "relative",
     paddingY: "32px",

@@ -10,6 +10,7 @@ import { ProjectPage } from "./projectPage/ProjectPage";
 import { LoadingOverlay } from "@components/loadingOverlay/LoadingOverlay";
 import { Alert, AlertTitle, Box, Button, Typography } from "@mui/material";
 import { Helmet } from "react-helmet";
+import { convertHtmlEntities } from "@utils/functions/convertHtmlEntities";
 
 export const Page = () => {
   const router = useRouterState();
@@ -31,7 +32,9 @@ export const Page = () => {
   // }, [page]);
 
   const title = useMemo(() => {
-    return page?.title ? `${page?.title} | Musical-Fabrik` : "Musical-Fabrik";
+    return page?.title
+      ? `${convertHtmlEntities(page?.title)} | Musical-Fabrik`
+      : "Musical-Fabrik";
   }, [page?.title]);
 
   return (

@@ -30,7 +30,10 @@ export const PageContents: React.FC<PagesContentsProps> = ({ page }) => {
       {page?.template?.name !== "home" && (
         <Paper className="page-content">
           {page?.template?.name !== "project" && (
-            <Typography variant="h1">{page.title}</Typography>
+            <Typography
+              variant="h1"
+              dangerouslySetInnerHTML={{ __html: page.title }}
+            ></Typography>
           )}
 
           {!!(page as DefaultPageDto)?.contents?.length && (

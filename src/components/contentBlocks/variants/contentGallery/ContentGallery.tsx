@@ -20,6 +20,7 @@ export const ContentGallery: React.FC<ContentGalleryProps> = ({ block }) => {
       "content-block",
       "content-gallery",
       `block-depth-${block.depth}`,
+      `gallery-type-${block.gallery_type}`,
     ];
 
     if (block.classes && typeof block.classes === "string") {
@@ -27,7 +28,7 @@ export const ContentGallery: React.FC<ContentGalleryProps> = ({ block }) => {
     }
 
     return output.join(" ");
-  }, [block?.classes, block?.depth, block?.id]);
+  }, [block?.classes, block?.depth, block?.gallery_type, block?.id]);
 
   const gallery = useMemo(() => {
     if (!block?.id) {

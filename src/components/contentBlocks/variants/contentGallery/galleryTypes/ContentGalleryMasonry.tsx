@@ -23,7 +23,7 @@ export const ContentGalleryMasonry: React.FC<ContentGalleryMasonryProps> = ({
       <Box className={`gallery-container content-gallery-masonry`}>
         <Masonry
           columns={{ xs: 1, sm: 2, md: 3, xl: 4, xxl: 5 }}
-          spacing={2}
+          spacing={"0px"}
           columns-md={3}
         >
           {images?.map((image, index) => (
@@ -39,10 +39,14 @@ export const ContentGalleryMasonry: React.FC<ContentGalleryMasonryProps> = ({
                 sizes={[
                   {
                     media: "sm-down",
-                    width: 220,
+                    width: 300,
                   },
                   {
-                    width: 310,
+                    media: "md-down",
+                    width: 360,
+                  },
+                  {
+                    width: 420,
                   },
                 ]}
               />

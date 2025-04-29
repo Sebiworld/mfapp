@@ -21,7 +21,8 @@
       "close": "Schließen",
       "done": "Ok",
       "clear": "Zurücksetzen",
-      "login": "Anmelden"
+      "login": "Anmelden",
+      "download": "Herunterladen"
     }
   },
 
@@ -95,6 +96,11 @@
     "external": "Besuchen Sie uns auch hier:",
     "by": "Entwickelt mit <heart/> von <a>Sebastian Schendel</a>",
     "copyright": "Copyright 2012 - {{year}} Musical-Fabrik e.V."
+  },
+
+  "page": {
+    "published-on": "Veröffentlicht am <time datetime='{{date_raw}}' class='publish-date'>{{date}}</time>",
+    "published-on-by": "Veröffentlicht am <time datetime='{{date_raw}}' class='publish-date'>{{date}}</time> von <strong class='authors'>{{authors}}</strong>"
   },
 
   "home": {

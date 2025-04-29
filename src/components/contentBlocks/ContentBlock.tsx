@@ -10,6 +10,8 @@ import { ContentBlockGalleryDto } from "@models/content/content-block-gallery-dt
 import { ContentGallery } from "./variants/contentGallery/ContentGallery";
 import { ContentImage } from "./variants/ContentImage";
 import { ContentBlockImageDto } from "@models/content/content-block-image-dto.model";
+import { ContentFiles } from "./variants/contentFiles/ContentFiles";
+import { ContentBlockFilesDto } from "@models/content/content-block-files-dto.model";
 
 export interface ContentBlocksProps {
   block: ContentBlockDtoVariant;
@@ -60,6 +62,15 @@ export const ContentBlock: React.FC<ContentBlocksProps> = ({ block }) => {
         key={block.id}
         block={block as ContentBlockYoutubeVideoDto}
       ></ContentYoutubeVideo>
+    );
+  }
+
+  if (block.type === "files") {
+    return (
+      <ContentFiles
+        key={block.id}
+        block={block as ContentBlockFilesDto}
+      ></ContentFiles>
     );
   }
 

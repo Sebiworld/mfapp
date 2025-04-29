@@ -1,6 +1,7 @@
 import { ContentBlockDto } from "./content-block-dto.model";
 
 export interface ContentBlockTimelineDto extends ContentBlockDto {
+  type: "timeline";
   title: string;
   hide_title: boolean;
   items: ContentBlockTimelineItemDto[];

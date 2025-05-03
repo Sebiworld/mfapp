@@ -3,7 +3,7 @@ import { mfTheme } from "@styles/theme/mfTheme";
 
 export const footerStyles: SxProps<Theme> = (theme) => ({
   position: "relative",
-  marginTop: "6vw",
+  marginTop: "64px",
 
   ".mf-logo": {
     width: "200px",

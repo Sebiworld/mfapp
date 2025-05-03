@@ -23,9 +23,7 @@ export const PageContents: React.FC<PagesContentsProps> = ({ page }) => {
   const defaultPage = page as DefaultPageDto;
 
   const showCreationDate = useMemo(
-    () =>
-      page?.template?.name &&
-      ["default_page", "article"].includes(page?.template?.name),
+    () => page?.template?.name && ["article"].includes(page?.template?.name),
     [page?.template?.name]
   );
 
@@ -67,37 +65,39 @@ export const PageContents: React.FC<PagesContentsProps> = ({ page }) => {
     >
       {page?.template?.name !== "home" && (
         <Paper className="page-content" elevation={0}>
-          {!!showCreationDate && !!page.created && (
-            <Typography
-              variant="subtitle1"
-              className="creation-date"
-              dangerouslySetInnerHTML={{
-                __html: authors
-                  ? t("page.published-on-by", {
-                      date: formatDate(defaultPage.datetime_from * 1000),
-                      date_raw: formatDate(
-                        defaultPage.datetime_from * 1000,
-                        "yyyy-MM-dd"
-                      ),
-                      authors,
-                    })
-                  : t("page.published-on", {
-                      date: formatDate(defaultPage.datetime_from * 1000),
-                      date_raw: formatDate(
-                        defaultPage.datetime_from * 1000,
-                        "yyyy-MM-dd"
-                      ),
-                    }),
-              }}
-            ></Typography>
-          )}
-
           {page?.template?.name !== "project" && (
-            <Typography
-              variant="h1"
-              className="page-title"
-              dangerouslySetInnerHTML={{ __html: page.title }}
-            ></Typography>
+            <Box className="page-header">
+              {!!showCreationDate && !!page.created && (
+                <Typography
+                  variant="subtitle1"
+                  className="creation-date"
+                  dangerouslySetInnerHTML={{
+                    __html: authors
+                      ? t("page.published-on-by", {
+                          date: formatDate(defaultPage.datetime_from * 1000),
+                          date_raw: formatDate(
+                            defaultPage.datetime_from * 1000,
+                            "yyyy-MM-dd"
+                          ),
+                          authors,
+                        })
+                      : t("page.published-on", {
+                          date: formatDate(defaultPage.datetime_from * 1000),
+                          date_raw: formatDate(
+                            defaultPage.datetime_from * 1000,
+                            "yyyy-MM-dd"
+                          ),
+                        }),
+                  }}
+                ></Typography>
+              )}
+
+              <Typography
+                variant="h1"
+                className="page-title"
+                dangerouslySetInnerHTML={{ __html: page.title }}
+              ></Typography>
+            </Box>
           )}
 
           {!!defaultPage.intro && (

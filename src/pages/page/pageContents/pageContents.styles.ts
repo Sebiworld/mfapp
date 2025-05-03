@@ -5,10 +5,8 @@ export const pageContentsStyles: SxProps = {
   background: mfTheme.vars.palette.background.default,
 
   ".page-content": {
-    mx: "32px",
-    my: "32px",
-    py: "32px",
-    px: "48px",
+    margin: "32px",
+    padding: "32px 48px 48px 48px",
     display: "flex",
     flexDirection: "column",
     alignItems: "flex-start",
@@ -21,8 +19,9 @@ export const pageContentsStyles: SxProps = {
       marginY: "128px",
     },
 
-    "&>.page-title": {
+    ".page-title": {
       marginBottom: "16px",
+      lineHeight: "1.05",
     },
 
     "&>.intro": {

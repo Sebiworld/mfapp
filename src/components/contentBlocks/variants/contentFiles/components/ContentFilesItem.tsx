@@ -2,13 +2,11 @@ import { FileDto } from "@models/file-dto.model";
 import {
   Avatar,
   Box,
-  Button,
   ListItem,
   ListItemAvatar,
   ListItemText,
 } from "@mui/material";
 import React from "react";
-import { useTranslation } from "react-i18next";
 import FolderIcon from "@mui/icons-material/Folder";
 import { ContentFilesAudioplayer } from "./ContentFilesAudioplayer";
 import { ContentFilesDownloadButton } from "./ContentFilesDownloadButton";
@@ -18,8 +16,6 @@ export interface ContentFilesItemProps {
 }
 
 export const ContentFilesItem: React.FC<ContentFilesItemProps> = ({ file }) => {
-  const { t } = useTranslation();
-
   return (
     <ListItem className="file-item">
       <ListItemAvatar>

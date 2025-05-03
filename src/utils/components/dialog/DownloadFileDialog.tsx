@@ -7,7 +7,6 @@ import {
   DialogTitle,
   LinearProgress,
 } from "@mui/material";
-import { AxiosProgressEvent } from "axios";
 import { useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 

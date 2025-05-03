@@ -7,6 +7,7 @@
     "yes": "Ja",
     "no": "Nein",
     "o-clock": "Uhr",
+    "download-progress": "Download-Fortschritt: {{progress}}%",
 
     "actions": {
       "back-to-home": "Zurück zur Startseite",
@@ -22,7 +23,8 @@
       "done": "Ok",
       "clear": "Zurücksetzen",
       "login": "Anmelden",
-      "download": "Herunterladen"
+      "download": "Herunterladen",
+      "save": "Speichern"
     }
   },
 

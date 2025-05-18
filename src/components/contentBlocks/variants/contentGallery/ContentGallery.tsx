@@ -18,6 +18,7 @@ export const ContentGallery: React.FC<ContentGalleryProps> = ({ block }) => {
 
     const output: string[] = [
       "content-block",
+      "layout-block",
       "content-gallery",
       `block-depth-${block.depth}`,
       `gallery-type-${block.gallery_type}`,

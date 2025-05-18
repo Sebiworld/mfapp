@@ -16,6 +16,7 @@ export const ContentImage: React.FC<ContentImageProps> = ({ block }) => {
 
     const output: string[] = [
       "content-block",
+      "layout-block",
       "content-image",
       `block-depth-${block.depth}`,
     ];

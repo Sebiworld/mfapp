@@ -8,6 +8,8 @@ export const projectPageStyles = (theme: Theme): SystemStyleObject<Theme> => ({
     ".main-image": {
       display: "flex",
       flexDirection: "column",
+      maxWidth: "100%",
+      width: "1900px",
 
       ".MuiAspectRatio-root": {
         border: "0 none",

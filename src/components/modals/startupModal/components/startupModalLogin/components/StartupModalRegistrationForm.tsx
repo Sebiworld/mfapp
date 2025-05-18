@@ -106,7 +106,7 @@ export const StartupModalRegistrationForm = ({
         onSubmit={handleSubmit(onSubmit)}
       >
         <section>
-          <p className="content-block">
+          <p className="content-block layout-block">
             <strong>Bist du bereits ein Mitglied der Musical-Fabrik?</strong>
             <br />
             Registriere dich hier, um Zugang zu internen Nachrichten und

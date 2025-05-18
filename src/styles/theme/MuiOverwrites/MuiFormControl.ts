@@ -4,9 +4,9 @@ export const MuiFormControlOverwrites: Components<Theme> = {
   MuiFormControl: {
     styleOverrides: {
       root: ({ theme }) => ({
-        display: "flex",
-        flexDirection: "column",
-        gap: "6px",
+        // display: "flex",
+        // flexDirection: "column",
+        // gap: "6px",
 
         "&>.MuiFormLabel-root": {
           margin: 0,

@@ -28,8 +28,18 @@ export interface FormInputTextarea extends Omit<FormInputDto, "type"> {
   value?: string;
 }
 
+export interface FormInputNumber extends Omit<FormInputDto, "type"> {
+  type: "number";
+  value?: string;
+}
+
 export interface FormInputEmail extends Omit<FormInputDto, "type"> {
   type: "email";
+  value?: string;
+}
+
+export interface FormInputMarkup extends Omit<FormInputDto, "type"> {
+  type: "markup";
   value?: string;
 }
 
@@ -64,14 +74,19 @@ export interface FormFieldsetClose extends Omit<FormElementDto, "type"> {
   type: "fieldset_close";
 }
 
-export type FormInputVariant =
+export type FormInputTextVariant =
   | FormInputDto
   | FormInputText
+  | FormInputNumber
   | FormInputTextarea
   | FormInputEmail
-  | FormInputCheckbox
-  | FormInputOptions
   | FormInputAntispamCode;
+
+export type FormInputVariant =
+  | FormInputTextVariant
+  | FormInputMarkup
+  | FormInputCheckbox
+  | FormInputOptions;
 
 export interface FormGroupedElement
   extends Partial<Omit<FormFieldsetOpen, "type">> {

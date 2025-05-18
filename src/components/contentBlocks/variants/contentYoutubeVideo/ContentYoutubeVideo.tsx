@@ -19,6 +19,7 @@ export const ContentYoutubeVideo: React.FC<ContentYoutubeVideoProps> = ({
 
     const output: string[] = [
       "content-block",
+      "layout-block",
       "content-youtube-video",
       `block-depth-${block.depth}`,
     ];

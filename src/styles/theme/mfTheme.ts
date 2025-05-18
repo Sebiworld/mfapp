@@ -26,6 +26,7 @@ import { MuiToolbarOverwrites } from "./MuiOverwrites/MuiToolbar";
 import { MuiCardOverwrites } from "./MuiOverwrites/MuiCard";
 import { mfBgDark, mfBgLight } from "./paletteColors/mfBg";
 import { ColorPartial } from "node_modules/@mui/material/esm/styles/createPalette";
+import { MuiInputOverwrites } from "./MuiOverwrites/MuiInput";
 
 export type ExtendedPaletteColor = Partial<SimplePaletteColorOptions> &
   Partial<ColorPartial> &
@@ -209,5 +210,6 @@ export const mfTheme = createTheme({
     ...MuiPickersInputOverwrites,
     ...MuiToolbarOverwrites,
     ...MuiCardOverwrites,
+    ...MuiInputOverwrites,
   },
 });

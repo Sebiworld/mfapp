@@ -14,6 +14,7 @@ export const ContentText: React.FC<ContentTextProps> = ({ block }) => {
 
     const output: string[] = [
       "content-block",
+      "layout-block",
       "content-text",
       `block-depth-${block.depth}`,
     ];
@@ -26,9 +27,16 @@ export const ContentText: React.FC<ContentTextProps> = ({ block }) => {
   }, [block?.classes, block?.depth, block?.id]);
 
   return (
-    <Box
-      className={classes}
-      dangerouslySetInnerHTML={{ __html: block.text }}
-    ></Box>
+    <Box className={classes}>
+      {block.title && (
+        <Box className="content-text-title">
+          <h3>{block.title}</h3>
+        </Box>
+      )}
+      <Box
+        className="content-text-inner"
+        dangerouslySetInnerHTML={{ __html: block.text }}
+      ></Box>
+    </Box>
   );
 };

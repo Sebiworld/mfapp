@@ -15,6 +15,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { zod } from "@utils/i18n/i18n";
 import { superRefineIsNotEmpty } from "@utils/functions/zod/superRefineIsNotEmpty";
+import { ContentFormInputCheckbox } from "./components/ContentFormInputCheckbox";
 
 export interface ContentTextProps {
   block: ContentBlockFormDto;
@@ -30,6 +31,7 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
 
     const output: string[] = [
       "content-block",
+      "layout-block",
       "content-form",
       `block-depth-${block.depth}`,
     ];
@@ -78,12 +80,10 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
     return output;
   }, [block?.form?.fields]);
 
-  useEffect(() => {
-    console.log("block", block);
-  }, [block]);
-
   const validationSchema = useMemo(() => {
-    const fieldValidations: { [key: string]: ZodTypeAny } = {};
+    const fieldValidations: { [key: string]: ZodTypeAny } = {
+      data: zod.optional(zod.boolean()),
+    };
 
     if (isValidArray(block?.form?.fields)) {
       for (const fieldData of block.form.fields) {
@@ -126,6 +126,7 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
         }
       }
     }
+    console.log("fieldValidations", fieldValidations);
 
     return zod.object(fieldValidations);
   }, [block?.form?.fields]);
@@ -194,6 +195,7 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const onSubmit: SubmitHandler<FormData> = useCallback(
     async (data) => {
+      console.log("DATA", data);
       setLoading(true);
       try {
         const response = await pageApi.submitPageForm(
@@ -253,9 +255,28 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
         formValidationResponse={formValidationResponse}
       ></ContentFormGroup>
 
+      <ContentFormInputCheckbox
+        item={{
+          type: "checkbox",
+          name: "data",
+          id: "data",
+          label: "Data",
+        }}
+        control={control}
+        errors={errors}
+        formValidationResponse={formValidationResponse}
+        classes={["hp-field"]}
+        checkboxProps={{
+          inputProps: {
+            autoComplete: "new-password",
+          },
+        }}
+      ></ContentFormInputCheckbox>
+
       <Box className="form-actions">
         <Button
           variant="contained"
+          color="projectPrimary"
           size="large"
           type="submit"
           loading={loading}

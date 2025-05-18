@@ -1,29 +1,19 @@
 import React, { ReactNode, useMemo } from "react";
-import {
-  FormElementDto,
-  FormInputVariant,
-} from "@models/utility-types/form-dto.model";
+import { FormInputTextVariant } from "@models/utility-types/form-dto.model";
 import { isValidArray } from "@utils/functions/isValidArray";
-import { useTranslation } from "react-i18next";
 import { Control, Controller, FieldErrors, FieldValues } from "react-hook-form";
 import {
   Box,
-  Checkbox,
   FormControl,
-  FormControlLabel,
   FormLabel,
   InputAdornment,
-  MenuItem,
-  Radio,
-  RadioGroup,
-  Select,
   TextField,
 } from "@mui/material";
 import { FormValidationResponseDto } from "@models/utility-types/form-validation-response-dto.model";
 import Check from "@mui/icons-material/Check";
 
-export interface ContentFormInputProps {
-  item: FormInputVariant | FormElementDto;
+export interface ContentFormInputTextProps {
+  item: FormInputTextVariant;
   control?: Control<FieldValues>;
   errors?: FieldErrors;
   formValidationResponse?: FormValidationResponseDto;
@@ -31,7 +21,7 @@ export interface ContentFormInputProps {
   inputClasses?: string[];
 }
 
-export const ContentFormInput: React.FC<ContentFormInputProps> = ({
+export const ContentFormInputText: React.FC<ContentFormInputTextProps> = ({
   item,
   control,
   errors,
@@ -39,7 +29,6 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
   classes: customClasses,
   inputClasses: customInputClasses,
 }) => {
-  const { t } = useTranslation();
   const fieldValidationState = useMemo(
     () => formValidationResponse?.fields?.[item.name],
     [formValidationResponse?.fields, item.name]
@@ -75,6 +64,7 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
     const output: string[] = [
       "content-form-input",
       "layout-block",
+      "content-form-input-text",
       `type-${item.type}`,
     ];
 
@@ -90,7 +80,7 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
   }, [customClasses, fieldSuccess, item.type]);
 
   const inputClasses = useMemo((): string => {
-    const output: string[] = [];
+    const output: string[] = ["input-field"];
 
     if (fieldSuccess) {
       output.push("successful");
@@ -104,52 +94,6 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
   }, [customInputClasses, fieldSuccess]);
 
   const inputElement = useMemo(() => {
-    if (item.type === "antispam_code") {
-      if (!control) {
-        return (
-          <TextField
-            name={item.name}
-            error={!!fieldError}
-            helperText={fieldError}
-            className={inputClasses}
-            slotProps={{
-              input: {
-                endAdornment: (
-                  <InputAdornment position="end" className="success-marker">
-                    <Check color="success" />
-                  </InputAdornment>
-                ),
-              },
-            }}
-          ></TextField>
-        );
-      }
-
-      return (
-        <Controller
-          render={({ field }) => (
-            <TextField
-              {...field}
-              error={!!fieldError}
-              helperText={fieldError}
-              className={inputClasses}
-              slotProps={{
-                input: {
-                  endAdornment: (
-                    <InputAdornment position="end" className="success-marker">
-                      <Check color="success" />
-                    </InputAdornment>
-                  ),
-                },
-              }}
-            ></TextField>
-          )}
-          control={control}
-          name={item.name}
-        />
-      );
-    }
-
     if (item.type === "text") {
       if (!control) {
         return (
@@ -342,161 +286,33 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
       );
     }
 
-    if (item.type === "markup") {
+    if (!control) {
       return (
-        <Box
-          className="form-markup"
-          dangerouslySetInnerHTML={{ __html: item.value as string }}
-        ></Box>
-      );
-    }
-
-    if (item.type === "checkbox") {
-      if (!control) {
-        return <Checkbox name={item.name} className={inputClasses}></Checkbox>;
-      }
-
-      return (
-        <Controller
-          render={({ field }) => (
-            <Checkbox {...field} className={inputClasses}></Checkbox>
-          )}
-          control={control}
+        <TextField
           name={item.name}
-        />
+          className={inputClasses}
+          slotProps={{
+            input: {
+              endAdornment: (
+                <InputAdornment position="end" className="success-marker">
+                  <Check color="success" />
+                </InputAdornment>
+              ),
+            },
+          }}
+        ></TextField>
       );
     }
 
-    if (item.type === "options") {
-      if (!item?.options?.length) {
-        return <></>;
-      }
-
-      if (item.isMultiselect) {
-        if (!control) {
-          let v;
-          if (isValidArray(item.value)) {
-            v = item.value as string[];
-          } else if (typeof item.value === "string") {
-            v = [item.value];
-          }
-
-          return (
-            <Select
-              multiple
-              // sx={{ minWidth: "13rem" }}
-              // slotProps={{
-              //   listbox: {
-              //     sx: {
-              //       width: "100%",
-              //     },
-              //   },
-              // }}
-              name={item.name}
-              value={v}
-              error={Boolean(errors?.[item.name])}
-              className={inputClasses}
-            >
-              {item.options?.map((option) => (
-                <MenuItem key={option.id} value={option.id}>
-                  {option.title}
-                </MenuItem>
-              ))}
-            </Select>
-          );
-        }
-
-        return (
-          <Controller
-            defaultValue={[]}
-            render={({ field: { value, ...field } }) => {
-              console.log("V", { value, item });
-              let v: (string | number)[];
-              if (isValidArray(value)) {
-                v = value as (string | number)[];
-              } else if (
-                typeof value === "string" ||
-                typeof value === "number"
-              ) {
-                v = [value];
-              } else {
-                v = [];
-              }
-
-              return (
-                <Select
-                  {...field}
-                  multiple
-                  defaultValue={[]}
-                  value={v}
-                  error={Boolean(errors?.[item.name])}
-                  className={inputClasses}
-                  // sx={{ minWidth: "13rem" }}
-                  // slotProps={{
-                  //   listbox: {
-                  //     sx: {
-                  //       width: "100%",
-                  //     },
-                  //   },
-                  // }}
-                >
-                  {item?.options?.map((option) => (
-                    <MenuItem key={option.id} value={option.id}>
-                      {option.title}
-                    </MenuItem>
-                  ))}
-                </Select>
-              );
-            }}
-            control={control}
-            name={item.name}
-          />
-        );
-      }
-
-      if (!control) {
-        return (
-          <RadioGroup name={item.name} className={inputClasses}>
-            {item.options?.map((option) => (
-              <FormControlLabel
-                value={option.value}
-                label={option.title}
-                control={<Radio />}
-              />
-            ))}
-          </RadioGroup>
-        );
-      }
-
-      return (
-        <Controller
-          render={({ field: { onChange, onBlur, value } }) => (
-            <RadioGroup
-              onBlur={onBlur}
-              onChange={onChange}
-              value={value}
-              className={inputClasses}
-            >
-              {item.options?.map((option) => (
-                <FormControlLabel
-                  value={option.value}
-                  label={option.title}
-                  control={<Radio />}
-                />
-              ))}
-            </RadioGroup>
-          )}
-          control={control}
-          name={item.name}
-        />
-      );
-    }
-
-    if (item.type === "input") {
-      if (!control) {
-        return (
+    return (
+      <Controller
+        render={({ field: { onChange, onBlur, value } }) => (
           <TextField
-            name={item.name}
+            onBlur={onBlur}
+            onChange={onChange}
+            value={value}
+            error={Boolean(errors?.[item.name])}
+            helperText={(errors?.[item.name]?.message as string) || ""}
             className={inputClasses}
             slotProps={{
               input: {
@@ -508,66 +324,12 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
               },
             }}
           ></TextField>
-        );
-      }
-
-      return (
-        <Controller
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextField
-              onBlur={onBlur}
-              onChange={onChange}
-              value={value}
-              error={Boolean(errors?.[item.name])}
-              helperText={(errors?.[item.name]?.message as string) || ""}
-              className={inputClasses}
-              slotProps={{
-                input: {
-                  endAdornment: (
-                    <InputAdornment position="end" className="success-marker">
-                      <Check color="success" />
-                    </InputAdornment>
-                  ),
-                },
-              }}
-            ></TextField>
-          )}
-          control={control}
-          name={item.name}
-        />
-      );
-    }
-
-    console.log("Unknown input type", item.type, item);
-    return <Box>{t("error.title")}</Box>;
-  }, [control, errors, fieldError, inputClasses, item, t]);
-
-  // if(item.type === "checkbox"){
-  //   return (
-  //     <FormControl
-  //       required={item?.required}
-  //       error={Boolean(errors?.[item.name])}
-  //       className={`content-form-input layout-block type-${item.type} ${fieldSuccess ? "successful" : ""}`}
-  //       // helperText={(errors?.[item.name]?.message as string) || ""}
-  //     >
-  //       <FormLabel
-  //         className="form-input-label"
-  //         // slotProps={{ asterisk: { title: t("general.required") } }}
-  //       >
-  //         {item.label}
-  //       </FormLabel>
-
-  //       {item.description && (
-  //         <Box
-  //           className="form-input-description"
-  //           dangerouslySetInnerHTML={{ __html: item.description }}
-  //         ></Box>
-  //       )}
-
-  //       {inputElement}
-  //     </FormControl>
-  //   );
-  // }
+        )}
+        control={control}
+        name={item.name}
+      />
+    );
+  }, [inputClasses, control, errors, fieldError, item.name, item.type]);
 
   return (
     <FormControl

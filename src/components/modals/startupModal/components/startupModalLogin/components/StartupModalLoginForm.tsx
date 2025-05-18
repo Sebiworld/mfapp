@@ -66,7 +66,7 @@ export const StartupModalLoginForm = ({
       onSubmit={handleSubmit(onSubmit)}
     >
       <section className="form-section">
-        <p className="content-block">
+        <p className="content-block layout-block">
           <strong>Bist du bereits ein Mitglied der Musical-Fabrik?</strong>
           <br />
           Melde dich an, um Zugang zu internen Nachrichten und Probenplänen zu
@@ -83,7 +83,7 @@ export const StartupModalLoginForm = ({
           Mitgliedszugang anfragen
         </Button>
 
-        <p className="content-block center">oder einloggen:</p>
+        <p className="content-block layout-block center">oder einloggen:</p>
       </section>
 
       <section className="form-section">

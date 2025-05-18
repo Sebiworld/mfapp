@@ -16,6 +16,7 @@ export const ContentFiles: React.FC<ContentFilesProps> = ({ block }) => {
 
     const output: string[] = [
       "content-block",
+      "layout-block",
       "content-files",
       `block-depth-${block.depth}`,
     ];

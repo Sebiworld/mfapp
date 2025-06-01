@@ -1,5 +1,5 @@
 import { ContentBlockFormDto } from "@models/content/content-block-form-dto.model";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { contentFormStyles } from "./contentForm.styles";
 import { FormGroupedElement } from "@models/utility-types/form-dto.model";
 import { isValidArray } from "@utils/functions/isValidArray";
@@ -9,13 +9,23 @@ import { pageApi } from "@api/pageApi";
 import { ZodTypeAny } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Box, Button } from "@mui/material";
+import { Alert, AlertTitle, Box, Button } from "@mui/material";
 import { FormValidationResponseDto } from "@models/utility-types/form-validation-response-dto.model";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { zod } from "@utils/i18n/i18n";
 import { superRefineIsNotEmpty } from "@utils/functions/zod/superRefineIsNotEmpty";
 import { ContentFormInputCheckbox } from "./components/ContentFormInputCheckbox";
+import { isValidObject } from "@utils/functions/isValidObject";
+import ClearIcon from "@mui/icons-material/Clear";
+import CheckIcon from "@mui/icons-material/Check";
+
+export interface FormMessage {
+  id: string;
+  type: "error" | "success" | "info" | "warning";
+  title?: string;
+  message: string;
+}
 
 export interface ContentTextProps {
   block: ContentBlockFormDto;
@@ -163,7 +173,7 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
   const {
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors: localFormErrors },
   } = useForm<FormData>({
     resolver: zodResolver(validationSchema),
     defaultValues: formDataDefaults,
@@ -203,10 +213,30 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
           block.form.form_origin,
           data
         );
-        console.log("response", response);
+
+        if (response?.status !== 200) {
+          throw new Error(
+            t("error.form_submit_error", {
+              code: response?.status,
+              message: response?.statusText,
+            })
+          );
+        }
+
+        if (response?.data?.success?.finished) {
+          toast.success(response.data.success.finished, {
+            toastId: "form_submit_error",
+          });
+        } else {
+          toast.success(t("general.form-submit-success"), {
+            toastId: "form_submit_error",
+          });
+        }
+
         setFormValidationResponse(response.data);
       } catch (error) {
-        console.log("ERROR", error);
+        console.error("Api Request error", error);
+
         if (axios.isAxiosError(error)) {
           toast.error(
             t("error.general_message_code", {
@@ -215,6 +245,7 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
             }),
             { toastId: "form_submit_error" }
           );
+
           setFormValidationResponse(error.response?.data);
         } else {
           toast.error(
@@ -232,8 +263,80 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
   );
 
   React.useEffect(() => {
-    console.log("ERRORS---", errors);
-  }, [errors]);
+    console.log("localFormErrors---", localFormErrors);
+  }, [localFormErrors]);
+
+  React.useEffect(() => {
+    console.log("formValidationResponse", formValidationResponse);
+  }, [formValidationResponse]);
+
+  const formState = useMemo((): undefined | "error" | "success" => {
+    if (formValidationResponse?.success) {
+      return "success";
+    }
+
+    if (formValidationResponse?.error) {
+      return "error";
+    }
+
+    if (isValidObject(localFormErrors)) {
+      const errorKeys = Object.keys(localFormErrors);
+      if (errorKeys.length) {
+        return "error";
+      }
+    }
+
+    return undefined;
+  }, [
+    formValidationResponse?.error,
+    formValidationResponse?.success,
+    localFormErrors,
+  ]);
+
+  const formMessages = useMemo((): FormMessage[] => {
+    const output: FormMessage[] = [];
+
+    if (isValidObject(localFormErrors)) {
+      const errorKeys = Object.keys(localFormErrors);
+      if (errorKeys.length) {
+        output.push({
+          id: "local-form-errors",
+          type: "error",
+          title: t("error.form_error.title"),
+          message: t("error.form_error.description"),
+        });
+      }
+    }
+
+    if (isValidObject(formValidationResponse?.error)) {
+      for (const [key, value] of Object.entries(formValidationResponse.error)) {
+        output.push({
+          id: key,
+          type: "error",
+          message: value,
+        });
+      }
+    }
+
+    if (isValidObject(formValidationResponse?.success)) {
+      for (const [key, value] of Object.entries(
+        formValidationResponse.success
+      )) {
+        output.push({
+          id: key,
+          type: "success",
+          message: value,
+        });
+      }
+    }
+
+    return output;
+  }, [
+    formValidationResponse?.error,
+    formValidationResponse?.success,
+    localFormErrors,
+    t,
+  ]);
 
   if (!groupedFields?.fields?.length) {
     return null;
@@ -251,7 +354,7 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
         item={groupedFields}
         isRoot={true}
         control={control}
-        errors={errors}
+        errors={localFormErrors}
         formValidationResponse={formValidationResponse}
       ></ContentFormGroup>
 
@@ -263,7 +366,7 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
           label: "Data",
         }}
         control={control}
-        errors={errors}
+        errors={localFormErrors}
         formValidationResponse={formValidationResponse}
         classes={["hp-field"]}
         checkboxProps={{
@@ -273,13 +376,31 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
         }}
       ></ContentFormInputCheckbox>
 
+      {!!formMessages?.length && (
+        <Box className="form-messages">
+          {formMessages?.map((message) => (
+            <Alert variant="filled" severity={message.type} key={message.id}>
+              {!!message.title && <AlertTitle>{message.title}</AlertTitle>}
+              {message.message}
+            </Alert>
+          ))}
+        </Box>
+      )}
+
       <Box className="form-actions">
         <Button
           variant="contained"
-          color="projectPrimary"
+          color={formState || "projectPrimary"}
           size="large"
           type="submit"
           loading={loading}
+          startIcon={
+            formState === "error" ? (
+              <ClearIcon />
+            ) : formState === "success" ? (
+              <CheckIcon />
+            ) : undefined
+          }
         >
           {t("general.actions.submit")}
         </Button>

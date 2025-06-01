@@ -8,6 +8,7 @@
     "no": "Nein",
     "o-clock": "Uhr",
     "download-progress": "Download-Fortschritt: {{progress}}%",
+    "form-submit-success": "Das Formular wurde erfolgreich abgeschickt.",
 
     "actions": {
       "back-to-home": "Zurück zur Startseite",
@@ -34,6 +35,10 @@
     "general_label_x": "Fehler: {{x}}",
     "general_message_code": "Ein Fehler ist aufgetreten. {{message}} [Fehlercode {{code}}]",
 
+    "form_error": {
+      "title": "Formularfehler",
+      "description": "Einige Formularfelder wurden nicht richtig ausgefüllt."
+    },
     "default_error": {
       "title": "Fehler",
       "description": "Beim Laden der Seite ist ein Fehler aufgetreten."

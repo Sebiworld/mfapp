@@ -35,7 +35,13 @@ export const globalContentStyles: Interpolation<Theme>[] = [
         width: "100%",
       },
 
-      "p.capital-letter, .capital-letter P:first-of-type, &.capital-letter P:first-of-type":
+      "&.capital-letter, .capital-letter": {
+        marginTop: "32px",
+        marginLeft: 0,
+        marginRight: 0,
+      },
+
+      "p.capital-letter, .capital-letter p:first-of-type, &.capital-letter p:first-of-type":
         {
           "&:first-letter": {
             // fontFamily: mfTheme.vars.font.serif,

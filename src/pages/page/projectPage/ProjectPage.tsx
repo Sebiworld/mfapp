@@ -41,9 +41,9 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({ page, children }) => {
     };
   }, [cssVars, resetGlobalCss, setGlobalCss]);
 
-  useEffect(() => {
-    console.log("projectPage", { projectPage });
-  }, [projectPage]);
+  // useEffect(() => {
+  //   console.log("projectPage", { projectPage });
+  // }, [projectPage]);
 
   useEffect(() => {
     if (!projectPage?.id) {

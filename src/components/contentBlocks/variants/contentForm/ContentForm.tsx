@@ -1,5 +1,5 @@
 import { ContentBlockFormDto } from "@models/content/content-block-form-dto.model";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useId, useMemo, useState } from "react";
 import { contentFormStyles } from "./contentForm.styles";
 import { FormGroupedElement } from "@models/utility-types/form-dto.model";
 import { isValidArray } from "@utils/functions/isValidArray";
@@ -19,6 +19,11 @@ import { ContentFormInputCheckbox } from "./components/ContentFormInputCheckbox"
 import { isValidObject } from "@utils/functions/isValidObject";
 import ClearIcon from "@mui/icons-material/Clear";
 import CheckIcon from "@mui/icons-material/Check";
+import { SectionFormDto } from "@models/section/section-form.model";
+import { useRouterState } from "@tanstack/react-router";
+import { useReward } from "react-rewards";
+import { useGlobalStore } from "@src/store/global.store";
+import { selectProjects } from "@src/store/projects.store";
 
 export interface FormMessage {
   id: string;
@@ -28,30 +33,59 @@ export interface FormMessage {
 }
 
 export interface ContentTextProps {
-  block: ContentBlockFormDto;
+  block: ContentBlockFormDto | SectionFormDto;
 }
 
 export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
+  const router = useRouterState();
+  const currentPath = router.location.pathname;
   const { t } = useTranslation();
+
+  const rewardId = useId();
+  const loadedProjects = useGlobalStore(selectProjects);
+  const projectColors = useMemo(() => {
+    if (!isValidObject(loadedProjects)) {
+      return undefined;
+    }
+
+    return Object.values(loadedProjects).reduce((acc, curr) => {
+      if (curr?.color) {
+        acc.push(`#${curr.color}`);
+      }
+      return acc;
+    }, [] as string[]);
+  }, [loadedProjects]);
+
+  const { reward } = useReward(rewardId, "balloons", {
+    position: "absolute",
+    colors: projectColors,
+  });
+
+  const blockDepth = useMemo(() => {
+    if ((block as ContentBlockFormDto)?.depth !== undefined) {
+      return (block as ContentBlockFormDto).depth;
+    }
+
+    return undefined;
+  }, [block]);
 
   const classes: string = useMemo(() => {
     if (!block?.id) {
       return "";
     }
 
-    const output: string[] = [
-      "content-block",
-      "layout-block",
-      "content-form",
-      `block-depth-${block.depth}`,
-    ];
+    const output: string[] = ["content-block", "layout-block", "content-form"];
+
+    if (blockDepth !== undefined) {
+      output.push(`block-depth-${blockDepth}`);
+    }
 
     if (block.classes && typeof block.classes === "string") {
       output.push(...block.classes.split(" "));
     }
 
     return output.join(" ");
-  }, [block?.classes, block?.depth, block?.id]);
+  }, [block?.classes, blockDepth, block?.id]);
 
   const groupedFields = useMemo((): FormGroupedElement => {
     const output: FormGroupedElement = { fields: [], type: "group" };
@@ -136,7 +170,6 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
         }
       }
     }
-    console.log("fieldValidations", fieldValidations);
 
     return zod.object(fieldValidations);
   }, [block?.form?.fields]);
@@ -205,11 +238,15 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const onSubmit: SubmitHandler<FormData> = useCallback(
     async (data) => {
-      console.log("DATA", data);
+      if (loading) {
+        return;
+      }
+
       setLoading(true);
+
       try {
         const response = await pageApi.submitPageForm(
-          "kontakt",
+          currentPath,
           block.form.form_origin,
           data
         );
@@ -223,13 +260,15 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
           );
         }
 
+        reward();
+
         if (response?.data?.success?.finished) {
           toast.success(response.data.success.finished, {
-            toastId: "form_submit_error",
+            toastId: "form_submit_succes",
           });
         } else {
           toast.success(t("general.form-submit-success"), {
-            toastId: "form_submit_error",
+            toastId: "form_submit_succes",
           });
         }
 
@@ -259,16 +298,8 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
       }
       setLoading(false);
     },
-    [block.form.form_origin, t]
+    [block?.form?.form_origin, currentPath, loading, reward, t]
   );
-
-  React.useEffect(() => {
-    console.log("localFormErrors---", localFormErrors);
-  }, [localFormErrors]);
-
-  React.useEffect(() => {
-    console.log("formValidationResponse", formValidationResponse);
-  }, [formValidationResponse]);
 
   const formState = useMemo((): undefined | "error" | "success" => {
     if (formValidationResponse?.success) {
@@ -404,6 +435,7 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
         >
           {t("general.actions.submit")}
         </Button>
+        <span id={rewardId} />
       </Box>
     </Box>
   );

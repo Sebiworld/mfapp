@@ -6,6 +6,7 @@ import { LoadingStatus } from "@models/loading-status.model";
 import axios from "axios";
 import { ProjectDetailsDto } from "@models/project-dto.model";
 import { GetProjectsResponse } from "@api/projectsApi";
+import { isValidObject } from "@utils/functions/isValidObject";
 
 export interface ProjectsState {
   projects: LoadingStatus<GetProjectsResponse>;
@@ -261,6 +262,20 @@ export const selectLoadProjectDetails = (state: GlobalStore) =>
   state.loadProjectDetails;
 export const selectProjects = (state: GlobalStore) =>
   state.projects?.data?.projects;
+export const selectProjectColors = (state: GlobalStore) => {
+  const projects = selectProjects(state);
+
+  if (!isValidObject(projects)) {
+    return undefined;
+  }
+
+  return Object.values(projects).reduce((acc, curr) => {
+    if (curr?.color) {
+      acc.push(`#${curr.color}`);
+    }
+    return acc;
+  }, [] as string[]);
+};
 export const selectProject = (id?: number) => (state: GlobalStore) => {
   if (!id) {
     return;

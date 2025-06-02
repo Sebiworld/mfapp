@@ -398,7 +398,7 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
               className={inputClasses}
             >
               {item.options?.map((option) => (
-                <MenuItem key={option.id} value={option.id}>
+                <MenuItem key={option.id} value={option.value}>
                   {option.title}
                 </MenuItem>
               ))}
@@ -410,7 +410,6 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
           <Controller
             defaultValue={[]}
             render={({ field: { value, ...field } }) => {
-              console.log("V", { value, item });
               let v: (string | number)[];
               if (isValidArray(value)) {
                 v = value as (string | number)[];
@@ -441,7 +440,7 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
                   // }}
                 >
                   {item?.options?.map((option) => (
-                    <MenuItem key={option.id} value={option.id}>
+                    <MenuItem key={option.id} value={option.value}>
                       {option.title}
                     </MenuItem>
                   ))}
@@ -459,6 +458,7 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
           <RadioGroup name={item.name} className={inputClasses}>
             {item.options?.map((option) => (
               <FormControlLabel
+                key={option.id}
                 value={option.value}
                 label={option.title}
                 control={<Radio />}
@@ -479,6 +479,7 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
             >
               {item.options?.map((option) => (
                 <FormControlLabel
+                  key={option.id}
                   value={option.value}
                   label={option.title}
                   control={<Radio />}
@@ -538,7 +539,7 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
       );
     }
 
-    console.log("Unknown input type", item.type, item);
+    console.error("Unknown input type", item.type, item);
     return <Box>{t("error.title")}</Box>;
   }, [control, errors, fieldError, inputClasses, item, t]);
 

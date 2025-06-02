@@ -10,6 +10,8 @@ import { SectionPartnersAndSponsorsDto } from "@models/section/section-partners-
 import { SectionPartnersAndSponsors } from "./sectionPartnersAndSponsors/SectionPartnersAndSponsors";
 import { SectionArticlesCarouselDto } from "@models/section/section-articles-carousel-dto.model";
 import { SectionArticlesCarousel } from "./sectionArticlesCarousel/SectionArticlesCarousel";
+import { SectionFormDto } from "@models/section/section-form.model";
+import { SectionForm } from "./sectionForm/SectionForm";
 
 interface SectionsContainerProps {
   sections?: SectionDtoVariant[];
@@ -45,6 +47,13 @@ export const SectionsContainer: FC<SectionsContainerProps> = ({ sections }) => {
               key={section.id}
               section={section as SectionArticlesCarouselDto}
             ></SectionArticlesCarousel>
+          );
+        } else if (section.type === "form") {
+          return (
+            <SectionForm
+              key={section.id}
+              section={section as SectionFormDto}
+            ></SectionForm>
           );
         } else if (section.type === "partners-and-sponsors") {
           return (

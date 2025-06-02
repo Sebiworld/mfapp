@@ -52,6 +52,7 @@
     "react-lottie": "^1.2.10",
     "react-player": "^2.16.0",
     "react-remove-scroll": "^2.7.1",
+    "react-rewards": "^2.1.0",
     "react-toastify": "^10.0.6",
     "swiper": "^11.2.8",
     "zod": "^3.25.46",

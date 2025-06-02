@@ -107,6 +107,7 @@ export const contentFormStyles: SxProps<Theme> = (theme) => ({
 
     ".form-input-error": {
       color: theme.vars.palette.error.main,
+      fontSize: "14px",
     },
   },
 

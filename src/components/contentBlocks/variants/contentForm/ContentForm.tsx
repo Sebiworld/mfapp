@@ -143,6 +143,7 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
         }
 
         if (fieldData.type === "checkbox") {
+          console.log("fieldData", fieldData);
           fieldValidations[fieldData.id] = zod.optional(
             zod.preprocess((value) => {
               return (
@@ -156,15 +157,19 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
           );
 
           if (fieldData.required) {
-            fieldValidations[fieldData.id] = zod.preprocess((value) => {
-              return (
-                value === "on" ||
-                value === true ||
-                value === "1" ||
-                value === 1 ||
-                value === "checked"
-              );
-            }, zod.boolean());
+            fieldValidations[fieldData.id] = zod
+              .preprocess((value) => {
+                return (
+                  value === "on" ||
+                  value === true ||
+                  value === "1" ||
+                  value === 1 ||
+                  value === "checked"
+                );
+              }, zod.boolean())
+              .refine((val) => val === true, {
+                message: t("error.form_checkbox_required"),
+              });
           }
         } else if (fieldData.type === "options") {
           fieldValidations[fieldData.id] = zod.nullable(
@@ -190,7 +195,7 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
     }
 
     return zod.object(fieldValidations);
-  }, [block?.form?.fields]);
+  }, [block?.form?.fields, t]);
 
   type FormData = zod.infer<typeof validationSchema>;
 

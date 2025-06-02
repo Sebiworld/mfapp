@@ -34,6 +34,7 @@
     "general": "Ein Fehler ist aufgetreten",
     "general_label_x": "Fehler: {{x}}",
     "general_message_code": "Ein Fehler ist aufgetreten. {{message}} [Fehlercode {{code}}]",
+    "form_checkbox_required": "Bitte bestätigen.",
 
     "form_error": {
       "title": "Formularfehler",

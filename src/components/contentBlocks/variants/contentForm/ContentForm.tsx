@@ -143,10 +143,28 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
         }
 
         if (fieldData.type === "checkbox") {
-          fieldValidations[fieldData.id] = zod.optional(zod.boolean());
+          fieldValidations[fieldData.id] = zod.optional(
+            zod.preprocess((value) => {
+              return (
+                value === "on" ||
+                value === true ||
+                value === "1" ||
+                value === 1 ||
+                value === "checked"
+              );
+            }, zod.boolean())
+          );
 
           if (fieldData.required) {
-            fieldValidations[fieldData.id] = zod.boolean();
+            fieldValidations[fieldData.id] = zod.preprocess((value) => {
+              return (
+                value === "on" ||
+                value === true ||
+                value === "1" ||
+                value === 1 ||
+                value === "checked"
+              );
+            }, zod.boolean());
           }
         } else if (fieldData.type === "options") {
           fieldValidations[fieldData.id] = zod.nullable(

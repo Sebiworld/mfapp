@@ -175,6 +175,9 @@ export const mfTheme = createTheme({
         projectPrimary: mfPrimaryLight,
         gradient:
           "linear-gradient(to left bottom, #fd8e00, #ff7a31, #ff684c, #fa5b62, #ec5476, #d65387, #bb5593, #9d5898, #745a95, #4f5887, #375171, #2f4858)",
+        background: {
+          paper: "var(--mf-palette-bg-400)",
+        },
       },
     },
     dark: {

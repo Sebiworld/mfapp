@@ -41,7 +41,6 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
   const currentPath = router.location.pathname;
   const { t } = useTranslation();
 
-  const rewardId = useId();
   const loadedProjects = useGlobalStore(selectProjects);
   const projectColors = useMemo(() => {
     if (!isValidObject(loadedProjects)) {
@@ -56,10 +55,15 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
     }, [] as string[]);
   }, [loadedProjects]);
 
-  const { reward } = useReward(rewardId, "balloons", {
-    position: "absolute",
-    colors: projectColors,
-  });
+  const rewardId = useId();
+  const { reward, isAnimating: isRewardAnimating } = useReward(
+    rewardId,
+    "balloons",
+    {
+      position: "absolute",
+      colors: projectColors,
+    }
+  );
 
   const blockDepth = useMemo(() => {
     if ((block as ContentBlockFormDto)?.depth !== undefined) {
@@ -283,7 +287,9 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
           );
         }
 
-        reward();
+        if (!isRewardAnimating) {
+          reward();
+        }
 
         if (response?.data?.success?.finished) {
           toast.success(response.data.success.finished, {
@@ -321,7 +327,7 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
       }
       setLoading(false);
     },
-    [block?.form?.form_origin, currentPath, loading, reward, t]
+    [block.form.form_origin, currentPath, isRewardAnimating, loading, reward, t]
   );
 
   const formState = useMemo((): undefined | "error" | "success" => {

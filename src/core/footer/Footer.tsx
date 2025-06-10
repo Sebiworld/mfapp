@@ -24,6 +24,8 @@ import {
 import { useGlobalStore } from "@src/store/global.store";
 import { selectMenues } from "@src/store/configuration.store";
 import { isValidArray } from "@utils/functions/isValidArray";
+import { useCallback, useId } from "react";
+import { useReward } from "react-rewards";
 
 const heartAnimationOptions = {
   loop: true,
@@ -38,6 +40,21 @@ export function Footer() {
   const { t } = useTranslation();
 
   const currentDate = useCurrentDate(1000 * 60);
+
+  const rewardId = useId();
+  const { reward, isAnimating: isRewardAnimating } = useReward(
+    rewardId,
+    "balloons",
+    {
+      position: "absolute",
+    }
+  );
+  const triggerReward = useCallback(() => {
+    if (isRewardAnimating) {
+      return;
+    }
+    reward();
+  }, [isRewardAnimating, reward]);
 
   const loadedMenues = useGlobalStore(selectMenues);
   const tertiaryNavigation = loadedMenues?.tertiary_navigation;
@@ -146,8 +163,9 @@ export function Footer() {
             </List>
           )}
 
-          <div className="copyright">
+          <div className="copyright" onClick={triggerReward}>
             {t("footer.copyright", { year: currentDate.getFullYear() })}
+            <span id={rewardId} />
           </div>
         </div>
       </Paper>

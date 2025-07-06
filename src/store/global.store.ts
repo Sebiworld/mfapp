@@ -13,11 +13,16 @@ import {
   ConfigurationSlice,
   createConfigurationSlice,
 } from "./configuration.store";
+import {
+  createProjectRolesSlice,
+  ProjectRolesSlice,
+} from "./projectRoles.store";
 
 export type GlobalStore = InitializationSlice &
   AuthSlice &
   PagesSlice &
   ProjectsSlice &
+  ProjectRolesSlice &
   ConfigurationSlice &
   SettingsSlice;
 
@@ -29,6 +34,7 @@ export const useGlobalStore = create<GlobalStore>()(
         ...createAuthSlice(...a),
         ...createPagesSlice(...a),
         ...createProjectsSlice(...a),
+        ...createProjectRolesSlice(...a),
         ...createConfigurationSlice(...a),
         ...createSettingsSlice(...a),
       })),

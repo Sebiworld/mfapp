@@ -8,6 +8,7 @@ import { useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { formatDate } from "@utils/functions/formatDate";
 import { isValidArray } from "@utils/functions/isValidArray";
+import { ProjectRole } from "../templateContents/projectRole/ProjectRole";
 
 export interface PagesContentsProps {
   page?: PageDtoVariant;
@@ -114,6 +115,11 @@ export const PageContents: React.FC<PagesContentsProps> = ({ page }) => {
           )}
         </Paper>
       )}
+
+      {!!(
+        defaultPage?.template?.name === "project_role" ||
+        defaultPage?.template?.name === "project_roles_container"
+      ) && <ProjectRole id={defaultPage?.id} />}
 
       {!!defaultPage?.sections?.length && (
         <SectionsContainer sections={defaultPage.sections} />

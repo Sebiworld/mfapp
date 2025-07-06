@@ -4,10 +4,12 @@ import { projectsApi } from "./projectsApi";
 import { fileApi } from "./fileApi";
 import { authApi } from "./authApi";
 import { configApi } from "./configApi";
+import { projectRolesApi } from "./projectRolesApi";
 
 export const MFApi = {
   ...pageApi,
   ...projectsApi,
+  ...projectRolesApi,
   ...fileApi,
   ...authApi,
   ...configApi,

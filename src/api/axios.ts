@@ -1,6 +1,7 @@
 // import { ErrorResponseDto } from "@models/error-response-dto.model";
 import { useGlobalStore } from "@src/store/global.store";
 import axios, { AxiosError } from "axios";
+import axiosRetry from "axios-retry";
 
 export const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_APIURL,
@@ -9,6 +10,8 @@ export const axiosInstance = axios.create({
     "x-api-key": import.meta.env.VITE_APIKEY,
   },
 });
+
+axiosRetry(axiosInstance, { retries: 2 });
 
 axiosInstance.defaults.withCredentials = true;
 
@@ -26,7 +29,10 @@ axiosInstance.interceptors.request.use(
 );
 
 const isRenewableRequest = (error: AxiosError): boolean => {
-  if ((error.config as unknown as { _retry?: boolean })._retry) {
+  if (
+    error?.config &&
+    (error.config as unknown as { _retry?: boolean })._retry
+  ) {
     return false;
   }
 

@@ -57,10 +57,16 @@ export const projectRoleStyles: SxProps<Theme> = (theme) => ({
   ".subroles-container": {
     display: "flex",
     flexDirection: "column",
-    gap: "42px",
+    gap: "82px",
   },
 
   ".project-subrole": {
+    position: "relative",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: "16px",
+
     ".subrole-title": {
       textAlign: "center",
       paddingLeft: "16px",
@@ -73,8 +79,6 @@ export const projectRoleStyles: SxProps<Theme> = (theme) => ({
       flexDirection: "column",
       alignItems: "center",
       textAlign: "center",
-      marginTop: "8px",
-      marginBottom: "16px",
       paddingLeft: "16px",
       paddingRight: "16px",
     },
@@ -86,7 +90,24 @@ export const projectRoleStyles: SxProps<Theme> = (theme) => ({
       alignItems: "center",
       gap: "8px",
       flexWrap: "wrap",
-      marginBottom: "16px",
+    },
+  },
+
+  ".group-image": {
+    position: "relative",
+    width: "600px",
+    maxWidth: "100%",
+    paddingLeft: "16px",
+    paddingRight: "16px",
+
+    "&>*": {
+      position: "relative",
+      objectFit: "contain",
+      width: "100%",
+    },
+
+    figcaption: {
+      display: "none",
     },
   },
 
@@ -105,6 +126,10 @@ export const projectRoleStyles: SxProps<Theme> = (theme) => ({
   ".project-role-portrait": {
     width: "220px",
     maxWidth: "100%",
+
+    ".portrait-image": {
+      width: "220px",
+    },
 
     ".portrait-title": {
       textAlign: "center",

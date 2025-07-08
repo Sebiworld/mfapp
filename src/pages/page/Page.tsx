@@ -38,7 +38,11 @@ export const Page = () => {
   }, [page?.title]);
 
   return (
-    <Box className="page" data-testid="page" sx={pageStyles}>
+    <Box
+      className={`page template-${page?.template?.name || "unknown"}`}
+      data-testid="page"
+      sx={pageStyles}
+    >
       <Helmet>
         <title>{title}</title>
       </Helmet>

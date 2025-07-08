@@ -6,6 +6,7 @@ export const globalContentStyles: Interpolation<Theme>[] = [
     ".content-block": {
       position: "relative",
       textAlign: "left",
+      maxWidth: "100%",
 
       "&.center": {
         textAlign: "center",

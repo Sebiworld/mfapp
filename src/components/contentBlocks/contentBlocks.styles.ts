@@ -7,6 +7,7 @@ export const contentBlocksStyles: SxProps<Theme> = [
     ".content-block": {
       display: "flex",
       flexDirection: "column",
+      maxWidth: "100%",
 
       "&.content-form": {
         gridColumnEnd: "span 12",

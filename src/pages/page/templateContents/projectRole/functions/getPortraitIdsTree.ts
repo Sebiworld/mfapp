@@ -47,6 +47,17 @@ export const getPortraitIdsTreeForRole = (
   }, new Map<number, Map<number, Set<number>>>());
 };
 
+/**
+ * Builds a tree for all season-, cast- and portraits ids of a role and its subroles
+ * First layer: season
+ * Second layer: cast
+ * Third layer: portrait
+ *
+ * @param role
+ * @param projectRoles
+ * @param maxDepth
+ * @returns
+ */
 export const getPortraitIdsTree = (
   role?: ProjectRoleDto,
   projectRoles?: { [key: number]: LoadingStatus<ProjectRoleDto> },
@@ -65,6 +76,7 @@ export const getPortraitIdsTree = (
     return portraitIdsTree;
   }
 
+  // Run through child roles:
   return role?.child_ids
     ?.map((id) => projectRoles[id]?.data)
     .reduce((acc, childRole) => {

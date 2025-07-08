@@ -10,19 +10,21 @@ import {
 import { isValidArray } from "@utils/functions/isValidArray";
 import { isValidObject } from "@utils/functions/isValidObject";
 import { uniqBy } from "lodash";
-import { FC, useEffect, useMemo } from "react";
+import { FC, useMemo } from "react";
 import { ProjectRolePortrait } from "./ProjectRolePortrait";
 
 interface ProjectRolePortraitsProps {
   role?: ProjectRoleDto;
   portraitIdsTree?: Map<number, Map<number, Set<number>>>;
   currentSeasonId?: number;
+  subroles?: ProjectRoleDto[];
 }
 
 export const ProjectRolePortraits: FC<ProjectRolePortraitsProps> = ({
   role,
   portraitIdsTree,
   currentSeasonId,
+  // TODO subroles
 }) => {
   const projectCasts = useGlobalStore(selectProjectCasts);
   const projectPortraits = useGlobalStore(selectProjectPortraits);

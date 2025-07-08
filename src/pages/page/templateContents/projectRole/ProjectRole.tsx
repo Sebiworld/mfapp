@@ -9,6 +9,7 @@ import {
 import { ProjectRolePortraits } from "./components/ProjectRolePortraits";
 import { getPortraitIdsTree } from "./functions/getPortraitIdsTree";
 import { ProjectSubrole } from "./components/ProjectSubrole";
+import { ProjectRoleDto } from "@models/project-role/project-role-dto.model";
 
 interface ProjectRoleProps {
   id?: number;
@@ -29,21 +30,28 @@ export const ProjectRole: FC<ProjectRoleProps> = ({ id }) => {
       return undefined;
     }
 
+    console.log("ROLE", currentRoleLoadingStatus.data);
     return currentRoleLoadingStatus.data;
   }, [currentRoleLoadingStatus?.data]);
 
-  const subRoles = useMemo(() => {
+  const subRoles = useMemo((): ProjectRoleDto[] | undefined => {
     if (!currentRole?.child_ids?.length) {
       return undefined;
     }
 
-    return currentRole.child_ids.map((id) => projectRoles[id]?.data);
+    return currentRole.child_ids
+      .map((id) => projectRoles[id]?.data)
+      .filter((subrole) => subrole?.id) as ProjectRoleDto[];
   }, [currentRole?.child_ids, projectRoles]);
 
   const portraitIdsTree = useMemo(
     () => getPortraitIdsTree(currentRole, projectRoles),
     [currentRole, projectRoles]
   );
+
+  useEffect(() => {
+    console.log("portraitIdsTree", portraitIdsTree);
+  }, [portraitIdsTree]);
 
   const isLoading = useMemo(
     () => currentRoleLoadingStatus?.status === "loading",
@@ -60,9 +68,25 @@ export const ProjectRole: FC<ProjectRoleProps> = ({ id }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
+  const showSubroles = useMemo(() => {
+    if (!currentRole?.view_type) {
+      return true;
+    }
+
+    return [
+      "as_block",
+      // "as_block_with_roles",
+      "subroles_teaser",
+      "by_cast",
+      "as_cast_block",
+    ].includes(currentRole?.view_type);
+  }, [currentRole?.view_type]);
+
   if (isLoading) {
     return;
   }
+
+  // TODO: Season selection
 
   return (
     <Box
@@ -70,12 +94,18 @@ export const ProjectRole: FC<ProjectRoleProps> = ({ id }) => {
       data-testid="project-role"
       sx={projectRoleStyles}
     >
+      {/* On view_type "as_block_with_roles": Show Portraits of subroles with their assigned roles */}
       <ProjectRolePortraits
         role={currentRole}
         portraitIdsTree={portraitIdsTree}
+        subroles={
+          currentRole?.view_type === "as_block_with_roles"
+            ? subRoles
+            : undefined
+        }
       />
 
-      {!!subRoles?.length && (
+      {!!subRoles?.length && showSubroles && (
         <Box className="subroles-container">
           {subRoles?.map((childRole) => (
             <ProjectSubrole
@@ -86,8 +116,6 @@ export const ProjectRole: FC<ProjectRoleProps> = ({ id }) => {
           ))}
         </Box>
       )}
-
-      {/* TODO: Children. Portraits per child or group image, if group_type dictates it. */}
     </Box>
   );
 };

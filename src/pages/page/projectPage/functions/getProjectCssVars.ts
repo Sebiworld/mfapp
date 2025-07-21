@@ -22,6 +22,14 @@ export const getProjectCssVars = (
     ) {
       output["--mf-palette-projectPrimary-contrastText"] = item.value;
     }
+
+    if (item.name === "300" && !output["--mf-palette-projectPrimary-light"]) {
+      output["--mf-palette-projectPrimary-light"] = item.value;
+    }
+
+    if (item.name === "700" && !output["--mf-palette-projectPrimary-dark"]) {
+      output["--mf-palette-projectPrimary-dark"] = item.value;
+    }
   }
 
   return output;

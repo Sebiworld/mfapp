@@ -3,14 +3,19 @@ import { GlobalStore } from "./global.store";
 import { MFApi } from "@api/mfApi";
 import { LoadingStatus } from "@models/loading-status.model";
 import axios from "axios";
-import { ProjectRoleDto } from "@models/project-role/project-role-dto.model";
+import {
+  ProjectRoleDto,
+  ProjectRolesContainerDto,
+} from "@models/project-role/project-role-dto.model";
 import { ProjectCastDto } from "@models/project-role/project-cast-dto.model";
 import { ProjectSeasonDto } from "@models/project-role/project-season-dto.model";
 import { ProjectPortraitDto } from "@models/project-role/project-portrait-dto.model";
 import { isValidObject } from "@utils/functions/isValidObject";
 
 export interface ProjectRolesState {
-  roles: { [key: number]: LoadingStatus<ProjectRoleDto> };
+  roles: {
+    [key: number]: LoadingStatus<ProjectRoleDto | ProjectRolesContainerDto>;
+  };
   casts: { [key: number]: ProjectCastDto };
   seasons: { [key: number]: ProjectSeasonDto };
   portraits: { [key: number]: ProjectPortraitDto };
@@ -44,11 +49,15 @@ export const createProjectRolesSlice: StateCreator<
       const change = { status: "loading" };
 
       if (!stateChanges.roles[id]?.status) {
-        stateChanges.roles[id] = change as LoadingStatus<ProjectRoleDto>;
+        stateChanges.roles[id] = change as LoadingStatus<
+          ProjectRoleDto | ProjectRolesContainerDto
+        >;
       } else {
         stateChanges.roles[id] = {
           ...stateChanges.roles[id],
-          ...(change as LoadingStatus<ProjectRoleDto>),
+          ...(change as LoadingStatus<
+            ProjectRoleDto | ProjectRolesContainerDto
+          >),
         };
       }
 
@@ -73,11 +82,15 @@ export const createProjectRolesSlice: StateCreator<
           const change = { status: "error", name: "Invalid response data" };
 
           if (!stateChanges.roles[id]?.status) {
-            stateChanges.roles[id] = change as LoadingStatus<ProjectRoleDto>;
+            stateChanges.roles[id] = change as LoadingStatus<
+              ProjectRoleDto | ProjectRolesContainerDto
+            >;
           } else {
             stateChanges.roles[id] = {
               ...stateChanges.roles[id],
-              ...(change as LoadingStatus<ProjectRoleDto>),
+              ...(change as LoadingStatus<
+                ProjectRoleDto | ProjectRolesContainerDto
+              >),
             };
           }
 
@@ -101,11 +114,15 @@ export const createProjectRolesSlice: StateCreator<
           };
 
           if (!stateChanges.roles[id]?.status) {
-            stateChanges.roles[id] = change as LoadingStatus<ProjectRoleDto>;
+            stateChanges.roles[id] = change as LoadingStatus<
+              ProjectRoleDto | ProjectRolesContainerDto
+            >;
           } else {
             stateChanges.roles[id] = {
               ...stateChanges.roles[id],
-              ...(change as LoadingStatus<ProjectRoleDto>),
+              ...(change as LoadingStatus<
+                ProjectRoleDto | ProjectRolesContainerDto
+              >),
             };
           }
           return stateChanges;
@@ -121,9 +138,14 @@ export const createProjectRolesSlice: StateCreator<
           portraits: { ...state.portraits },
         };
 
+        let mainIdFound = false;
         for (const roleData of Object.values(responseData.roles)) {
           if (!roleData?.id) {
             continue;
+          }
+
+          if (roleData.id === id) {
+            mainIdFound = true;
           }
 
           const change = {
@@ -137,14 +159,23 @@ export const createProjectRolesSlice: StateCreator<
           };
 
           if (!stateChanges.roles[roleData.id]?.status) {
-            stateChanges.roles[roleData.id] =
-              change as LoadingStatus<ProjectRoleDto>;
+            stateChanges.roles[roleData.id] = change as LoadingStatus<
+              ProjectRoleDto | ProjectRolesContainerDto
+            >;
           } else {
             stateChanges.roles[roleData.id] = {
               ...stateChanges.roles[roleData.id],
-              ...(change as LoadingStatus<ProjectRoleDto>),
+              ...(change as LoadingStatus<
+                ProjectRoleDto | ProjectRolesContainerDto
+              >),
             };
           }
+        }
+
+        if (!mainIdFound) {
+          stateChanges.roles[id] = {
+            status: "success",
+          } as LoadingStatus<ProjectRoleDto | ProjectRolesContainerDto>;
         }
 
         if (isValidObject(responseData.casts)) {
@@ -196,11 +227,15 @@ export const createProjectRolesSlice: StateCreator<
           };
 
           if (!stateChanges.roles[id]?.status) {
-            stateChanges.roles[id] = change as LoadingStatus<ProjectRoleDto>;
+            stateChanges.roles[id] = change as LoadingStatus<
+              ProjectRoleDto | ProjectRolesContainerDto
+            >;
           } else {
             stateChanges.roles[id] = {
               ...stateChanges.roles[id],
-              ...(change as LoadingStatus<ProjectRoleDto>),
+              ...(change as LoadingStatus<
+                ProjectRoleDto | ProjectRolesContainerDto
+              >),
             };
           }
           return stateChanges;
@@ -216,11 +251,15 @@ export const createProjectRolesSlice: StateCreator<
           };
 
           if (!stateChanges.roles[id]?.status) {
-            stateChanges.roles[id] = change as LoadingStatus<ProjectRoleDto>;
+            stateChanges.roles[id] = change as LoadingStatus<
+              ProjectRoleDto | ProjectRolesContainerDto
+            >;
           } else {
             stateChanges.roles[id] = {
               ...stateChanges.roles[id],
-              ...(change as LoadingStatus<ProjectRoleDto>),
+              ...(change as LoadingStatus<
+                ProjectRoleDto | ProjectRolesContainerDto
+              >),
             };
           }
           return stateChanges;

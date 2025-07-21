@@ -30,4 +30,15 @@ export const MuiButtonOverwrites: Components<Theme> = {
       },
     },
   },
+
+  MuiButtonGroup: {
+    styleOverrides: {
+      root: {
+        ".MuiButtonGroup-middleButton, .MuiButtonGroup-firstButton, .MuiButtonGroup-lastButton":
+          {
+            borderColor: "rgba( 0, 0, 0, 0.4)",
+          },
+      },
+    },
+  },
 };

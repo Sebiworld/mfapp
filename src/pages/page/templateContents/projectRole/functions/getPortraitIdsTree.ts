@@ -1,5 +1,8 @@
 import { LoadingStatus } from "@models/loading-status.model";
-import { ProjectRoleDto } from "@models/project-role/project-role-dto.model";
+import {
+  ProjectRoleDto,
+  ProjectRolesContainerDto,
+} from "@models/project-role/project-role-dto.model";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { isValidObject } from "@utils/functions/isValidObject";
 
@@ -16,7 +19,7 @@ export const getPortraitIdsTreeForRole = (
       return acc;
     }
 
-    let seasonIds = participant.seasons_ids;
+    let seasonIds = participant.season_ids;
     if (!isValidArray(seasonIds) || !seasonIds.length) {
       seasonIds = [0]; // Default season ID if none are specified
     }
@@ -59,15 +62,20 @@ export const getPortraitIdsTreeForRole = (
  * @returns
  */
 export const getPortraitIdsTree = (
-  role?: ProjectRoleDto,
-  projectRoles?: { [key: number]: LoadingStatus<ProjectRoleDto> },
+  role?: ProjectRoleDto | ProjectRolesContainerDto,
+  projectRoles?: {
+    [key: number]: LoadingStatus<ProjectRoleDto | ProjectRolesContainerDto>;
+  },
   maxDepth = -1
 ): Map<number, Map<number, Set<number>>> | undefined => {
   if (!role) {
     return undefined;
   }
 
-  const portraitIdsTree = getPortraitIdsTreeForRole(role);
+  const portraitIdsTree = (role as ProjectRoleDto)?.participants
+    ? getPortraitIdsTreeForRole(role as ProjectRoleDto)
+    : new Map<number, Map<number, Set<number>>>();
+
   if (
     !isValidObject(projectRoles) ||
     !role?.child_ids?.length ||

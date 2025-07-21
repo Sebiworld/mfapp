@@ -1,11 +1,29 @@
 import { SxProps, Theme } from "@mui/material";
 
 export const projectRoleStyles: SxProps<Theme> = (theme) => ({
+  ".season-selection": {
+    position: "relative",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: '32px'
+  },
+
   ".casts-container": {
     display: "grid",
     gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
     paddingLeft: "48px",
     paddingRight: "48px",
+
+    ".project-role-portraits": {
+      width: "100%",
+    },
+
+    ".portraits-container": {
+      paddingLeft: 0,
+      paddingRight: 0,
+    },
 
     ".cast": {
       ".cast-title": {
@@ -26,6 +44,11 @@ export const projectRoleStyles: SxProps<Theme> = (theme) => ({
         ".cast-title": {
           borderRight: "0 none",
         },
+      },
+
+      ".portraits-container": {
+        paddingLeft: "16px",
+        paddingRight: "16px",
       },
     },
 
@@ -91,6 +114,10 @@ export const projectRoleStyles: SxProps<Theme> = (theme) => ({
       gap: "8px",
       flexWrap: "wrap",
     },
+
+    ".project-role-portraits": {
+      width: "100%",
+    },
   },
 
   ".group-image": {
@@ -112,28 +139,34 @@ export const projectRoleStyles: SxProps<Theme> = (theme) => ({
   },
 
   ".portraits-container": {
-    display: "flex",
-    gap: "8px",
+    gap: "16px",
     paddingTop: "16px",
-    alignItems: "center",
-    justifyContent: "center",
-    flexWrap: "wrap",
     width: "100%",
-    paddingLeft: "16px",
-    paddingRight: "16px",
+    paddingLeft: "32px",
+    paddingRight: "32px",
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fill, minmax(140px, 200px))",
   },
 
   ".project-role-portrait": {
-    width: "220px",
     maxWidth: "100%",
+    flex: "0 1 200px",
 
-    ".portrait-image": {
-      width: "220px",
+    ".MuiCardContent-root": {
+      display: "flex",
+      flexDirection: "column",
+      gap: "8px",
     },
 
     ".portrait-title": {
       textAlign: "center",
-      fontSize: "16px",
+      fontSize: "15px",
+      lineHeight: "1.2",
+    },
+
+    ".portrait-role": {
+      textAlign: "center",
+      fontSize: "14px",
       lineHeight: "1.2",
     },
   },

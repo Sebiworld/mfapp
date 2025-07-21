@@ -1,5 +1,4 @@
 import { SxProps, Theme } from "@mui/material";
-import { mfTheme } from "@styles/theme/mfTheme";
 
 export const footerStyles: SxProps<Theme> = (theme) => ({
   position: "relative",
@@ -12,7 +11,7 @@ export const footerStyles: SxProps<Theme> = (theme) => ({
   },
 
   ".section-spacer.section-spacer": {
-    "--background-color": mfTheme.vars.palette.background.paper,
+    "--background-color": theme.vars.palette.background.paper,
     position: "absolute",
     top: "calc(-1 * 6vw)",
     width: "100%",
@@ -75,7 +74,7 @@ export const footerStyles: SxProps<Theme> = (theme) => ({
     justifyContent: "flex-end",
     padding: "32px 64px 0 64px",
 
-    [mfTheme.breakpoints.up("md")]: {
+    [theme.breakpoints.up("md")]: {
       display: "flex",
     },
 

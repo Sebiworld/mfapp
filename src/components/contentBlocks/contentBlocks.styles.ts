@@ -18,6 +18,41 @@ export const contentBlocksStyles: SxProps<Theme> = [
       },
 
       "&.content-text": {},
+
+      "&.content-collapsible": {
+        ".MuiAccordion-root": {
+          ".accordion-title": {
+            fontWeight: 600,
+            fontSize: "1.2rem",
+          },
+
+          ".MuiAccordion-heading>.MuiButtonBase-root": {
+            background: theme.vars.palette.contrast.main,
+            color: theme.vars.palette.contrast.contrastText,
+            borderBottom: `1px solid ${theme.vars.palette.contrast.contrastBorder}`,
+          },
+
+          ".MuiAccordionSummary-expandIconWrapper ": {
+            color: theme.vars.palette.contrast.contrastText,
+          },
+
+          ".MuiAccordionDetails-root": {
+            paddingTop: "16px",
+          },
+
+          "&:last-child": {
+            ".MuiAccordion-heading>.MuiButtonBase-root": {
+              borderBottom: "0 none",
+            },
+          },
+        },
+
+        "&.capital-letter": {
+          ".MuiAccordionDetails-root": {
+            paddingTop: "32px",
+          },
+        },
+      },
     },
   }),
 ];

@@ -32,7 +32,7 @@ export default function ThemeSelect() {
           ".hover-container": {
             display: "inline-flex",
             flexDirection: "row",
-            alignItems: "center"
+            alignItems: "center",
           },
         },
       }}

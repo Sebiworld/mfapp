@@ -72,12 +72,8 @@ export const ProjectRolePortrait: FC<ProjectRolePortraitProps> = ({
 
   return (
     <Card data-testid="project-role-portrait" className="project-role-portrait">
-      <CardActionArea>
-        <Box
-          className="portrait-image aspect-ratio ar-3-4"
-          component={Link}
-          to={portrait.url}
-        >
+      <CardActionArea component={Link} to={portrait.url}>
+        <Box className="portrait-image aspect-ratio ar-3-4">
           <LazyPicture
             className="ar-content"
             image={portrait.main_image}

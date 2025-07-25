@@ -152,8 +152,7 @@ export const ProjectRole: FC<ProjectRoleProps> = ({ id }) => {
     return;
   }
 
-  // TODO: Seasons zusammenfassen, wenn sie gleich sind
-  // TODO Button Hover Farbe anpassen
+  // TODO: Seasons zusammenfassen, wenn sie gleich sindx
 
   return (
     <Box

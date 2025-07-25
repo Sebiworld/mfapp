@@ -11,6 +11,7 @@ export interface ProjectRoleDto {
   main_image?: ImageDto;
   dont_crop_main_image?: boolean;
   description?: string;
+  amount?: number;
   participants?: ProjectRoleParticipantDto[];
   view_type?:
     | "as_block"
@@ -26,6 +27,7 @@ export interface ProjectRoleParticipantDto {
   season_ids?: number[];
   cast_ids?: number[];
   portrait_ids?: number[];
+  amount_positions_available?: number;
 }
 
 export interface ProjectRolesContainerDto {

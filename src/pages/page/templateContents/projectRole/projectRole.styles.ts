@@ -144,13 +144,18 @@ export const projectRoleStyles: SxProps<Theme> = (theme) => ({
     width: "100%",
     paddingLeft: "32px",
     paddingRight: "32px",
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fill, minmax(140px, 200px))",
+    // display: "grid",
+    // gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))",
+    display: 'flex',
+    flexWrap: 'wrap',
+
   },
 
   ".project-role-portrait": {
-    maxWidth: "100%",
-    flex: "0 1 200px",
+    display: 'flex',
+    position: 'relative',
+    maxWidth: "160px",
+    flex: "1 1 160px",
 
     ".MuiCardContent-root": {
       display: "flex",

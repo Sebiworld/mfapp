@@ -39,7 +39,7 @@ export const App = () => {
 
   return (
     <>
-      <ThemeProvider theme={{ [THEME_ID]: mfTheme }}>
+      <ThemeProvider theme={{ [THEME_ID]: mfTheme }} noSsr defaultMode="light">
         <CssBaseline />
         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="de">
           <GlobalStylesElement></GlobalStylesElement>

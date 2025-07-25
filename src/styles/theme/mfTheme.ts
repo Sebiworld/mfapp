@@ -31,7 +31,10 @@ import { MuiTabsOverwrites } from "./MuiOverwrites/MuiTabs";
 
 export type ExtendedPaletteColor = Partial<SimplePaletteColorOptions> &
   Partial<ColorPartial> &
-  Partial<PaletteColorChannel> & { contrastText?: string };
+  Partial<PaletteColorChannel> & {
+    contrastText?: string;
+    contrastBorder?: string;
+  };
 
 declare module "@mui/material/styles" {
   interface Palette {

@@ -12,6 +12,8 @@ import { ContentImage } from "./variants/ContentImage";
 import { ContentBlockImageDto } from "@models/content/content-block-image-dto.model";
 import { ContentFiles } from "./variants/contentFiles/ContentFiles";
 import { ContentBlockFilesDto } from "@models/content/content-block-files-dto.model";
+import { ContentBlockCollapsibleDto } from "@models/content/content-block-collapsible-dto.model";
+import { ContentCollapsible } from "./variants/ContentCollapsible";
 
 export interface ContentBlocksProps {
   block: ContentBlockDtoVariant;
@@ -71,6 +73,15 @@ export const ContentBlock: React.FC<ContentBlocksProps> = ({ block }) => {
         key={block.id}
         block={block as ContentBlockFilesDto}
       ></ContentFiles>
+    );
+  }
+
+  if (block.type === "collapsible") {
+    return (
+      <ContentCollapsible
+        key={block.id}
+        block={block as ContentBlockCollapsibleDto}
+      ></ContentCollapsible>
     );
   }
 

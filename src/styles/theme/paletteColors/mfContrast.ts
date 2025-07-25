@@ -9,6 +9,7 @@ export const mfContrast: ExtendedPaletteColor = {
   main: mfWhite[500],
   dark: mfWhite[700],
   contrastText: "var(--mf-palette-common-black)",
+  contrastBorder: mfBlack[500],
 };
 
 export const mfContrastLight: ExtendedPaletteColor = {
@@ -18,6 +19,7 @@ export const mfContrastLight: ExtendedPaletteColor = {
   main: mfBlack[500],
   dark: mfBlack[700],
   contrastText: "var(--mf-palette-common-white)",
+  contrastBorder: mfWhite[500],
 };
 
 export const mfContrastDark: ExtendedPaletteColor = {

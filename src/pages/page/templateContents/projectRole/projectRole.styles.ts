@@ -7,7 +7,7 @@ export const projectRoleStyles: SxProps<Theme> = (theme) => ({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: '32px'
+    marginBottom: "32px",
   },
 
   ".casts-container": {
@@ -146,14 +146,13 @@ export const projectRoleStyles: SxProps<Theme> = (theme) => ({
     paddingRight: "32px",
     // display: "grid",
     // gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))",
-    display: 'flex',
-    flexWrap: 'wrap',
-
+    display: "flex",
+    flexWrap: "wrap",
   },
 
   ".project-role-portrait": {
-    display: 'flex',
-    position: 'relative',
+    display: "flex",
+    position: "relative",
     maxWidth: "160px",
     flex: "1 1 160px",
 
@@ -161,6 +160,15 @@ export const projectRoleStyles: SxProps<Theme> = (theme) => ({
       display: "flex",
       flexDirection: "column",
       gap: "8px",
+    },
+
+    ".MuiCardActionArea-root": {
+      display: "flex",
+      flexDirection: "column",
+
+      "&>.MuiCardContent-root": {
+        flex: "1 1 auto",
+      },
     },
 
     ".portrait-title": {

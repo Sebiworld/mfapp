@@ -12,6 +12,7 @@ import { isValidObject } from "@utils/functions/isValidObject";
 import { uniqBy } from "lodash";
 import { FC, useMemo } from "react";
 import { ProjectRolePortrait } from "./ProjectRolePortrait";
+import { useTranslation } from "react-i18next";
 
 interface ProjectRolePortraitsProps {
   role?: ProjectRoleDto;
@@ -28,6 +29,7 @@ export const ProjectRolePortraits: FC<ProjectRolePortraitsProps> = ({
 }) => {
   const projectCasts = useGlobalStore(selectProjectCasts);
   const projectPortraits = useGlobalStore(selectProjectPortraits);
+  const { t } = useTranslation();
 
   const castIds = useMemo(() => {
     if (!portraitIdsTree) {
@@ -66,16 +68,21 @@ export const ProjectRolePortraits: FC<ProjectRolePortraitsProps> = ({
       }
     }
 
+    // Main role
     if (isValidArray(role?.participants) && role.participants.length) {
       for (const participant of role.participants) {
-        if (!isValidArray(participant.portrait_ids)) {
+        if (
+          !participant.portrait_ids?.length &&
+          !participant.amount_positions_available
+        ) {
+          // Participant has no portraits, so we skip them
           continue;
         }
 
+        const seasonIds = participant.season_ids;
         if (
-          participant.season_ids?.length &&
-          (!currentSeasonId ||
-            !participant.season_ids.includes(currentSeasonId))
+          seasonIds?.length &&
+          (!currentSeasonId || !seasonIds.includes(currentSeasonId))
         ) {
           continue;
         }
@@ -86,6 +93,61 @@ export const ProjectRolePortraits: FC<ProjectRolePortraitsProps> = ({
               output.set(castId, new Map<number, ProjectPortraitWithRoles>());
             }
 
+            if (isValidArray(participant.portrait_ids)) {
+              for (const portraitId of participant.portrait_ids) {
+                console.log("portraitId 1", portraitId);
+                if (typeof portraitId === "number" && portraitId <= 0) {
+                  // Place a dummy portrait
+
+                  if (!output.get(castId)?.has(portraitId)) {
+                    output.get(castId)?.set(portraitId, {
+                      id: portraitId,
+                      name: "available-position",
+                      title: t("role.available-position"),
+                      projectRoles: [],
+                    });
+                  }
+                  continue;
+                }
+
+                const portrait = projectPortraits[portraitId];
+
+                if (!portrait?.id) {
+                  continue;
+                }
+
+                if (!output.get(castId)?.has(portrait.id)) {
+                  output
+                    .get(castId)
+                    ?.set(portrait.id, { ...portrait, projectRoles: [] });
+                }
+              }
+            }
+
+            if (participant.amount_positions_available) {
+              console;
+              const ids = Array.from(output.get(castId)?.keys() || []).sort();
+              const lowestId = ids.length ? ids[0] : 0;
+              const lowestIdUnder1 = lowestId > 0 ? 0 : lowestId;
+
+              for (
+                let step = 0;
+                step < participant.amount_positions_available;
+                step++
+              ) {
+                const id = lowestIdUnder1 - step;
+                output.get(castId)?.set(id, {
+                  id: id,
+                  name: "available-position",
+                  title: t("role.available-position"),
+                  projectRoles: [],
+                });
+              }
+            }
+          }
+        } else {
+          // If no cast_ids, add to default cast (0)
+          if (isValidArray(participant.portrait_ids)) {
             for (const portraitId of participant.portrait_ids) {
               const portrait = projectPortraits[portraitId];
 
@@ -93,31 +155,32 @@ export const ProjectRolePortraits: FC<ProjectRolePortraitsProps> = ({
                 continue;
               }
 
-              if (!output.get(castId)?.has(portrait.id)) {
+              if (!output.get(0)?.has(portrait.id)) {
                 output
-                  .get(castId)
+                  .get(0)
                   ?.set(portrait.id, { ...portrait, projectRoles: [] });
               }
-
-              // output.get(castId)?.get(portrait.id)?.projectRoles.push(role);
             }
           }
-        } else {
-          // If no cast_ids, add to default cast (0)
-          for (const portraitId of participant.portrait_ids) {
-            const portrait = projectPortraits[portraitId];
 
-            if (!portrait?.id) {
-              continue;
+          if (participant.amount_positions_available) {
+            const ids = Array.from(output.get(0)?.keys() || []).sort();
+            const lowestId = ids.length ? ids[0] : 0;
+            const lowestIdUnder1 = lowestId > 0 ? 0 : lowestId;
+
+            for (
+              let step = 0;
+              step < participant.amount_positions_available;
+              step++
+            ) {
+              const id = lowestIdUnder1 - step;
+              output.get(0)?.set(id, {
+                id: id,
+                name: "available-position",
+                title: t("role.available-position"),
+                projectRoles: [],
+              });
             }
-
-            if (!output.get(0)?.has(portrait.id)) {
-              output
-                .get(0)
-                ?.set(portrait.id, { ...portrait, projectRoles: [] });
-            }
-
-            // output.get(0)?.get(portrait.id)?.projectRoles.push(role);
           }
         }
       }
@@ -134,7 +197,11 @@ export const ProjectRolePortraits: FC<ProjectRolePortraitsProps> = ({
         }
 
         for (const participant of subrole.participants) {
-          if (!isValidArray(participant.portrait_ids)) {
+          if (
+            !participant.portrait_ids?.length &&
+            !participant.amount_positions_available
+          ) {
+            // Participant has no portraits, so we skip them
             continue;
           }
 
@@ -152,6 +219,51 @@ export const ProjectRolePortraits: FC<ProjectRolePortraitsProps> = ({
                 output.set(castId, new Map<number, ProjectPortraitWithRoles>());
               }
 
+              if (isValidArray(participant.portrait_ids)) {
+                for (const portraitId of participant.portrait_ids) {
+                  const portrait = projectPortraits[portraitId];
+
+                  if (!portrait?.id) {
+                    continue;
+                  }
+
+                  if (!output.get(castId)?.has(portrait.id)) {
+                    output
+                      .get(castId)
+                      ?.set(portrait.id, { ...portrait, projectRoles: [] });
+                  }
+
+                  output
+                    .get(castId)
+                    ?.get(portrait.id)
+                    ?.projectRoles.push(subrole);
+                }
+              }
+
+              if (participant.amount_positions_available) {
+                console;
+                const ids = Array.from(output.get(castId)?.keys() || []).sort();
+                const lowestId = ids.length ? ids[0] : 0;
+                const lowestIdUnder1 = lowestId > 0 ? 0 : lowestId;
+
+                for (
+                  let step = 0;
+                  step < participant.amount_positions_available;
+                  step++
+                ) {
+                  const id = lowestIdUnder1 - step;
+                  output.get(castId)?.set(id, {
+                    id: id,
+                    name: "available-position",
+                    title: t("role.available-position"),
+                    projectRoles: [],
+                  });
+                }
+              }
+            }
+          } else {
+            // If no cast_ids, add to default cast (0)
+            if (isValidArray(participant.portrait_ids)) {
               for (const portraitId of participant.portrait_ids) {
                 const portrait = projectPortraits[portraitId];
 
@@ -159,34 +271,35 @@ export const ProjectRolePortraits: FC<ProjectRolePortraitsProps> = ({
                   continue;
                 }
 
-                if (!output.get(castId)?.has(portrait.id)) {
+                if (!output.get(0)?.has(portrait.id)) {
                   output
-                    .get(castId)
+                    .get(0)
                     ?.set(portrait.id, { ...portrait, projectRoles: [] });
                 }
 
-                output
-                  .get(castId)
-                  ?.get(portrait.id)
-                  ?.projectRoles.push(subrole);
+                output.get(0)?.get(portrait.id)?.projectRoles.push(subrole);
               }
             }
-          } else {
-            // If no cast_ids, add to default cast (0)
-            for (const portraitId of participant.portrait_ids) {
-              const portrait = projectPortraits[portraitId];
 
-              if (!portrait?.id) {
-                continue;
+            if (participant.amount_positions_available) {
+              console;
+              const ids = Array.from(output.get(0)?.keys() || []).sort();
+              const lowestId = ids.length ? ids[0] : 0;
+              const lowestIdUnder1 = lowestId > 0 ? 0 : lowestId;
+
+              for (
+                let step = 0;
+                step < participant.amount_positions_available;
+                step++
+              ) {
+                const id = lowestIdUnder1 - step;
+                output.get(0)?.set(id, {
+                  id: id,
+                  name: "available-position",
+                  title: t("role.available-position"),
+                  projectRoles: [],
+                });
               }
-
-              if (!output.get(0)?.has(portrait.id)) {
-                output
-                  .get(0)
-                  ?.set(portrait.id, { ...portrait, projectRoles: [] });
-              }
-
-              output.get(0)?.get(portrait.id)?.projectRoles.push(subrole);
             }
           }
         }
@@ -194,7 +307,14 @@ export const ProjectRolePortraits: FC<ProjectRolePortraitsProps> = ({
     }
 
     return output;
-  }, [castIds, role, subroles, currentSeasonId, projectPortraits]);
+  }, [
+    castIds,
+    role?.participants,
+    subroles,
+    currentSeasonId,
+    projectPortraits,
+    t,
+  ]);
 
   const hasOnlyPortraitsWithoutCasts = useMemo(() => {
     if (!isValidObject(portraitsByCastIds)) {
@@ -219,8 +339,11 @@ export const ProjectRolePortraits: FC<ProjectRolePortraitsProps> = ({
       return undefined;
     }
 
-    const output: { cast?: CastDto; portraits: ProjectPortraitWithRoles[] }[] =
-      [];
+    const output: {
+      cast?: CastDto;
+      portraits: ProjectPortraitWithRoles[];
+      amountPositionsAvailable?: number;
+    }[] = [];
 
     for (const [castId, portraitsMap] of portraitsByCastIds) {
       if (castId === 0) {

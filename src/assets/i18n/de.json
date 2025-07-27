@@ -116,6 +116,10 @@
     "menu": "Home"
   },
 
+  "role": {
+    "available-position": "Zu besetzen"
+  },
+
   "user": {
     "title": "Deine Benutzereinstellungen"
   },

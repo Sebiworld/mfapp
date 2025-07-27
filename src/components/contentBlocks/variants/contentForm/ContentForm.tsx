@@ -147,7 +147,6 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
         }
 
         if (fieldData.type === "checkbox") {
-          console.log("fieldData", fieldData);
           fieldValidations[fieldData.id] = zod.optional(
             zod.preprocess((value) => {
               return (

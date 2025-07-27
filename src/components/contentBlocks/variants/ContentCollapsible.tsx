@@ -6,7 +6,7 @@ import {
   Box,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { isValidArray } from "@utils/functions/isValidArray";
 
@@ -35,10 +35,6 @@ export const ContentCollapsible: React.FC<ContentCollapsibleProps> = ({
 
     return output.join(" ");
   }, [block?.classes, block?.depth, block?.id]);
-
-  useEffect(() => {
-    console.log("ContentCollapsible mounted with block:", block);
-  }, [block]);
 
   if (!isValidArray(block.items) || !block.items.length) {
     return null;

@@ -4,32 +4,32 @@ import {
   ProjectPortraitWithRoles,
 } from "@models/project-role/project-portrait-dto.model";
 import { ProjectRoleDto } from "@models/project-role/project-role-dto.model";
-import {
-  Box,
-  Card,
-  CardActionArea,
-  CardContent,
-  Typography,
-} from "@mui/material";
-import { Link } from "@tanstack/react-router";
+import { Box, Card, CardContent, Typography } from "@mui/material";
 import { getRandomNumberBetween } from "@utils/functions/getRandomNumberBetween";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { FC, Fragment, useMemo } from "react";
+import { ProjectRolePortraitActionWrapper } from "./ProjectRolePortraitActionWrapper";
 
-const placeholderPaths = [
+const placeholderPathsMale = [
   "/img/portrait-single/portrait-placeholder-single-1.jpg",
   "/img/portrait-single/portrait-placeholder-single-2.jpg",
-  "/img/portrait-single/portrait-placeholder-single-3.jpg",
   "/img/portrait-single/portrait-placeholder-single-4.jpg",
-  "/img/portrait-single/portrait-placeholder-single-5.jpg",
+  "/img/portrait-single/portrait-placeholder-single-13.jpg",
+];
+
+const placeholderPathsFemale = [
+  "/img/portrait-single/portrait-placeholder-single-3.jpg",
   "/img/portrait-single/portrait-placeholder-single-6.jpg",
   "/img/portrait-single/portrait-placeholder-single-7.jpg",
+];
+
+const placeholderPathsRandom = [
+  "/img/portrait-single/portrait-placeholder-single-5.jpg",
   "/img/portrait-single/portrait-placeholder-single-8.jpg",
   "/img/portrait-single/portrait-placeholder-single-9.jpg",
   "/img/portrait-single/portrait-placeholder-single-10.jpg",
   "/img/portrait-single/portrait-placeholder-single-11.jpg",
   "/img/portrait-single/portrait-placeholder-single-12.jpg",
-  "/img/portrait-single/portrait-placeholder-single-13.jpg",
 ];
 
 interface ProjectRolePortraitProps {
@@ -48,18 +48,45 @@ export const ProjectRolePortrait: FC<ProjectRolePortraitProps> = ({
       return portrait.title_separable.replaceAll("_", "&shy;");
     }
 
+    if (portrait.title) {
+      return portrait.title;
+    }
+
     return "";
   }, [portrait]);
 
   const placeholderUrl = useMemo(() => {
+    let placeholderPaths = [];
+    if (
+      !portrait.portrait_mode ||
+      portrait.portrait_mode === "male" ||
+      portrait.portrait_mode === "random"
+    ) {
+      placeholderPaths.push(...placeholderPathsMale);
+    }
+
+    if (
+      portrait.portrait_mode === "female" ||
+      portrait.portrait_mode === "random"
+    ) {
+      placeholderPaths.push(...placeholderPathsFemale);
+    }
+
+    if (portrait.portrait_mode === "random") {
+      placeholderPaths.push(...placeholderPathsRandom);
+    }
+
+    if (portrait.last_name?.toLowerCase() === "schendel") {
+      placeholderPaths = placeholderPathsRandom;
+    }
+
     const placeholderIndex = getRandomNumberBetween(
       0,
       placeholderPaths.length - 1
     );
-    return placeholderPaths[placeholderIndex];
-  }, []);
 
-  // TODO: Show Placeholder portrait. Add "zu besetzen" amount option to participants list
+    return placeholderPaths[placeholderIndex];
+  }, [portrait.last_name, portrait.portrait_mode]);
 
   const projectRoles = useMemo(() => {
     const portraitRoles = (portrait as ProjectPortraitWithRoles)?.projectRoles;
@@ -72,7 +99,7 @@ export const ProjectRolePortrait: FC<ProjectRolePortraitProps> = ({
 
   return (
     <Card data-testid="project-role-portrait" className="project-role-portrait">
-      <CardActionArea component={Link} to={portrait.url}>
+      <ProjectRolePortraitActionWrapper portrait={portrait}>
         <Box className="portrait-image aspect-ratio ar-3-4">
           <LazyPicture
             className="ar-content"
@@ -115,7 +142,7 @@ export const ProjectRolePortrait: FC<ProjectRolePortraitProps> = ({
             </Fragment>
           ))}
         </CardContent>
-      </CardActionArea>
+      </ProjectRolePortraitActionWrapper>
     </Card>
   );
 };

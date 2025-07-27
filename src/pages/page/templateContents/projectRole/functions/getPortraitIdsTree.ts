@@ -14,7 +14,10 @@ export const getPortraitIdsTreeForRole = (
   }
 
   return role.participants.reduce((acc, participant) => {
-    if (!participant.portrait_ids?.length) {
+    if (
+      !participant.portrait_ids?.length &&
+      !participant.amount_positions_available
+    ) {
       // Participant has no portraits, so we skip them
       return acc;
     }
@@ -40,8 +43,27 @@ export const getPortraitIdsTreeForRole = (
           acc?.get(seasonId)?.set(castId, new Set<number>());
         }
 
-        for (const portraitId of participant.portrait_ids) {
-          acc.get(seasonId)?.get(castId)?.add(portraitId);
+        if (participant.portrait_ids) {
+          for (const portraitId of participant.portrait_ids) {
+            acc.get(seasonId)?.get(castId)?.add(portraitId);
+          }
+        }
+
+        if (participant.amount_positions_available) {
+          const castSet = acc.get(seasonId)?.get(castId);
+          const lowestId = castSet ? Array.from(castSet).sort()?.[0] || 0 : 0;
+          const lowestIdUnder1 = lowestId > 0 ? 0 : lowestId;
+
+          for (
+            let step = 0;
+            step < participant.amount_positions_available;
+            step++
+          ) {
+            acc
+              .get(seasonId)
+              ?.get(castId)
+              ?.add(lowestIdUnder1 - step);
+          }
         }
       }
     }

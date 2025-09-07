@@ -1,7 +1,6 @@
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { ImageDto } from "@models/image-dto.model";
-import { LazyPicture } from "@components/lazyPicture/LazyPicture";
 import { Swiper, SwiperOptions } from "swiper/types";
 
 // Import Swiper React components
@@ -12,13 +11,16 @@ import { Thumbs, Pagination } from "swiper/modules";
 import "swiper/css/bundle";
 
 import { useLightGallery } from "@components/lightGallery/useLightGallery";
+import { ContentGallerySliderItem } from "./components/ContentGallerySliderItem";
 
 export interface ContentGallerySliderProps {
   images: ImageDto[];
+  detailLink?: string;
 }
 
 export const ContentGallerySlider: React.FC<ContentGallerySliderProps> = ({
   images,
+  detailLink,
 }) => {
   const swiperElRef = useRef<SwiperContainer | null>(null);
   const [activeIndex, setActiveIndex] = useState<number>(0);
@@ -71,34 +73,14 @@ export const ContentGallerySlider: React.FC<ContentGallerySliderProps> = ({
           <swiper-container ref={swiperElRef} init="false">
             {images?.map((image, index) => {
               return (
-                <swiper-slide
+                <ContentGallerySliderItem
                   key={`${image.page_id}#${image.basename}`}
-                  lazy="true"
-                >
-                  <Button
-                    className="image-button"
-                    onClick={() => {
-                      lightGalleryRef?.current?.openGallery(index);
-                    }}
-                  >
-                    <LazyPicture
-                      image={image}
-                      sizes={[
-                        {
-                          media: "(max-width: 500px)",
-                          width: 500,
-                        },
-                        {
-                          media: "(max-width: 800px)",
-                          width: 800,
-                        },
-                        {
-                          width: 1200,
-                        },
-                      ]}
-                    />
-                  </Button>
-                </swiper-slide>
+                  image={image}
+                  detailLink={detailLink}
+                  onClick={() => {
+                    lightGalleryRef?.current?.openGallery(index);
+                  }}
+                />
               );
             })}
           </swiper-container>

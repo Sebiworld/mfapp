@@ -4,7 +4,7 @@ import { pageContentsStyles } from "./pageContents.styles";
 import { DefaultPageDto } from "@models/page/default-page-dto.model";
 import { PageDtoVariant } from "@models/page/page-dto-variant.model";
 import { Box, Paper, Typography } from "@mui/material";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { formatDate } from "@utils/functions/formatDate";
 import { isValidArray } from "@utils/functions/isValidArray";
@@ -17,9 +17,9 @@ export interface PagesContentsProps {
 export const PageContents: React.FC<PagesContentsProps> = ({ page }) => {
   const { t } = useTranslation();
 
-  useEffect(() => {
-    console.log("page", page);
-  }, [page]);
+  // useEffect(() => {
+  //   console.log("page", page);
+  // }, [page]);
 
   const defaultPage = page as DefaultPageDto;
 

@@ -3,8 +3,10 @@ import { isValidArray } from "@utils/functions/isValidArray";
 
 import { Box, Button, Typography } from "@mui/material";
 import { sidebarBoxGalleriesStyles } from "./sidebarBoxGalleries.styles";
-import { useEffect } from "react";
+import { useMemo } from "react";
 import { ProjectDetailsDto } from "@models/project-dto.model";
+import { ImageDto } from "@models/image-dto.model";
+import { ContentGallerySlider } from "@components/contentBlocks/variants/contentGallery/galleryTypes/contentGallerySlider/ContentGallerySlider";
 
 type SidebarBoxGalleriesData = ProjectDetailsDto["images"];
 
@@ -18,10 +20,13 @@ export const SidebarBoxGalleries: React.FC<SidebarBoxGalleriesProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  useEffect(() => {
-    // For demo purposes, log the project data to the console
-    console.log("Image data:", data);
-  }, [data]);
+  const gallery = useMemo(
+    () =>
+      data?.galleries.filter(
+        (item) => isValidArray(item.images) && item.images.length
+      )?.[0],
+    [data?.galleries]
+  );
 
   if (!isValidArray(data?.galleries) || !data?.galleries.length) {
     return null;
@@ -37,11 +42,16 @@ export const SidebarBoxGalleries: React.FC<SidebarBoxGalleriesProps> = ({
         {t(`project.galleries.title`)}
       </Typography>
 
-      {data.galleries.map((item) => (
-        <Box key={item.id} className="gallery-item" sx={{ mb: 2 }}>
-          TEST
+      {gallery && (
+        <Box className="gallery-container aspect-ratio ar-8-5">
+          <Box className="gallery ar-content ">
+            <ContentGallerySlider
+              images={gallery.images as ImageDto[]}
+              detailLink={gallery.url}
+            />
+          </Box>
         </Box>
-      ))}
+      )}
 
       {!!data?.galleries_page_url && (
         <Button

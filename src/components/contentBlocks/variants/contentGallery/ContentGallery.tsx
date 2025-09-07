@@ -2,9 +2,9 @@ import { Box } from "@mui/material";
 import React, { useMemo } from "react";
 import { contentGalleryStyles } from "./contentGallery.styles";
 import { ContentBlockGalleryDto } from "@models/content/content-block-gallery-dto.model";
-import { ContentGallerySlider } from "./galleryTypes/ContentGallerySlider";
 import { ContentGalleryGrid } from "./galleryTypes/ContentGalleryGrid";
 import { ContentGalleryMasonry } from "./galleryTypes/ContentGalleryMasonry";
+import { ContentGallerySlider } from "./galleryTypes/contentGallerySlider/ContentGallerySlider";
 
 export interface ContentGalleryProps {
   block: ContentBlockGalleryDto;

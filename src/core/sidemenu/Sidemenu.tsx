@@ -120,13 +120,13 @@ export const Sidemenu = ({ sidemenuOpen, setSidemenuOpen }: SidemenuProps) => {
 
             <List component="nav" className="navigation-list">
               <ListItem>
-                <ListItemButton component={Link} to="/shop">
+                <ListItemButton component={Link} to="/shop" disabled>
                   Merch-Shop
                 </ListItemButton>
               </ListItem>
 
               <ListItem>
-                <ListItemButton component={Link} to="/events">
+                <ListItemButton component={Link} to="/events" disabled>
                   Probenplan
                 </ListItemButton>
               </ListItem>

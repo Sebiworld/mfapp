@@ -29,7 +29,7 @@ export const SidebarBoxGeneral: React.FC<SidebarBoxGeneralProps> = ({
         {t("project.general_data")}
       </Typography>
 
-      <List component="ul">
+      <List component="ul" className="root-list">
         {data.map((item) => {
           return (
             <ListItem key={item.id} className={`list-item level-${item.depth}`}>

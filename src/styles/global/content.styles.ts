@@ -12,7 +12,7 @@ export const globalContentStyles: Interpolation<Theme>[] = [
         textAlign: "center",
       },
 
-      "p, h1, h2, h3, h4, h5, h6": {
+      "p, h1, h2, h3, h4, h5, h6, ul, ol": {
         position: "relative",
         maxWidth: "100%",
         width: "38em",

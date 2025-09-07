@@ -10,6 +10,7 @@ import { Thumbs, Pagination } from "swiper/modules";
 
 // Import Swiper styles
 import "swiper/css/bundle";
+
 import { useLightGallery } from "@components/lightGallery/useLightGallery";
 
 export interface ContentGallerySliderProps {

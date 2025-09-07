@@ -184,7 +184,12 @@
       "get-tickets": "Jetzt Tickets sichern!",
       "already-passed": "bereits vergangen"
     },
+    "galleries": {
+      "title": "Galerie",
+      "more": "Mehr Bildergalerien"
+    },
     "share": "Weitersagen!",
+    "links": "Links",
     "partners": "Unsere Partner",
     "sponsors": "Unsere Förderer"
   },

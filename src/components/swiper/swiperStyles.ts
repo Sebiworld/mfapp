@@ -1,6 +1,11 @@
-import { SxProps, Theme } from "@mui/material";
+import { Theme } from "@mui/material";
+import { SystemStyleObject } from "@mui/system";
 
-export const swiperStyles: SxProps<Theme> = {
+export const swiperStyles: SystemStyleObject<Theme> = {
+  ".swiper-wrapper": {
+    color: "red",
+  },
+
   "swiper-container": (theme) => ({
     marginLeft: "-24px",
     marginRight: "-24px",

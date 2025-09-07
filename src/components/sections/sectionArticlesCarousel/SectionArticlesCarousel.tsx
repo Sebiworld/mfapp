@@ -3,9 +3,13 @@ import { Box, Typography } from "@mui/material";
 import React, { useEffect, useRef } from "react";
 import { sectionArticlesCarouselStyles } from "./sectionArticlesCarousel.styles";
 import { SectionArticlesCarouselDto } from "@models/section/section-articles-carousel-dto.model";
-import { register, SwiperContainer } from "swiper/element";
+import { register, SwiperContainer } from "swiper/element/bundle";
 import { SwiperOptions } from "swiper/types";
 import { PageCard } from "@components/pageCard/PageCard";
+
+// Import Swiper styles
+import "swiper/css/bundle";
+import { isValidArray } from "@utils/functions/isValidArray";
 
 export interface SectionArticlesCarouselProps {
   section: SectionArticlesCarouselDto;
@@ -14,7 +18,7 @@ export interface SectionArticlesCarouselProps {
 export const SectionArticlesCarousel: React.FC<
   SectionArticlesCarouselProps
 > = ({ section }) => {
-  const swiperElRef = useRef(null);
+  const swiperElRef = useRef<SwiperContainer | null>(null);
 
   useEffect(() => {
     if (!swiperElRef?.current) {
@@ -28,12 +32,16 @@ export const SectionArticlesCarousel: React.FC<
       slidesPerView: "auto",
       spaceBetween: 16,
       centeredSlides: false,
-      navigation: true
+      navigation: true,
     };
     Object.assign(swiperContainer, params);
 
     swiperContainer.initialize();
   }, []);
+
+  if (!isValidArray(section.items) || !section.items.length) {
+    return null;
+  }
 
   return (
     <Box

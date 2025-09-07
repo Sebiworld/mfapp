@@ -21,6 +21,7 @@ export const sectionContainerStyles: SxProps = {
       maxWidth: "100%",
       width: "38em",
       alignSelf: "center",
+      fontSize: "48px",
     },
 
     ".sub-section": {

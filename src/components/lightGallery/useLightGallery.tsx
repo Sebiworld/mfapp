@@ -10,8 +10,6 @@ import LightGalleryElement from "lightgallery/react";
 import lgThumbnail from "lightgallery/plugins/thumbnail";
 import lgZoom from "lightgallery/plugins/zoom";
 
-// Import Swiper styles
-import "swiper/css/bundle";
 import {
   AfterCloseDetail,
   AfterSlideDetail,

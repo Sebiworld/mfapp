@@ -11,4 +11,5 @@ export interface PageCardDto extends PageDto {
   details_deactivated?: boolean;
   external_type?: string;
   external_link?: string;
+  images?: ImageDto[];
 }

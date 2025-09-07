@@ -74,6 +74,14 @@ export const projectPageStyles = (theme: Theme): SystemStyleObject<Theme> => ({
     position: "relative",
   },
 
+  ".section": {
+    ".section-title.section-title": {
+      fontSize: "28px",
+      paddingLeft: "16px",
+      paddingRight: "16px",
+    },
+  },
+
   [theme.breakpoints.up("sm")]: {
     ".project-subheader.project-subheader": {
       flexDirection: "row",

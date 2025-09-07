@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useEffect, useMemo } from "react";
 import { useGlobalStore } from "@src/store/global.store";
 import { Box, ButtonGroup } from "@mui/material";
 import { projectRoleStyles } from "./projectRole.styles";
@@ -152,7 +152,7 @@ export const ProjectRole: FC<ProjectRoleProps> = ({ id }) => {
     return;
   }
 
-  // TODO: Seasons zusammenfassen, wenn sie gleich sindx
+  // TODO: Seasons zusammenfassen, wenn sie gleich sind
 
   return (
     <Box

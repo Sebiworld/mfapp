@@ -1,5 +1,6 @@
 import { BasicPageDto } from "./basic-page-dto.model";
 import { ImageDto } from "./image-dto.model";
+import { NavigationItemDto } from "./navigation-item-dto.model";
 import { PageCardDto } from "./page/page-card-dto.model";
 import { PageDto } from "./page/page-dto.model";
 import { IconLinkDto } from "./utility-types/icon-link-dto.model";
@@ -20,12 +21,13 @@ export interface ProjectDetailsDto extends ProjectDto {
   images?: {
     galleries: PageCardDto[];
     galleries_count: number;
-    galleries_page?: PageDto;
+    galleries_page_url?: string;
   };
   events?: ProjectEventsData;
   sharing?: IconLinkDto[];
   partners?: SponsorDto[];
   sponsors?: SponsorDto[];
+  main_navigation?: NavigationItemDto[];
 }
 
 export interface ProjectGeneralDataBlock {

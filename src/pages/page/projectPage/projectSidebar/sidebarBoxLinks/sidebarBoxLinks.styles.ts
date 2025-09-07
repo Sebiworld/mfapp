@@ -1,14 +1,13 @@
 import { SxProps } from "@mui/material";
 
-export const sidebarBoxGeneralStyles: SxProps = {
+export const sidebarBoxLinksStyles: SxProps = {
   "&>ul": {
-    padding: "0 16px",
+    padding: "0",
 
     "&>li": {
       paddingY: 0,
       paddingLeft: 0,
       minBlockSize: "28px",
-      alignItems: "flex-start",
 
       "&>a": {
         paddingTop: "0",
@@ -21,14 +20,6 @@ export const sidebarBoxGeneralStyles: SxProps = {
 
       "&.level-1": {
         paddingLeft: "24px",
-      },
-    },
-
-    "&.root-list": {
-      "&>li": {
-        "&>.MuiListItemIcon-root": {
-          marginTop: "8px",
-        },
       },
     },
   },

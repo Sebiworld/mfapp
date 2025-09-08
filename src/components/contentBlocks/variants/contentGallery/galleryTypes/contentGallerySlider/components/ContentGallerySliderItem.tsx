@@ -1,4 +1,3 @@
-import { Button } from "@mui/material";
 import React from "react";
 import { ImageDto } from "@models/image-dto.model";
 import { LazyPicture } from "@components/lazyPicture/LazyPicture";

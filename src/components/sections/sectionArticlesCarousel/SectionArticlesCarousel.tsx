@@ -1,5 +1,5 @@
 import { ContentBlocks } from "@components/contentBlocks/ContentBlocks";
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import React, { useEffect, useRef } from "react";
 import { sectionArticlesCarouselStyles } from "./sectionArticlesCarousel.styles";
 import { SectionArticlesCarouselDto } from "@models/section/section-articles-carousel-dto.model";
@@ -10,6 +10,9 @@ import { PageCard } from "@components/pageCard/PageCard";
 // Import Swiper styles
 import "swiper/css/bundle";
 import { isValidArray } from "@utils/functions/isValidArray";
+import { useTranslation } from "react-i18next";
+import { SwiperContainerElement } from "@utils/components/SwiperContainerElement";
+import { SwiperSlideElement } from "@utils/components/SwiperSlideElement";
 
 export interface SectionArticlesCarouselProps {
   section: SectionArticlesCarouselDto;
@@ -18,6 +21,7 @@ export interface SectionArticlesCarouselProps {
 export const SectionArticlesCarousel: React.FC<
   SectionArticlesCarouselProps
 > = ({ section }) => {
+  const { t } = useTranslation();
   const swiperElRef = useRef<SwiperContainer | null>(null);
 
   useEffect(() => {
@@ -59,14 +63,27 @@ export const SectionArticlesCarousel: React.FC<
       <ContentBlocks blocks={section.contents}></ContentBlocks>
 
       <Box className="slider-wrapper">
-        <swiper-container ref={swiperElRef} init="false">
+        <SwiperContainerElement ref={swiperElRef} init="false">
           {section.items.map((item) => (
-            <swiper-slide key={item.id}>
+            <SwiperSlideElement key={item.id}>
               <PageCard card={item}></PageCard>
-            </swiper-slide>
+            </SwiperSlideElement>
           ))}
-        </swiper-container>
+        </SwiperContainerElement>
       </Box>
+
+      {section.articles_page_url && (
+        <Box className="section-actions">
+          <Button
+            variant="contained"
+            color="secondary"
+            href={section.articles_page_url}
+            className="all-articles-button"
+          >
+            {t("news.see-all")}
+          </Button>
+        </Box>
+      )}
     </Box>
   );
 };

@@ -5,7 +5,7 @@ import { FormGroupedElement } from "@models/utility-types/form-dto.model";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { ContentFormGroup } from "./components/ContentFormGroup";
 import { useTranslation } from "react-i18next";
-import { pageApi } from "@api/pageApi";
+import { pageApi } from "@api/axios/pageApi";
 import { ZodTypeAny } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -463,7 +463,8 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
         >
           {t("general.actions.submit")}
         </Button>
-        <span id={rewardId} />
+
+        <Box component="span" id={rewardId} />
       </Box>
     </Box>
   );

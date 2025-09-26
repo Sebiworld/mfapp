@@ -15,6 +15,7 @@ export const MuiButtonOverwrites: Components<Theme> = {
       root: {
         fontWeight: "bold",
         textTransform: "none",
+        lineHeight: "1.2",
 
         "&.image-button": {
           padding: 0,

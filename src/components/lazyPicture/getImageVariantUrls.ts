@@ -1,4 +1,4 @@
-import { MFApi } from "@api/mfApi";
+import { MFApi } from "@api/axios/mfApi";
 import { ImageDto } from "@models/image-dto.model";
 
 export const getImageVariantUrls = (

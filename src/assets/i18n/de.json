@@ -158,7 +158,8 @@
   "news": {
     "title": "Neuigkeiten",
     "menu": "Neuigkeiten",
-    "view-archive": "Archiv ansehen"
+    "view-archive": "Archiv ansehen",
+    "see-all": "Alle Neuigkeiten ansehen"
   },
 
   "settings": {

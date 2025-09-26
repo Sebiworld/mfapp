@@ -1,9 +1,9 @@
 import { StateCreator } from "zustand";
 import { GlobalStore } from "./global.store";
-import { MFApi } from "@api/mfApi";
+import { MFApi } from "@api/axios/mfApi";
 import { LoadingStatus } from "@models/loading-status.model";
 import axios from "axios";
-import { GetConfigurationResponse, GetMenuesResponse } from "@api/configApi";
+import { GetConfigurationResponse, GetMenuesResponse } from "@api/axios/configApi";
 
 export interface ConfigurationState {
   configuration: LoadingStatus<GetConfigurationResponse>;

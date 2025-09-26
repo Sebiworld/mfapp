@@ -5,9 +5,11 @@ import { fileApi } from "./fileApi";
 import { authApi } from "./authApi";
 import { configApi } from "./configApi";
 import { projectRolesApi } from "./projectRolesApi";
+import { pageListApi } from "./pageListApi";
 
 export const MFApi = {
   ...pageApi,
+  ...pageListApi,
   ...projectsApi,
   ...projectRolesApi,
   ...fileApi,

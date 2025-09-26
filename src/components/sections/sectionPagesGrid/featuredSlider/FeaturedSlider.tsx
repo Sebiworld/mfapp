@@ -12,6 +12,8 @@ import { LazyPicture } from "@components/lazyPicture/LazyPicture";
 import { SwiperOptions } from "swiper/types";
 import { featuredSliderStyles } from "./featuredSlider.styles";
 import { Box, Link } from "@mui/material";
+import { SwiperContainerElement } from "@utils/components/SwiperContainerElement";
+import { SwiperSlideElement } from "@utils/components/SwiperSlideElement";
 
 export interface FeaturedSliderProps {
   section: SectionPagesGridDto;
@@ -53,11 +55,11 @@ export const FeaturedSlider: React.FC<FeaturedSliderProps> = ({ section }) => {
       data-testid="featured-slider"
       sx={featuredSliderStyles}
     >
-      <swiper-container ref={swiperElRef} init="false">
+      <SwiperContainerElement ref={swiperElRef} init="false">
         {section.cards?.map((card) => {
           const image = card.card_image || card.main_image;
           return (
-            <swiper-slide key={card.id}>
+            <SwiperSlideElement key={card.id}>
               <Link
                 href={card.url}
                 color="primary"
@@ -81,10 +83,10 @@ export const FeaturedSlider: React.FC<FeaturedSliderProps> = ({ section }) => {
                   ></Box>
                 )}
               </Link>
-            </swiper-slide>
+            </SwiperSlideElement>
           );
         })}
-      </swiper-container>
+      </SwiperContainerElement>
     </Box>
   );
 };

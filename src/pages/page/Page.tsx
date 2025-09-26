@@ -9,7 +9,6 @@ import { PageContents } from "./pageContents/PageContents";
 import { ProjectPage } from "./projectPage/ProjectPage";
 import { LoadingOverlay } from "@components/loadingOverlay/LoadingOverlay";
 import { Alert, AlertTitle, Box, Button, Typography } from "@mui/material";
-import { Helmet } from "react-helmet";
 import { convertHtmlEntities } from "@utils/functions/convertHtmlEntities";
 
 export const Page = () => {
@@ -43,9 +42,7 @@ export const Page = () => {
       data-testid="page"
       sx={pageStyles}
     >
-      <Helmet>
-        <title>{title}</title>
-      </Helmet>
+      <title>{title}</title>
 
       <ProjectPage page={page}>
         <PageContents page={page}></PageContents>

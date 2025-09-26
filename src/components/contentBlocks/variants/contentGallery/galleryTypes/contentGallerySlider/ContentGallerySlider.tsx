@@ -12,6 +12,7 @@ import "swiper/css/bundle";
 
 import { useLightGallery } from "@components/lightGallery/useLightGallery";
 import { ContentGallerySliderItem } from "./components/ContentGallerySliderItem";
+import { SwiperContainerElement } from "@utils/components/SwiperContainerElement";
 
 export interface ContentGallerySliderProps {
   images: ImageDto[];
@@ -70,7 +71,7 @@ export const ContentGallerySlider: React.FC<ContentGallerySliderProps> = ({
 
       <Box className="slider-outer-wrapper">
         <Box className="slider-wrapper">
-          <swiper-container ref={swiperElRef} init="false">
+          <SwiperContainerElement ref={swiperElRef} init="false">
             {images?.map((image, index) => {
               return (
                 <ContentGallerySliderItem
@@ -83,7 +84,7 @@ export const ContentGallerySlider: React.FC<ContentGallerySliderProps> = ({
                 />
               );
             })}
-          </swiper-container>
+          </SwiperContainerElement>
         </Box>
       </Box>
     </Box>

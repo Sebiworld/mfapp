@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useScrollTrigger } from "@mui/material";
 import React from "react";
 import { ReactElement } from "react";
@@ -6,7 +7,7 @@ export const ElevationScroll = ({
   children,
   supportsTranslucentHeader,
 }: {
-  children?: ReactElement;
+  children?: ReactElement<any>;
   supportsTranslucentHeader?: boolean;
 }) => {
   const trigger = useScrollTrigger({
@@ -18,8 +19,8 @@ export const ElevationScroll = ({
     return children;
   }
 
-  return children
-    ? React.cloneElement(children, {
+  return React.isValidElement(children)
+    ? React.cloneElement<any>(children, {
         // elevation: trigger ? 2 : 0,
         className: trigger ? "elevated" : "translucent",
       })

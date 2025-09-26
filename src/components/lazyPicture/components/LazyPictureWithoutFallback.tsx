@@ -1,4 +1,4 @@
-import { MFApi } from "@api/mfApi";
+import { MFApi } from "@api/axios/mfApi";
 import { ImageDto } from "@models/image-dto.model";
 import { ComponentPropsWithoutRef, useMemo, useState } from "react";
 import { Box } from "@mui/material";

@@ -1,6 +1,6 @@
 import { StateCreator } from "zustand";
 import { GlobalStore } from "./global.store";
-import { MFApi } from "@api/mfApi";
+import { MFApi } from "@api/axios/mfApi";
 import { LoadingStatus } from "@models/loading-status.model";
 import { PermissionDto, RoleDto, UserDto } from "@models/user-dto.model";
 import axios from "axios";

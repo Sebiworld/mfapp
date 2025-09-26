@@ -1,16 +1,20 @@
 import { SxProps, Theme } from "@mui/material";
 
-export const pageCardStyles: SxProps<Theme> = theme => ({
+export const pageCardStyles: SxProps<Theme> = (theme) => ({
+  display: "flex",
+  flexDirection: "column",
+
   ".card-content": {
     marginTop: "4px",
     marginBottom: "8px",
+    flex: "1 1 100px",
 
     ".card-title": {
       "&.subtle": {
         fontWeight: "normal",
         fontStyle: "italic",
         fontSize: theme.vars.font.bodyXS,
-        opacity: '0.7'
+        opacity: "0.7",
       },
     },
   },

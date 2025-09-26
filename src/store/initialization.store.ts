@@ -80,6 +80,8 @@ export const createInitializationSlice: StateCreator<
 
     const resetProjects = get().resetProjects;
     await resetProjects();
+
+    // TODO reset other stores
   },
 });
 

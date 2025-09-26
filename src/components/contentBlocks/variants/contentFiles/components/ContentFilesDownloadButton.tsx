@@ -1,4 +1,4 @@
-import { MFApi } from "@api/mfApi";
+import { MFApi } from "@api/axios/mfApi";
 import { useCallback, useState } from "react";
 
 import React from "react";

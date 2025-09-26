@@ -1,11 +1,28 @@
 import React from "react";
+import { register } from "swiper/element/bundle";
 import { ImageDto } from "@models/image-dto.model";
 import { LazyPicture } from "@components/lazyPicture/LazyPicture";
+import { ContentGallerySliderItemButton } from "./ContentGallerySliderItemButton";
 
 // Import Swiper styles
 import "swiper/css/bundle";
+import { SwiperSlideElement } from "@utils/components/SwiperSlideElement";
 
-import { ContentGallerySliderItemButton } from "./ContentGallerySliderItemButton";
+// Register Swiper custom elements
+register();
+
+// Define custom element interface
+interface SwiperSlideProps extends React.HTMLAttributes<HTMLElement> {
+  lazy?: boolean | "true" | "false";
+}
+
+declare module "react" {
+  interface JSX {
+    IntrinsicElements: {
+      "swiper-slide": SwiperSlideProps;
+    };
+  }
+}
 
 export interface ContentGallerySliderItemProps {
   image: ImageDto;
@@ -17,7 +34,7 @@ export const ContentGallerySliderItem: React.FC<
   ContentGallerySliderItemProps
 > = ({ image, detailLink, onClick }) => {
   return (
-    <swiper-slide lazy="true">
+    <SwiperSlideElement lazy="true">
       <ContentGallerySliderItemButton detailLink={detailLink} onClick={onClick}>
         <LazyPicture
           image={image}
@@ -36,6 +53,6 @@ export const ContentGallerySliderItem: React.FC<
           ]}
         />
       </ContentGallerySliderItemButton>
-    </swiper-slide>
+    </SwiperSlideElement>
   );
 };

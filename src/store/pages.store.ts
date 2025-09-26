@@ -1,7 +1,7 @@
 import { PageDtoVariant } from "@models/page/page-dto-variant.model";
 import { StateCreator } from "zustand";
 import { GlobalStore } from "./global.store";
-import { MFApi } from "@api/mfApi";
+import { MFApi } from "@api/axios/mfApi";
 import { LoadingStatus } from "@models/loading-status.model";
 import axios from "axios";
 

@@ -1,18 +1,20 @@
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { ImageDto } from "@models/image-dto.model";
-import { Swiper, SwiperOptions } from "swiper/types";
+import { Swiper, SwiperRef, SwiperSlide } from "swiper/react";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 // Import Swiper React components
-import { SwiperContainer, register } from "swiper/element/bundle";
-import { Thumbs, Pagination } from "swiper/modules";
+import { Thumbs, Pagination, Virtual } from "swiper/modules";
 
 // Import Swiper styles
 import "swiper/css/bundle";
 
 import { useLightGallery } from "@components/lightGallery/useLightGallery";
-import { ContentGallerySliderItem } from "./components/ContentGallerySliderItem";
-import { SwiperContainerElement } from "@utils/components/SwiperContainerElement";
+import { ContentGallerySliderItemButton } from "./components/ContentGallerySliderItemButton";
+import { LazyPicture } from "@components/lazyPicture/LazyPicture";
+import { useTranslation } from "react-i18next";
 
 export interface ContentGallerySliderProps {
   images: ImageDto[];
@@ -23,7 +25,9 @@ export const ContentGallerySlider: React.FC<ContentGallerySliderProps> = ({
   images,
   detailLink,
 }) => {
-  const swiperElRef = useRef<SwiperContainer | null>(null);
+  const { t } = useTranslation();
+
+  const swiperElRef = useRef<SwiperRef | null>(null);
   const [activeIndex, setActiveIndex] = useState<number>(0);
 
   const onLightGalleryClose = useCallback((index: number) => {
@@ -37,31 +41,6 @@ export const ContentGallerySlider: React.FC<ContentGallerySliderProps> = ({
     });
 
   useEffect(() => {
-    if (!swiperElRef?.current) {
-      return;
-    }
-    register();
-
-    const swiperContainer = swiperElRef.current as SwiperContainer;
-
-    const params: SwiperOptions = {
-      slidesPerView: 1,
-      spaceBetween: 16,
-      centeredSlides: false,
-      navigation: true,
-      modules: [Thumbs, Pagination],
-      on: {
-        slideChange: (swiper: Swiper) => {
-          setActiveIndex(swiper.activeIndex);
-        },
-      },
-    };
-    Object.assign(swiperContainer, params);
-
-    swiperContainer.initialize();
-  }, []);
-
-  useEffect(() => {
     swiperElRef.current?.swiper?.slideTo(activeIndex, 0);
   }, [activeIndex]);
 
@@ -71,20 +50,67 @@ export const ContentGallerySlider: React.FC<ContentGallerySliderProps> = ({
 
       <Box className="slider-outer-wrapper">
         <Box className="slider-wrapper">
-          <SwiperContainerElement ref={swiperElRef} init="false">
+          <Swiper
+            init={true}
+            modules={[Thumbs, Pagination, Virtual]}
+            slidesPerView={1}
+            spaceBetween={16}
+            centeredSlides={false}
+            virtual
+            onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
+            ref={swiperElRef}
+          >
             {images?.map((image, index) => {
               return (
-                <ContentGallerySliderItem
+                <SwiperSlide
                   key={`${image.page_id}#${image.basename}`}
-                  image={image}
-                  detailLink={detailLink}
-                  onClick={() => {
-                    lightGalleryRef?.current?.openGallery(index);
-                  }}
-                />
+                  virtualIndex={index}
+                >
+                  <ContentGallerySliderItemButton
+                    detailLink={detailLink}
+                    onClick={() => {
+                      lightGalleryRef?.current?.openGallery(index);
+                    }}
+                  >
+                    <LazyPicture
+                      image={image}
+                      sizes={[
+                        {
+                          media: "(max-width: 500px)",
+                          width: 500,
+                        },
+                        {
+                          media: "(max-width: 800px)",
+                          width: 800,
+                        },
+                        {
+                          width: 1200,
+                        },
+                      ]}
+                    />
+                  </ContentGallerySliderItemButton>
+                </SwiperSlide>
               );
             })}
-          </SwiperContainerElement>
+          </Swiper>
+
+          <Button
+            className="swiper-action action-prev icon-only"
+            variant="contained"
+            startIcon={<ArrowBackIcon />}
+            onClick={() => swiperElRef.current?.swiper.slidePrev()}
+            title={t("general.actions.previous")}
+            disabled={activeIndex <= 0}
+          ></Button>
+
+          <Button
+            className="swiper-action action-next icon-only"
+            variant="contained"
+            startIcon={<ArrowForwardIcon />}
+            onClick={() => swiperElRef.current?.swiper.slideNext()}
+            title={t("general.actions.forward")}
+            disabled={activeIndex >= images.length - 1}
+          ></Button>
         </Box>
       </Box>
     </Box>

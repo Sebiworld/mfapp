@@ -1,65 +1,68 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef, useState } from "react";
 
 // Import Swiper React components
-import { SwiperContainer, register } from "swiper/element/bundle";
-import { Thumbs, Pagination } from "swiper/modules";
+import { Thumbs, Pagination, EffectCoverflow } from "swiper/modules";
 
 // Import Swiper styles
 import "swiper/css/bundle";
 
 import { SectionPagesGridDto } from "@models/section/section-pages-grid-dto.model";
 import { LazyPicture } from "@components/lazyPicture/LazyPicture";
-import { SwiperOptions } from "swiper/types";
 import { featuredSliderStyles } from "./featuredSlider.styles";
-import { Box, Link } from "@mui/material";
-import { SwiperContainerElement } from "@utils/components/SwiperContainerElement";
-import { SwiperSlideElement } from "@utils/components/SwiperSlideElement";
+import { Box, Button, Link } from "@mui/material";
+import { Swiper, SwiperRef, SwiperSlide } from "swiper/react";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { useTranslation } from "react-i18next";
 
 export interface FeaturedSliderProps {
   section: SectionPagesGridDto;
 }
 
 export const FeaturedSlider: React.FC<FeaturedSliderProps> = ({ section }) => {
-  const swiperElRef = useRef(null);
-
-  useEffect(() => {
-    if (!swiperElRef?.current) {
-      return;
-    }
-    register();
-
-    const swiperContainer = swiperElRef.current as SwiperContainer;
-
-    const params: SwiperOptions = {
-      slidesPerView: 3,
-      spaceBetween: 16,
-      centeredSlides: true,
-      navigation: true,
-      effect: "coverflow",
-      modules: [Thumbs, Pagination],
-      pagination: {
-        clickable: true,
-      },
-      coverflowEffect: {
-        // scale: 2,
-      },
-    };
-    Object.assign(swiperContainer, params);
-
-    swiperContainer.initialize();
-  }, []);
+  const { t } = useTranslation();
+  const swiperElRef = useRef<SwiperRef | null>(null);
+  const [allowSlidePrev, setAllowSlidePrev] = useState<boolean>(true);
+  const [allowSlideNext, setAllowSlideNext] = useState<boolean>(true);
 
   return (
     <Box
-      className="featured-slider"
+      className="featured-slider slider-wrapper"
       data-testid="featured-slider"
       sx={featuredSliderStyles}
     >
-      <SwiperContainerElement ref={swiperElRef} init="false">
+      <Swiper
+        modules={[Thumbs, Pagination, EffectCoverflow]}
+        slidesPerView={3}
+        spaceBetween={16}
+        centeredSlides
+        effect={"coverflow"}
+        pagination={{ clickable: true }}
+        coverflowEffect={
+          {
+            // scale: 2,
+          }
+        }
+        onInit={(swiper) => {
+          setAllowSlidePrev(!swiper.isBeginning);
+          setAllowSlideNext(!swiper.isEnd);
+        }}
+        onReachBeginning={() => {
+          setAllowSlidePrev(false);
+        }}
+        onReachEnd={() => {
+          setAllowSlideNext(false);
+        }}
+        onFromEdge={() => {
+          setAllowSlidePrev(true);
+          setAllowSlideNext(true);
+        }}
+        ref={swiperElRef}
+      >
         {section.cards?.map((card) => {
           const image = card.card_image || card.main_image;
           return (
-            <SwiperSlideElement key={card.id}>
+            <SwiperSlide key={card.id}>
               <Link
                 href={card.url}
                 color="primary"
@@ -83,10 +86,28 @@ export const FeaturedSlider: React.FC<FeaturedSliderProps> = ({ section }) => {
                   ></Box>
                 )}
               </Link>
-            </SwiperSlideElement>
+            </SwiperSlide>
           );
         })}
-      </SwiperContainerElement>
+      </Swiper>
+
+      <Button
+        className="swiper-action action-prev icon-only"
+        variant="contained"
+        startIcon={<ArrowBackIcon />}
+        onClick={() => swiperElRef.current?.swiper.slidePrev()}
+        title={t("general.actions.previous")}
+        disabled={!allowSlidePrev}
+      ></Button>
+
+      <Button
+        className="swiper-action action-next icon-only"
+        variant="contained"
+        startIcon={<ArrowForwardIcon />}
+        onClick={() => swiperElRef.current?.swiper.slideNext()}
+        title={t("general.actions.forward")}
+        disabled={!allowSlideNext}
+      ></Button>
     </Box>
   );
 };

@@ -20,6 +20,17 @@ export const MuiButtonOverwrites: Components<Theme> = {
         "&.image-button": {
           padding: 0,
         },
+
+        "&.icon-only": {
+          minWidth: "32px",
+          width: "32px",
+          height: "32px",
+          padding: 0,
+
+          "&>.MuiButton-startIcon": {
+            margin: 0,
+          },
+        },
       },
     },
   },

@@ -13,7 +13,7 @@ export const sectionArticlesCarouselStyles: SxProps<Theme> = [
       }
     },
 
-    "swiper-slide": {
+    ".swiper-slide.swiper-slide": {
       display: "inline-block",
       width: "300px",
       maxWidth: "100%",

@@ -1,4 +1,3 @@
-import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useMemo } from "react";
 import { pageStyles } from "./page.styles";
 // import WarningIcon from "@mui/icons-material/Warning";
@@ -10,10 +9,11 @@ import { ProjectPage } from "./projectPage/ProjectPage";
 import { LoadingOverlay } from "@components/loadingOverlay/LoadingOverlay";
 import { Alert, AlertTitle, Box, Button, Typography } from "@mui/material";
 import { convertHtmlEntities } from "@utils/functions/convertHtmlEntities";
+import { Link, useLocation } from "react-router";
 
 export const Page = () => {
-  const router = useRouterState();
-  const currentPath = router.location.pathname;
+  const location = useLocation();
+  const currentPath = location.pathname;
   const { t, i18n } = useTranslation();
 
   const loadedPage = useGlobalStore(selectPage(currentPath));

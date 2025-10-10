@@ -6,7 +6,6 @@ import {
   Input,
   Paper,
 } from "@mui/material";
-// import { Link } from "@tanstack/react-router";
 
 export const LoginPage = () => {
   return (

@@ -3,8 +3,8 @@ import { useTranslation } from "react-i18next";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { sidebarBoxGeneralStyles } from "./sidebarBoxGeneral.styles";
 import { SidebarBoxGeneralItemContent } from "./SidebarBoxGeneralItemContent";
-import { Link } from "@tanstack/react-router";
 import { Box, List, ListItem, ListItemButton, Typography } from "@mui/material";
+import { Link } from "react-router";
 
 export interface SidebarBoxGeneralProps {
   data?: ProjectGeneralDataBlock[];

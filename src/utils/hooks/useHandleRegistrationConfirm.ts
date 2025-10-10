@@ -1,11 +1,11 @@
 import { useEffect } from "react";
-import { Route as rootRoute } from "@routes/__root";
 import { useGlobalStore } from "@src/store/global.store";
 import { selectRegistrationConfirm } from "@src/store/auth.store";
+import { useSearchParams } from "react-router";
 
 export const useHandleRegistrationConfirm = () => {
-  const searchParams = rootRoute.useSearch();
-  const token = searchParams?.registration_confirm;
+  const [searchParams] = useSearchParams();
+  const token = searchParams?.get("registration_confirm");
   const registrationConfirm = useGlobalStore(selectRegistrationConfirm);
 
   useEffect(() => {

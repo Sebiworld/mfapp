@@ -1,6 +1,6 @@
 import { FC, useEffect, useMemo } from "react";
 import { useGlobalStore } from "@src/store/global.store";
-import { Box, ButtonGroup } from "@mui/material";
+import { Box, Button, ButtonGroup } from "@mui/material";
 import { projectRoleStyles } from "./projectRole.styles";
 import {
   selectLoadProjectRoles,
@@ -13,8 +13,7 @@ import { ProjectSubrole } from "./components/ProjectSubrole";
 import { ProjectRoleDto } from "@models/project-role/project-role-dto.model";
 import { ProjectSeasonDto } from "@models/project-role/project-season-dto.model";
 import { isValidArray } from "@utils/functions/isValidArray";
-import { TanstackButton } from "@components/tanstackLinkComponents";
-import { Route } from "@routes/$";
+import { Link, useSearchParams } from "react-router";
 
 interface ProjectRoleProps {
   id?: number;
@@ -24,7 +23,7 @@ export const ProjectRole: FC<ProjectRoleProps> = ({ id }) => {
   const projectRoles = useGlobalStore(selectProjectRoles);
   const projectSeasons = useGlobalStore(selectProjectSeasons);
 
-  const searchParams = Route.useSearch();
+  const [searchParams] = useSearchParams();
 
   const currentRoleLoadingStatus = useMemo(() => {
     if (!id) {
@@ -116,8 +115,18 @@ export const ProjectRole: FC<ProjectRoleProps> = ({ id }) => {
   }, [projectSeasons, seasonIds]);
 
   const selectedSeasonId = useMemo(() => {
-    return searchParams?.season;
-  }, [searchParams?.season]);
+    const searchParam = searchParams?.get("season");
+    if (!searchParam) {
+      return undefined;
+    }
+
+    const numberVal = parseInt(searchParam, 10);
+    if (isNaN(numberVal)) {
+      return undefined;
+    }
+
+    return numberVal;
+  }, [searchParams]);
 
   const currentSeasonId = useMemo(() => {
     if (!isValidArray(seasons) || !seasons.length) {
@@ -163,18 +172,25 @@ export const ProjectRole: FC<ProjectRoleProps> = ({ id }) => {
       {isSeasonSelectable && (
         <Box className="season-selection">
           <ButtonGroup variant="contained">
-            {seasons.map((season) => (
-              <TanstackButton
-                key={season.id}
-                color={
-                  season.id === currentSeasonId ? "contrast" : "projectPrimary"
-                }
-                to="."
-                search={{ season: season.id }}
-              >
-                {season.title}
-              </TanstackButton>
-            ))}
+            {seasons.map((season) => {
+              const searchParams = new URLSearchParams({
+                season: season.id || "",
+              } as Record<string, string>);
+              return (
+                <Button
+                  key={season.id}
+                  // color={
+                  //   season.id === currentSeasonId
+                  //     ? "contrast"
+                  //     : "projectPrimary"
+                  // }
+                  component={Link}
+                  to={{ pathname: "..", search: searchParams.toString() }}
+                >
+                  {season.title}
+                </Button>
+              );
+            })}
           </ButtonGroup>
         </Box>
       )}

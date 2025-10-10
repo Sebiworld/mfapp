@@ -1,4 +1,3 @@
-import { Outlet } from "@tanstack/react-router";
 import { ToastContainer } from "react-toastify";
 
 import { Header } from "./header/Header";
@@ -8,6 +7,7 @@ import { useColorTheme } from "@utils/hooks/useColorTheme";
 import { useGlobalStore } from "@src/store/global.store";
 import { selectUserHash } from "@src/store/auth.store";
 import { Box } from "@mui/material";
+import { Outlet } from "react-router";
 
 export const Layout = () => {
   const theme = useColorTheme();

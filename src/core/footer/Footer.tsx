@@ -10,7 +10,6 @@ import { Trans, useTranslation } from "react-i18next";
 import Lottie from "react-lottie";
 import heartAnimation from "@assets/lotties/heart.json";
 import { useCurrentDate } from "@utils/hooks/useCurrentDate";
-import { Link as TanstackLink } from "@tanstack/react-router";
 import {
   Box,
   Button,
@@ -26,6 +25,7 @@ import { selectMenues } from "@src/store/configuration.store";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { useCallback, useId } from "react";
 import { useReward } from "react-rewards";
+import { Link as RouterLink } from "react-router";
 
 const heartAnimationOptions = {
   loop: true,
@@ -67,7 +67,7 @@ export function Footer() {
         role="footer"
         className="footer"
       >
-        <Box component={TanstackLink} to="/">
+        <Box component={RouterLink} to="/">
           <MfLogo layout="vertical"></MfLogo>
         </Box>
 
@@ -141,14 +141,16 @@ export function Footer() {
         <hr />
 
         <div className="bottom-wrapper">
-          {isValidArray(tertiaryNavigation) && !!tertiaryNavigation.length && (
+          {isValidArray(tertiaryNavigation) &&  !!tertiaryNavigation.length && (
             <List className="nav-list tertiary-navigation">
               {tertiaryNavigation.map((item, index) => (
                 <ListItem key={index} disablePadding>
                   <ListItemButton
-                    component={TanstackLink}
-                    to={item?.page?.url || item.link}
-                    hash={item.section}
+                    component={RouterLink}
+                    to={{
+                      pathname: item?.page?.url || item.link || "/",
+                      hash: item.section,
+                    }}
                   >
                     <Box
                       component="span"

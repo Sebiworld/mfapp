@@ -1,7 +1,7 @@
-import { Link } from "@tanstack/react-router";
 import { Box, ListItem, ListItemButton, ListItemIcon } from "@mui/material";
 import { NavigationItemDto } from "@models/navigation-item-dto.model";
 import { IonIcon } from "@ionic/react";
+import { Link } from "react-router";
 
 export interface MenueItemProps {
   item: NavigationItemDto;
@@ -12,8 +12,7 @@ export const MenueItem = ({ item }: MenueItemProps) => {
     <ListItem>
       <ListItemButton
         component={Link}
-        to={item?.page?.url || item.link}
-        hash={item.section}
+        to={{ pathname: item?.page?.url || item.link, hash: item.section }}
       >
         {item.ionicon && (
           <ListItemIcon>

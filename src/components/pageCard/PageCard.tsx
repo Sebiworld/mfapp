@@ -1,6 +1,5 @@
 import React from "react";
 
-import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import {
   Box,
@@ -15,6 +14,7 @@ import { pageCardStyles } from "./pageCard.styles";
 import { HeadingLevel } from "@models/utility-types/heading-level.model";
 import { LazyPicture } from "@components/lazyPicture/LazyPicture";
 import { IonIcon } from "@ionic/react";
+import { Link } from "react-router";
 
 export interface PageCardProps {
   card: PageCardDto;
@@ -99,7 +99,9 @@ export const PageCard: React.FC<PageCardProps> = ({
         {card.external_type === "Facebook" ? (
           <Button
             component={Link}
-            to={card.external_link}
+            to={
+              card.external_link || "https://de-de.facebook.com/musicalfabrik"
+            }
             variant="contained"
             color="contrast"
             target="_blank"

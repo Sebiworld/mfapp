@@ -1,6 +1,5 @@
 import { useTranslation } from "react-i18next";
 import { isValidArray } from "@utils/functions/isValidArray";
-import { Link } from "@tanstack/react-router";
 import {
   Box,
   List,
@@ -14,6 +13,7 @@ import { NavigationItemDto } from "@models/navigation-item-dto.model";
 import { sidebarBoxLinksStyles } from "./sidebarBoxLinks.styles";
 import { IonIcon } from "@ionic/react";
 import { link } from "ionicons/icons";
+import { Link } from "react-router";
 
 export interface SidebarBoxLinksProps {
   navItems?: NavigationItemDto[];
@@ -43,8 +43,10 @@ export const SidebarBoxLinks: React.FC<SidebarBoxLinksProps> = ({
           <ListItem key={index} disablePadding>
             <ListItemButton
               component={Link}
-              to={item?.page?.url || item.link}
-              hash={item.section}
+              to={{
+                pathname: item?.page?.url || item.link,
+                hash: item.section,
+              }}
             >
               <ListItemIcon>
                 <IonIcon aria-hidden="true" icon={link}></IonIcon>

@@ -4,8 +4,8 @@ import {
 } from "@models/project-role/project-portrait-dto.model";
 
 import { CardActionArea } from "@mui/material";
-import { Link } from "@tanstack/react-router";
 import { FC } from "react";
+import { Link } from "react-router";
 
 interface ProjectRolePortraitActionWrapperProps {
   portrait: ProjectPortraitWithRoles | ProjectPortraitDto;

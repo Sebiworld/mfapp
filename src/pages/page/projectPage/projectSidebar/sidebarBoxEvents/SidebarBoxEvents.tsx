@@ -5,9 +5,9 @@ import { sidebarBoxEventsStyles } from "./sidebarBoxEvents.styles";
 import { useMemo } from "react";
 import { PerformanceDto } from "@models/utility-types/performance-dto.model";
 import { useCurrentDate } from "@utils/hooks/useCurrentDate";
-import { Link } from "@tanstack/react-router";
 import { Box, Button, Typography } from "@mui/material";
 import { SidebarBoxEventsEventItem } from "./SidebarBoxEventsEventItem";
+import { Link } from "react-router";
 
 export interface SidebarBoxEventsProps {
   data?: ProjectEventsData;

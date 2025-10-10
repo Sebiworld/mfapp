@@ -1,7 +1,6 @@
 import Menu from "@mui/icons-material/Menu";
 import { headerStyles } from "./header.styles";
 import { MfLogo } from "@components/mfLogo/MfLogo";
-import { Link, useRouterState } from "@tanstack/react-router";
 import {
   AppBar,
   Box,
@@ -19,12 +18,13 @@ import { DefaultPageDto } from "@models/page/default-page-dto.model";
 import { ElevationScroll } from "./components/ElevationScroll";
 import { selectMenues } from "@src/store/configuration.store";
 import { isValidArray } from "@utils/functions/isValidArray";
+import { Link, useLocation } from "react-router";
 
 export const Header = () => {
   const [sidemenuOpen, setSidemenuOpen] = React.useState(false);
 
-  const router = useRouterState();
-  const currentPath = router.location.pathname;
+  const location = useLocation();
+  const currentPath = location.pathname;
   const loadedPage = useGlobalStore(selectPage(currentPath));
   const page = loadedPage?.data as DefaultPageDto;
   const loadedMenues = useGlobalStore(selectMenues);
@@ -63,8 +63,10 @@ export const Header = () => {
                       <ListItem key={index} disablePadding>
                         <ListItemButton
                           component={Link}
-                          to={item?.page?.url || item.link}
-                          hash={item.section}
+                          to={{
+                            pathname: item?.page?.url || item.link,
+                            hash: item.section,
+                          }}
                         >
                           <Box
                             component="span"

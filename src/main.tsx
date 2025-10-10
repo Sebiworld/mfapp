@@ -4,24 +4,9 @@ import "@fontsource/inter";
 
 import "@utils/i18n/i18n";
 import "./index.css";
-import { RouterProvider, createRouter } from "@tanstack/react-router";
 
-// Import the generated route tree
-import { routeTree } from "./routeTree.gen";
-
-// Create a new router instance
-const router = createRouter({
-  routeTree,
-  // scrollToTopSelectors: ["#top"],
-  scrollRestoration: false,
-});
-
-// Register the router instance for type safety
-declare module "@tanstack/react-router" {
-  interface Register {
-    router: typeof router;
-  }
-}
+import { RouterProvider } from "react-router";
+import { router } from "./routing/routes";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

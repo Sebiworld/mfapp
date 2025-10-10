@@ -3,7 +3,6 @@ import { projectPageStyles } from "./projectPage.styles";
 import { useGlobalStore } from "@src/store/global.store";
 import { useEffect, useMemo } from "react";
 import { ProjectSidebar } from "./projectSidebar/ProjectSidebar";
-import { Link } from "@tanstack/react-router";
 import { getProjectCssVars } from "./functions/getProjectCssVars";
 import {
   selectResetGlobalCss,
@@ -15,6 +14,7 @@ import {
   selectProjectPageDetails,
 } from "@src/store/projects.store";
 import { LazyPicture } from "@components/lazyPicture/LazyPicture";
+import { Link } from "react-router";
 
 export interface ProjectPageProps {
   page?: PageDtoVariant;

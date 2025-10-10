@@ -20,10 +20,10 @@ import { isValidObject } from "@utils/functions/isValidObject";
 import ClearIcon from "@mui/icons-material/Clear";
 import CheckIcon from "@mui/icons-material/Check";
 import { SectionFormDto } from "@models/section/section-form.model";
-import { useRouterState } from "@tanstack/react-router";
 import { useReward } from "react-rewards";
 import { useGlobalStore } from "@src/store/global.store";
 import { selectProjects } from "@src/store/projects.store";
+import { useLocation, useParams } from "react-router";
 
 export interface FormMessage {
   id: string;
@@ -37,9 +37,9 @@ export interface ContentTextProps {
 }
 
 export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
-  const router = useRouterState();
-  const currentPath = router.location.pathname;
   const { t } = useTranslation();
+  const location = useLocation();
+  const currentPath = location.pathname;
 
   const loadedProjects = useGlobalStore(selectProjects);
   const projectColors = useMemo(() => {

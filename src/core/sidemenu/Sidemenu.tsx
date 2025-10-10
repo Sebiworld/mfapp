@@ -2,7 +2,6 @@ import * as React from "react";
 import ThemeSelect from "@components/ThemeSelect";
 import { sidemenuStyles } from "./sidemenu.styles";
 import { useTranslation } from "react-i18next";
-import { Link } from "@tanstack/react-router";
 import { useGlobalStore } from "@src/store/global.store";
 import { selectCurrentUser, selectLogout } from "@src/store/auth.store";
 import { StartupModal } from "@components/modals/startupModal/StartupModal";
@@ -21,6 +20,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { selectMenues } from "@src/store/configuration.store";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { MenueItem } from "./components/MenueItem";
+import { Link } from "react-router";
 
 export interface SidemenuProps {
   sidemenuOpen: boolean;

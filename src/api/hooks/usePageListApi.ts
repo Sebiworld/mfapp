@@ -1,31 +1,42 @@
 import { MFApi } from "@api/axios/mfApi";
+import { GetPageListResponse } from "@api/axios/pageListApi";
 import { useGlobalStore } from "@src/store/global.store";
-import { selectSetPageCards } from "@src/store/pageCards.store";
+import { selectAddPageCards } from "@src/store/pageCards.store";
 import { useCallback } from "react";
+
+export interface PageListPositioning {
+  lastElementIndex: number;
+  moreAvailable: boolean;
+  totalNumber: number;
+}
 
 interface UsePageListApiOutput {
   loadArticles: (
     projectId?: number,
     offset?: number,
-    limit?: number
-  ) => Promise<true | Error>;
+    limit?: number,
+    hashes?: { index: number; id: number; hash?: string }[]
+  ) => Promise<GetPageListResponse | true | Error>;
 }
 
 export const usePageListApi = (): UsePageListApiOutput => {
-  const setPageCards = useGlobalStore(selectSetPageCards);
+  const addPageCards = useGlobalStore(selectAddPageCards);
 
   const loadArticles = useCallback(
-    async (projectId?: number): Promise<true | Error> => {
+    async (
+      projectId?: number,
+      offset?: number,
+      limit?: number,
+      hashes?: { index: number; id: number; hash?: string }[]
+    ): Promise<GetPageListResponse | true | Error> => {
       try {
-        const params: { [key: string]: unknown } = {};
-        // TODO: Hashes
-        // const hash = get().pages?.[path]?.data?.hash;
-        // if (hash) {
-        //   params.hash = hash;
-        // }
+        const params: { [key: string]: unknown } = {
+          offset,
+          limit,
+          hashes,
+        };
 
         const response = await MFApi.getArticles(projectId, params);
-        console.log("RESPONSE", response);
 
         if (response.status === 204) {
           return true;
@@ -33,16 +44,16 @@ export const usePageListApi = (): UsePageListApiOutput => {
 
         const articles = response.data?.items;
         if (articles) {
-          setPageCards(articles);
+          addPageCards(articles);
         }
+
+        return response.data ?? true;
       } catch (error) {
         console.error("Error in data fetch:", error);
         return error as Error;
       }
-
-      return true;
     },
-    [setPageCards]
+    [addPageCards]
   );
 
   return { loadArticles };

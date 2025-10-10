@@ -19,15 +19,29 @@ import { IonIcon } from "@ionic/react";
 export interface PageCardProps {
   card: PageCardDto;
   headingLevel?: HeadingLevel;
+  style?: React.CSSProperties;
 }
 
-export const PageCard: React.FC<PageCardProps> = ({ card, headingLevel }) => {
+export const PageCard: React.FC<PageCardProps> = ({
+  card,
+  headingLevel,
+  style,
+}) => {
   const { t } = useTranslation();
 
-  const image = card.main_image;
+  if (!card?.id) {
+    return null;
+  }
+
+  const image = card?.main_image;
 
   return (
-    <Card className="page-card" variant="outlined" sx={pageCardStyles}>
+    <Card
+      className="page-card"
+      variant="outlined"
+      sx={pageCardStyles}
+      style={style}
+    >
       <Box className="aspect-ratio ar-2-1">
         <Box className="ar-content">
           {image ? (

@@ -8,6 +8,7 @@ import { useMemo } from "react";
 import { GlobalStyles, Interpolation, Theme } from "@mui/material";
 import { globalAspectRatioStyles } from "./aspect-ratio.styles";
 import { lightgalleryStyles } from "./vendors/lightgallery.styles";
+import "react-virtualized/styles.css";
 
 export const GlobalStylesElement = () => {
   const globalCss = useGlobalStore(selectGlobalCss);

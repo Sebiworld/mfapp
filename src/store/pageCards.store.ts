@@ -1,15 +1,16 @@
 import { StateCreator } from "zustand";
 import { GlobalStore } from "./global.store";
 import { PageCardDto } from "@models/page/page-card-dto.model";
+import { orderBy as _orderBy } from "lodash";
 
 export interface PageCardsState {
   pageCards: { [key: string]: PageCardDto };
 }
 
 export interface PageCardsActions {
-  setPageCards: (pageCards: PageCardDto[]) => void;
+  addPageCards: (pageCards: PageCardDto[]) => void;
   initializePageCards: () => Promise<void>;
-  resetPageCards: () => Promise<void>;
+  resetPageCards: (projectId?: number, template?: string) => Promise<void>;
 }
 
 export type PageCardsSlice = PageCardsState & PageCardsActions;
@@ -22,7 +23,7 @@ export const createPageCardsSlice: StateCreator<
 > = (set, get) => ({
   pageCards: {},
 
-  setPageCards: async (pageCards: PageCardDto[]) => {
+  addPageCards: async (pageCards: PageCardDto[]) => {
     set((state) => {
       const changedState = {
         pageCards: { ...state.pageCards },
@@ -34,9 +35,6 @@ export const createPageCardsSlice: StateCreator<
 
       return changedState;
     });
-
-    const initializePageCards = get().initializePageCards;
-    await initializePageCards();
   },
 
   initializePageCards: async () => {
@@ -44,22 +42,53 @@ export const createPageCardsSlice: StateCreator<
     setPartInitialized("pagecards");
   },
 
-  resetPageCards: async () => {
-    set((state) => {
-      state.pageCards = {};
-      return state;
-    });
+  resetPageCards: async (projectId?: number, template?: string) => {
+    if (!projectId && !template) {
+      set((state) => {
+        state.pageCards = {};
+        return state;
+      });
+      return;
+    }
 
-    const initializePageCards = get().initializePageCards;
-    await initializePageCards();
+    set((state) => {
+      const changedState = {
+        pageCards: {} as { [key: string]: PageCardDto },
+      };
+
+      for (const pageCardId in state.pageCards) {
+        const pageCard = state.pageCards[pageCardId];
+
+        // Filter out project specific page cards
+        if (projectId && pageCard.project_id === projectId) {
+          continue;
+        }
+
+        if (template && pageCard.template.name === template) {
+          continue;
+        }
+
+        changedState.pageCards[pageCardId] = pageCard;
+      }
+
+      return changedState;
+    });
   },
 });
 
-export const selectSetPageCards = (state: GlobalStore) => state.setPageCards;
+export const selectAddPageCards = (state: GlobalStore) => state.addPageCards;
+export const selectResetPageCards = (state: GlobalStore) =>
+  state.resetPageCards;
 
 export const selectPageCards =
-  (projectId?: number, template?: string) => (state: GlobalStore) =>
-    Object.values(state.pageCards).filter((pageCard) => {
+  (
+    projectId?: number,
+    template?: string,
+    sortBy?: string[],
+    sortByOrders?: ("asc" | "desc")[]
+  ) =>
+  (state: GlobalStore) => {
+    const output = Object.values(state.pageCards).filter((pageCard) => {
       if (projectId && pageCard.project_id !== projectId) {
         return false;
       }
@@ -70,7 +99,20 @@ export const selectPageCards =
 
       return true;
     });
-export const selectArticles = (projectId?: number) =>
-  selectPageCards(projectId, "article");
-export const selectGalleries = (projectId?: number) =>
-  selectPageCards(projectId, "gallery");
+
+    if (sortBy) {
+      return _orderBy(output, sortBy, sortByOrders);
+    }
+
+    return _orderBy(output, ["datetime_from"], ["desc"]);
+  };
+export const selectArticles = (
+  projectId?: number,
+  sortBy?: string[],
+  sortByOrders?: ("asc" | "desc")[]
+) => selectPageCards(projectId, "article", sortBy, sortByOrders);
+export const selectGalleries = (
+  projectId?: number,
+  sortBy?: string[],
+  sortByOrders?: ("asc" | "desc")[]
+) => selectPageCards(projectId, "gallery", sortBy, sortByOrders);

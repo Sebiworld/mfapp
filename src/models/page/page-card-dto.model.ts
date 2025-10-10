@@ -12,4 +12,5 @@ export interface PageCardDto extends PageDto {
   external_type?: string;
   external_link?: string;
   images?: ImageDto[];
+  hash?: string;
 }

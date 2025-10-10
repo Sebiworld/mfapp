@@ -5,6 +5,9 @@ import { PageCardDto } from "@models/page/page-card-dto.model";
 export interface GetPageListResponse {
   hash?: string;
   items: PageCardDto[];
+  lastElementIndex: number;
+  moreAvailable: boolean;
+  totalNumber: number;
 }
 
 export const pageListApi = {

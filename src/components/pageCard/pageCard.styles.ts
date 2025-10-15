@@ -17,5 +17,16 @@ export const pageCardStyles: SxProps<Theme> = (theme) => ({
         opacity: "0.7",
       },
     },
+
+    ".card-intro": {
+      textOverflow: "ellipsis",
+      overflow: "hidden",
+      display: "-webkit-box",
+      // whiteSpace: "nowrap",
+      lineClamp: "3",
+      boxOrient: "vertical",
+      WebkitLineClamp: "3",
+      WebkitBoxOrient: "vertical",
+    },
   },
 });

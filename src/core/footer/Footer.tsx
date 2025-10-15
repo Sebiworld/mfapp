@@ -76,7 +76,8 @@ export function Footer() {
           variant="contained"
           color="primary"
           size="large"
-          href="#mitglied-werden"
+          component={RouterLink}
+          to={{ pathname: "/", hash: "#mitglied-werden" }}
         >
           {t("footer.cta")}
         </Button>
@@ -123,6 +124,7 @@ export function Footer() {
                   underline="always"
                   href="https://www.sebi.dev"
                   target="_blank"
+                  key="link"
                 />
               ),
               // heart: <FavoriteBorderIcon />,
@@ -132,6 +134,7 @@ export function Footer() {
                   height={"3em"}
                   width={"3.5em"}
                   style={{ margin: " 0 -16px 0 -16px" }}
+                  key="heart"
                 />
               ),
             }}
@@ -141,10 +144,10 @@ export function Footer() {
         <hr />
 
         <div className="bottom-wrapper">
-          {isValidArray(tertiaryNavigation) &&  !!tertiaryNavigation.length && (
+          {isValidArray(tertiaryNavigation) && !!tertiaryNavigation.length && (
             <List className="nav-list tertiary-navigation">
-              {tertiaryNavigation.map((item, index) => (
-                <ListItem key={index} disablePadding>
+              {tertiaryNavigation.map((item) => (
+                <ListItem key={item.id} disablePadding>
                   <ListItemButton
                     component={RouterLink}
                     to={{

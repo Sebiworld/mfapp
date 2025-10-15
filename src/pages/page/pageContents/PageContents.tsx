@@ -9,8 +9,8 @@ import { useTranslation } from "react-i18next";
 import { formatDate } from "@utils/functions/formatDate";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { ProjectRole } from "../templateContents/projectRole/ProjectRole";
-import { ArticlesContainer } from "../templateContents/articles_container/ArticlesContainer";
-import { ArticlesContainerPageDto } from "@models/page/articles-container-page-dto.model";
+import { ListContainerPageDto } from "@models/page/list-container-page-dto.model";
+import { ListContainer } from "../templateContents/listContainer/ListContainer";
 
 export interface PagesContentsProps {
   page?: PageDtoVariant;
@@ -123,8 +123,18 @@ export const PageContents: React.FC<PagesContentsProps> = ({ page }) => {
         defaultPage?.template?.name === "project_roles_container"
       ) && <ProjectRole id={defaultPage?.id} />}
 
+      {defaultPage?.template?.name === "galleries_container" && (
+        <ListContainer
+          page={page as ListContainerPageDto}
+          templates={["gallery"]}
+        />
+      )}
+
       {defaultPage?.template?.name === "articles_container" && (
-        <ArticlesContainer page={page as ArticlesContainerPageDto} />
+        <ListContainer
+          page={page as ListContainerPageDto}
+          templates={["article"]}
+        />
       )}
 
       {!!defaultPage?.sections?.length && (

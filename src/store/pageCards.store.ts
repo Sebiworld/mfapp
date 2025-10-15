@@ -1,19 +1,44 @@
 import { StateCreator } from "zustand";
 import { GlobalStore } from "./global.store";
 import { PageCardDto } from "@models/page/page-card-dto.model";
-import { orderBy as _orderBy } from "lodash";
+import {
+  orderBy as _orderBy,
+  trimStart as _trimStart,
+  startsWith as _startsWith,
+} from "lodash";
+import { isValidObject } from "@utils/functions/isValidObject";
+import { isValidArray } from "@utils/functions/isValidArray";
+import md5 from "blueimp-md5";
+
+export interface PageCardDtoWithIndex extends PageCardDto {
+  indexData?: { [key: string]: { [key: string]: number } }; // key is projectId or 'global'. Inner key is the sort order
+}
 
 export interface PageCardsState {
-  pageCards: { [key: string]: PageCardDto };
+  pageCards: { [key: string]: PageCardDtoWithIndex };
 }
 
 export interface PageCardsActions {
-  addPageCards: (pageCards: PageCardDto[]) => void;
+  addPageCards: (pageCards: PageCardDtoWithIndex[]) => void;
   initializePageCards: () => Promise<void>;
   resetPageCards: (projectId?: number, template?: string) => Promise<void>;
 }
 
 export type PageCardsSlice = PageCardsState & PageCardsActions;
+
+export const getFilterHash = (templates?: string[], sortBy?: string[]) => {
+  const sortOrderKey = isValidArray(sortBy)
+    ? sortBy.join(",")
+    : "-datetime_from";
+
+  const filterHash = md5(
+    JSON.stringify({
+      templates: templates,
+      sortOrderKey,
+    })
+  );
+  return filterHash;
+};
 
 export const createPageCardsSlice: StateCreator<
   GlobalStore,
@@ -23,14 +48,24 @@ export const createPageCardsSlice: StateCreator<
 > = (set, get) => ({
   pageCards: {},
 
-  addPageCards: async (pageCards: PageCardDto[]) => {
+  addPageCards: async (pageCards: PageCardDtoWithIndex[]) => {
     set((state) => {
       const changedState = {
         pageCards: { ...state.pageCards },
       };
 
       for (const pageCard of pageCards) {
+        const indexData = changedState.pageCards[pageCard.id]?.indexData || {};
+
         changedState.pageCards[pageCard.id] = pageCard;
+
+        // Merge index data if available
+        if (isValidObject(changedState.pageCards[pageCard.id]?.indexData)) {
+          changedState.pageCards[pageCard.id].indexData = {
+            ...indexData,
+            ...changedState.pageCards[pageCard.id]?.indexData,
+          };
+        }
       }
 
       return changedState;
@@ -53,7 +88,7 @@ export const createPageCardsSlice: StateCreator<
 
     set((state) => {
       const changedState = {
-        pageCards: {} as { [key: string]: PageCardDto },
+        pageCards: {} as { [key: string]: PageCardDtoWithIndex },
       };
 
       for (const pageCardId in state.pageCards) {
@@ -81,38 +116,56 @@ export const selectResetPageCards = (state: GlobalStore) =>
   state.resetPageCards;
 
 export const selectPageCards =
-  (
-    projectId?: number,
-    template?: string,
-    sortBy?: string[],
-    sortByOrders?: ("asc" | "desc")[]
-  ) =>
+  (params: {
+    offset?: number;
+    limit?: number;
+    projectId?: number;
+    templates?: string[];
+    sortBy?: string[];
+  }) =>
   (state: GlobalStore) => {
+    const startIndex = params?.offset || 0;
+    const endIndex =
+      params?.limit && typeof params.limit === "number" && params.limit > 0
+        ? startIndex + params.limit
+        : startIndex + 12;
+    const indexKey = params?.projectId ? `${params.projectId}` : "global";
+    const filterHash = getFilterHash(params?.templates, params?.sortBy);
+
     const output = Object.values(state.pageCards).filter((pageCard) => {
-      if (projectId && pageCard.project_id !== projectId) {
+      if (params?.projectId && pageCard.project_id !== params?.projectId) {
         return false;
       }
 
-      if (template && pageCard.template.name !== template) {
+      if (
+        isValidArray(params?.templates) &&
+        !params?.templates.includes(pageCard.template.name)
+      ) {
         return false;
+      }
+
+      if (params?.offset !== undefined || params?.limit !== undefined) {
+        const pageCardIndex = pageCard.indexData?.[indexKey]?.[filterHash];
+        if (pageCardIndex === undefined) {
+          return false;
+        }
+
+        if (pageCardIndex < startIndex || pageCardIndex >= endIndex) {
+          return false;
+        }
       }
 
       return true;
     });
 
-    if (sortBy) {
-      return _orderBy(output, sortBy, sortByOrders);
+    if (isValidArray(params?.sortBy)) {
+      const sortKeys = params.sortBy.map((key) => _trimStart(key, "-"));
+      const sortOrders = params.sortBy.map((key) =>
+        _startsWith(key, "-") ? "desc" : "asc"
+      );
+
+      return _orderBy(output, sortKeys, sortOrders);
     }
 
     return _orderBy(output, ["datetime_from"], ["desc"]);
   };
-export const selectArticles = (
-  projectId?: number,
-  sortBy?: string[],
-  sortByOrders?: ("asc" | "desc")[]
-) => selectPageCards(projectId, "article", sortBy, sortByOrders);
-export const selectGalleries = (
-  projectId?: number,
-  sortBy?: string[],
-  sortByOrders?: ("asc" | "desc")[]
-) => selectPageCards(projectId, "gallery", sortBy, sortByOrders);

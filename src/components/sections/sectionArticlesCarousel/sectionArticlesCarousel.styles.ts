@@ -13,10 +13,19 @@ export const sectionArticlesCarouselStyles: SxProps<Theme> = [
       }
     },
 
+    ".slider-wrapper": {
+      marginTop: '16px',
+      marginBottom: '16px',
+    },
+
     ".swiper-slide.swiper-slide": {
       display: "inline-block",
       width: "300px",
       maxWidth: "100%",
     },
+
+    ".section-actions": {
+      marginTop: "8px",
+    }
   },
 ];

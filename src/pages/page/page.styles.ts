@@ -4,7 +4,7 @@ export const pageStyles: SxProps = {
   position: "relative",
   minHeight: "600px",
 
-  "&.template-project_role, &.template-project_roles_container, , &.template-articles_container":
+  "&.template-project_role, &.template-project_roles_container, &.template-articles_container":
     {
       ".page-title": {
         textAlign: "center",

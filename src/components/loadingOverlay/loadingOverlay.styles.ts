@@ -6,7 +6,18 @@ export const loadingOverlayStyles: SxProps = {
   justifyContent: "center",
   padding: "32px",
 
-  "&:is-overlay": {
+  "&.is-progress": {
+    padding: 0,
+
+    ".linear-progress": {
+      position: "absolute",
+      top: "-4px",
+      left: 0,
+      right: 0,
+    },
+  },
+
+  "&.is-overlay": {
     position: "absolute",
     top: 0,
     left: 0,

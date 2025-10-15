@@ -18,7 +18,7 @@ import { DefaultPageDto } from "@models/page/default-page-dto.model";
 import { ElevationScroll } from "./components/ElevationScroll";
 import { selectMenues } from "@src/store/configuration.store";
 import { isValidArray } from "@utils/functions/isValidArray";
-import { Link, useLocation } from "react-router";
+import { Link, NavLink, useLocation } from "react-router";
 
 export const Header = () => {
   const [sidemenuOpen, setSidemenuOpen] = React.useState(false);
@@ -62,7 +62,7 @@ export const Header = () => {
                     {primaryNavigation.map((item, index) => (
                       <ListItem key={index} disablePadding>
                         <ListItemButton
-                          component={Link}
+                          component={NavLink}
                           to={{
                             pathname: item?.page?.url || item.link,
                             hash: item.section,

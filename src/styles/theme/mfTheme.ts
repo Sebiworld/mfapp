@@ -28,6 +28,7 @@ import { mfBgDark, mfBgLight } from "./paletteColors/mfBg";
 import { ColorPartial } from "node_modules/@mui/material/esm/styles/createPalette";
 import { MuiInputOverwrites } from "./MuiOverwrites/MuiInput";
 import { MuiTabsOverwrites } from "./MuiOverwrites/MuiTabs";
+import { MuiLinearProgressOverwrites } from "./MuiOverwrites/MuiLinearProgress";
 
 export type ExtendedPaletteColor = Partial<SimplePaletteColorOptions> &
   Partial<ColorPartial> &
@@ -180,7 +181,7 @@ export const mfTheme = createTheme({
         gradient:
           "linear-gradient(to left bottom, #fd8e00, #ff7a31, #ff684c, #fa5b62, #ec5476, #d65387, #bb5593, #9d5898, #745a95, #4f5887, #375171, #2f4858)",
         background: {
-          paper: "var(--mf-palette-bg-400)",
+          paper: mfBgLight[400]
         },
       },
     },
@@ -219,5 +220,6 @@ export const mfTheme = createTheme({
     ...MuiCardOverwrites,
     ...MuiInputOverwrites,
     ...MuiTabsOverwrites,
+    ...MuiLinearProgressOverwrites,
   },
 });

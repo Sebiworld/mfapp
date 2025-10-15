@@ -3,6 +3,11 @@ import { Theme } from "@mui/material";
 
 export const globalContentStyles: Interpolation<Theme>[] = [
   {
+    html: {
+      scrollBehavior: "smooth",
+      scrollPaddingTop: "72px",
+    },
+
     ".content-block": {
       position: "relative",
       textAlign: "left",
@@ -29,6 +34,20 @@ export const globalContentStyles: Interpolation<Theme>[] = [
         "&:last-child": {
           marginBottom: 0,
         },
+      },
+
+      dt: {
+        display: "block",
+        fontWeight: "bold",
+
+        "::after": {
+          content: "':'",
+        },
+      },
+
+      dd: {
+        display: "block",
+        margin: "0 0 16px 0",
       },
 
       hr: {

@@ -11,7 +11,7 @@ export interface GetPageListResponse {
 }
 
 export const pageListApi = {
-  getArticles: (
+  getPageListItems: (
     projectId?: number,
     params?: {
       [key: string]: unknown;
@@ -19,31 +19,7 @@ export const pageListApi = {
   ): Promise<AxiosResponse<GetPageListResponse | undefined>> =>
     axiosInstance({
       method: "GET",
-      url: `/page-list/articles/${projectId ?? ""}`,
-      params,
-      transformResponse: (response): GetPageListResponse | undefined => {
-        if (!response) {
-          return;
-        }
-
-        try {
-          const json = JSON.parse(response);
-          return json as GetPageListResponse;
-        } catch (e) {
-          throw new Error("Could not parse response");
-        }
-      },
-    }),
-
-  getGalleries: (
-    projectId?: number,
-    params?: {
-      [key: string]: unknown;
-    }
-  ): Promise<AxiosResponse<GetPageListResponse | undefined>> =>
-    axiosInstance({
-      method: "GET",
-      url: `/page-list/galleries/${projectId ?? ""}`,
+      url: `/page-list/items/${projectId ?? ""}`,
       params,
       transformResponse: (response): GetPageListResponse | undefined => {
         if (!response) {

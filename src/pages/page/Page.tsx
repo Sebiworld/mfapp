@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { pageStyles } from "./page.styles";
 // import WarningIcon from "@mui/icons-material/Warning";
 import { useTranslation } from "react-i18next";
@@ -36,6 +36,29 @@ export const Page = () => {
       : "Musical-Fabrik";
   }, [page?.title]);
 
+  const lastHash = useRef("");
+
+  // listen to location change using useEffect with location as dependency
+  // https://jasonwatmore.com/react-router-v6-listen-to-location-route-change-without-history-listen
+  useEffect(() => {
+    if (isLoading) {
+      return;
+    }
+
+    if (location.hash) {
+      lastHash.current = location.hash.slice(1); // safe hash for further use after navigation
+    }
+
+    if (lastHash.current && document.getElementById(lastHash.current)) {
+      setTimeout(() => {
+        document
+          .getElementById(lastHash.current)
+          ?.scrollIntoView({ behavior: "smooth", block: "start" });
+        lastHash.current = "";
+      }, 100);
+    }
+  }, [location, isLoading]);
+
   return (
     <Box
       className={`page template-${page?.template?.name || "unknown"}`}
@@ -45,8 +68,11 @@ export const Page = () => {
       <title>{title}</title>
 
       <ProjectPage page={page}>
+        <LoadingOverlay
+          visible={isLoading}
+          onlyProgress={!!page?.id}
+        ></LoadingOverlay>
         <PageContents page={page}></PageContents>
-        {isLoading && <LoadingOverlay overlay={!!page?.id}></LoadingOverlay>}
       </ProjectPage>
 
       {loadedPage?.status === "error" && (

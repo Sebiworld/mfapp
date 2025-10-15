@@ -95,7 +95,6 @@ export const ProjectRolePortraits: FC<ProjectRolePortraitsProps> = ({
 
             if (isValidArray(participant.portrait_ids)) {
               for (const portraitId of participant.portrait_ids) {
-                console.log("portraitId 1", portraitId);
                 if (typeof portraitId === "number" && portraitId <= 0) {
                   // Place a dummy portrait
 

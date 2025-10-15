@@ -95,7 +95,7 @@ export const SectionArticlesCarousel: React.FC<
         <Box className="section-actions">
           <Button
             variant="contained"
-            color="secondary"
+            color="projectPrimary"
             href={section.articles_page_url}
             className="all-articles-button"
           >

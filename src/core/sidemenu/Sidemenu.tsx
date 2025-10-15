@@ -20,7 +20,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { selectMenues } from "@src/store/configuration.store";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { MenueItem } from "./components/MenueItem";
-import { Link } from "react-router";
+import { NavLink } from "react-router";
 
 export interface SidemenuProps {
   sidemenuOpen: boolean;
@@ -120,13 +120,13 @@ export const Sidemenu = ({ sidemenuOpen, setSidemenuOpen }: SidemenuProps) => {
 
             <List component="nav" className="navigation-list">
               <ListItem>
-                <ListItemButton component={Link} to="/shop" disabled>
+                <ListItemButton component={NavLink} to="/shop" disabled>
                   Merch-Shop
                 </ListItemButton>
               </ListItem>
 
               <ListItem>
-                <ListItemButton component={Link} to="/events" disabled>
+                <ListItemButton component={NavLink} to="/events" disabled>
                   Probenplan
                 </ListItemButton>
               </ListItem>
@@ -142,7 +142,7 @@ export const Sidemenu = ({ sidemenuOpen, setSidemenuOpen }: SidemenuProps) => {
 
         <List component="nav" className="navigation-list">
           <ListItem>
-            <ListItemButton component={Link} to="/settings">
+            <ListItemButton component={NavLink} to="/settings">
               {t("sidemenu.settings")}
             </ListItemButton>
           </ListItem>

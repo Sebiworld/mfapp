@@ -6,6 +6,7 @@ export const pageContentsStyles: SxProps = {
 
   ".page-content": {
     margin: "32px",
+    marginBottom: "16px",
     padding: "32px 48px 48px 48px",
     display: "flex",
     flexDirection: "column",

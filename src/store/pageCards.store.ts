@@ -19,7 +19,10 @@ export interface PageCardsState {
 }
 
 export interface PageCardsActions {
-  addPageCards: (pageCards: PageCardDtoWithIndex[]) => void;
+  addPageCards: (
+    pageCards: PageCardDtoWithIndex[],
+    indexData: { indexKey: string; filterHash: string; startIndex: number }
+  ) => void;
   initializePageCards: () => Promise<void>;
   resetPageCards: (projectId?: number, template?: string) => Promise<void>;
 }
@@ -48,23 +51,97 @@ export const createPageCardsSlice: StateCreator<
 > = (set, get) => ({
   pageCards: {},
 
-  addPageCards: async (pageCards: PageCardDtoWithIndex[]) => {
+  addPageCards: async (
+    pageCards: PageCardDtoWithIndex[],
+    indexData: { indexKey: string; filterHash: string; startIndex: number }
+  ) => {
+    // .map((item, index) => ({
+    //   ...item,
+    //   indexData: {
+    //     [indexKey]: {
+    //       [filterHash]: (params?.offset || 0) + index,
+    //     },
+    //   },
+    // }))
+
     set((state) => {
       const changedState = {
         pageCards: { ...state.pageCards },
       };
 
-      for (const pageCard of pageCards) {
-        const indexData = changedState.pageCards[pageCard.id]?.indexData || {};
+      for (const pageCardIndex in pageCards) {
+        const pageCard = pageCards[pageCardIndex];
+
+        const existingIndexData =
+          changedState.pageCards[pageCard.id]?.indexData || {};
 
         changedState.pageCards[pageCard.id] = pageCard;
 
         // Merge index data if available
-        if (isValidObject(changedState.pageCards[pageCard.id]?.indexData)) {
-          changedState.pageCards[pageCard.id].indexData = {
-            ...indexData,
-            ...changedState.pageCards[pageCard.id]?.indexData,
+        if (isValidObject(indexData)) {
+          const newIndex = indexData!.startIndex + parseInt(pageCardIndex, 10);
+          const newIndexData = {
+            [indexData!.indexKey]: {
+              [indexData!.filterHash]: newIndex,
+            },
           };
+
+          // Remove matching indexData from other entries
+          for (const otherPageCard of Object.values(changedState.pageCards)) {
+            if (otherPageCard.id === pageCard.id) {
+              continue;
+            }
+
+            if (
+              otherPageCard.indexData?.[indexData!.indexKey]?.[
+                indexData!.filterHash
+              ] === newIndex
+            ) {
+              delete otherPageCard.indexData[indexData.indexKey][
+                indexData.filterHash
+              ];
+            }
+          }
+
+          if (isValidObject(existingIndexData)) {
+            changedState.pageCards[pageCard.id].indexData = {
+              ...existingIndexData,
+              ...newIndexData,
+            };
+          } else {
+            changedState.pageCards[pageCard.id].indexData = newIndexData;
+          }
+        }
+      }
+
+      // Cleanup orphaned indexData entries
+      for (const pageCardKey in changedState.pageCards) {
+        const pageCard = changedState.pageCards[pageCardKey];
+
+        if (!isValidObject(pageCard.indexData)) {
+          continue;
+        }
+
+        const thisIndexData = pageCard.indexData;
+        if (!isValidObject(thisIndexData)) {
+          delete changedState.pageCards[pageCardKey];
+          continue;
+        }
+
+        for (const indexDataKey in thisIndexData) {
+          if (!isValidObject(thisIndexData[indexDataKey])) {
+            continue;
+          }
+
+          if (!Object.keys(thisIndexData[indexDataKey]).length) {
+            delete thisIndexData[indexDataKey];
+            continue;
+          }
+        }
+
+        if (Object.keys(thisIndexData).length === 0) {
+          delete changedState.pageCards[pageCardKey];
+          continue;
         }
       }
 

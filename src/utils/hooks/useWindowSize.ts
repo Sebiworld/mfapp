@@ -15,17 +15,13 @@ export const useWindowSize = () => {
     if (typeof window !== "undefined") {
       // Handler to call on window resize
 
-      // eslint-disable-next-line
       // @ts-ignore
       function handleResize() {
         // Set window width/height to state
-        // eslint-disable-next-line
         // @ts-ignore
         setWindowSize({
-          // eslint-disable-next-line
           // @ts-ignore
           width: window.innerWidth,
-          // eslint-disable-next-line
           // @ts-ignore
           height: window.innerHeight,
         });

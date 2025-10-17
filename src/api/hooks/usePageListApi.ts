@@ -57,16 +57,13 @@ export const usePageListApi = (): UsePageListApiOutput => {
           const filterHash = getFilterHash(params?.templates, params?.sortBy);
 
           addPageCards(
-            items.map((item, index) => ({
-              ...item,
-              indexData: {
-                [indexKey]: {
-                  [filterHash]: (params?.offset || 0) + index,
-                },
-              },
-            }))
+            items,
+            {
+              indexKey,
+              filterHash,
+              startIndex: params?.offset || 0,
+            }
           );
-
           // TODO: indexData löschen, wenn sie nicht mehr zur Response hier passt. Ganzes Item löschen, wenn kein indexData mehr da ist.
         }
 

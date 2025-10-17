@@ -23,7 +23,7 @@ import { SectionFormDto } from "@models/section/section-form.model";
 import { useReward } from "react-rewards";
 import { useGlobalStore } from "@src/store/global.store";
 import { selectProjects } from "@src/store/projects.store";
-import { useLocation, useParams } from "react-router";
+import { useLocation } from "react-router";
 
 export interface FormMessage {
   id: string;

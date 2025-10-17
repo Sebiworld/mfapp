@@ -193,7 +193,7 @@ export const createAuthSlice: StateCreator<GlobalStore, [], [], AuthSlice> = (
     } catch (error) {
       console.error("Error while trying to renew access: ", error);
       const resetApp = get().resetApp;
-      await resetApp();
+      await resetApp(true);
     }
   },
 

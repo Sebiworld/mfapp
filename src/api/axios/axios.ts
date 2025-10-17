@@ -1,4 +1,5 @@
 // import { ErrorResponseDto } from "@models/error-response-dto.model";
+import { ErrorResponseDto } from "@models/error-response-dto.model";
 import { useGlobalStore } from "@src/store/global.store";
 import axios, { AxiosError } from "axios";
 import axiosRetry from "axios-retry";
@@ -28,7 +29,7 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-const isRenewableRequest = (error: AxiosError): boolean => {
+const isRenewableRequest = (error: AxiosError<ErrorResponseDto>): boolean => {
   if (
     error?.config &&
     (error.config as unknown as { _retry?: boolean })._retry
@@ -38,7 +39,7 @@ const isRenewableRequest = (error: AxiosError): boolean => {
 
   console.log("isRenewableRequest", error);
 
-  if (error?.response?.status === 401) {
+  if (error?.response?.data?.errorcode === "access_token_expired") {
     return true;
   }
 

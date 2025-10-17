@@ -17,7 +17,7 @@ export const VirtualizedCellRenderer: GridCellRenderer = ({
   rowIndex,
   style,
 }) => {
-  const content; // Derive this from your data somehow
+  const content = ""; // Derive this from your data somehow
 
   return (
     <CellMeasurer

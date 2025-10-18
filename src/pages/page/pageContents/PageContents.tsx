@@ -8,9 +8,19 @@ import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { formatDate } from "@utils/functions/formatDate";
 import { isValidArray } from "@utils/functions/isValidArray";
-import { ProjectRole } from "../templateContents/projectRole/ProjectRole";
 import { ListContainerPageDto } from "@models/page/list-container-page-dto.model";
-import { ListContainer } from "../templateContents/listContainer/ListContainer";
+import React from "react";
+
+const ProjectRole = React.lazy(() =>
+  import("../templateContents/projectRole/ProjectRole").then((module) => ({
+    default: module.ProjectRole,
+  }))
+);
+const ListContainer = React.lazy(() =>
+  import("../templateContents/listContainer/ListContainer").then((module) => ({
+    default: module.ListContainer,
+  }))
+);
 
 export interface PagesContentsProps {
   page?: PageDtoVariant;

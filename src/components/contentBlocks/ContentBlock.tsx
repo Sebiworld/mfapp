@@ -1,19 +1,50 @@
 import React from "react";
-import { ContentText } from "./variants/ContentText";
 import { ContentBlockTextDto } from "@models/content/content-block-text-dto.model";
 import { ContentBlockDtoVariant } from "@models/content/content-block-dto-variant.model";
-import { ContentForm } from "./variants/contentForm/ContentForm";
 import { ContentBlockFormDto } from "@models/content/content-block-form-dto.model";
 import { ContentBlockYoutubeVideoDto } from "@models/content/content-block-youtube-video-dto.model";
-import { ContentYoutubeVideo } from "./variants/contentYoutubeVideo/ContentYoutubeVideo";
 import { ContentBlockGalleryDto } from "@models/content/content-block-gallery-dto.model";
-import { ContentGallery } from "./variants/contentGallery/ContentGallery";
-import { ContentImage } from "./variants/ContentImage";
 import { ContentBlockImageDto } from "@models/content/content-block-image-dto.model";
-import { ContentFiles } from "./variants/contentFiles/ContentFiles";
 import { ContentBlockFilesDto } from "@models/content/content-block-files-dto.model";
 import { ContentBlockCollapsibleDto } from "@models/content/content-block-collapsible-dto.model";
-import { ContentCollapsible } from "./variants/ContentCollapsible";
+
+const ContentText = React.lazy(() =>
+  import("./variants/ContentText").then((module) => ({
+    default: module.ContentText,
+  }))
+);
+const ContentForm = React.lazy(() =>
+  import("./variants/contentForm/ContentForm").then((module) => ({
+    default: module.ContentForm,
+  }))
+);
+const ContentYoutubeVideo = React.lazy(() =>
+  import("./variants/contentYoutubeVideo/ContentYoutubeVideo").then(
+    (module) => ({
+      default: module.ContentYoutubeVideo,
+    })
+  )
+);
+const ContentGallery = React.lazy(() =>
+  import("./variants/contentGallery/ContentGallery").then((module) => ({
+    default: module.ContentGallery,
+  }))
+);
+const ContentImage = React.lazy(() =>
+  import("./variants/ContentImage").then((module) => ({
+    default: module.ContentImage,
+  }))
+);
+const ContentFiles = React.lazy(() =>
+  import("./variants/contentFiles/ContentFiles").then((module) => ({
+    default: module.ContentFiles,
+  }))
+);
+const ContentCollapsible = React.lazy(() =>
+  import("./variants/ContentCollapsible").then((module) => ({
+    default: module.ContentCollapsible,
+  }))
+);
 
 export interface ContentBlocksProps {
   block: ContentBlockDtoVariant;

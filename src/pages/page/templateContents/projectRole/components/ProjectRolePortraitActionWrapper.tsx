@@ -5,7 +5,6 @@ import {
 
 import { CardActionArea } from "@mui/material";
 import { FC } from "react";
-import { Link } from "react-router";
 
 interface ProjectRolePortraitActionWrapperProps {
   portrait: ProjectPortraitWithRoles | ProjectPortraitDto;
@@ -20,8 +19,7 @@ export const ProjectRolePortraitActionWrapper: FC<
   }
 
   return (
-    <CardActionArea component={Link} to={portrait.url}>
-      {children}
-    </CardActionArea>
+    // <CardActionArea component={Link} to={portrait.url}>
+    <CardActionArea>{children}</CardActionArea>
   );
 };

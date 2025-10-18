@@ -20,7 +20,7 @@ export const projectSidebarStyles: SxProps<Theme> = (theme: Theme) => ({
   [theme.breakpoints.up("md")]: {
     display: "flex",
 
-    "&.mobile": {
+    "&.mobile.mobile": {
       display: "none",
     },
   },

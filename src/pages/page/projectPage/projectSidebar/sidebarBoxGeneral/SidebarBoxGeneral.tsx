@@ -8,10 +8,14 @@ import { Link } from "react-router";
 
 export interface SidebarBoxGeneralProps {
   data?: ProjectGeneralDataBlock[];
+  showTitle?: boolean;
+  onClose?: () => void;
 }
 
 export const SidebarBoxGeneral: React.FC<SidebarBoxGeneralProps> = ({
   data,
+  showTitle,
+  onClose,
 }) => {
   const { t } = useTranslation();
 
@@ -25,9 +29,11 @@ export const SidebarBoxGeneral: React.FC<SidebarBoxGeneralProps> = ({
       data-testid="sidebar-box-general"
       sx={sidebarBoxGeneralStyles}
     >
-      <Typography className="box-title" variant="h3">
-        {t("project.general_data")}
-      </Typography>
+      {showTitle !== false && (
+        <Typography className="box-title" variant="h3">
+          {t("project.general_data")}
+        </Typography>
+      )}
 
       <List component="ul" className="root-list">
         {data.map((item) => {
@@ -38,6 +44,7 @@ export const SidebarBoxGeneral: React.FC<SidebarBoxGeneralProps> = ({
                   component={Link}
                   to={item.link}
                   title={item.linktitle}
+                  onClick={onClose}
                 >
                   <SidebarBoxGeneralItemContent
                     data={item}

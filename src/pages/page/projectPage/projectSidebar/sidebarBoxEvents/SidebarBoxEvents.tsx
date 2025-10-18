@@ -11,9 +11,15 @@ import { Link } from "react-router";
 
 export interface SidebarBoxEventsProps {
   data?: ProjectEventsData;
+  showTitle?: boolean;
+  onClose?: () => void;
 }
 
-export const SidebarBoxEvents: React.FC<SidebarBoxEventsProps> = ({ data }) => {
+export const SidebarBoxEvents: React.FC<SidebarBoxEventsProps> = ({
+  data,
+  showTitle,
+  onClose,
+}) => {
   const { t } = useTranslation();
   const currentDate = useCurrentDate(1000 * 60);
 
@@ -51,16 +57,22 @@ export const SidebarBoxEvents: React.FC<SidebarBoxEventsProps> = ({ data }) => {
       data-testid="sidebar-box-events"
       sx={sidebarBoxEventsStyles}
     >
-      <Typography className="box-title" variant="h3">
-        {t("project.events.title")}
-      </Typography>
+      {showTitle !== false && (
+        <Typography className="box-title" variant="h3">
+          {t("project.events.title")}
+        </Typography>
+      )}
 
       <Box className="lists-wrapper">
         {!!sortedPerformances.future?.length && (
           <Box component="section" className="events-section future">
             <Box className="events-container">
               {sortedPerformances.future.map((item) => (
-                <SidebarBoxEventsEventItem key={item.id} item={item} />
+                <SidebarBoxEventsEventItem
+                  key={item.id}
+                  item={item}
+                  onClose={onClose}
+                />
               ))}
             </Box>
 
@@ -69,6 +81,7 @@ export const SidebarBoxEvents: React.FC<SidebarBoxEventsProps> = ({ data }) => {
                 color="contrast"
                 component={Link}
                 to={data.ticket_page.url}
+                onClick={onClose}
               >
                 {t("project.events.get-tickets")}
               </Button>
@@ -84,7 +97,11 @@ export const SidebarBoxEvents: React.FC<SidebarBoxEventsProps> = ({ data }) => {
 
             <Box className="events-container ">
               {sortedPerformances.past.map((item) => (
-                <SidebarBoxEventsEventItem key={item.id} item={item} />
+                <SidebarBoxEventsEventItem
+                  key={item.id}
+                  item={item}
+                  onClose={onClose}
+                />
               ))}
             </Box>
           </Box>

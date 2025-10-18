@@ -100,15 +100,15 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({ page, children }) => {
       </Box>
 
       <Box className="layout-wrapper">
+        <Box className="project-sidebar-wrapper">
+          <ProjectSidebar project={projectPage}></ProjectSidebar>
+        </Box>
+
         <Box
           className="project-main-content"
           data-testid="project-main-content"
         >
           {children}
-        </Box>
-
-        <Box className="project-sidebar-wrapper">
-          <ProjectSidebar project={projectPage}></ProjectSidebar>
         </Box>
       </Box>
     </Box>

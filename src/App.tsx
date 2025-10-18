@@ -20,6 +20,7 @@ import { CssBaseline } from "@mui/material";
 
 import * as ionIcons from "ionicons/icons";
 import { addIcons } from "ionicons";
+import { ScrollRestoration } from "react-router";
 addIcons(ionIcons);
 
 export const App = () => {
@@ -43,6 +44,7 @@ export const App = () => {
         <CssBaseline />
         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="de">
           <GlobalStylesElement></GlobalStylesElement>
+          <ScrollRestoration />
           <Layout />
           <SplashScreen visible={!isInitialized}></SplashScreen>
         </LocalizationProvider>

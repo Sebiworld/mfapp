@@ -19,11 +19,13 @@ import { useTranslation } from "react-i18next";
 export interface ContentGallerySliderProps {
   images: ImageDto[];
   detailLink?: string;
+  onClose?: () => void;
 }
 
 export const ContentGallerySlider: React.FC<ContentGallerySliderProps> = ({
   images,
   detailLink,
+  onClose,
 }) => {
   const { t } = useTranslation();
 
@@ -70,6 +72,9 @@ export const ContentGallerySlider: React.FC<ContentGallerySliderProps> = ({
                     detailLink={detailLink}
                     onClick={() => {
                       lightGalleryRef?.current?.openGallery(index);
+                      if (typeof onClose === "function") {
+                        onClose();
+                      }
                     }}
                   >
                     <LazyPicture

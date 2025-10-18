@@ -6,9 +6,14 @@ import { Box, Typography } from "@mui/material";
 
 export interface SidebarBoxShareProps {
   data?: IconLinkDto[];
+  showTitle?: boolean;
+  onClose?: () => void;
 }
 
-export const SidebarBoxShare: React.FC<SidebarBoxShareProps> = ({ data }) => {
+export const SidebarBoxShare: React.FC<SidebarBoxShareProps> = ({
+  data,
+  showTitle,
+}) => {
   const { t } = useTranslation();
 
   if (!isValidArray(data) || !data.length) {
@@ -21,9 +26,11 @@ export const SidebarBoxShare: React.FC<SidebarBoxShareProps> = ({ data }) => {
       data-testid={`sidebar-box-share`}
       sx={sidebarBoxShareStyles}
     >
-      <Typography className="box-title" variant="h3">
-        {t(`project.share`)}
-      </Typography>
+      {showTitle !== false && (
+        <Typography className="box-title" variant="h3">
+          {t(`project.share`)}
+        </Typography>
+      )}
 
       {/* TODO */}
     </Box>

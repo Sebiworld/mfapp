@@ -7,11 +7,14 @@ import { Box, Typography } from "@mui/material";
 export interface SidebarBoxSponsorsProps {
   data?: SponsorDto[];
   type?: string;
+  showTitle?: boolean;
+  onClose?: () => void;
 }
 
 export const SidebarBoxSponsors: React.FC<SidebarBoxSponsorsProps> = ({
   data,
   type = "sponsors",
+  showTitle,
 }) => {
   const { t } = useTranslation();
 
@@ -25,9 +28,11 @@ export const SidebarBoxSponsors: React.FC<SidebarBoxSponsorsProps> = ({
       data-testid={`sidebar-box-${type}`}
       sx={sidebarBoxSponsorsStyles}
     >
-      <Typography className="box-title" variant="h3">
-        {t(`project.${type}`)}
-      </Typography>
+      {showTitle !== false && (
+        <Typography className="box-title" variant="h3">
+          {t(`project.${type}`)}
+        </Typography>
+      )}
 
       <Box className="list-container">
         {data.map((item, index, all) => {

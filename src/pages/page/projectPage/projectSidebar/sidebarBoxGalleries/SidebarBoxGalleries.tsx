@@ -13,10 +13,14 @@ type SidebarBoxGalleriesData = ProjectDetailsDto["images"];
 export interface SidebarBoxGalleriesProps {
   data?: SidebarBoxGalleriesData;
   type?: string;
+  showTitle?: boolean;
+  onClose?: () => void;
 }
 
 export const SidebarBoxGalleries: React.FC<SidebarBoxGalleriesProps> = ({
   data,
+  showTitle,
+  onClose,
 }) => {
   const { t } = useTranslation();
 
@@ -38,9 +42,11 @@ export const SidebarBoxGalleries: React.FC<SidebarBoxGalleriesProps> = ({
       data-testid={`sidebar-box-galleries`}
       sx={sidebarBoxGalleriesStyles}
     >
-      <Typography className="box-title" variant="h3">
-        {t(`project.galleries.title`)}
-      </Typography>
+      {showTitle !== false && (
+        <Typography className="box-title" variant="h3">
+          {t(`project.galleries.title`)}
+        </Typography>
+      )}
 
       {gallery && (
         <Box className="gallery-container aspect-ratio ar-8-5">
@@ -48,6 +54,7 @@ export const SidebarBoxGalleries: React.FC<SidebarBoxGalleriesProps> = ({
             <ContentGallerySlider
               images={gallery.images as ImageDto[]}
               detailLink={gallery.url}
+              onClose={onClose}
             />
           </Box>
         </Box>
@@ -60,6 +67,7 @@ export const SidebarBoxGalleries: React.FC<SidebarBoxGalleriesProps> = ({
           href={data.galleries_page_url}
           fullWidth
           size="small"
+          onClick={onClose}
         >
           {t("project.galleries.more")}
         </Button>

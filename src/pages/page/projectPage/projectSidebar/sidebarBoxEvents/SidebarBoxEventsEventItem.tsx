@@ -4,6 +4,7 @@ import { Box, Chip, Typography } from "@mui/material";
 
 export interface SidebarBoxEventsEventItemProps {
   item: PerformanceDto;
+  onClose?: () => void;
 }
 
 export const SidebarBoxEventsEventItem: React.FC<

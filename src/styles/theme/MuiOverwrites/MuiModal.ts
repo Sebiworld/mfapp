@@ -60,10 +60,27 @@ export const MuiModalOverwrites: Components<Theme> = {
           },
 
           "&>.modal-header": {
-            paddingBottom: 0,
+            position: "relative",
+            paddingTop: "8px",
+            paddingBottom: "8px",
+            paddingRight: "16px",
 
-            ".actions": {
+            "&>.title": {
+              fontSize: "24px",
+              fontWeight: 600,
+            },
+
+            "&>.actions": {
               alignSelf: "flex-end",
+            },
+
+            "&::after": {
+              content: '""',
+              position: "absolute",
+              bottom: 0,
+              left: "16px",
+              right: "16px",
+              borderBottom: `2px solid var(--mf-palette-contrast-900)`,
             },
           },
 

@@ -17,10 +17,14 @@ import { Link } from "react-router";
 
 export interface SidebarBoxLinksProps {
   navItems?: NavigationItemDto[];
+  showTitle?: boolean;
+  onClose?: () => void;
 }
 
 export const SidebarBoxLinks: React.FC<SidebarBoxLinksProps> = ({
   navItems,
+  showTitle,
+  onClose,
 }) => {
   const { t } = useTranslation();
 
@@ -34,9 +38,11 @@ export const SidebarBoxLinks: React.FC<SidebarBoxLinksProps> = ({
       data-testid="sidebar-box-general"
       sx={sidebarBoxLinksStyles}
     >
-      <Typography className="box-title" variant="h3">
-        {t("project.links")}
-      </Typography>
+      {showTitle !== false && (
+        <Typography className="box-title" variant="h3">
+          {t("project.links")}
+        </Typography>
+      )}
 
       <List className="nav-list" component="ul">
         {navItems.map((item, index) => (
@@ -47,6 +53,7 @@ export const SidebarBoxLinks: React.FC<SidebarBoxLinksProps> = ({
                 pathname: item?.page?.url || item.link,
                 hash: item.section,
               }}
+              onClick={onClose}
             >
               <ListItemIcon>
                 <IonIcon aria-hidden="true" icon={link}></IonIcon>

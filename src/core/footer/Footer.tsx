@@ -5,11 +5,10 @@ import LanguageIcon from "@mui/icons-material/Language";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import YoutubeIcon from "@mui/icons-material/YouTube";
-// import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { Trans, useTranslation } from "react-i18next";
-import Lottie from "react-lottie";
 import heartAnimation from "@assets/lotties/heart.json";
 import { useCurrentDate } from "@utils/hooks/useCurrentDate";
+import { useLottie } from "lottie-react";
 import {
   Box,
   Button,
@@ -34,6 +33,12 @@ const heartAnimationOptions = {
   rendererSettings: {
     preserveAspectRatio: "xMidYMid slice",
   },
+  key: "heartAnimation",
+};
+const heartAnimationStyles = {
+  margin: " 0 -16px 0 -16px",
+  width: "3.5em",
+  height: "3em",
 };
 
 export function Footer() {
@@ -58,6 +63,10 @@ export function Footer() {
 
   const loadedMenues = useGlobalStore(selectMenues);
   const tertiaryNavigation = loadedMenues?.tertiary_navigation;
+  const { View: heartElement } = useLottie(
+    heartAnimationOptions,
+    heartAnimationStyles
+  );
 
   return (
     <Box className="footer-wrapper" sx={footerStyles}>
@@ -127,16 +136,7 @@ export function Footer() {
                   key="link"
                 />
               ),
-              // heart: <FavoriteBorderIcon />,
-              heart: (
-                <Lottie
-                  options={heartAnimationOptions}
-                  height={"3em"}
-                  width={"3.5em"}
-                  style={{ margin: " 0 -16px 0 -16px" }}
-                  key="heart"
-                />
-              ),
+              heart: heartElement,
             }}
           ></Trans>
         </div>

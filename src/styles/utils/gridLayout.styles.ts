@@ -6,22 +6,22 @@ export const gridLayoutStyles: (theme: Theme) => SystemStyleObject<Theme> = (
 ) => ({
   position: "relative",
   display: "grid",
-  gridTemplateColumns: "repeat(12, 1fr)",
+  gridTemplateColumns: "repeat(6, 1fr)",
   gridAutoFlow: "dense",
   width: "100%",
   gap: "32px",
 
-  [theme.breakpoints.down("md")]: {
-    gridTemplateColumns: "repeat(6, 1fr)",
+  [theme.breakpoints.up("lg")]: {
+    gridTemplateColumns: "repeat(12, 1fr)",
   },
 
   ".layout-block": {
     position: "relative",
     textAlign: "left",
-    gridColumnEnd: "span 12",
+    gridColumnEnd: "span 6",
 
-    [theme.breakpoints.down("md")]: {
-      gridColumnEnd: "span 6",
+    [theme.breakpoints.up("lg")]: {
+      gridColumnEnd: "span 12",
     },
 
     "&.block-depth-1": {

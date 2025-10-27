@@ -55,6 +55,24 @@ export const globalContentStyles: Interpolation<Theme>[] = [
         width: "100%",
       },
 
+      table: {
+        marginLeft: "-12px",
+        marginRight: "-12px",
+        borderCollapse: "collapse",
+
+        tr: {
+          borderBottom: `1px solid var(--mf-palette-contrast-900)`,
+
+          "&:last-child": {
+            borderBottom: "0 none",
+          },
+        },
+
+        td: {
+          padding: "6px 12px",
+        },
+      },
+
       "&.capital-letter, .capital-letter": {
         marginTop: "32px",
         marginLeft: 0,
@@ -199,6 +217,17 @@ export const globalContentStyles: Interpolation<Theme>[] = [
           "&:hover, &:focus": {
             backgroundColor: "var(--mf-palette-light-600, #185EA5)",
             color: "var(--mf-palette-light-solidColor, #000)",
+          },
+        },
+
+        "&.btn-contrast": {
+          backgroundColor:
+            "var(--variant-solidBg, var(--mf-palette-contrast-solidBg, var(--mf-palette-contrast-500, #0B6BCB)))",
+          color: "var(--mf-palette-contrast-solidColor, #000)",
+
+          "&:hover, &:focus": {
+            backgroundColor: "var(--mf-palette-contrast-600, #185EA5)",
+            color: "var(--mf-palette-contrast-solidColor, #000)",
           },
         },
 

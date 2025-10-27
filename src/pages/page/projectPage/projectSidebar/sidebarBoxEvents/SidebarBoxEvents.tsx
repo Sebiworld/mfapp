@@ -78,6 +78,7 @@ export const SidebarBoxEvents: React.FC<SidebarBoxEventsProps> = ({
 
             {data.ticket_page?.url && (
               <Button
+                variant="contained"
                 color="contrast"
                 component={Link}
                 to={data.ticket_page.url}

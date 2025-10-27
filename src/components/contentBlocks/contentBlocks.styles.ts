@@ -10,10 +10,10 @@ export const contentBlocksStyles: SxProps<Theme> = [
       maxWidth: "100%",
 
       "&.content-form": {
-        gridColumnEnd: "span 12",
+        gridColumnEnd: "span 6",
 
-        [theme.breakpoints.down("md")]: {
-          gridColumn: "span 6",
+        [theme.breakpoints.up("lg")]: {
+          gridColumn: "span 12",
         },
       },
 

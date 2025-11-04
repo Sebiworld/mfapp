@@ -28,35 +28,28 @@ export const projectRoleStyles: SxProps<Theme> = (theme) => ({
     ".cast": {
       ".cast-title": {
         textAlign: "center",
-        borderLeft: `1px solid ${theme.palette.contrast[50]}`,
-        borderRight: `1px solid ${theme.palette.contrast[50]}`,
         paddingLeft: "16px",
         paddingRight: "16px",
-      },
-
-      "&:first-of-type": {
-        ".cast-title": {
-          borderLeft: "0 none",
-        },
-      },
-
-      "&:last-of-type": {
-        ".cast-title": {
-          borderRight: "0 none",
-        },
       },
 
       ".portraits-container": {
         paddingLeft: "16px",
         paddingRight: "16px",
+        justifyContent: "center",
       },
     },
 
     "&.casts-2": {
       ".cast": {
+        ".cast-title": {
+          borderLeft: `1px solid ${theme.palette.contrast[50]}`,
+          borderRight: `1px solid ${theme.palette.contrast[50]}`,
+        },
+
         "&:first-of-type": {
           ".cast-title": {
             textAlign: "right",
+            borderLeft: "0 none",
           },
 
           ".portraits-container": {
@@ -67,6 +60,7 @@ export const projectRoleStyles: SxProps<Theme> = (theme) => ({
         "&:last-of-type": {
           ".cast-title": {
             textAlign: "left",
+            borderRight: "0 none",
           },
 
           ".portraits-container": {

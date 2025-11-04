@@ -3,7 +3,8 @@ import { SxProps, Theme } from "@mui/material";
 
 export const featuredSliderStyles: SxProps<Theme> = [
   swiperStyles,
-  {
+
+  (theme) => ({
     width: "1000px",
     maxWidth: "100%",
     margin: "0 auto",
@@ -31,5 +32,28 @@ export const featuredSliderStyles: SxProps<Theme> = [
         right: "0",
       },
     },
-  },
+
+    ".swiper": {
+      width: "100%",
+      paddingTop: "24px",
+      paddingBottom: "24px",
+
+      [theme.breakpoints.down("md")]: {
+        paddingTop: "0",
+        paddingBottom: "0",
+      },
+    },
+
+    ".swiper-slide": {
+      backgroundPosition: "center",
+      backgroundSize: "cover",
+      width: "300px",
+      height: "300px",
+
+      img: {
+        display: "block",
+        width: "100%",
+      },
+    },
+  }),
 ];

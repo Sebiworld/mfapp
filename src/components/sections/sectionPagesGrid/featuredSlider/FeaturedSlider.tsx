@@ -33,16 +33,19 @@ export const FeaturedSlider: React.FC<FeaturedSliderProps> = ({ section }) => {
     >
       <Swiper
         modules={[Thumbs, Pagination, EffectCoverflow]}
-        slidesPerView={3}
-        spaceBetween={16}
-        centeredSlides
+        slidesPerView={"auto"}
+        // spaceBetween={16}
+        grabCursor={true}
+        centeredSlides={true}
         effect={"coverflow"}
+        coverflowEffect={{
+          rotate: 50,
+          stretch: 0,
+          depth: 100,
+          modifier: 1,
+          slideShadows: true,
+        }}
         pagination={{ clickable: true }}
-        coverflowEffect={
-          {
-            // scale: 2,
-          }
-        }
         onInit={(swiper) => {
           setAllowSlidePrev(!swiper.isBeginning);
           setAllowSlideNext(!swiper.isEnd);
@@ -71,7 +74,10 @@ export const FeaturedSlider: React.FC<FeaturedSliderProps> = ({ section }) => {
               >
                 {!!image && (
                   <LazyPicture
-                    image={image}
+                    image={{
+                      ...image,
+                      description: image.description || card.title,
+                    }}
                     imageProps={{
                       "data-swiper-material-scale": 1.5,
                       "data-swiper-material-slide-size": "100%",

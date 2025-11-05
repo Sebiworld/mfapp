@@ -21,7 +21,9 @@ export const projectPageStyles = (theme: Theme): SystemStyleObject<Theme> => ({
       position: "relative",
       // minHeight: "90px",
       paddingTop: "20px",
-      margin: "0 32px",
+      // margin: "0 32px",
+      paddingLeft: '32px',
+      paddingRight: '32px',
       display: "flex",
       flexDirection: "column",
       gap: "4px",
@@ -91,6 +93,7 @@ export const projectPageStyles = (theme: Theme): SystemStyleObject<Theme> => ({
     ".layout-wrapper.layout-wrapper": {
       display: "flex",
       flexDirection: "row",
+      maxWidth: "100%",
     },
 
     ".project-sidebar-wrapper": {
@@ -133,10 +136,10 @@ export const projectPageStyles = (theme: Theme): SystemStyleObject<Theme> => ({
     },
 
     ".project-main-content": {
-      maxWidth: "67%",
       width: "auto",
       flexGrow: 1,
       flexShrink: 1,
+      overflowX: "hidden",
     },
   },
 });

@@ -9,7 +9,7 @@ export const lazyPictureWithoutFallbackStyles: SxProps = {
   img: {
     position: "relative",
     display: "block",
-    width: "auto",
+    width: "100%",
     height: "auto",
     maxWidth: "100%",
   },

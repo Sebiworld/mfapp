@@ -1,11 +1,13 @@
+import { effectCarouselStyles } from "@components/swiper/effects/effect-carousel.styles";
 import { swiperStyles } from "@components/swiper/swiperStyles";
 import { SxProps, Theme } from "@mui/material";
 
 export const featuredSliderStyles: SxProps<Theme> = [
   swiperStyles,
+  effectCarouselStyles,
 
   (theme) => ({
-    width: "1000px",
+    // width: "1000px",
     maxWidth: "100%",
     margin: "0 auto",
 

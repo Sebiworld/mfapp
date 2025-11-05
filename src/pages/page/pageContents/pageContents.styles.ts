@@ -14,6 +14,7 @@ export const pageContentsStyles: SxProps = {
     gap: "16px",
     borderRadius: "sm",
     boxShadow: "md",
+    maxWidth: "1000px",
 
     "&.message": {
       width: 300,

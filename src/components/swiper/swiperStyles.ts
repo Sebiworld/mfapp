@@ -14,11 +14,15 @@ export const swiperStyles: SystemStyleObject<Theme> = {
       top: "50%",
       transform: "translateY(-50%)",
       zIndex: 10,
-      color: "var(--mf-palette-contrast-500)",
+
       backgroundColor: "rgba(var(--mf-palette-contrast-mainChannel) / 0.15)",
       backdropFilter: "blur(10px)",
       WebkitBackdropFilter: "blur(10px)",
       padding: "8px",
+
+      "&:not(:disabled)": {
+        color: "var(--mf-palette-contrast-500)",
+      },
 
       "&:hover, &:focus": {
         background: "rgba(var(--mf-palette-contrast-mainChannel) / 0.20)",

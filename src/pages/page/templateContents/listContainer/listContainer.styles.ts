@@ -11,4 +11,8 @@ export const listContainerStyles: SxProps<Theme> = {
     paddingTop: "16px",
     marginBottom: "16px",
   },
+
+  "&:last-child": {
+    marginBottom: "100px",
+  },
 };

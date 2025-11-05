@@ -5,6 +5,7 @@ import {
   orderBy as _orderBy,
   trimStart as _trimStart,
   startsWith as _startsWith,
+  cloneDeep as _cloneDeep,
 } from "lodash";
 import { isValidObject } from "@utils/functions/isValidObject";
 import { isValidArray } from "@utils/functions/isValidArray";
@@ -66,7 +67,7 @@ export const createPageCardsSlice: StateCreator<
 
     set((state) => {
       const changedState = {
-        pageCards: { ...state.pageCards },
+        pageCards: _cloneDeep(state.pageCards),
       };
 
       for (const pageCardIndex in pageCards) {

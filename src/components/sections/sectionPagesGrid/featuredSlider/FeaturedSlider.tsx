@@ -1,7 +1,8 @@
 import React, { useRef, useState } from "react";
 
 // Import Swiper React components
-import { Thumbs, Pagination, EffectCoverflow } from "swiper/modules";
+import { Thumbs, Pagination } from "swiper/modules";
+import EffectCarousel from "../../../swiper/effects/effect-carousel.esm";
 
 // Import Swiper styles
 import "swiper/css/bundle";
@@ -32,18 +33,20 @@ export const FeaturedSlider: React.FC<FeaturedSliderProps> = ({ section }) => {
       sx={featuredSliderStyles}
     >
       <Swiper
-        modules={[Thumbs, Pagination, EffectCoverflow]}
+        modules={[Thumbs, Pagination, EffectCarousel]}
         slidesPerView={"auto"}
         // spaceBetween={16}
         grabCursor={true}
         centeredSlides={true}
-        effect={"coverflow"}
-        coverflowEffect={{
-          rotate: 50,
-          stretch: 0,
-          depth: 100,
-          modifier: 1,
-          slideShadows: true,
+        effect={"carousel"}
+        // @ts-expect-error - carouselEffect is a custom prop provided by the EffectCarousel module
+        carouseleffect={{
+          // opacity change per side slide
+          opacityStep: 0.5,
+          // scale change per side slide
+          scaleStep: 0.8,
+          // amount of side slides visible, can be 1, 2 or 3
+          sideSlides: 3,
         }}
         pagination={{ clickable: true }}
         onInit={(swiper) => {

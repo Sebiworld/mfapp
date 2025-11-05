@@ -119,6 +119,11 @@ export const footerStyles: SxProps<Theme> = (theme) => ({
     marginLeft: "32px",
     marginRight: "32px",
     marginBottom: "8px",
+
+    [theme.breakpoints.down("md")]: {
+      marginLeft: 0,
+      marginRight: 0,
+    },
   },
 
   ".bottom-wrapper": {
@@ -133,6 +138,8 @@ export const footerStyles: SxProps<Theme> = (theme) => ({
 
     [theme.breakpoints.down("md")]: {
       flexDirection: "column",
+      padding: 0,
+      alignItems: "flex-start",
     },
   },
 
@@ -158,5 +165,10 @@ export const footerStyles: SxProps<Theme> = (theme) => ({
 
   ".copyright": {
     display: "block",
+
+    [theme.breakpoints.down("md")]: {
+      paddingLeft: "16px",
+      paddingRight: "16px",
+    },
   },
 });

@@ -8,15 +8,15 @@ export const sectionContainerStyles: SxProps = {
     flexDirection: "column",
     gap: "32px",
 
-    // [mfTheme.breakpoints.down("md")]: {
-    //   gap: "16px",
-    // },
+    [mfTheme.breakpoints.down("md")]: {
+      gap: "16px",
+    },
 
     "&:not(.np)": {
       padding: "64px",
 
       [mfTheme.breakpoints.down("md")]: {
-        padding: "48px 24px",
+        padding: "42px 24px",
       },
     },
 
@@ -29,6 +29,7 @@ export const sectionContainerStyles: SxProps = {
 
       [mfTheme.breakpoints.down("md")]: {
         fontSize: "24px",
+        marginBottom: "8px",
       },
     },
 

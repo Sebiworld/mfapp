@@ -10,8 +10,10 @@ export const contentGalleryStyles: SxProps<Theme> = [
     },
 
     "&.gallery-type-slider": {
-      paddingLeft: "48px",
-      paddingRight: "48px",
+      [theme.breakpoints.up("sm")]: {
+        paddingLeft: "48px",
+        paddingRight: "48px",
+      },
     },
 
     ".gallery-container": {

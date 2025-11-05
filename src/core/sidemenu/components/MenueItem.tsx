@@ -5,14 +5,16 @@ import { Link } from "react-router";
 
 export interface MenueItemProps {
   item: NavigationItemDto;
+  onClick?: () => void;
 }
 
-export const MenueItem = ({ item }: MenueItemProps) => {
+export const MenueItem = ({ item, onClick }: MenueItemProps) => {
   return (
     <ListItem>
       <ListItemButton
         component={Link}
         to={{ pathname: item?.page?.url || item.link, hash: item.section }}
+        onClick={onClick}
       >
         {item.ionicon && (
           <ListItemIcon>

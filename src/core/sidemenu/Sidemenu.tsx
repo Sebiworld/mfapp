@@ -21,6 +21,7 @@ import { selectMenues } from "@src/store/configuration.store";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { MenueItem } from "./components/MenueItem";
 import { NavLink } from "react-router";
+import { useCallback } from "react";
 
 export interface SidemenuProps {
   sidemenuOpen: boolean;
@@ -47,6 +48,10 @@ export const Sidemenu = ({ sidemenuOpen, setSidemenuOpen }: SidemenuProps) => {
 
     return items;
   }, [loadedMenues?.main_navigation, loadedMenues?.secondary_navigation]);
+
+  const closeSidemenu = useCallback(() => {
+    setSidemenuOpen(false);
+  }, [setSidemenuOpen]);
 
   return (
     <>
@@ -120,19 +125,33 @@ export const Sidemenu = ({ sidemenuOpen, setSidemenuOpen }: SidemenuProps) => {
 
             <List component="nav" className="navigation-list">
               <ListItem>
-                <ListItemButton component={NavLink} to="/shop" disabled>
+                <ListItemButton
+                  component={NavLink}
+                  to="/shop"
+                  disabled
+                  onClick={closeSidemenu}
+                >
                   Merch-Shop
                 </ListItemButton>
               </ListItem>
 
               <ListItem>
-                <ListItemButton component={NavLink} to="/events" disabled>
+                <ListItemButton
+                  component={NavLink}
+                  to="/events"
+                  disabled
+                  onClick={closeSidemenu}
+                >
                   Probenplan
                 </ListItemButton>
               </ListItem>
 
               {menueItems.map((item) => (
-                <MenueItem key={item.id} item={item}></MenueItem>
+                <MenueItem
+                  key={item.id}
+                  item={item}
+                  onClick={closeSidemenu}
+                ></MenueItem>
               ))}
             </List>
           </Box>
@@ -141,11 +160,11 @@ export const Sidemenu = ({ sidemenuOpen, setSidemenuOpen }: SidemenuProps) => {
         <hr />
 
         <List component="nav" className="navigation-list">
-          <ListItem>
+          {/* <ListItem>
             <ListItemButton component={NavLink} to="/settings">
               {t("sidemenu.settings")}
             </ListItemButton>
-          </ListItem>
+          </ListItem> */}
 
           <ListItem>
             {currentUser?.data?.isLoggedIn ? (

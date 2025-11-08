@@ -81,8 +81,6 @@ export const StartupModalRegistrationForm = ({
   });
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
-    console.log("submit", data);
-
     await registration(
       data.email,
       data.password,

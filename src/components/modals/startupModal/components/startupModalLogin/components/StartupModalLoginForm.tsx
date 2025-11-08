@@ -45,8 +45,6 @@ export const StartupModalLoginForm = ({
   });
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
-    console.log("submit", data);
-
     if (!data?.email || !data?.password) {
       toast.error(t("startup.error-no-email-password"));
       return;

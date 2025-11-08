@@ -1,13 +1,16 @@
-import { selectIsLoggedIn, selectNickname } from "@src/store/auth.store";
 import { useGlobalStore } from "@src/store/global.store";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { startupModalStyles } from "./startupModalStyles";
 import { StartupModalIntro } from "./components/StartupModalIntro";
 import { StartupModalNickname } from "./components/StartupModalNickname";
 import { StartupModalLogout } from "./components/StartupModalLogout";
-import { selectDidReceiveWelcomeMessage } from "@src/store/initialization.store";
 import { StartupModalLogin } from "./components/startupModalLogin/StartupModalLogin";
 import { Modal, Paper } from "@mui/material";
+import { selectDidReceiveWelcomeMessage } from "@src/store/initialization/initialization.selectors";
+import {
+  selectIsLoggedIn,
+  selectNickname,
+} from "@src/store/auth/auth.selectors";
 
 export interface StartupModalProps {
   setIsStartupModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;

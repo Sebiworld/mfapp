@@ -3,10 +3,8 @@ import ThemeSelect from "@components/ThemeSelect";
 import { sidemenuStyles } from "./sidemenu.styles";
 import { useTranslation } from "react-i18next";
 import { useGlobalStore } from "@src/store/global.store";
-import { selectCurrentUser, selectLogout } from "@src/store/auth.store";
 import { StartupModal } from "@components/modals/startupModal/StartupModal";
 import {
-  Avatar,
   Box,
   Button,
   Drawer,
@@ -18,7 +16,6 @@ import {
   Typography,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { selectMenues } from "@src/store/configuration.store";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { MenueItem } from "./components/MenueItem";
 import { NavLink, Link as RouterLink } from "react-router";
@@ -26,6 +23,9 @@ import { useCallback, useEffect, useMemo } from "react";
 import { MfLogo } from "@components/mfLogo/MfLogo";
 import { SectionSpacer } from "@components/sectionSpacer/SectionSpacer";
 import { ProfileCard } from "./components/ProfileCard";
+import { selectCurrentUser } from "@src/store/auth/auth.selectors";
+import { selectMenues } from "@src/store/configuration/configuration.selectors";
+import { authStoreActions } from "@src/store/auth/auth.actions";
 
 export interface SidemenuProps {
   sidemenuOpen: boolean;
@@ -34,7 +34,6 @@ export interface SidemenuProps {
 
 export const Sidemenu = ({ sidemenuOpen, setSidemenuOpen }: SidemenuProps) => {
   const { t } = useTranslation();
-  const logout = useGlobalStore(selectLogout);
   const currentUser = useGlobalStore(selectCurrentUser);
   const [isStartupModalOpen, setIsStartupModalOpen] = React.useState(false);
   const loadedMenues = useGlobalStore(selectMenues);
@@ -168,7 +167,7 @@ export const Sidemenu = ({ sidemenuOpen, setSidemenuOpen }: SidemenuProps) => {
               {currentUser?.data?.isLoggedIn ? (
                 <ListItemButton
                   onClick={() => {
-                    logout();
+                    authStoreActions.logout();
                   }}
                 >
                   {t("auth.logout")}

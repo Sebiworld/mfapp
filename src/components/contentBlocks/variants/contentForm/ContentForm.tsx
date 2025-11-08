@@ -22,8 +22,8 @@ import CheckIcon from "@mui/icons-material/Check";
 import { SectionFormDto } from "@models/section/section-form.model";
 import { useReward } from "react-rewards";
 import { useGlobalStore } from "@src/store/global.store";
-import { selectProjects } from "@src/store/projects.store";
 import { useLocation } from "react-router";
+import { selectProjects } from "@src/store/projects/projects.selectors";
 
 export interface FormMessage {
   id: string;

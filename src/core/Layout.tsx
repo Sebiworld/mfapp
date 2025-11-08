@@ -5,9 +5,9 @@ import { Footer } from "./footer/Footer";
 import { layoutStyles } from "./layout.styles";
 import { useColorTheme } from "@utils/hooks/useColorTheme";
 import { useGlobalStore } from "@src/store/global.store";
-import { selectUserHash } from "@src/store/auth.store";
 import { Box } from "@mui/material";
 import { Outlet } from "react-router";
+import { selectUserHash } from "@src/store/auth/auth.selectors";
 
 export const Layout = () => {
   const theme = useColorTheme();

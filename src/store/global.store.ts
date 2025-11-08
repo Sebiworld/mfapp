@@ -4,20 +4,23 @@ import { devtools, persist } from "zustand/middleware";
 import {
   createInitializationSlice,
   InitializationSlice,
-} from "./initialization.store";
-import { AuthSlice, createAuthSlice } from "./auth.store";
-import { createPagesSlice, PagesSlice } from "./pages.store";
-import { createSettingsSlice, SettingsSlice } from "./settings.store";
-import { createProjectsSlice, ProjectsSlice } from "./projects.store";
+} from "./initialization/initialization.store";
+import { AuthSlice, createAuthSlice } from "./auth/auth.store";
+import { createPagesSlice, PagesSlice } from "./pages/pages.store";
+import { createSettingsSlice, SettingsSlice } from "./settings/settings.store";
+import { createProjectsSlice, ProjectsSlice } from "./projects/projects.store";
 import {
   ConfigurationSlice,
   createConfigurationSlice,
-} from "./configuration.store";
+} from "./configuration/configuration.store";
 import {
   createProjectRolesSlice,
   ProjectRolesSlice,
-} from "./projectRoles.store";
-import { createPageCardsSlice, PageCardsSlice } from "./pageCards.store";
+} from "./projectRoles/projectRoles.store";
+import {
+  createPageCardsSlice,
+  PageCardsSlice,
+} from "./pageCards/pageCards.store";
 
 export type GlobalStore = InitializationSlice &
   AuthSlice &

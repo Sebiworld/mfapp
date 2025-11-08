@@ -3,10 +3,9 @@ import { useGlobalStore } from "@src/store/global.store";
 import { Box, Button, ButtonGroup } from "@mui/material";
 import { projectRoleStyles } from "./projectRole.styles";
 import {
-  selectLoadProjectRoles,
   selectProjectRoles,
   selectProjectSeasons,
-} from "@src/store/projectRoles.store";
+} from "@src/store/projectRoles/projectRoles.selectors";
 import { ProjectRolePortraits } from "./components/ProjectRolePortraits";
 import { getPortraitIdsTree } from "./functions/getPortraitIdsTree";
 import { ProjectSubrole } from "./components/ProjectSubrole";
@@ -14,6 +13,7 @@ import { ProjectRoleDto } from "@models/project-role/project-role-dto.model";
 import { ProjectSeasonDto } from "@models/project-role/project-season-dto.model";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { Link, useSearchParams } from "react-router";
+import { projectRolesStoreActions } from "@src/store/projectRoles/projectRoles.actions";
 
 interface ProjectRoleProps {
   id?: number;
@@ -62,13 +62,12 @@ export const ProjectRole: FC<ProjectRoleProps> = ({ id }) => {
     [currentRoleLoadingStatus?.status]
   );
 
-  const loadProjectRoles = useGlobalStore(selectLoadProjectRoles);
   useEffect(() => {
     if (!id) {
       return;
     }
 
-    loadProjectRoles(id);
+    projectRolesStoreActions.loadProjectRoles(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 

@@ -9,8 +9,6 @@ import { uniqBy } from "lodash";
 import { lazyPictureWithoutFallbackStyles } from "./lazyPictureWithoutFallback.styles";
 import { mediaPlaceholders } from "../mediaPlaceholders";
 import { LazyPictureSecureWithoutFallback } from "./LazyPictureSecureWithoutFallback";
-// import { useGlobalStore } from "@src/store/global.store";
-// import { selectAccessToken } from "@src/store/auth.store";
 
 export interface LazyPictureSize {
   media?: string;
@@ -75,7 +73,7 @@ export const LazyPictureWithoutFallback: React.FC<
       });
 
       const media = size.media
-        ? (mediaPlaceholders[size.media] ?? size.media)
+        ? mediaPlaceholders[size.media] ?? size.media
         : undefined;
 
       return (

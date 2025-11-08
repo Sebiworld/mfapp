@@ -6,7 +6,7 @@ import { useGlobalStore } from "@src/store/global.store";
 import {
   selectProjectCasts,
   selectProjectPortraits,
-} from "@src/store/projectRoles.store";
+} from "@src/store/projectRoles/projectRoles.selectors";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { isValidObject } from "@utils/functions/isValidObject";
 import { uniqBy } from "lodash";
@@ -433,7 +433,9 @@ export const ProjectRolePortraits: FC<ProjectRolePortraitsProps> = ({
       className="project-role-portraits casts-with-portraits"
     >
       <Box
-        className={`casts-container casts-${castsWithPortraitsFiltered.length || 0}`}
+        className={`casts-container casts-${
+          castsWithPortraitsFiltered.length || 0
+        }`}
       >
         {castsWithPortraitsFiltered
           .filter((item) => item.cast?.id)

@@ -3,7 +3,7 @@ import { Box, Pagination, PaginationItem } from "@mui/material";
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { usePageListApi } from "@api/hooks/usePageListApi";
 import { useGlobalStore } from "@src/store/global.store";
-import { selectPageCards } from "@src/store/pageCards.store";
+import { selectPageCards } from "@src/store/pageCards/pageCards.selectors";
 import { useShallow } from "zustand/shallow";
 import { Link, useLocation, useSearchParams } from "react-router";
 import { LoadingOverlay } from "@components/loadingOverlay/LoadingOverlay";

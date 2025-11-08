@@ -1,5 +1,3 @@
-import { selectRegistration } from "@src/store/auth.store";
-import { useGlobalStore } from "@src/store/global.store";
 import { Dispatch, SetStateAction } from "react";
 import { useTranslation } from "react-i18next";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
@@ -17,6 +15,7 @@ import {
   FormLabel,
   TextField,
 } from "@mui/material";
+import { authStoreActions } from "@src/store/auth/auth.actions";
 
 const registrationSchema = z
   .object({
@@ -68,7 +67,6 @@ export const StartupModalRegistrationForm = ({
 }: StartupModalContentProps & {
   setIsRegistrationActive: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const registration = useGlobalStore(selectRegistration);
   const { t } = useTranslation();
 
   const {
@@ -81,7 +79,7 @@ export const StartupModalRegistrationForm = ({
   });
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
-    await registration(
+    await authStoreActions.registration(
       data.email,
       data.password,
       data.firstname,

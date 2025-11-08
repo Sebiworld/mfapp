@@ -9,10 +9,7 @@ import { GlobalStylesElement } from "@styles/global/GlobalStylesElement";
 
 import "react-toastify/dist/ReactToastify.css";
 import { useGlobalStore } from "./store/global.store";
-import {
-  selectInitializeApp,
-  selectIsInitialized,
-} from "./store/initialization.store";
+import { selectIsInitialized } from "./store/initialization/initialization.selectors";
 import { useEffect } from "react";
 import { useHandleRegistrationConfirm } from "@utils/hooks/useHandleRegistrationConfirm";
 import { mfTheme } from "@styles/theme/mfTheme";
@@ -21,22 +18,18 @@ import { CssBaseline } from "@mui/material";
 import * as ionIcons from "ionicons/icons";
 import { addIcons } from "ionicons";
 import { ScrollRestoration } from "react-router";
+import { initializationStoreActions } from "./store/initialization/initialization.actions";
 addIcons(ionIcons);
 
 export const App = () => {
   const isInitialized = useGlobalStore(selectIsInitialized);
-  const initializeApp = useGlobalStore(selectInitializeApp);
   useHandleRegistrationConfirm();
 
   // TODO: Modal mit Konfetti nach Registrierung
 
   useEffect(() => {
-    if (!initializeApp || typeof initializeApp !== "function") {
-      return;
-    }
-
-    void initializeApp();
-  }, [initializeApp]);
+    void initializationStoreActions.initializeApp();
+  }, []);
 
   return (
     <>

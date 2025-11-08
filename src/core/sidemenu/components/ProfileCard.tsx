@@ -1,13 +1,5 @@
 import { UserDto } from "@models/user-dto.model";
-import {
-  Avatar,
-  Badge,
-  Box,
-  Card,
-  CardHeader,
-  Chip,
-  IconButton,
-} from "@mui/material";
+import { Avatar, Box, Card, CardHeader, IconButton } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { useMemo } from "react";
 import { profileCardStyles } from "./profileCard.styles";

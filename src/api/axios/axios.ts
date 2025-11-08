@@ -1,5 +1,6 @@
 // import { ErrorResponseDto } from "@models/error-response-dto.model";
 import { ErrorResponseDto } from "@models/error-response-dto.model";
+import { authStoreActions } from "@src/store/auth/auth.actions";
 import { useGlobalStore } from "@src/store/global.store";
 import axios, { AxiosError } from "axios";
 import axiosRetry from "axios-retry";
@@ -66,15 +67,13 @@ axiosInstance.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const renewAccess = useGlobalStore.getState().renewAccess;
-        await renewAccess();
+        await authStoreActions.renewAccess();
         const accessToken = useGlobalStore.getState().accessToken;
         originalRequest.headers["Authorization"] = `Bearer ${accessToken}`;
         return axiosInstance(originalRequest);
       } catch (err) {
-        const logout = useGlobalStore.getState().logout;
         // TODO User Feedback
-        await logout();
+        await authStoreActions.logout();
         return Promise.reject(err);
       }
     }

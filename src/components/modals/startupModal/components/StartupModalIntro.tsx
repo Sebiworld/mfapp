@@ -1,15 +1,11 @@
-import { useGlobalStore } from "@src/store/global.store";
 import { useTranslation } from "react-i18next";
 import { StartupModalContentProps } from "../StartupModal";
-import { selectSetDidReceiveWelcomeMessage } from "@src/store/initialization.store";
 import { Box, Button, IconButton, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { initializationStoreActions } from "@src/store/initialization/initialization.actions";
 
 export const StartupModalIntro = ({ closeModal }: StartupModalContentProps) => {
   const { t } = useTranslation();
-  const setDidReceiveWelcomeMessage = useGlobalStore(
-    selectSetDidReceiveWelcomeMessage
-  );
 
   return (
     <>
@@ -40,7 +36,7 @@ export const StartupModalIntro = ({ closeModal }: StartupModalContentProps) => {
           color="primary"
           variant="contained"
           onClick={() => {
-            setDidReceiveWelcomeMessage(true);
+            initializationStoreActions.setDidReceiveWelcomeMessage(true);
           }}
         >
           {t("general.actions.lets-go")}

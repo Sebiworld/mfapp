@@ -1,11 +1,10 @@
-import { selectSetNickname } from "@src/store/auth.store";
-import { useGlobalStore } from "@src/store/global.store";
 import { FormEventHandler, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { StartupModalContentProps } from "../StartupModal";
 import CloseIcon from "@mui/icons-material/Close";
 import { Box, Button, IconButton, Input, Typography } from "@mui/material";
+import { authStoreActions } from "@src/store/auth/auth.actions";
 
 interface FormElements extends HTMLFormControlsCollection {
   nickname: HTMLInputElement;
@@ -17,7 +16,6 @@ interface NicknameFormElement extends HTMLFormElement {
 export const StartupModalNickname = ({
   closeModal,
 }: StartupModalContentProps) => {
-  const setNickname = useGlobalStore(selectSetNickname);
   const { t } = useTranslation();
 
   const [nicknameInput, setNicknameInput] = useState("");
@@ -29,7 +27,7 @@ export const StartupModalNickname = ({
       toast.error(t("startup.error-no-nickname"), {});
       return;
     }
-    setNickname(nickname);
+    authStoreActions.setNickname(nickname);
     toast.success(t("startup.nickname-success", { name: nickname }));
   };
 

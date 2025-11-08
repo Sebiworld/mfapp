@@ -20,11 +20,11 @@ import {
   Paper,
 } from "@mui/material";
 import { useGlobalStore } from "@src/store/global.store";
-import { selectMenues } from "@src/store/configuration.store";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { useCallback, useId } from "react";
 import { useReward } from "react-rewards";
 import { Link as RouterLink } from "react-router";
+import { selectMenues } from "@src/store/configuration/configuration.selectors";
 
 const heartAnimationOptions = {
   loop: true,

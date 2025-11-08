@@ -1,5 +1,3 @@
-import { selectLogin } from "@src/store/auth.store";
-import { useGlobalStore } from "@src/store/global.store";
 import { Dispatch, SetStateAction } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
@@ -15,6 +13,7 @@ import {
   FormLabel,
   TextField,
 } from "@mui/material";
+import { authStoreActions } from "@src/store/auth/auth.actions";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email").min(1, "Email is required"),
@@ -32,7 +31,6 @@ export const StartupModalLoginForm = ({
 }: StartupModalContentProps & {
   setIsRegistrationActive: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const login = useGlobalStore(selectLogin);
   const { t } = useTranslation();
 
   const {
@@ -50,7 +48,7 @@ export const StartupModalLoginForm = ({
       return;
     }
 
-    await login(data.email, data.password);
+    await authStoreActions.login(data.email, data.password);
 
     if (closeModal && typeof closeModal === "function") {
       closeModal();

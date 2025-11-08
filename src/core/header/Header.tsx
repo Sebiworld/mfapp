@@ -13,12 +13,12 @@ import {
 import React, { useMemo } from "react";
 import { Sidemenu } from "@core/sidemenu/Sidemenu";
 import { useGlobalStore } from "@src/store/global.store";
-import { selectPage } from "@src/store/pages.store";
 import { DefaultPageDto } from "@models/page/default-page-dto.model";
 import { ElevationScroll } from "./components/ElevationScroll";
-import { selectMenues } from "@src/store/configuration.store";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { Link, NavLink, useLocation } from "react-router";
+import { selectPage } from "@src/store/pages/pages.selectors";
+import { selectMenues } from "@src/store/configuration/configuration.selectors";
 
 export const Header = () => {
   const [sidemenuOpen, setSidemenuOpen] = React.useState(false);

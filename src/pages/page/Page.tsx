@@ -3,13 +3,14 @@ import { pageStyles } from "./page.styles";
 // import WarningIcon from "@mui/icons-material/Warning";
 import { useTranslation } from "react-i18next";
 import { useGlobalStore } from "@src/store/global.store";
-import { selectLoadPage, selectPage } from "@src/store/pages.store";
 import { PageContents } from "./pageContents/PageContents";
 import { ProjectPage } from "./projectPage/ProjectPage";
 import { LoadingOverlay } from "@components/loadingOverlay/LoadingOverlay";
 import { Alert, AlertTitle, Box, Button, Typography } from "@mui/material";
 import { convertHtmlEntities } from "@utils/functions/convertHtmlEntities";
 import { Link, useLocation } from "react-router";
+import { selectPage } from "@src/store/pages/pages.selectors";
+import { pagesStoreActions } from "@src/store/pages/pages.actions";
 
 export const Page = () => {
   const location = useLocation();
@@ -18,13 +19,12 @@ export const Page = () => {
 
   const loadedPage = useGlobalStore(selectPage(currentPath));
   const page = loadedPage?.data;
-  const loadPage = useGlobalStore(selectLoadPage);
 
   const isLoading = loadedPage?.status === "loading";
 
   useEffect(() => {
-    loadPage(currentPath);
-  }, [currentPath, loadPage, loadedPage?.data?.id]);
+    pagesStoreActions.loadPage(currentPath);
+  }, [currentPath, loadedPage?.data?.id]);
 
   // useEffect(() => {
   //   console.log("page", { page });

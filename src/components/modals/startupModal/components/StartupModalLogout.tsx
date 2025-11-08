@@ -1,15 +1,13 @@
-import { selectLogout } from "@src/store/auth.store";
-import { useGlobalStore } from "@src/store/global.store";
 import { useTranslation } from "react-i18next";
 import { StartupModalContentProps } from "../StartupModal";
 import { Box, Button, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { authStoreActions } from "@src/store/auth/auth.actions";
 
 export const StartupModalLogout = ({
   closeModal,
 }: StartupModalContentProps) => {
   const { t } = useTranslation();
-  const logout = useGlobalStore(selectLogout);
 
   return (
     <>
@@ -27,7 +25,7 @@ export const StartupModalLogout = ({
         <Button
           color="error"
           onClick={() => {
-            logout();
+            authStoreActions.logout();
           }}
         >
           {t("auth.logout")}

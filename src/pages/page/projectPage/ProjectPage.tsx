@@ -3,18 +3,16 @@ import { projectPageStyles } from "./projectPage.styles";
 import { useGlobalStore } from "@src/store/global.store";
 import { useEffect, useMemo } from "react";
 import { ProjectSidebar } from "./projectSidebar/ProjectSidebar";
-import { getProjectCssVars } from "./functions/getProjectCssVars";
+import { Box, Paper, SxProps, Theme, Typography } from "@mui/material";
 import {
-  selectResetGlobalCss,
-  selectSetGlobalCss,
-} from "@src/store/settings.store";
-import { Box, Paper, Typography } from "@mui/material";
-import {
-  selectLoadProjectDetails,
+  selectProjectCssVars,
   selectProjectPageDetails,
-} from "@src/store/projects.store";
+} from "@src/store/projects/projects.selectors";
 import { LazyPicture } from "@components/lazyPicture/LazyPicture";
 import { Link } from "react-router";
+import { useShallow } from "zustand/shallow";
+import { projectsStoreActions } from "@src/store/projects/projects.actions";
+import { settingsStoreActions } from "@src/store/settings/settings.actions";
 
 export interface ProjectPageProps {
   page?: PageDtoVariant;
@@ -25,43 +23,43 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({ page, children }) => {
   const projectPage = useGlobalStore(
     selectProjectPageDetails(page?.project_id)
   );
-  const loadProjectDetails = useGlobalStore(selectLoadProjectDetails);
-  const setGlobalCss = useGlobalStore(selectSetGlobalCss);
-  const resetGlobalCss = useGlobalStore(selectResetGlobalCss);
 
-  const cssVars = useMemo(() => getProjectCssVars(projectPage), [projectPage]);
+  const cssVars = useGlobalStore(
+    useShallow(selectProjectCssVars(page?.project_id))
+  );
 
   useEffect(() => {
     if (cssVars) {
-      setGlobalCss(cssVars);
+      settingsStoreActions.setGlobalCss(cssVars);
     }
 
     return () => {
-      resetGlobalCss();
+      settingsStoreActions.resetGlobalCss();
     };
-  }, [cssVars, resetGlobalCss, setGlobalCss]);
-
-  // useEffect(() => {
-  //   console.log("projectPage", { projectPage });
-  // }, [projectPage]);
+  }, [cssVars]);
 
   useEffect(() => {
     if (!projectPage?.id) {
       return;
     }
-    loadProjectDetails(projectPage.id);
-  }, [loadProjectDetails, projectPage?.id]);
+
+    projectsStoreActions.loadProjectDetails(projectPage.id);
+  }, [projectPage?.id]);
+
+  const pageStyles = useMemo((): SxProps<Theme> => {
+    if (!cssVars) {
+      return projectPageStyles;
+    }
+
+    return [projectPageStyles, cssVars];
+  }, [cssVars]);
 
   if (!projectPage?.id) {
     return children;
   }
 
   return (
-    <Box
-      className="project-page"
-      data-testid="project-page"
-      sx={[projectPageStyles, cssVars]}
-    >
+    <Box className="project-page" data-testid="project-page" sx={pageStyles}>
       <Box className="project-header" data-testid="project-header">
         <Box
           className="main-image aspect-ratio ar-3-1"

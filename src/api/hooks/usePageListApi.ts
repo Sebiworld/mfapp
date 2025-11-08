@@ -1,7 +1,7 @@
 import { MFApi } from "@api/axios/mfApi";
 import { GetPageListResponse } from "@api/axios/pageListApi";
-import { useGlobalStore } from "@src/store/global.store";
-import { getFilterHash, selectAddPageCards } from "@src/store/pageCards.store";
+import { pageCardsStoreActions } from "@src/store/pageCards/pageCards.actions";
+import { getFilterHash } from "@src/store/pageCards/pageCards.selectors";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { useCallback } from "react";
 
@@ -23,8 +23,6 @@ interface UsePageListApiOutput {
 }
 
 export const usePageListApi = (): UsePageListApiOutput => {
-  const addPageCards = useGlobalStore(selectAddPageCards);
-
   const loadPageListItems = useCallback(
     async (params: {
       offset?: number;
@@ -56,14 +54,11 @@ export const usePageListApi = (): UsePageListApiOutput => {
           const indexKey = params?.projectId ? `${params.projectId}` : "global";
           const filterHash = getFilterHash(params?.templates, params?.sortBy);
 
-          addPageCards(
-            items,
-            {
-              indexKey,
-              filterHash,
-              startIndex: params?.offset || 0,
-            }
-          );
+          pageCardsStoreActions.addPageCards(items, {
+            indexKey,
+            filterHash,
+            startIndex: params?.offset || 0,
+          });
           // TODO: indexData löschen, wenn sie nicht mehr zur Response hier passt. Ganzes Item löschen, wenn kein indexData mehr da ist.
         }
 
@@ -73,7 +68,7 @@ export const usePageListApi = (): UsePageListApiOutput => {
         return error as Error;
       }
     },
-    [addPageCards]
+    []
   );
 
   return { loadPageListItems };

@@ -18,7 +18,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { MenueItem } from "./components/MenueItem";
 import { NavLink, Link as RouterLink } from "react-router";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { SectionSpacer } from "@components/sectionSpacer/SectionSpacer";
 import { selectCurrentUser } from "@src/store/auth/auth.selectors";
 import { selectMenues } from "@src/store/configuration/configuration.selectors";

@@ -68,7 +68,6 @@ export const ProjectRole: FC<ProjectRoleProps> = ({ id }) => {
     }
 
     projectRolesStoreActions.loadProjectRoles(id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const currentViewType = useMemo(() => {

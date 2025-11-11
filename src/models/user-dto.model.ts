@@ -20,6 +20,9 @@ export interface UserDto {
   nickname?: string;
   first_name?: string;
   last_name?: string;
+  birthdate?: string;
+  contact_email?: string;
+  description?: string;
   main_image?: ImageDto;
   isLoggedIn?: boolean;
   roles?: RoleDto[];

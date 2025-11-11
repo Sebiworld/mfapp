@@ -23,6 +23,10 @@ export const SidebarBoxEvents: React.FC<SidebarBoxEventsProps> = ({
   const { t } = useTranslation();
   const currentDate = useCurrentDate(1000 * 60);
 
+  // useEffect(() => {
+  //   console.log("SidebarBoxEvents data:", data);
+  // }, [data]);
+
   const sortedPerformances = useMemo(() => {
     const output: {
       past: PerformanceDto[];

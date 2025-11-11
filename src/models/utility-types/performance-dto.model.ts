@@ -1,9 +1,13 @@
 export interface PerformanceDto {
   id: number;
+  title?: string;
+  location_id?: number;
   timestamp: number;
+  timestamp_until?: number;
   seasons?: SeasonDto[];
   casts?: CastDto[];
   categories?: CategoryDto[];
+  ticket_url?: string;
 }
 
 export interface SeasonDto {

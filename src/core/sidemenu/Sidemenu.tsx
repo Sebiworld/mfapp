@@ -3,7 +3,6 @@ import ThemeSelect from "@components/ThemeSelect";
 import { sidemenuStyles } from "./sidemenu.styles";
 import { useTranslation } from "react-i18next";
 import { useGlobalStore } from "@src/store/global.store";
-import { StartupModal } from "@components/modals/startupModal/StartupModal";
 import {
   Box,
   Button,
@@ -20,12 +19,12 @@ import { isValidArray } from "@utils/functions/isValidArray";
 import { MenueItem } from "./components/MenueItem";
 import { NavLink, Link as RouterLink } from "react-router";
 import { useCallback, useEffect, useMemo } from "react";
-import { MfLogo } from "@components/mfLogo/MfLogo";
 import { SectionSpacer } from "@components/sectionSpacer/SectionSpacer";
-import { ProfileCard } from "./components/ProfileCard";
 import { selectCurrentUser } from "@src/store/auth/auth.selectors";
 import { selectMenues } from "@src/store/configuration/configuration.selectors";
-import { authStoreActions } from "@src/store/auth/auth.actions";
+import { AuthCard } from "./components/authCard/AuthCard";
+import { StartupModal } from "@components/modals/startupModal/StartupModal";
+import { MfLogo } from "@components/mfLogo/MfLogo";
 
 export interface SidemenuProps {
   sidemenuOpen: boolean;
@@ -36,11 +35,8 @@ export const Sidemenu = ({ sidemenuOpen, setSidemenuOpen }: SidemenuProps) => {
   const { t } = useTranslation();
   const currentUser = useGlobalStore(selectCurrentUser);
   const [isStartupModalOpen, setIsStartupModalOpen] = React.useState(false);
-  const loadedMenues = useGlobalStore(selectMenues);
 
-  useEffect(() => {
-    console.log("CurrentUser:", currentUser);
-  }, [currentUser]);
+  const loadedMenues = useGlobalStore(selectMenues);
 
   const menueItems = React.useMemo(() => {
     const items = [];
@@ -60,10 +56,25 @@ export const Sidemenu = ({ sidemenuOpen, setSidemenuOpen }: SidemenuProps) => {
     setSidemenuOpen(false);
   }, [setSidemenuOpen]);
 
-  const isVereinsmitglied = useMemo(
-    () => currentUser?.data?.roles?.some((role) => role?.name === "mitglied"),
-    [currentUser]
-  );
+  const footerMode = useMemo(() => {
+    if (!currentUser?.data?.isLoggedIn) {
+      return "login";
+    }
+
+    if (
+      !currentUser?.data?.roles?.some(
+        (role) => role?.name === "vereinsmitglied"
+      )
+    ) {
+      return "mitglied-werden";
+    }
+
+    return "logo";
+  }, [currentUser]);
+
+  const versionNumber = useMemo(() => {
+    return __VERSION__;
+  }, []);
 
   return (
     <>
@@ -84,18 +95,12 @@ export const Sidemenu = ({ sidemenuOpen, setSidemenuOpen }: SidemenuProps) => {
           </Stack>
         </Box>
 
-        {!!currentUser?.data?.isLoggedIn && (
-          // <Stack className="header-center user-box">
-          //   <Avatar />
-          //   <Box className="name">
-          //     {currentUser.data.nickname || currentUser.data.name}
-          //   </Box>
-          // </Stack>
-
-          <Box className="sidemenu-subheader">
-            <ProfileCard user={currentUser.data}></ProfileCard>
-          </Box>
-        )}
+        <Box className="sidemenu-subheader">
+          <AuthCard
+            user={currentUser?.data}
+            setSidemenuOpen={setSidemenuOpen}
+          ></AuthCard>
+        </Box>
 
         <Box className="sidemenu-content">
           {!!menueItems?.length && (
@@ -134,69 +139,36 @@ export const Sidemenu = ({ sidemenuOpen, setSidemenuOpen }: SidemenuProps) => {
                     onClick={closeSidemenu}
                   ></MenueItem>
                 ))}
-
-                {menueItems.map((item) => (
-                  <MenueItem
-                    key={item.id}
-                    item={item}
-                    onClick={closeSidemenu}
-                  ></MenueItem>
-                ))}
-
-                {menueItems.map((item) => (
-                  <MenueItem
-                    key={item.id}
-                    item={item}
-                    onClick={closeSidemenu}
-                  ></MenueItem>
-                ))}
               </List>
             </Box>
           )}
-
-          <hr />
-
-          <List component="nav" className="navigation-list">
-            {/* <ListItem>
-            <ListItemButton component={NavLink} to="/settings">
-              {t("sidemenu.settings")}
-            </ListItemButton>
-          </ListItem> */}
-
-            <ListItem>
-              {currentUser?.data?.isLoggedIn ? (
-                <ListItemButton
-                  onClick={() => {
-                    authStoreActions.logout();
-                  }}
-                >
-                  {t("auth.logout")}
-                </ListItemButton>
-              ) : (
-                <ListItemButton
-                  onClick={() => {
-                    setIsStartupModalOpen(true);
-                    setSidemenuOpen(false);
-                  }}
-                >
-                  {t("auth.login")}
-                </ListItemButton>
-              )}
-            </ListItem>
-          </List>
         </Box>
 
         <Box className="sidemenu-footer">
-          <Box
-            className="logo-container"
-            component={RouterLink}
-            to="/"
-            onClick={closeSidemenu}
-          >
-            <MfLogo layout="vertical"></MfLogo>
-          </Box>
+          {footerMode === "login" && (
+            <>
+              <Typography variant="h5">Mitgliederbereich</Typography>
 
-          {isVereinsmitglied && (
+              <Typography variant="body2">
+                Jetzt anmelden und die Mitgliederfunktionen nutzen!
+              </Typography>
+
+              <Button
+                variant="contained"
+                size="small"
+                fullWidth
+                color="primary"
+                onClick={() => {
+                  setIsStartupModalOpen(true);
+                  // setSidemenuOpen(false);
+                }}
+              >
+                {t("auth.login")}
+              </Button>
+            </>
+          )}
+
+          {footerMode === "mitglied-werden" && (
             <Button
               variant="contained"
               color="primary"
@@ -209,7 +181,25 @@ export const Sidemenu = ({ sidemenuOpen, setSidemenuOpen }: SidemenuProps) => {
             </Button>
           )}
 
-          <SectionSpacer position="top"></SectionSpacer>
+          {footerMode === "logo" && (
+            <Box
+              className="logo-container"
+              component={RouterLink}
+              to="/"
+              onClick={closeSidemenu}
+            >
+              <MfLogo layout="vertical"></MfLogo>
+            </Box>
+          )}
+
+          {!!versionNumber && (
+            <Box className="version-number">v{versionNumber}</Box>
+          )}
+
+          <SectionSpacer
+            logo={footerMode !== "logo" ? "wide" : undefined}
+            position="top"
+          ></SectionSpacer>
         </Box>
       </Drawer>
 

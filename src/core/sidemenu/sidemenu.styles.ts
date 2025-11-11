@@ -64,7 +64,7 @@ export const sidemenuStyles: SxProps<Theme> = (theme) => ({
   ".nav-container": {
     "&>.nav-title": {
       padding: "32px 32px 0 32px",
-      fontSize: theme.typography.body2.fontSize,
+      fontSize: "12px",
       opacity: 0.5,
     },
   },
@@ -73,6 +73,7 @@ export const sidemenuStyles: SxProps<Theme> = (theme) => ({
     flex: "1 1 100px",
     borderRight: `3px solid ${theme.vars.palette.divider}`,
     overflowY: "auto",
+    paddingBottom: "24px",
   },
 
   ".navigation-list": {
@@ -106,7 +107,7 @@ export const sidemenuStyles: SxProps<Theme> = (theme) => ({
   ".sidemenu-footer": {
     position: "relative",
     background: theme.vars.palette.background.paper,
-    paddingTop: "64px",
+    paddingTop: "46px",
     paddingLeft: "32px",
     paddingRight: "32px",
     paddingBottom: "32px",
@@ -130,5 +131,15 @@ export const sidemenuStyles: SxProps<Theme> = (theme) => ({
       left: 0,
       width: "100%",
     },
+  },
+
+  ".version-number": {
+    position: "absolute",
+    display: "block",
+    bottom: "4px",
+    fontSize: "12px",
+    left: "50%",
+    transform: "translateX(-50%)",
+    color: theme.vars.palette.text.secondary,
   },
 });

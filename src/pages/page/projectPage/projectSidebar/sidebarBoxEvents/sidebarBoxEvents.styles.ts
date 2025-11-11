@@ -41,7 +41,7 @@ export const sidebarBoxEventsStyles: SxProps = {
   ".seasons-container": {
     // opacity: 0.5,
     fontSize: "14px",
-    // marginLeft: "-8px",
+    marginLeft: "-8px",
     // marginRight: "-8px",
 
     ".season": {
@@ -49,9 +49,15 @@ export const sidebarBoxEventsStyles: SxProps = {
     },
   },
 
+  ".event-title": {
+    fontWeight: "bold",
+    fontSize: "14px",
+  },
+
   ".date": {
     fontWeight: "bold",
     fontSize: "14px",
+    marginTop: "2px",
   },
 
   ".casts-container": {
@@ -59,13 +65,13 @@ export const sidebarBoxEventsStyles: SxProps = {
     gap: "4px",
     flexWrap: "wrap",
     textTransform: "uppercase",
-    // marginTop: "4px",
-    // marginLeft: "-8px",
+    marginTop: "2px",
+    marginLeft: "-8px",
     // marginRight: "-8px",
     fontSize: "13px",
 
     ".cast": {
-      fontSize: "14px",
+      fontSize: "12px",
     },
   },
 };

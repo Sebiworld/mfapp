@@ -24,12 +24,19 @@ export const SidebarBoxEventsEventItem: React.FC<
         ))}
       </Box>
 
-      <Typography className="date">
+      <Typography className="date" title={item.title}>
         {`${formatDate(item.timestamp * 1000, "EEEE, P - p")}`}
       </Typography>
 
       <Box className="casts-container">
-        {item.casts?.map((cast) => cast.title).join(", ")}
+        {item.casts?.map((cast) => (
+          <Chip
+            key={cast.id}
+            className="cast"
+            label={cast.title}
+            size="small"
+          ></Chip>
+        ))}
       </Box>
     </Box>
   );

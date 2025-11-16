@@ -91,7 +91,7 @@ export const LazyPictureWithoutFallback: React.FC<
         </React.Fragment>
       );
     });
-  }, [image?.basename, image?.ext, image?.page_id, sizes]);
+  }, [image, sizes]);
 
   const fileUrl = useMemo((): string | undefined => {
     if (!image?.basename) {
@@ -109,7 +109,7 @@ export const LazyPictureWithoutFallback: React.FC<
       height,
       // authorization: "Bearer " + accessToken,
     });
-  }, [defaultSize, image?.basename, image?.page_id, sizes]);
+  }, [defaultSize, image, sizes]);
 
   if (!image?.basename) {
     return;

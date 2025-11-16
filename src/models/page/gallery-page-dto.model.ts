@@ -213,6 +213,7 @@
 import { ImageDto } from "@models/image-dto.model";
 import { PageDto } from "./page-dto.model";
 import { ContentBlockDtoVariant } from "@models/content/content-block-dto-variant.model";
+import { AlertDto } from "@models/utility-types/alert-dto.model";
 
 export interface GalleryPageDto extends PageDto {
   datetime_from: number;
@@ -222,4 +223,5 @@ export interface GalleryPageDto extends PageDto {
   authors: string[];
   tags: PageDto[];
   detailsLoaded: boolean;
+  alerts?: AlertDto[];
 }

@@ -1,7 +1,7 @@
-
 import { ContentBlockDtoVariant } from "@models/content/content-block-dto-variant.model";
 import { ImageDto } from "@models/image-dto.model";
 import { PageDto } from "@models/page/page-dto.model";
+import { AlertDto } from "@models/utility-types/alert-dto.model";
 
 export interface SectionDto {
   type: string;
@@ -19,4 +19,5 @@ export interface SectionDto {
   main_image_dark?: ImageDto;
   background_image?: ImageDto;
   background_image_dark?: ImageDto;
+  alerts?: AlertDto[];
 }

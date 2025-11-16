@@ -48,7 +48,7 @@ export const Header = () => {
         >
           <Toolbar className="toolbar">
             <Box className="container-left">
-              <Box component={Link} to="/" className="hide-when-translucent">
+              <Box component={Link} to="/" className="logo hide-when-translucent">
                 <MfLogo color="dark"></MfLogo>
               </Box>
             </Box>

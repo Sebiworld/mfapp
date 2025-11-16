@@ -29,7 +29,7 @@ export const ContentGallery: React.FC<ContentGalleryProps> = ({ block }) => {
     }
 
     return output.join(" ");
-  }, [block?.classes, block?.depth, block?.gallery_type, block?.id]);
+  }, [block]);
 
   const gallery = useMemo(() => {
     if (!block?.id) {
@@ -45,7 +45,7 @@ export const ContentGallery: React.FC<ContentGalleryProps> = ({ block }) => {
     }
 
     return <ContentGalleryMasonry images={block.images} />;
-  }, [block?.gallery_type, block?.id, block?.images]);
+  }, [block]);
 
   if (!block?.id) {
     return null;

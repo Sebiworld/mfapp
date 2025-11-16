@@ -49,7 +49,7 @@ export const SidebarBoxEvents: React.FC<SidebarBoxEventsProps> = ({
     }
 
     return output;
-  }, [data?.performances, currentDate]);
+  }, [data, currentDate]);
 
   if (!isValidArray(data?.performances) || !data.performances.length) {
     return null;

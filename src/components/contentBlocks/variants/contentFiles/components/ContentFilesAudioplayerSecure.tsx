@@ -41,7 +41,7 @@ export const ContentFilesAudioplayerSecure: React.FC<ContentFilesItemProps> = ({
     // Update the source of the image.
     audioplayerRef.current.src = objectUrl;
     audioplayerRef.current.onload = () => URL.revokeObjectURL(objectUrl);
-  }, [file?.basename, file?.page_id]);
+  }, [file]);
 
   useEffect(() => {
     void loadBase64File();
@@ -52,7 +52,12 @@ export const ContentFilesAudioplayerSecure: React.FC<ContentFilesItemProps> = ({
   }
 
   return (
-    <audio controls ref={audioplayerRef} title={file.basename} className="audio-player">
+    <audio
+      controls
+      ref={audioplayerRef}
+      title={file.basename}
+      className="audio-player"
+    >
       <source type={mimetype} />
     </audio>
   );

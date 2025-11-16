@@ -39,7 +39,7 @@ export const ProjectRole: FC<ProjectRoleProps> = ({ id }) => {
     }
 
     return currentRoleLoadingStatus.data;
-  }, [currentRoleLoadingStatus?.data]);
+  }, [currentRoleLoadingStatus]);
 
   const subRoles = useMemo((): ProjectRoleDto[] | undefined => {
     if (!currentRole?.child_ids?.length) {
@@ -49,7 +49,7 @@ export const ProjectRole: FC<ProjectRoleProps> = ({ id }) => {
     return currentRole.child_ids
       .map((id) => projectRoles[id]?.data)
       .filter((subrole) => subrole?.id) as ProjectRoleDto[];
-  }, [currentRole?.child_ids, projectRoles]);
+  }, [currentRole, projectRoles]);
 
   // Portrait Ids Tree for the current role with all subroles
   const portraitIdsTree = useMemo(

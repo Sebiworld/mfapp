@@ -29,7 +29,7 @@ export const ContentYoutubeVideo: React.FC<ContentYoutubeVideoProps> = ({
     }
 
     return output.join(" ");
-  }, [block?.classes, block?.depth, block?.id]);
+  }, [block]);
 
   if (!block.video_id) {
     return null;
@@ -42,7 +42,7 @@ export const ContentYoutubeVideo: React.FC<ContentYoutubeVideoProps> = ({
           className="react-player"
           width="100%"
           height="100%"
-          url={`https://www.youtube.com/watch?v=${block.video_id}`}
+          src={`https://www.youtube.com/watch?v=${block.video_id}`}
           light={
             <VideoPlaceholder
               image={block.placeholder_image}

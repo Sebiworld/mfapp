@@ -22,11 +22,21 @@ export const projectPageStyles = (theme: Theme): SystemStyleObject<Theme> => ({
       // minHeight: "90px",
       paddingTop: "20px",
       // margin: "0 32px",
-      paddingLeft: '32px',
-      paddingRight: '32px',
+      paddingLeft: "32px",
+      paddingRight: "32px",
       display: "flex",
       flexDirection: "column",
       gap: "4px",
+
+      [theme.breakpoints.down("md")]: {
+        paddingLeft: "80px",
+        paddingRight: "80px",
+      },
+
+      [theme.breakpoints.down("sm")]: {
+        paddingLeft: "40px",
+        paddingRight: "40px",
+      },
 
       ".project-menu": {
         display: "flex",
@@ -62,6 +72,16 @@ export const projectPageStyles = (theme: Theme): SystemStyleObject<Theme> => ({
 
     ".project-sidebar": {
       position: "relative",
+
+      [theme.breakpoints.down("md")]: {
+        marginLeft: "64px",
+        marginRight: "64px",
+      },
+
+      [theme.breakpoints.down("sm")]: {
+        marginLeft: "24px",
+        marginRight: "24px",
+      },
     },
   },
 

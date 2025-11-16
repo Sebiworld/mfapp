@@ -28,8 +28,13 @@ export const sectionContainerStyles: SxProps = {
       fontSize: "48px",
 
       [mfTheme.breakpoints.down("md")]: {
+        fontSize: "32px",
+        marginBottom: "4px",
+      },
+
+      [mfTheme.breakpoints.down("sm")]: {
         fontSize: "24px",
-        marginBottom: "8px",
+        marginBottom: "0",
       },
     },
 

@@ -22,7 +22,7 @@ export const SectionForm: React.FC<SectionFormProps> = ({ section }) => {
     }
 
     return output.join(" ");
-  }, [section?.classes, section?.id]);
+  }, [section]);
 
   return (
     <Box

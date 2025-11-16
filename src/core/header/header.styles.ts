@@ -1,6 +1,6 @@
 import { SxProps, Theme } from "@mui/material";
 
-export const headerStyles: SxProps<Theme> = theme => ({
+export const headerStyles: SxProps<Theme> = (theme) => ({
   "&.translucent": {
     backgroundColor: "transparent",
     backdropFilter: "none",
@@ -9,6 +9,11 @@ export const headerStyles: SxProps<Theme> = theme => ({
     ".hide-when-translucent": {
       visibility: "hidden",
     },
+  },
+
+  ".logo": {
+    width: "130px",
+    height: "30px",
   },
 
   "&>.toolbar": {
@@ -42,7 +47,7 @@ export const headerStyles: SxProps<Theme> = theme => ({
 
         [theme.breakpoints.up("md")]: {
           display: "flex",
-        }
+        },
       },
     },
 

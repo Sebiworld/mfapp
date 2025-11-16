@@ -34,7 +34,7 @@ export const ContentCollapsible: React.FC<ContentCollapsibleProps> = ({
     }
 
     return output.join(" ");
-  }, [block?.classes, block?.depth, block?.id]);
+  }, [block]);
 
   if (!isValidArray(block.items) || !block.items.length) {
     return null;

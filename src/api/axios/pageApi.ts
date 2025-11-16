@@ -22,6 +22,7 @@ export const pageApi = {
           const json = JSON.parse(response);
           return json as DefaultPageDto;
         } catch (e) {
+          console.warn(e);
           throw new Error("Could not parse response");
         }
       },
@@ -52,6 +53,7 @@ export const pageApi = {
           const json = JSON.parse(response);
           return json as FormValidationResponseDto;
         } catch (e) {
+          console.warn(e);
           throw new Error("Could not parse response");
         }
       },

@@ -26,7 +26,7 @@ export const ContentImage: React.FC<ContentImageProps> = ({ block }) => {
     }
 
     return output.join(" ");
-  }, [block?.classes, block?.depth, block?.id]);
+  }, [block]);
 
   const image = block.image;
 

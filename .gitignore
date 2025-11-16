@@ -23,7 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 .vercel
-.env*.local
+.env.*
 
 /ios
 /android

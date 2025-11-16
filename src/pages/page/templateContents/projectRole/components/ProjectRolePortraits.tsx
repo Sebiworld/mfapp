@@ -124,7 +124,6 @@ export const ProjectRolePortraits: FC<ProjectRolePortraitsProps> = ({
             }
 
             if (participant.amount_positions_available) {
-              console;
               const ids = Array.from(output.get(castId)?.keys() || []).sort();
               const lowestId = ids.length ? ids[0] : 0;
               const lowestIdUnder1 = lowestId > 0 ? 0 : lowestId;
@@ -240,7 +239,6 @@ export const ProjectRolePortraits: FC<ProjectRolePortraitsProps> = ({
               }
 
               if (participant.amount_positions_available) {
-                console;
                 const ids = Array.from(output.get(castId)?.keys() || []).sort();
                 const lowestId = ids.length ? ids[0] : 0;
                 const lowestIdUnder1 = lowestId > 0 ? 0 : lowestId;
@@ -281,7 +279,6 @@ export const ProjectRolePortraits: FC<ProjectRolePortraitsProps> = ({
             }
 
             if (participant.amount_positions_available) {
-              console;
               const ids = Array.from(output.get(0)?.keys() || []).sort();
               const lowestId = ids.length ? ids[0] : 0;
               const lowestIdUnder1 = lowestId > 0 ? 0 : lowestId;
@@ -306,14 +303,7 @@ export const ProjectRolePortraits: FC<ProjectRolePortraitsProps> = ({
     }
 
     return output;
-  }, [
-    castIds,
-    role?.participants,
-    subroles,
-    currentSeasonId,
-    projectPortraits,
-    t,
-  ]);
+  }, [castIds, currentSeasonId, projectPortraits, role, subroles, t]);
 
   const hasOnlyPortraitsWithoutCasts = useMemo(() => {
     if (!isValidObject(portraitsByCastIds)) {

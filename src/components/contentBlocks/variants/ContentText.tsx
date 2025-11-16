@@ -24,7 +24,7 @@ export const ContentText: React.FC<ContentTextProps> = ({ block }) => {
     }
 
     return output.join(" ");
-  }, [block?.classes, block?.depth, block?.id]);
+  }, [block]);
 
   return (
     <Box className={classes}>

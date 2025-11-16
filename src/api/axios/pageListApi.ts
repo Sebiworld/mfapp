@@ -30,6 +30,7 @@ export const pageListApi = {
           const json = JSON.parse(response);
           return json as GetPageListResponse;
         } catch (e) {
+          console.warn(e);
           throw new Error("Could not parse response");
         }
       },

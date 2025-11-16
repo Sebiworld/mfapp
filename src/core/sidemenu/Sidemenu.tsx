@@ -50,7 +50,7 @@ export const Sidemenu = ({ sidemenuOpen, setSidemenuOpen }: SidemenuProps) => {
     }
 
     return items;
-  }, [loadedMenues?.main_navigation, loadedMenues?.secondary_navigation]);
+  }, [loadedMenues]);
 
   const closeSidemenu = useCallback(() => {
     setSidemenuOpen(false);
@@ -144,7 +144,7 @@ export const Sidemenu = ({ sidemenuOpen, setSidemenuOpen }: SidemenuProps) => {
           )}
         </Box>
 
-        <Box className="sidemenu-footer">
+        <Box className={`sidemenu-footer mode-${footerMode}`}>
           {footerMode === "login" && (
             <>
               <Typography variant="h5">Mitgliederbereich</Typography>

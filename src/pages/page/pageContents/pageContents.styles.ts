@@ -1,8 +1,7 @@
-import { SxProps } from "@mui/material";
-import { mfTheme } from "@styles/theme/mfTheme";
+import { SxProps, Theme } from "@mui/material";
 
-export const pageContentsStyles: SxProps = {
-  background: mfTheme.vars.palette.background.default,
+export const pageContentsStyles: SxProps<Theme> = (theme) => ({
+  background: theme.vars.palette.background.default,
 
   ".page-content": {
     margin: "32px",
@@ -15,6 +14,11 @@ export const pageContentsStyles: SxProps = {
     borderRadius: "sm",
     boxShadow: "md",
     maxWidth: "1000px",
+
+    [theme.breakpoints.down("sm")]: {
+      margin: "16px",
+      padding: "16px 24px 24px 24px",
+    },
 
     "&.message": {
       width: 300,
@@ -39,4 +43,4 @@ export const pageContentsStyles: SxProps = {
     mx: "auto",
     marginY: "128px",
   },
-};
+});

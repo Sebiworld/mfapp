@@ -116,6 +116,10 @@ export const sidemenuStyles: SxProps<Theme> = (theme) => ({
     flexDirection: "column",
     gap: "16px",
 
+    "&.mode-mitglied-werden, &.mode-login": {
+      paddingBottom: "48px",
+    },
+
     ".logo-container": {
       position: "relative",
       display: "block",

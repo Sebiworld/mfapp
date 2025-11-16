@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/purity */
 import { UserDto } from "@models/user-dto.model";
 import {
   Avatar,

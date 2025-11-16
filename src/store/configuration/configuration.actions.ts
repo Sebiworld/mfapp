@@ -72,7 +72,9 @@ const loadConfiguration = async () => {
 };
 
 const loadMenues = async () => {
-  useGlobalStore.setState((state) => ({ menues: { ...state.menues, status: "loading" } }));
+  useGlobalStore.setState((state) => ({
+    menues: { ...state.menues, status: "loading" },
+  }));
 
   try {
     const params: { [key: string]: unknown } = {};
@@ -139,7 +141,6 @@ const loadMenues = async () => {
 
 const initializeConfiguration = async () => {
   await loadConfiguration();
-
   await loadMenues();
 
   initializationStoreActions.setPartInitialized("configuration");

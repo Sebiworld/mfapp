@@ -26,7 +26,7 @@ export const ContentFiles: React.FC<ContentFilesProps> = ({ block }) => {
     }
 
     return output.join(" ");
-  }, [block?.classes, block?.depth, block?.id]);
+  }, [block]);
 
   return (
     <Box className={classes} sx={contentFilesStyles}>

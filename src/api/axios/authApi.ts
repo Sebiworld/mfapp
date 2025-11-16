@@ -41,6 +41,7 @@ export const authApi = {
           const json = JSON.parse(response);
           return json as UserDto;
         } catch (e) {
+          console.warn(e);
           throw new Error("Could not parse response");
         }
       },
@@ -70,6 +71,7 @@ export const authApi = {
           const json = JSON.parse(response);
           return json as AuthLoginResponse;
         } catch (e) {
+          console.warn(e);
           throw new Error("Could not parse response");
         }
       },
@@ -97,6 +99,7 @@ export const authApi = {
           const json = JSON.parse(response);
           return json as AuthAccessResponse;
         } catch (e) {
+          console.warn(e);
           throw new Error("Could not parse response");
         }
       },
@@ -118,6 +121,7 @@ export const authApi = {
           const json = JSON.parse(response);
           return json as AuthAccessResponse;
         } catch (e) {
+          console.warn(e);
           throw new Error("Could not parse response");
         }
       },
@@ -146,6 +150,7 @@ export const authApi = {
           const json = JSON.parse(response);
           return json as AuthRegistrationResponse;
         } catch (e) {
+          console.warn(e);
           throw new Error("Could not parse response");
         }
       },
@@ -170,6 +175,7 @@ export const authApi = {
           const json = JSON.parse(response);
           return json as AuthRegistrationConfirmResponse;
         } catch (e) {
+          console.warn(e);
           throw new Error("Could not parse response");
         }
       },

@@ -24,6 +24,7 @@ export const projectsApi = {
           const json = JSON.parse(response);
           return json as GetProjectsResponse;
         } catch (e) {
+          console.warn(e);
           throw new Error("Could not parse response");
         }
       },
@@ -46,6 +47,7 @@ export const projectsApi = {
           const json = JSON.parse(response);
           return json as ProjectDetailsDto;
         } catch (e) {
+          console.warn(e);
           throw new Error("Could not parse response");
         }
       },

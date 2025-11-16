@@ -48,7 +48,7 @@ export const LazyPictureSecureWithoutFallback: React.FC<
     // Update the source of the image.
     imageRef.current.src = objectUrl;
     imageRef.current.onload = () => URL.revokeObjectURL(objectUrl);
-  }, [defaultSize, image?.basename, image?.page_id, sizes]);
+  }, [defaultSize, image, sizes]);
 
   useEffect(() => {
     void loadBase64Image();

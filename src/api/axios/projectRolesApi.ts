@@ -36,6 +36,7 @@ export const projectRolesApi = {
           const json = JSON.parse(response);
           return json as GetProjectRolesResponse;
         } catch (e) {
+          console.warn(e);
           throw new Error("Could not parse response");
         }
       },
@@ -65,6 +66,7 @@ export const projectRolesApi = {
           const json = JSON.parse(response);
           return json as GetProjectPortraitsResponse;
         } catch (e) {
+          console.warn(e);
           throw new Error("Could not parse response");
         }
       },

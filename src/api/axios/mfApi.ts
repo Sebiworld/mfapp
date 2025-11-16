@@ -26,6 +26,7 @@ export const MFApi = {
           const json = JSON.parse(response);
           return json;
         } catch (e) {
+          console.warn(e);
           throw new Error("Could not parse response");
         }
       },

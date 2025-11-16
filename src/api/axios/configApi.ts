@@ -33,6 +33,7 @@ export const configApi = {
           const json = JSON.parse(response);
           return json as GetConfigurationResponse;
         } catch (e) {
+          console.warn(e);
           throw new Error("Could not parse response");
         }
       },
@@ -54,6 +55,7 @@ export const configApi = {
           const json = JSON.parse(response);
           return json as GetMenuesResponse;
         } catch (e) {
+          console.warn(e);
           throw new Error("Could not parse response");
         }
       },

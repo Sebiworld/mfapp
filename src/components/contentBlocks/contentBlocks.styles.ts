@@ -17,7 +17,15 @@ export const contentBlocksStyles: SxProps<Theme> = [
         },
       },
 
-      "&.content-text": {},
+      "&.content-text": {
+        "&.center .content-text-inner": {
+          display: "flex",
+          justifyContent: "center",
+          flexDirection: "column",
+          alignItems: "center",
+          textAlign: "center",
+        },
+      },
 
       "&.content-collapsible": {
         ".MuiAccordion-root": {

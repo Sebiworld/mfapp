@@ -36,6 +36,7 @@ export const ContentText: React.FC<ContentTextProps> = ({ block }) => {
           ></Typography>
         </Box>
       )}
+
       <Box
         className="content-text-inner"
         dangerouslySetInnerHTML={{ __html: block.text }}

@@ -1,31 +1,35 @@
-import { SxProps } from "@mui/material";
-import { mfTheme } from "@styles/theme/mfTheme";
+import { SxProps, Theme } from "@mui/material";
 
-export const sectionContainerStyles: SxProps = {
+export const sectionContainerStyles: SxProps<Theme> = (theme) => ({
   ".section": {
     position: "relative",
     display: "flex",
     flexDirection: "column",
     gap: "32px",
 
-    [mfTheme.breakpoints.down("md")]: {
+    [theme.breakpoints.down("md")]: {
       gap: "16px",
     },
 
     "&:not(.np)": {
       padding: "64px",
 
-      [mfTheme.breakpoints.down("md")]: {
+      [theme.breakpoints.down("md")]: {
         padding: "42px 24px",
       },
     },
 
-    "&.center": {
-      alignItems: "center",
-    },
-
     "&>.alerts-container": {
       paddingTop: 0,
+    },
+
+    "&.center": {
+      alignItems: "center",
+      textAlign: "center",
+
+      "&>.alerts-container": {
+        alignItems: "center",
+      },
     },
 
     ".section-title": {
@@ -35,12 +39,12 @@ export const sectionContainerStyles: SxProps = {
       alignSelf: "center",
       fontSize: "48px",
 
-      [mfTheme.breakpoints.down("md")]: {
+      [theme.breakpoints.down("md")]: {
         fontSize: "32px",
         marginBottom: "4px",
       },
 
-      [mfTheme.breakpoints.down("sm")]: {
+      [theme.breakpoints.down("sm")]: {
         fontSize: "24px",
         marginBottom: "0",
       },
@@ -53,9 +57,9 @@ export const sectionContainerStyles: SxProps = {
       gap: "32px",
       padding: "64px",
 
-      [mfTheme.breakpoints.down("md")]: {
+      [theme.breakpoints.down("md")]: {
         padding: "48px 24px",
       },
     },
   },
-};
+});

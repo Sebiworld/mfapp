@@ -6,6 +6,7 @@ import { LazyPicture } from "@components/lazyPicture/LazyPicture";
 import { Box, Typography } from "@mui/material";
 import { Alerts } from "@components/alerts/Alerts";
 import { ContentBlocks } from "@components/contentBlocks/ContentBlocks";
+import { isValidArray } from "@utils/functions/isValidArray";
 
 export interface SectionHeroProps {
   section: SectionDto;
@@ -23,10 +24,10 @@ export const SectionHero: React.FC<SectionHeroProps> = ({ section }) => {
   }, [section]);
 
   const hasTextContent = useMemo(() => {
-    return (
-      !!section?.alerts ||
-      !!(section?.title && !section?.hide_title) ||
-      !!section?.contents
+    return !!(
+      (isValidArray(section?.alerts) && !!section.alerts.length) ||
+      (section?.title && !section?.hide_title) ||
+      (isValidArray(section?.contents) && !!section.contents.length)
     );
   }, [section]);
 
@@ -38,8 +39,22 @@ export const SectionHero: React.FC<SectionHeroProps> = ({ section }) => {
         className={classes}
         sx={sectionHeroStyles}
       >
+        <Box className="image-container">
+          {section.main_image?.basename && (
+            <Box className="hero-image">
+              <LazyPicture image={section.main_image}></LazyPicture>
+            </Box>
+          )}
+
+          <SectionSpacer
+            position="bottom"
+            logo="auto"
+            logoColor="light"
+          ></SectionSpacer>
+        </Box>
+
         {hasTextContent && (
-          <Box className="text-contents">
+          <Box className="text-contents-container">
             {section?.alerts && <Alerts alerts={section?.alerts}></Alerts>}
 
             {section.title && !section.hide_title && (
@@ -51,18 +66,6 @@ export const SectionHero: React.FC<SectionHeroProps> = ({ section }) => {
             <ContentBlocks blocks={section.contents}></ContentBlocks>
           </Box>
         )}
-
-        {section.main_image?.basename && (
-          <Box className="hero-image">
-            <LazyPicture image={section.main_image}></LazyPicture>
-          </Box>
-        )}
-
-        <SectionSpacer
-          position="bottom"
-          logo="auto"
-          logoColor="light"
-        ></SectionSpacer>
       </Box>
     </>
   );

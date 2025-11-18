@@ -4,18 +4,15 @@ import React, { useMemo } from "react";
 import { SectionFormDto } from "@models/section/section-form.model";
 import { sectionFormStyles } from "./sectionForm.styles";
 import { ContentForm } from "@components/contentBlocks/variants/contentForm/ContentForm";
+import { Alerts } from "@components/alerts/Alerts";
 
 export interface SectionFormProps {
   section: SectionFormDto;
 }
 
 export const SectionForm: React.FC<SectionFormProps> = ({ section }) => {
-  const classes: string = useMemo(() => {
-    if (!section?.id) {
-      return "";
-    }
-
-    const output: string[] = ["section", "section-form"];
+  const classes = useMemo(() => {
+    const output = ["section", `section-${section.type}`];
 
     if (section.classes && typeof section.classes === "string") {
       output.push(...section.classes.split(" "));
@@ -31,6 +28,8 @@ export const SectionForm: React.FC<SectionFormProps> = ({ section }) => {
       className={classes}
       sx={sectionFormStyles}
     >
+      {section?.alerts && <Alerts alerts={section?.alerts}></Alerts>}
+
       {section.title && !section.hide_title && (
         <Typography variant="h2" className="section-title">
           {section.title}

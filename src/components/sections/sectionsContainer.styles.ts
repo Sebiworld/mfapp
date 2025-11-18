@@ -20,6 +20,14 @@ export const sectionContainerStyles: SxProps = {
       },
     },
 
+    "&.center": {
+      alignItems: "center",
+    },
+
+    "&>.alerts-container": {
+      paddingTop: 0,
+    },
+
     ".section-title": {
       position: "relative",
       maxWidth: "100%",

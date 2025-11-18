@@ -19,4 +19,8 @@ export const mfBlack: ExtendedPaletteColor = {
   lightChannel: "171 171 171",
   mainChannel: "18 18 18",
   darkChannel: "13 13 13",
+
+  lightRgb: "171, 171, 171",
+  mainRgb: "18, 18, 18",
+  darkRgb: "13, 13, 13",
 };

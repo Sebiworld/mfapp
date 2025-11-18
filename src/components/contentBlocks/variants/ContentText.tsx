@@ -1,5 +1,5 @@
 import { ContentBlockTextDto } from "@models/content/content-block-text-dto.model";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import React, { useMemo } from "react";
 
 export interface ContentTextProps {
@@ -30,7 +30,10 @@ export const ContentText: React.FC<ContentTextProps> = ({ block }) => {
     <Box className={classes}>
       {block.title && (
         <Box className="content-text-title">
-          <h3>{block.title}</h3>
+          <Typography
+            variant="h3"
+            dangerouslySetInnerHTML={{ __html: block.title }}
+          ></Typography>
         </Box>
       )}
       <Box

@@ -19,4 +19,8 @@ export const mfWhite: ExtendedPaletteColor = {
   lightChannel: "252 252 252",
   mainChannel: "238 238 238",
   darkChannel: "157 157 157",
+
+  lightRgb: "252, 252, 252",
+  mainRgb: "238, 238, 238",
+  darkRgb: "157, 157, 157",
 };

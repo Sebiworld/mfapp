@@ -19,4 +19,8 @@ export const mfRed: ExtendedPaletteColor = {
   lightChannel: "254 202 202",
   mainChannel: "239 68 68",
   darkChannel: "185 28 28",
+
+  lightRgb: "254, 202, 202",
+  mainRgb: "239, 68, 68",
+  darkRgb: "185, 28, 28",
 };

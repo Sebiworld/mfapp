@@ -5,7 +5,7 @@ import { AlertDto } from "@models/utility-types/alert-dto.model";
 
 export interface SectionDto {
   type: string;
-  id: string;
+  id: number;
   section_name: string;
   title: string;
   hide_title?: boolean;

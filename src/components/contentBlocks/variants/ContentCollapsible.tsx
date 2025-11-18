@@ -49,9 +49,11 @@ export const ContentCollapsible: React.FC<ContentCollapsibleProps> = ({
             aria-controls={`${item.id}-content`}
             id={`${item.id}-header`}
           >
-            <Typography component="span" className="accordion-title">
-              {item.title}
-            </Typography>
+            <Typography
+              component="span"
+              className="accordion-title"
+              dangerouslySetInnerHTML={{ __html: item.title || "" }}
+            ></Typography>
           </AccordionSummary>
 
           <AccordionDetails

@@ -19,4 +19,8 @@ export const mfYellow: ExtendedPaletteColor = {
   lightChannel: "254 240 138",
   mainChannel: "234 179 8",
   darkChannel: "161 98 7",
+
+  lightRgb: "254, 240, 138",
+  mainRgb: "234, 179, 8",
+  darkRgb: "161, 98, 7",
 };

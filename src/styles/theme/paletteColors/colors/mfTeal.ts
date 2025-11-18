@@ -19,4 +19,8 @@ export const mfTeal: ExtendedPaletteColor = {
   lightChannel: "170 240 213",
   mainChannel: "25 198 152",
   darkChannel: "8 116 92",
+
+  lightRgb: "170, 240, 213",
+  mainRgb: "25, 198, 152",
+  darkRgb: "8, 116, 92",
 };

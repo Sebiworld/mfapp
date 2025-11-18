@@ -19,4 +19,8 @@ export const mfCinnabarRed: ExtendedPaletteColor = {
   lightChannel: "251 197 198",
   mainChannel: "233 40 43",
   darkChannel: "60 10 11",
+
+  lightRgb: "251, 197, 198",
+  mainRgb: "233, 40, 43",
+  darkRgb: "60, 10, 11",
 };

@@ -35,6 +35,9 @@ export type ExtendedPaletteColor = Partial<SimplePaletteColorOptions> &
   Partial<PaletteColorChannel> & {
     contrastText?: string;
     contrastBorder?: string;
+    lightRgb?: string;
+    mainRgb?: string;
+    darkRgb?: string;
   };
 
 declare module "@mui/material/styles" {
@@ -62,6 +65,9 @@ declare module "@mui/material/styles" {
     lightChannel?: string;
     mainChannel?: string;
     darkChannel?: string;
+    lightrgb?: string;
+    mainrgb?: string;
+    darkrgb?: string;
   }
 
   interface TypographyVariants {
@@ -181,7 +187,7 @@ export const mfTheme = createTheme({
         gradient:
           "linear-gradient(to left bottom, #fd8e00, #ff7a31, #ff684c, #fa5b62, #ec5476, #d65387, #bb5593, #9d5898, #745a95, #4f5887, #375171, #2f4858)",
         background: {
-          paper: mfBgLight[400]
+          paper: mfBgLight[400],
         },
       },
     },

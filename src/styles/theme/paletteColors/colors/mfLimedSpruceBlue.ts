@@ -19,4 +19,8 @@ export const mfLimedSpruceBlue: ExtendedPaletteColor = {
   lightChannel: "172 197 209", // RGB of 200
   mainChannel: "47 72 88", // RGB of 500
   darkChannel: "37 50 61", // RGB of 700
+
+  lightRgb: "172, 197, 209", // RGB of 200
+  mainRgb: "47, 72, 88", // RGB of 500
+  darkRgb: "37, 50, 61", // RGB of 700
 };

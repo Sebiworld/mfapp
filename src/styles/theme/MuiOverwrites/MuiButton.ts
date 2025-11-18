@@ -4,6 +4,7 @@ declare module "@mui/material/Button" {
   interface ButtonPropsColorOverrides {
     light: true;
     dark: true;
+    bg: true;
     contrast: true;
     projectPrimary: true;
   }

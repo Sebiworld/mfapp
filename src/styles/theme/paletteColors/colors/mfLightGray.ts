@@ -19,4 +19,8 @@ export const mfLightGray: ExtendedPaletteColor = {
   lightChannel: "221 231 238",
   mainChannel: "99 107 116",
   darkChannel: "50 56 62",
+
+  lightRgb: "221, 231, 238",
+  mainRgb: "99, 107, 116",
+  darkRgb: "50, 56, 62",
 };

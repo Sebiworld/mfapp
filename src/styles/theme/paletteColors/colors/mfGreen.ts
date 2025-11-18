@@ -19,4 +19,8 @@ export const mfGreen: ExtendedPaletteColor = {
   lightChannel: "187 247 208",
   mainChannel: "34 197 94",
   darkChannel: "21 128 61",
+
+  lightRgb: "187, 247, 208",
+  mainRgb: "34, 197, 94",
+  darkRgb: "21, 128, 61",
 };

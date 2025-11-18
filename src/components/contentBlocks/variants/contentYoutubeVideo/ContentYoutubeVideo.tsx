@@ -37,19 +37,21 @@ export const ContentYoutubeVideo: React.FC<ContentYoutubeVideoProps> = ({
 
   return (
     <Box className={classes} sx={contentYoutubeVideoStyles}>
-      <Box className="player-wrapper">
-        <ReactPlayer
-          className="react-player"
-          width="100%"
-          height="100%"
-          src={`https://www.youtube.com/watch?v=${block.video_id}`}
-          light={
-            <VideoPlaceholder
-              image={block.placeholder_image}
-              title={block.title}
-            ></VideoPlaceholder>
-          }
-        />
+      <Box className="player-wrapper aspect-ratio ar-16-9">
+        <Box className="player-container ar-content">
+          <ReactPlayer
+            className="react-player"
+            width="100%"
+            height="100%"
+            src={`https://www.youtube.com/watch?v=${block.video_id}`}
+            light={
+              <VideoPlaceholder
+                image={block.placeholder_image}
+                title={block.title}
+              ></VideoPlaceholder>
+            }
+          />
+        </Box>
       </Box>
     </Box>
   );

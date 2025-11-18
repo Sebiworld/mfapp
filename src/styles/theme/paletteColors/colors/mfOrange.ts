@@ -19,4 +19,8 @@ export const mfOrange: ExtendedPaletteColor = {
   lightChannel: "254 215 170", // RGB of 200
   mainChannel: "253 142 0", // RGB of 500
   darkChannel: "194 65 12", // RGB of 700
+
+  lightRgb: "254, 215, 170", // RGB of 200
+  mainRgb: "253, 142, 0", // RGB of 500
+  darkRgb: "194, 65, 12", // RGB of 700
 };

@@ -1,6 +1,6 @@
 import { ContentBlocks } from "@components/contentBlocks/ContentBlocks";
 import { Box, Button, Typography } from "@mui/material";
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { sectionArticlesCarouselStyles } from "./sectionArticlesCarousel.styles";
 import { SectionArticlesCarouselDto } from "@models/section/section-articles-carousel-dto.model";
 import { PageCard } from "@components/pageCard/PageCard";
@@ -12,6 +12,7 @@ import "swiper/css/bundle";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { useTranslation } from "react-i18next";
 import { Swiper, SwiperRef, SwiperSlide } from "swiper/react";
+import { Alerts } from "@components/alerts/Alerts";
 
 export interface SectionArticlesCarouselProps {
   section: SectionArticlesCarouselDto;
@@ -25,6 +26,16 @@ export const SectionArticlesCarousel: React.FC<
   const [allowSlidePrev, setAllowSlidePrev] = useState<boolean>(true);
   const [allowSlideNext, setAllowSlideNext] = useState<boolean>(true);
 
+  const classes = useMemo(() => {
+    const output = ["section", `section-${section.type}`];
+
+    if (section.classes && typeof section.classes === "string") {
+      output.push(...section.classes.split(" "));
+    }
+
+    return output.join(" ");
+  }, [section]);
+
   if (!isValidArray(section.items) || !section.items.length) {
     return null;
   }
@@ -33,9 +44,11 @@ export const SectionArticlesCarousel: React.FC<
     <Box
       component="section"
       id={section.section_name}
-      className="section section-articles-carousel"
+      className={classes}
       sx={sectionArticlesCarouselStyles}
     >
+      {section?.alerts && <Alerts alerts={section?.alerts}></Alerts>}
+
       {section.title && !section.hide_title && (
         <Typography variant="h2" className="section-title">
           {section.title}

@@ -13,6 +13,9 @@ import { Link } from "react-router";
 import { useShallow } from "zustand/shallow";
 import { projectsStoreActions } from "@src/store/projects/projects.actions";
 import { settingsStoreActions } from "@src/store/settings/settings.actions";
+import { Alerts } from "@components/alerts/Alerts";
+import { AlertDto } from "@models/utility-types/alert-dto.model";
+import { isValidArray } from "@utils/functions/isValidArray";
 
 export interface ProjectPageProps {
   page?: PageDtoVariant;
@@ -54,8 +57,27 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({ page, children }) => {
     return [projectPageStyles, cssVars];
   }, [cssVars]);
 
+  const alerts = useMemo(() => {
+    const output: AlertDto[] = [];
+
+    if (isValidArray(projectPage?.alerts) && projectPage.alerts.length) {
+      output.push(...projectPage.alerts);
+    }
+
+    if (isValidArray(page?.alerts) && page.alerts.length) {
+      output.push(...page.alerts);
+    }
+
+    return output;
+  }, [page, projectPage]);
+
   if (!projectPage?.id) {
-    return children;
+    return (
+      <>
+        {!!alerts?.length && <Alerts alerts={alerts}></Alerts>}
+        {children}
+      </>
+    );
   }
 
   return (
@@ -106,6 +128,8 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({ page, children }) => {
           className="project-main-content"
           data-testid="project-main-content"
         >
+          {!!alerts?.length && <Alerts alerts={alerts}></Alerts>}
+
           {children}
         </Box>
       </Box>

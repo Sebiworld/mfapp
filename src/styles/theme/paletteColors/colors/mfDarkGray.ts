@@ -1,6 +1,6 @@
-import { Color } from "@mui/material/styles";
+import { ExtendedPaletteColor } from "@styles/theme/mfTheme";
 
-export const mfDarkGray: Color = {
+export const mfDarkGray: ExtendedPaletteColor = {
   50: "#f8f6f3",
   100: "#f1eeec",
   200: "#e2e0de",
@@ -19,4 +19,8 @@ export const mfDarkGray: Color = {
   lightChannel: "226 224 222",
   mainChannel: "100 97 89",
   darkChannel: "51 49 40",
+
+  lightRgb: "226, 224, 222",
+  mainRgb: "100, 97, 89",
+  darkRgb: "51, 49, 40",
 };

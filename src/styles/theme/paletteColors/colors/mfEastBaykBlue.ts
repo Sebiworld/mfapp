@@ -19,4 +19,8 @@ export const mfEastBayBlue: ExtendedPaletteColor = {
   lightChannel: "198 206 225", // RGB of 200
   mainChannel: "72 86 130", // RGB of 500
   darkChannel: "63 67 99", // RGB of 700
+
+  lightRgb: "198, 206, 225", // RGB of 200
+  mainRgb: "72, 86, 130", // RGB of 500
+  darkRgb: "63, 67, 99", // RGB of 700
 };

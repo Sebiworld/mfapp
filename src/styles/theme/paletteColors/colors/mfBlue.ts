@@ -1,6 +1,6 @@
-import { Color } from "@mui/material/styles";
+import { ExtendedPaletteColor } from "@styles/theme/mfTheme";
 
-export const mfBlue: Color = {
+export const mfBlue: ExtendedPaletteColor = {
   50: "#eef5ff",
   100: "#E3EFFB",
   200: "#C7DFF7",
@@ -19,4 +19,8 @@ export const mfBlue: Color = {
   lightChannel: "199 223 247",
   mainChannel: "11 107 203",
   darkChannel: "18 70 123",
+
+  lightRgb: "199, 223, 247",
+  mainRgb: "11, 107, 203",
+  darkRgb: "18, 70, 123",
 };

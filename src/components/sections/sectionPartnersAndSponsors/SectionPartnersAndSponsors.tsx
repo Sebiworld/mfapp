@@ -1,11 +1,12 @@
 import { ContentBlocks } from "@components/contentBlocks/ContentBlocks";
 import { SectionPartnersAndSponsorsDto } from "@models/section/section-partners-and-sponsors-dto.model";
 import { Box, Card, Typography } from "@mui/material";
-import React from "react";
+import React, { useMemo } from "react";
 import { sectionPartnersAndSponsorsStyles } from "./sectionPartnersAndSponsors.styles";
 import { LazyPicture } from "@components/lazyPicture/LazyPicture";
 import { useTranslation } from "react-i18next";
 import { SectionSpacer } from "@components/sectionSpacer/SectionSpacer";
+import { Alerts } from "@components/alerts/Alerts";
 
 export interface SectionPartnersAndSponsorsProps {
   section: SectionPartnersAndSponsorsDto;
@@ -16,17 +17,29 @@ export const SectionPartnersAndSponsors: React.FC<
 > = ({ section }) => {
   const { t } = useTranslation();
 
+  const classes = useMemo(() => {
+    const output = ["section", `section-${section.type}`, "np"];
+
+    if (section.classes && typeof section.classes === "string") {
+      output.push(...section.classes.split(" "));
+    }
+
+    return output.join(" ");
+  }, [section]);
+
   return (
     <Box
       component="section"
       id={section.section_name}
-      className="section section-partners-and-sponsors np"
+      className={classes}
       sx={sectionPartnersAndSponsorsStyles}
     >
       <SectionSpacer position="top"></SectionSpacer>
 
       <Box className="introduction">
         <Box className="sub-section">
+          {section?.alerts && <Alerts alerts={section?.alerts}></Alerts>}
+
           {section.title && !section.hide_title && (
             <Typography variant="h2" className="section-title">
               {section.title}

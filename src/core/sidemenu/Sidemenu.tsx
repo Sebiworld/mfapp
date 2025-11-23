@@ -9,15 +9,13 @@ import {
   Drawer,
   IconButton,
   List,
-  ListItem,
-  ListItemButton,
   Stack,
   Typography,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { MenueItem } from "./components/MenueItem";
-import { NavLink, Link as RouterLink } from "react-router";
+import { Link as RouterLink } from "react-router";
 import { useCallback, useMemo } from "react";
 import { SectionSpacer } from "@components/sectionSpacer/SectionSpacer";
 import { selectCurrentUser } from "@src/store/auth/auth.selectors";
@@ -121,7 +119,7 @@ export const Sidemenu = ({ sidemenuOpen, setSidemenuOpen }: SidemenuProps) => {
               </Typography>
 
               <List component="nav" className="navigation-list">
-                <ListItem>
+                {/* <ListItem>
                   <ListItemButton
                     component={NavLink}
                     to="/shop"
@@ -141,7 +139,7 @@ export const Sidemenu = ({ sidemenuOpen, setSidemenuOpen }: SidemenuProps) => {
                   >
                     Probenplan
                   </ListItemButton>
-                </ListItem>
+                </ListItem> */}
 
                 {menueItems.map((item) => (
                   <MenueItem

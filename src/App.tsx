@@ -18,18 +18,20 @@ import { CssBaseline } from "@mui/material";
 import * as ionIcons from "ionicons/icons";
 import { addIcons } from "ionicons";
 import { ScrollRestoration } from "react-router";
-import { initializationStoreActions } from "./store/initialization/initialization.actions";
+import { useInitialization } from "@api/hooks/useInitialization";
 addIcons(ionIcons);
 
 export const App = () => {
   const isInitialized = useGlobalStore(selectIsInitialized);
   useHandleRegistrationConfirm();
 
+  const { initialize } = useInitialization();
+
   // TODO: Modal mit Konfetti nach Registrierung
 
   useEffect(() => {
-    void initializationStoreActions.initializeApp();
-  }, []);
+    void initialize();
+  }, [initialize]);
 
   return (
     <>

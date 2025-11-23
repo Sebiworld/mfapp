@@ -21,7 +21,10 @@ import { NavLink, Link as RouterLink } from "react-router";
 import { useCallback, useMemo } from "react";
 import { SectionSpacer } from "@components/sectionSpacer/SectionSpacer";
 import { selectCurrentUser } from "@src/store/auth/auth.selectors";
-import { selectMenues } from "@src/store/configuration/configuration.selectors";
+import {
+  selectConfigurationParams,
+  selectMenues,
+} from "@src/store/configuration/configuration.selectors";
 import { AuthCard } from "./components/authCard/AuthCard";
 import { StartupModal } from "@components/modals/startupModal/StartupModal";
 import { MfLogo } from "@components/mfLogo/MfLogo";
@@ -37,6 +40,7 @@ export const Sidemenu = ({ sidemenuOpen, setSidemenuOpen }: SidemenuProps) => {
   const [isStartupModalOpen, setIsStartupModalOpen] = React.useState(false);
 
   const loadedMenues = useGlobalStore(selectMenues);
+  const configuration = useGlobalStore(selectConfigurationParams);
 
   const menueItems = React.useMemo(() => {
     const items = [];
@@ -56,7 +60,14 @@ export const Sidemenu = ({ sidemenuOpen, setSidemenuOpen }: SidemenuProps) => {
     setSidemenuOpen(false);
   }, [setSidemenuOpen]);
 
+  // TODO: Prüfen, ob initializeConfig richtig eingebunden ist
+  // Neuen Hook einbauen und bei der Initialisierung der App aufrufen
+
   const footerMode = useMemo(() => {
+    if (!configuration?.disable_login) {
+      return "logo";
+    }
+
     if (!currentUser?.data?.isLoggedIn) {
       return "login";
     }
@@ -70,7 +81,7 @@ export const Sidemenu = ({ sidemenuOpen, setSidemenuOpen }: SidemenuProps) => {
     }
 
     return "logo";
-  }, [currentUser]);
+  }, [configuration, currentUser?.data?.isLoggedIn, currentUser?.data?.roles]);
 
   const versionNumber = useMemo(() => {
     return __VERSION__;

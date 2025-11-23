@@ -9,7 +9,7 @@ export const projectPageStyles = (theme: Theme): SystemStyleObject<Theme> => ({
       display: "flex",
       flexDirection: "column",
       maxWidth: "100%",
-      width: "1900px",
+      width: "1600px",
 
       ".MuiAspectRatio-root": {
         border: "0 none",

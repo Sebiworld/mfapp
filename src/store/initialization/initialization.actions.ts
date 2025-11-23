@@ -1,5 +1,5 @@
 import { authStoreActions } from "../auth/auth.actions";
-import { configurationActions } from "../configuration/configuration.actions";
+import { configurationStoreActions } from "../configuration/configuration.actions";
 import { useGlobalStore } from "../global.store";
 import { pagesStoreActions } from "../pages/pages.actions";
 import { projectsStoreActions } from "../projects/projects.actions";
@@ -29,18 +29,12 @@ const setDidReceiveWelcomeMessage = (value: boolean) => {
   });
 };
 
-const initializeApp = async () => {
-  await configurationActions.initializeConfiguration();
-  await pagesStoreActions.initializePages();
-  await projectsStoreActions.initializeProjects();
-};
-
 const resetApp = async (includeAuth?: boolean) => {
   if (includeAuth !== false) {
     await authStoreActions.resetAuth();
   }
 
-  await configurationActions.resetConfiguration();
+  await configurationStoreActions.resetConfiguration();
   await pagesStoreActions.resetPages();
   await projectsStoreActions.resetProjects();
 
@@ -51,6 +45,5 @@ export const initializationStoreActions = {
   registerUninitializedPart,
   setPartInitialized,
   setDidReceiveWelcomeMessage,
-  initializeApp,
   resetApp,
 };

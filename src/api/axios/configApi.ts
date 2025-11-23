@@ -3,11 +3,6 @@ import { axiosInstance } from "./axios";
 import { NavigationItemDto } from "@models/navigation-item-dto.model";
 import { ConfigurationDto } from "@models/utility-types/configuration-dto.model";
 
-export interface GetConfigurationResponse {
-  configuration: ConfigurationDto;
-  hash?: string;
-}
-
 export interface GetMenuesResponse {
   main_navigation: NavigationItemDto[];
   secondary_navigation: NavigationItemDto[];
@@ -19,19 +14,19 @@ export interface GetMenuesResponse {
 export const configApi = {
   getConfiguration: (params?: {
     [key: string]: unknown;
-  }): Promise<AxiosResponse<GetConfigurationResponse | undefined>> =>
+  }): Promise<AxiosResponse<ConfigurationDto | undefined>> =>
     axiosInstance({
       method: "GET",
       url: `/configuration`,
       params,
-      transformResponse: (response): GetConfigurationResponse | undefined => {
+      transformResponse: (response): ConfigurationDto | undefined => {
         if (!response) {
           return;
         }
 
         try {
           const json = JSON.parse(response);
-          return json as GetConfigurationResponse;
+          return json as ConfigurationDto;
         } catch (e) {
           console.warn(e);
           throw new Error("Could not parse response");

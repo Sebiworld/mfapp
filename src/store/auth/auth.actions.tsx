@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { t } from "i18next";
 import { useGlobalStore } from "../global.store";
 import { initializationStoreActions } from "../initialization/initialization.actions";
-import { selectConfiguration } from "../configuration/configuration.selectors";
+import { selectConfigurationParams } from "../configuration/configuration.selectors";
 
 const setNickname = (nickname?: string) => {
   useGlobalStore.setState((state) => {
@@ -85,8 +85,8 @@ const refreshUser = async () => {
 };
 
 const login = async (email: string, password: string) => {
-  const config = selectConfiguration(useGlobalStore.getState());
-  if (config?.configuration?.disable_login) {
+  const config = selectConfigurationParams(useGlobalStore.getState());
+  if (config?.disable_login) {
     toast.error(t("auth.login-disabled"));
     return;
   }

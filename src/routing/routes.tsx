@@ -7,11 +7,6 @@ const Page = React.lazy(() =>
     default: module.Page,
   }))
 );
-const LoginPage = React.lazy(() =>
-  import("@pages/loginPage/LoginPage").then((module) => ({
-    default: module.LoginPage,
-  }))
-);
 const SettingsPage = React.lazy(() =>
   import("@pages/settingsPage/SettingsPage").then((module) => ({
     default: module.SettingsPage,
@@ -27,10 +22,6 @@ export const router = createBrowserRouter([
       {
         index: true,
         Component: Page,
-      },
-      {
-        path: "login",
-        Component: LoginPage,
       },
       {
         path: "settings",

@@ -8,15 +8,6 @@ const addPageCards = async (
   pageCards: PageCardDtoWithIndex[],
   indexData: { indexKey: string; filterHash: string; startIndex: number }
 ) => {
-  // .map((item, index) => ({
-  //   ...item,
-  //   indexData: {
-  //     [indexKey]: {
-  //       [filterHash]: (params?.offset || 0) + index,
-  //     },
-  //   },
-  // }))
-
   useGlobalStore.setState((state) => {
     const changedState = {
       pageCards: _cloneDeep(state.pageCards),

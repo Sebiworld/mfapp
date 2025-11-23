@@ -1,14 +1,11 @@
 import { StateCreator } from "zustand";
 import { GlobalStore } from "../global.store";
-import { LoadingStatus } from "@models/loading-status.model";
-import {
-  GetConfigurationResponse,
-  GetMenuesResponse,
-} from "@api/axios/configApi";
+import { GetMenuesResponse } from "@api/axios/configApi";
+import { ConfigurationDto } from "@models/utility-types/configuration-dto.model";
 
 export interface ConfigurationSlice {
-  configuration: LoadingStatus<GetConfigurationResponse>;
-  menues: LoadingStatus<GetMenuesResponse>;
+  configurationParams?: ConfigurationDto;
+  menues?: GetMenuesResponse;
 }
 
 export const createConfigurationSlice: StateCreator<
@@ -17,14 +14,6 @@ export const createConfigurationSlice: StateCreator<
   [],
   ConfigurationSlice
 > = () => ({
-  configuration: {
-    status: "uninitialized",
-  },
-  menues: {
-    status: "uninitialized",
-  },
-
-
+  configuration: undefined,
+  menues: undefined,
 });
-
-

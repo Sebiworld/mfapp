@@ -1,5 +1,6 @@
 export type ConfigurationDto = {
+  [key: string]: unknown;
   disable_login?: boolean;
   disable_registration?: boolean;
-  [key: string]: unknown;
+  hash?: string;
 };

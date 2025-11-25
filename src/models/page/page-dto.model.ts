@@ -2,6 +2,10 @@ import { BasicPageDto } from "@models/basic-page-dto.model";
 import { AlertDto } from "@models/utility-types/alert-dto.model";
 
 export interface PageDto extends BasicPageDto {
-  project_id?: number;
   alerts?: AlertDto[];
+  seo?: {
+    title?: string;
+    description?: string;
+    canonical?: string;
+  };
 }

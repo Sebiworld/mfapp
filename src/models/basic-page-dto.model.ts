@@ -11,5 +11,6 @@ export interface BasicPageDto {
   created: number;
   modified: number;
   title: string;
+  project_id?: number;
   hash?: string;
 }

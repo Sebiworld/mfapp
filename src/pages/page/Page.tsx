@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { pageStyles } from "./page.styles";
 // import WarningIcon from "@mui/icons-material/Warning";
 import { useTranslation } from "react-i18next";
@@ -7,10 +7,10 @@ import { PageContents } from "./pageContents/PageContents";
 import { ProjectPage } from "./projectPage/ProjectPage";
 import { LoadingOverlay } from "@components/loadingOverlay/LoadingOverlay";
 import { Alert, AlertTitle, Box, Button, Typography } from "@mui/material";
-import { convertHtmlEntities } from "@utils/functions/convertHtmlEntities";
 import { Link, useLocation } from "react-router";
 import { selectPage } from "@src/store/pages/pages.selectors";
 import { pagesStoreActions } from "@src/store/pages/pages.actions";
+import { SeoHeaders } from "@components/SeoHeaders";
 
 export const Page = () => {
   const location = useLocation();
@@ -29,12 +29,6 @@ export const Page = () => {
   // useEffect(() => {
   //   console.log("page", { page });
   // }, [page]);
-
-  const title = useMemo(() => {
-    return page?.title
-      ? `${convertHtmlEntities(page?.title)} | Musical-Fabrik`
-      : "Musical-Fabrik";
-  }, [page?.title]);
 
   const lastHash = useRef("");
 
@@ -65,7 +59,7 @@ export const Page = () => {
       data-testid="page"
       sx={pageStyles}
     >
-      <title>{title}</title>
+      {page?.id && <SeoHeaders page={page}></SeoHeaders>}
 
       <ProjectPage page={page}>
         <LoadingOverlay

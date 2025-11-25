@@ -70,12 +70,7 @@ export function Footer() {
 
   return (
     <Box className="footer-wrapper" sx={footerStyles}>
-      <Paper
-        color="neutral"
-        component="footer"
-        role="footer"
-        className="footer"
-      >
+      <Paper color="neutral" component="footer" className="footer">
         <Box component={RouterLink} to="/">
           <MfLogo layout="vertical"></MfLogo>
         </Box>

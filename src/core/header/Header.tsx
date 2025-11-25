@@ -39,7 +39,6 @@ export const Header = () => {
       <ElevationScroll supportsTranslucentHeader={supportsTranslucentHeader}>
         <AppBar
           component="header"
-          role="header"
           position={supportsTranslucentHeader ? "fixed" : "sticky"}
           color="dark"
           elevation={0}
@@ -48,7 +47,11 @@ export const Header = () => {
         >
           <Toolbar className="toolbar">
             <Box className="container-left">
-              <Box component={Link} to="/" className="logo hide-when-translucent">
+              <Box
+                component={Link}
+                to="/"
+                className="logo hide-when-translucent"
+              >
                 <MfLogo color="dark"></MfLogo>
               </Box>
             </Box>

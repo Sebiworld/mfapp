@@ -30,10 +30,25 @@ export const splashScreenStyles: SxProps = {
     },
   },
 
+  ".message-container": {
+    flex: "1 1 auto",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    textAlign: "center",
+    lineHeight: 1.2,
+    width: "400px",
+    maxWidth: "100%",
+
+    ".title": {
+      lineHeight: 1.2,
+      marginBottom: "16px",
+    },
+  },
+
   ".loading-message": {
     width: "240px",
     maxWidth: "100%",
-    textAlign: "center",
-    lineHeight: 1.2,
   },
 };

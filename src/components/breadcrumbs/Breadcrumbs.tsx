@@ -8,7 +8,7 @@ import {
 import { FC, useMemo } from "react";
 import { breadcrumbsStyles } from "./breadcrumbs.styles";
 import { isValidArray } from "@utils/functions/isValidArray";
-import { BreadcrumbList, WithContext } from "schema-dts";
+import { BreadcrumbList, ListItem, WithContext } from "schema-dts";
 
 export interface BreadcrumbsProps {
   items?: BreadcrumbDto[];
@@ -23,13 +23,20 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = ({ items }) => {
     const output: WithContext<BreadcrumbList> = {
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
-      itemListElement: items.map((item, index) => ({
-        "@type": "ListItem",
-        position: index + 1,
-        "@id": `${item.id}`,
-        name: item.title,
-        item: item.httpUrl,
-      })),
+      itemListElement: items.map((item, index) => {
+        const itemOutput: ListItem = {
+          "@type": "ListItem",
+          position: index + 1,
+          "@id": `${item.id}`,
+          name: item.title,
+        };
+
+        if (item.httpUrl && item.viewable) {
+          itemOutput.item = item.httpUrl;
+        }
+
+        return itemOutput;
+      }),
     };
 
     return output;

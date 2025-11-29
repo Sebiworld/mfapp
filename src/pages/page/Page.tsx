@@ -11,6 +11,7 @@ import { Link, useLocation } from "react-router";
 import { selectPage } from "@src/store/pages/pages.selectors";
 import { pagesStoreActions } from "@src/store/pages/pages.actions";
 import { SeoHeaders } from "@components/SeoHeaders";
+import { Breadcrumbs } from "@components/breadcrumbs/Breadcrumbs";
 
 export const Page = () => {
   const location = useLocation();
@@ -112,6 +113,8 @@ export const Page = () => {
           </Box>
         </Alert>
       )}
+
+      <Breadcrumbs items={page?.breadcrumbs}></Breadcrumbs>
     </Box>
   );
 };

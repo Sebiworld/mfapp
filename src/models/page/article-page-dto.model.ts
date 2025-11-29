@@ -34,6 +34,7 @@ import { AlertDto } from "@models/utility-types/alert-dto.model";
 
 export interface ArticlePageDto extends PageDto {
   datetime_from: number;
+  datetime_modified?: number;
   main_image: ImageDto;
   intro: string;
   contents: ContentBlockDtoVariant[];

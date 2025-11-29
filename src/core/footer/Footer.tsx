@@ -41,7 +41,7 @@ const heartAnimationStyles = {
   height: "3em",
 };
 
-export function Footer() {
+export const Footer = () => {
   const { t } = useTranslation();
 
   const currentDate = useCurrentDate(1000 * 60);
@@ -173,4 +173,4 @@ export function Footer() {
       <SectionSpacer position="top"></SectionSpacer>
     </Box>
   );
-}
+};

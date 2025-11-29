@@ -1,10 +1,15 @@
 import { ImageDto } from "@models/image-dto.model";
+import { ArticlePageDto } from "@models/page/article-page-dto.model";
 import { PageDto } from "@models/page/page-dto.model";
 import { selectConfigurationParams } from "@src/store/configuration/configuration.selectors";
 import { useGlobalStore } from "@src/store/global.store";
 import { convertHtmlEntities } from "@utils/functions/convertHtmlEntities";
 import { trimWords } from "@utils/functions/trimWords";
+import { publisherLdJson, publisherLongLdJson } from "@utils/ldJson/publisher";
 import { useMemo } from "react";
+import { Article, WebPage, WithContext } from "schema-dts";
+import { formatISO } from "date-fns";
+import { isValidArray } from "@utils/functions/isValidArray";
 
 export interface SeoHeadersProps {
   page: PageDto;
@@ -59,6 +64,75 @@ export const SeoHeaders: React.FC<SeoHeadersProps> = ({ page }) => {
 
     return "";
   }, [page, configurationParams]);
+
+  const structuredData = useMemo(() => {
+    if (!page?.id) {
+      return null;
+    }
+
+    if (page.template?.name === "home") {
+      const output: WithContext<WebPage> = {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        url: page.httpUrl,
+        name: "Musical-Fabrik e. V.",
+        description: description,
+        publisher: publisherLdJson,
+      };
+      return output;
+    }
+
+    if (page.template?.name === "project") {
+      const output: WithContext<WebPage> = {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        url: page.httpUrl,
+        name: `${title} (eine Produktion der Musical-Fabrik e. V.)`,
+        description: description,
+        publisher: publisherLdJson,
+      };
+
+      return output;
+    }
+
+    if (page.template?.name === "article") {
+      const articlePage = page as ArticlePageDto;
+
+      const output: WithContext<Article> = {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: articlePage.title,
+        datePublished: formatISO(articlePage.datetime_from * 1000),
+        dateModified: formatISO(articlePage.modified * 1000),
+        description: articlePage.intro,
+        publisher: publisherLdJson,
+        url: page.httpUrl,
+        mainEntityOfPage: {
+          "@type": "WebPage",
+          "@id": "https://google.com/article",
+        },
+      };
+
+      if (isValidArray(articlePage.authors) && articlePage.authors.length) {
+        output.author = articlePage.authors.map((authorName) => ({
+          "@type": "Person",
+          name: authorName,
+          // TODO: add author url if available
+        }));
+      } else {
+        output.author = {
+          "@type": "Organization",
+          name: "Musical-Fabrik e. V.",
+        };
+      }
+
+      if (imageUrl) {
+        output.image = imageUrl;
+      }
+
+      return output;
+    }
+  }, [description, page, title, imageUrl]);
 
   return (
     <>
@@ -118,6 +192,27 @@ export const SeoHeaders: React.FC<SeoHeadersProps> = ({ page }) => {
           <meta property="og:url" content={page.httpUrl} />
           <meta property="twitter:url" content={page.httpUrl} />
         </>
+      )}
+
+      {!!structuredData && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
+          }}
+        />
+      )}
+
+      {page?.template?.name === "home" && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(publisherLongLdJson).replace(
+              /</g,
+              "\\u003c"
+            ),
+          }}
+        />
       )}
     </>
   );

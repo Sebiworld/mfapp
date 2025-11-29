@@ -25,6 +25,7 @@ export const ContentGalleryGrid: React.FC<ContentGalleryGridProps> = ({
           <Button
             key={`${image.page_id}#${image.basename}`}
             className="image-button"
+            title={`${image?.description || "Bild"} in Galerie öffnen`}
             onClick={() => {
               lightGalleryRef?.current?.openGallery(index);
             }}

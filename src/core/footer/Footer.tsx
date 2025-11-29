@@ -82,6 +82,7 @@ export const Footer = () => {
           size="large"
           component={RouterLink}
           to={{ pathname: "/", hash: "#mitglied-werden" }}
+          title="Mitglied werden"
         >
           {t("footer.cta")}
         </Button>
@@ -90,27 +91,37 @@ export const Footer = () => {
           <strong>{t("footer.external")}</strong>
 
           <div className="social-actions">
-            <IconButton component="a" href="https://www.musical-fabrik.de">
+            <IconButton
+              component="a"
+              href="https://www.musical-fabrik.de"
+              title="Die Musical-Fabrik Website"
+            >
               <LanguageIcon></LanguageIcon>
             </IconButton>
+
             <IconButton
               component="a"
               target="_blank"
               href="https://www.facebook.com/musicalfabrik"
+              title="Die Musical-Fabrik auf Facebook"
             >
               <FacebookIcon></FacebookIcon>
             </IconButton>
+
             <IconButton
               component="a"
               target="_blank"
               href="https://www.instagram.com/musicalfabrik/"
+              title="Die Musical-Fabrik auf Instagram"
             >
               <InstagramIcon></InstagramIcon>
             </IconButton>
+
             <IconButton
               component="a"
               target="_blank"
               href="https://www.youtube.com/channel/UCluu4BuDfn4dChkFBPpQt0g"
+              title="Die Musical-Fabrik auf Youtube"
             >
               <YoutubeIcon></YoutubeIcon>
             </IconButton>
@@ -129,6 +140,7 @@ export const Footer = () => {
                   href="https://www.sebi.dev"
                   target="_blank"
                   key="link"
+                  title="Zur Website von Sebastian Schendel"
                 />
               ),
               heart: heartElement,

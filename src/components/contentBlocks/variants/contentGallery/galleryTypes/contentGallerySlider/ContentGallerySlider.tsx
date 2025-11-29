@@ -76,6 +76,7 @@ export const ContentGallerySlider: React.FC<ContentGallerySliderProps> = ({
                         onClose();
                       }
                     }}
+                    title={`${image?.description || "Bild"} in Galerie öffnen`}
                   >
                     <LazyPicture
                       image={image}

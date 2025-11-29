@@ -1,21 +1,20 @@
 import { Button } from "@mui/material";
-import React from "react";
+import React, { ComponentProps } from "react";
 
 // Import Swiper styles
 import "swiper/css/bundle";
 
-export interface ContentGallerySliderItemButtonProps {
+export interface ContentGallerySliderItemButtonProps
+  extends ComponentProps<typeof Button> {
   detailLink?: string;
-  onClick?: () => void;
-  children?: React.ReactNode;
 }
 
 export const ContentGallerySliderItemButton: React.FC<
   ContentGallerySliderItemButtonProps
-> = ({ detailLink, onClick, children }) => {
+> = ({ detailLink, onClick, children, ...props }) => {
   if (detailLink) {
     return (
-      <Button className="gallery-link" href={detailLink}>
+      <Button className="gallery-link" href={detailLink} {...props}>
         {children}
       </Button>
     );
@@ -23,7 +22,7 @@ export const ContentGallerySliderItemButton: React.FC<
 
   if (onClick) {
     return (
-      <Button className="image-button" onClick={onClick}>
+      <Button className="image-button" onClick={onClick} {...props}>
         {children}
       </Button>
     );

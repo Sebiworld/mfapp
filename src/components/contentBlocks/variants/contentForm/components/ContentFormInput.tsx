@@ -1,4 +1,4 @@
-import React, { ReactNode, useMemo } from "react";
+import React, { ReactNode, useId, useMemo } from "react";
 import {
   FormElementDto,
   FormInputVariant,
@@ -18,9 +18,11 @@ import {
   RadioGroup,
   Select,
   TextField,
+  Typography,
 } from "@mui/material";
 import { FormValidationResponseDto } from "@models/utility-types/form-validation-response-dto.model";
 import Check from "@mui/icons-material/Check";
+import { autocompleteNamesMap } from "../functions/autocompleteNamesMap";
 
 export interface ContentFormInputProps {
   item: FormInputVariant | FormElementDto;
@@ -29,6 +31,7 @@ export interface ContentFormInputProps {
   formValidationResponse?: FormValidationResponseDto;
   classes?: string[];
   inputClasses?: string[];
+  id?: string;
 }
 
 export const ContentFormInput: React.FC<ContentFormInputProps> = ({
@@ -38,12 +41,16 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
   formValidationResponse,
   classes: customClasses,
   inputClasses: customInputClasses,
+  id,
 }) => {
   const { t } = useTranslation();
   const fieldValidationState = useMemo(
     () => formValidationResponse?.fields?.[item.name],
     [formValidationResponse?.fields, item.name]
   );
+
+  const autoId = useId();
+  const inputId = id || autoId;
 
   const fieldError = useMemo((): ReactNode => {
     // Local zod validation errors
@@ -104,6 +111,21 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
   }, [customInputClasses, fieldSuccess]);
 
   const inputElement = useMemo(() => {
+    const autocompleteName = autocompleteNamesMap[item.name];
+
+    const inputProps = {
+      "aria-labelledby": `${inputId}-label`,
+      "aria-describedby": item.description
+        ? `${inputId}-description`
+        : undefined,
+      autocomplete: autocompleteName,
+      endAdornment: (
+        <InputAdornment position="end" className="success-marker">
+          <Check color="success" />
+        </InputAdornment>
+      ),
+    };
+
     if (item.type === "antispam_code") {
       if (!control) {
         return (
@@ -112,14 +134,9 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
             error={!!fieldError}
             helperText={fieldError}
             className={inputClasses}
+            id={`${inputId}-input`}
             slotProps={{
-              input: {
-                endAdornment: (
-                  <InputAdornment position="end" className="success-marker">
-                    <Check color="success" />
-                  </InputAdornment>
-                ),
-              },
+              input: inputProps,
             }}
           ></TextField>
         );
@@ -133,14 +150,9 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
               error={!!fieldError}
               helperText={fieldError}
               className={inputClasses}
+              id={`${inputId}-input`}
               slotProps={{
-                input: {
-                  endAdornment: (
-                    <InputAdornment position="end" className="success-marker">
-                      <Check color="success" />
-                    </InputAdornment>
-                  ),
-                },
+                input: inputProps,
               }}
             ></TextField>
           )}
@@ -158,14 +170,9 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
             error={!!fieldError}
             helperText={fieldError}
             className={inputClasses}
+            id={`${inputId}-input`}
             slotProps={{
-              input: {
-                endAdornment: (
-                  <InputAdornment position="end" className="success-marker">
-                    <Check color="success" />
-                  </InputAdornment>
-                ),
-              },
+              input: inputProps,
             }}
           ></TextField>
         );
@@ -179,14 +186,9 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
               error={!!fieldError}
               helperText={fieldError}
               className={inputClasses}
+              id={`${inputId}-input`}
               slotProps={{
-                input: {
-                  endAdornment: (
-                    <InputAdornment position="end" className="success-marker">
-                      <Check color="success" />
-                    </InputAdornment>
-                  ),
-                },
+                input: inputProps,
               }}
             ></TextField>
           )}
@@ -205,14 +207,9 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
             error={!!fieldError}
             helperText={fieldError}
             className={inputClasses}
+            id={`${inputId}-input`}
             slotProps={{
-              input: {
-                endAdornment: (
-                  <InputAdornment position="end" className="success-marker">
-                    <Check color="success" />
-                  </InputAdornment>
-                ),
-              },
+              input: inputProps,
             }}
           ></TextField>
         );
@@ -227,14 +224,9 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
               error={!!fieldError}
               helperText={fieldError}
               className={inputClasses}
+              id={`${inputId}-input`}
               slotProps={{
-                input: {
-                  endAdornment: (
-                    <InputAdornment position="end" className="success-marker">
-                      <Check color="success" />
-                    </InputAdornment>
-                  ),
-                },
+                input: inputProps,
               }}
             ></TextField>
           )}
@@ -253,14 +245,9 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
             error={!!fieldError}
             helperText={fieldError}
             className={inputClasses}
+            id={`${inputId}-input`}
             slotProps={{
-              input: {
-                endAdornment: (
-                  <InputAdornment position="end" className="success-marker">
-                    <Check color="success" />
-                  </InputAdornment>
-                ),
-              },
+              input: inputProps,
             }}
           ></TextField>
         );
@@ -275,14 +262,9 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
               error={!!fieldError}
               helperText={fieldError}
               className={inputClasses}
+              id={`${inputId}-input`}
               slotProps={{
-                input: {
-                  endAdornment: (
-                    <InputAdornment position="end" className="success-marker">
-                      <Check color="success" />
-                    </InputAdornment>
-                  ),
-                },
+                input: inputProps,
               }}
             ></TextField>
           )}
@@ -302,14 +284,9 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
             error={!!fieldError}
             helperText={fieldError}
             className={inputClasses}
+            id={`${inputId}-input`}
             slotProps={{
-              input: {
-                endAdornment: (
-                  <InputAdornment position="end" className="success-marker">
-                    <Check color="success" />
-                  </InputAdornment>
-                ),
-              },
+              input: inputProps,
             }}
           ></TextField>
         );
@@ -325,14 +302,9 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
               error={!!fieldError}
               helperText={fieldError}
               className={inputClasses}
+              id={`${inputId}-input`}
               slotProps={{
-                input: {
-                  endAdornment: (
-                    <InputAdornment position="end" className="success-marker">
-                      <Check color="success" />
-                    </InputAdornment>
-                  ),
-                },
+                input: inputProps,
               }}
             ></TextField>
           )}
@@ -346,6 +318,10 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
       return (
         <Box
           className="form-markup"
+          aria-labelledby={`${inputId}-label`}
+          aria-describedby={
+            item.description ? `${inputId}-description` : undefined
+          }
           dangerouslySetInnerHTML={{ __html: item.value as string }}
         ></Box>
       );
@@ -353,13 +329,31 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
 
     if (item.type === "checkbox") {
       if (!control) {
-        return <Checkbox name={item.name} className={inputClasses}></Checkbox>;
+        return (
+          <Checkbox
+            name={item.name}
+            className={inputClasses}
+            id={`${inputId}-input`}
+            aria-labelledby={`${inputId}-label`}
+            aria-describedby={
+              item.description ? `${inputId}-description` : undefined
+            }
+          ></Checkbox>
+        );
       }
 
       return (
         <Controller
           render={({ field }) => (
-            <Checkbox {...field} className={inputClasses}></Checkbox>
+            <Checkbox
+              {...field}
+              className={inputClasses}
+              id={`${inputId}-input`}
+              aria-labelledby={`${inputId}-label`}
+              aria-describedby={
+                item.description ? `${inputId}-description` : undefined
+              }
+            ></Checkbox>
           )}
           control={control}
           name={item.name}
@@ -384,18 +378,15 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
           return (
             <Select
               multiple
-              // sx={{ minWidth: "13rem" }}
-              // slotProps={{
-              //   listbox: {
-              //     sx: {
-              //       width: "100%",
-              //     },
-              //   },
-              // }}
               name={item.name}
               value={v}
               error={Boolean(errors?.[item.name])}
               className={inputClasses}
+              id={`${inputId}-input`}
+              aria-labelledby={`${inputId}-label`}
+              aria-describedby={
+                item.description ? `${inputId}-description` : undefined
+              }
             >
               {item.options?.map((option) => (
                 <MenuItem key={option.id} value={option.value}>
@@ -429,6 +420,11 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
                   defaultValue={[]}
                   value={v}
                   error={Boolean(errors?.[item.name])}
+                  id={`${inputId}-input`}
+                  labelId={`${inputId}-label`}
+                  aria-describedby={
+                    item.description ? `${inputId}-description` : undefined
+                  }
                   className={inputClasses}
                   // sx={{ minWidth: "13rem" }}
                   // slotProps={{
@@ -455,7 +451,15 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
 
       if (!control) {
         return (
-          <RadioGroup name={item.name} className={inputClasses}>
+          <RadioGroup
+            name={item.name}
+            className={inputClasses}
+            id={`${inputId}-input`}
+            aria-labelledby={`${inputId}-label`}
+            aria-describedby={
+              item.description ? `${inputId}-description` : undefined
+            }
+          >
             {item.options?.map((option) => (
               <FormControlLabel
                 key={option.id}
@@ -476,6 +480,11 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
               onChange={onChange}
               value={value}
               className={inputClasses}
+              id={`${inputId}-input`}
+              aria-labelledby={`${inputId}-label`}
+              aria-describedby={
+                item.description ? `${inputId}-description` : undefined
+              }
             >
               {item.options?.map((option) => (
                 <FormControlLabel
@@ -499,14 +508,9 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
           <TextField
             name={item.name}
             className={inputClasses}
+            id={`${inputId}-input`}
             slotProps={{
-              input: {
-                endAdornment: (
-                  <InputAdornment position="end" className="success-marker">
-                    <Check color="success" />
-                  </InputAdornment>
-                ),
-              },
+              input: inputProps,
             }}
           ></TextField>
         );
@@ -522,14 +526,9 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
               error={Boolean(errors?.[item.name])}
               helperText={(errors?.[item.name]?.message as string) || ""}
               className={inputClasses}
+              id={`${inputId}-input`}
               slotProps={{
-                input: {
-                  endAdornment: (
-                    <InputAdornment position="end" className="success-marker">
-                      <Check color="success" />
-                    </InputAdornment>
-                  ),
-                },
+                input: inputProps,
               }}
             ></TextField>
           )}
@@ -541,53 +540,38 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
 
     console.error("Unknown input type", item.type, item);
     return <Box>{t("error.title")}</Box>;
-  }, [control, errors, fieldError, inputClasses, item, t]);
+  }, [control, errors, fieldError, inputClasses, inputId, item, t]);
 
-  // if(item.type === "checkbox"){
-  //   return (
-  //     <FormControl
-  //       required={item?.required}
-  //       error={Boolean(errors?.[item.name])}
-  //       className={`content-form-input layout-block type-${item.type} ${fieldSuccess ? "successful" : ""}`}
-  //       // helperText={(errors?.[item.name]?.message as string) || ""}
-  //     >
-  //       <FormLabel
-  //         className="form-input-label"
-  //         // slotProps={{ asterisk: { title: t("general.required") } }}
-  //       >
-  //         {item.label}
-  //       </FormLabel>
-
-  //       {item.description && (
-  //         <Box
-  //           className="form-input-description"
-  //           dangerouslySetInnerHTML={{ __html: item.description }}
-  //         ></Box>
-  //       )}
-
-  //       {inputElement}
-  //     </FormControl>
-  //   );
-  // }
+  const noLabel =
+    item.type === "options" ||
+    item.type === "checkbox" ||
+    item.type === "markup";
 
   return (
     <FormControl
       required={item?.required}
       error={Boolean(errors?.[item.name])}
       className={classes}
-      // helperText={(errors?.[item.name]?.message as string) || ""}
     >
-      <FormLabel
-        className="form-input-label"
-        // slotProps={{ asterisk: { title: t("general.required") } }}
-      >
-        {item.label}
-      </FormLabel>
+      {!noLabel ? (
+        <FormLabel
+          className="form-input-label"
+          id={`${inputId}-label`}
+          htmlFor={`${inputId}-input`}
+        >
+          {item.label}
+        </FormLabel>
+      ) : (
+        <Typography className="form-input-label" id={`${inputId}-label`}>
+          {item.label}
+        </Typography>
+      )}
 
       {item.description && (
         <Box
           className="form-input-description"
           dangerouslySetInnerHTML={{ __html: item.description }}
+          id={`${inputId}-description`}
         ></Box>
       )}
 

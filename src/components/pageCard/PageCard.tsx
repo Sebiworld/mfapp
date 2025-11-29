@@ -47,7 +47,11 @@ export const PageCard: React.FC<PageCardProps> = ({
           {image ? (
             <LazyPicture image={image}></LazyPicture>
           ) : (
-            <img src="img/mf-bg.jpg" loading="lazy" />
+            <img
+              src="img/mf-bg.jpg"
+              alt="Musical-Fabrik Platzhalterbild"
+              loading="lazy"
+            />
           )}
         </Box>
       </Box>

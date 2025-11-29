@@ -51,6 +51,7 @@ export const Header = () => {
                 component={Link}
                 to="/"
                 className="logo hide-when-translucent"
+                title="Zur Startseite"
               >
                 <MfLogo color="dark"></MfLogo>
               </Box>
@@ -85,7 +86,10 @@ export const Header = () => {
                 )}
 
               {setSidemenuOpen && (
-                <IconButton onClick={() => setSidemenuOpen(true)}>
+                <IconButton
+                  title="Menü öffnen"
+                  onClick={() => setSidemenuOpen(true)}
+                >
                   <Menu />
                 </IconButton>
               )}

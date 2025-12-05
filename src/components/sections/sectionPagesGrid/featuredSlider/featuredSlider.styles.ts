@@ -59,3 +59,37 @@ export const featuredSliderStyles: SxProps<Theme> = [
     },
   }),
 ];
+
+export const featuredSliderModalStyles: SxProps<Theme> = {
+  ".MuiTimeline-root": {
+    padding: 0,
+  },
+
+  ".MuiTimelineOppositeContent-root, .MuiTimelineContent-root": {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    // alignItems: "center",
+    minHeight: "120px",
+    lineHeight: "1.4",
+
+    ".MuiTypography-root": {
+      lineHeight: "1.2",
+    },
+
+    ".MuiButtonBase-root": {
+      marginTop: "8px",
+    },
+  },
+
+  ".MuiTimelineDot-root": {
+    padding: 0,
+
+    "&>.lazy-picture": {
+      width: "60px",
+      height: "60px",
+      overflow: "hidden",
+      borderRadius: "50%",
+    },
+  },
+};

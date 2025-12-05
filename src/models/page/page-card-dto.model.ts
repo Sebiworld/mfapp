@@ -6,6 +6,7 @@ export interface PageCardDto extends PageDto {
   card_image?: ImageDto;
   intro?: string;
   description?: string;
+  info_overlay?: string;
   datetime_from?: number;
   project_id?: number;
   details_deactivated?: boolean;

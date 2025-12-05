@@ -11,6 +11,11 @@ export const featuredSliderStyles: SxProps<Theme> = [
     maxWidth: "100%",
     margin: "0 auto",
 
+    "&.slider-wrapper": {
+      marginLeft: "0",
+      marginRight: "0",
+    },
+
     ".card-wrapper": {
       display: "flex",
       flexDirection: "column",

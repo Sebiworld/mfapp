@@ -12,6 +12,11 @@ const SettingsPage = React.lazy(() =>
     default: module.SettingsPage,
   }))
 );
+const SecretCodePage = React.lazy(() =>
+  import("@pages/games/secretCodePage/SecretCodePage").then((module) => ({
+    default: module.SecretCodePage,
+  }))
+);
 
 export const router = createBrowserRouter([
   {
@@ -26,6 +31,10 @@ export const router = createBrowserRouter([
       {
         path: "settings",
         Component: SettingsPage,
+      },
+      {
+        path: "secret-code",
+        Component: SecretCodePage,
       },
       {
         path: "*",

@@ -8,7 +8,13 @@ export const secretCodePageStyles: SxProps<Theme> = (theme) => ({
   padding: "32px 32px 64px 32px",
 
   [theme.breakpoints.down("md")]: {
-    padding: "32px 24px",
+    padding: "24px 24px 32px 24px",
+
+    gap: "24px",
+
+    "&>.description": {
+      fontSize: "1rem",
+    },
   },
 
   ".numbers-grid": {
@@ -23,6 +29,10 @@ export const secretCodePageStyles: SxProps<Theme> = (theme) => ({
     ".MuiButton-root": {
       height: "80px",
       fontSize: "2rem",
+
+      [theme.breakpoints.down("md")]: {
+        height: "60px",
+      },
     },
   },
 
@@ -39,7 +49,6 @@ export const secretCodePageStyles: SxProps<Theme> = (theme) => ({
       display: "flex",
       gap: "16px",
       marginTop: "16px",
-      fontSize: "64px",
       flexWrap: "wrap",
     },
 
@@ -51,6 +60,12 @@ export const secretCodePageStyles: SxProps<Theme> = (theme) => ({
       boxShadow: theme.shadows[2],
       minWidth: "80px",
       textAlign: "center",
+      fontSize: "48px",
+
+      [theme.breakpoints.down("md")]: {
+        fontSize: "36px",
+        minWidth: "50px",
+      },
     },
 
     "&.error .number-item": {

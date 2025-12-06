@@ -129,7 +129,7 @@ export const SecretCodePage = () => {
 
   return (
     <Box className="secret-code-page" sx={secretCodePageStyles}>
-      <Typography variant="h6" align="center">
+      <Typography className="description" variant="h6" align="center">
         Gib den geheimen Code ein!
       </Typography>
 

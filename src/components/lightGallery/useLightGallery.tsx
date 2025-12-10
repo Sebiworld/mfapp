@@ -1,5 +1,6 @@
 import React, {
   ReactNode,
+  RefObject,
   useCallback,
   useEffect,
   useMemo,
@@ -27,7 +28,7 @@ export interface UseLightGalleryProps {
 
 export interface UseLightGalleryReturn {
   element?: ReactNode;
-  ref: React.MutableRefObject<LightGallery | null>;
+  ref: RefObject<LightGallery | null>;
 }
 
 export const useLightGallery = ({

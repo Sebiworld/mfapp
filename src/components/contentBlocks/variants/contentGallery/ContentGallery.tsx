@@ -6,6 +6,8 @@ import { ContentGalleryGrid } from "./galleryTypes/ContentGalleryGrid";
 import { ContentGalleryMasonry } from "./galleryTypes/ContentGalleryMasonry";
 import { ContentGallerySlider } from "./galleryTypes/contentGallerySlider/ContentGallerySlider";
 
+const sliderTypes = ["slider", "carousel", "featured_slider"];
+
 export interface ContentGalleryProps {
   block: ContentBlockGalleryDto;
 }
@@ -36,8 +38,13 @@ export const ContentGallery: React.FC<ContentGalleryProps> = ({ block }) => {
       return null;
     }
 
-    if (block.gallery_type === "slider") {
-      return <ContentGallerySlider images={block.images} />;
+    if (block.gallery_type && sliderTypes.includes(block.gallery_type)) {
+      return (
+        <ContentGallerySlider
+          images={block.images}
+          galleryType={block.gallery_type}
+        />
+      );
     }
 
     if (block.gallery_type === "grid") {

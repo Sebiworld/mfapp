@@ -6,7 +6,7 @@ import { ContentGalleryGrid } from "./galleryTypes/ContentGalleryGrid";
 import { ContentGalleryMasonry } from "./galleryTypes/ContentGalleryMasonry";
 import { ContentGallerySlider } from "./galleryTypes/contentGallerySlider/ContentGallerySlider";
 
-const sliderTypes = ["slider", "carousel", "featured_slider"];
+const sliderTypes = ["slider", "panorama_slider", "featured_slider"];
 
 export interface ContentGalleryProps {
   block: ContentBlockGalleryDto;

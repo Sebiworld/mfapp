@@ -5,6 +5,7 @@ import { ImageDto } from "@models/image-dto.model";
 import { useLightGallery } from "@components/lightGallery/useLightGallery";
 import { ContentGallerySliderDefault } from "./components/ContentGallerySliderDefault";
 import { ContentGallerySliderFeaturedSlider } from "./components/ContentGallerySliderFeaturedSlider";
+import { ContentGallerySliderPanoramaSlider } from "./components/ContentGallerySliderPanoramaSlider";
 
 export interface ContentGallerySliderProps {
   images: ImageDto[];
@@ -37,6 +38,15 @@ export const ContentGallerySlider: React.FC<ContentGallerySliderProps> = ({
 
       {galleryType === "featured_slider" ? (
         <ContentGallerySliderFeaturedSlider
+          images={images}
+          activeIndex={activeIndex}
+          setActiveIndex={setActiveIndex}
+          lightGalleryRef={lightGalleryRef}
+          detailLink={detailLink}
+          onClose={onClose}
+        />
+      ) : galleryType === "panorama_slider" ? (
+        <ContentGallerySliderPanoramaSlider
           images={images}
           activeIndex={activeIndex}
           setActiveIndex={setActiveIndex}

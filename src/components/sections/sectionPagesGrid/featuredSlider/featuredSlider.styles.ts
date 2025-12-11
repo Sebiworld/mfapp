@@ -7,7 +7,7 @@ export const featuredSliderStyles: SxProps<Theme> = [
   effectCarouselStyles,
 
   (theme) => ({
-    // width: "1000px",
+    width: "850px",
     maxWidth: "100%",
     margin: "0 auto",
 

@@ -48,6 +48,11 @@ export const contentGalleryStyles: SxProps<Theme> = [
             marginLeft: "-48px",
             marginRight: "-48px",
           },
+
+          "&.featured-slider": {
+            width: "850px",
+            maxWidth: "100%",
+          }
         },
       },
     },

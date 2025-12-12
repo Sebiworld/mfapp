@@ -65,6 +65,11 @@ export const featuredSliderStyles: SxProps<Theme> = [
   }),
 ];
 
+export const featuredSliderActionsContainerStyles: SxProps<Theme> = {
+  width: "850px",
+  maxWidth: "100%",
+};
+
 export const featuredSliderModalStyles: SxProps<Theme> = {
   ".MuiTimeline-root": {
     padding: 0,

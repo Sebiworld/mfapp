@@ -10,6 +10,7 @@ import "swiper/css/bundle";
 import { SectionPagesGridDto } from "@models/section/section-pages-grid-dto.model";
 import { LazyPicture } from "@components/lazyPicture/LazyPicture";
 import {
+  featuredSliderActionsContainerStyles,
   featuredSliderModalStyles,
   featuredSliderStyles,
 } from "./featuredSlider.styles";
@@ -160,7 +161,10 @@ export const FeaturedSlider: React.FC<FeaturedSliderProps> = ({ section }) => {
         ></Button>
       </Box>
 
-      <Box className="actions-container">
+      <Box
+        className="actions-container"
+        sx={featuredSliderActionsContainerStyles}
+      >
         <Button
           variant="contained"
           color="projectPrimary"

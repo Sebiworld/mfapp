@@ -20,6 +20,7 @@ import { addIcons } from "ionicons";
 import { ScrollRestoration } from "react-router";
 import { useInitialization } from "@api/hooks/useInitialization";
 import { selectIsMaintenanceModeActive } from "./store/configuration/configuration.selectors";
+import { AppContextPage } from "./context/appContext/AppContextPage";
 addIcons(ionIcons);
 
 export const App = () => {
@@ -36,6 +37,8 @@ export const App = () => {
 
   return (
     <>
+      <AppContextPage />
+
       <ThemeProvider theme={{ [THEME_ID]: mfTheme }} noSsr defaultMode="light">
         <CssBaseline />
         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="de">
@@ -51,7 +54,9 @@ export const App = () => {
             showProgressBar={false}
             message={
               <>
-                <Typography variant="h6" className="title">Kurze Pause - Wir sind gleich wieder für dich da.</Typography>
+                <Typography variant="h6" className="title">
+                  Kurze Pause - Wir sind gleich wieder für dich da.
+                </Typography>
                 <Typography variant="body1">
                   Wir führen gerade wichtige Updates durch. Bitte versuch es in
                   einigen Minuten erneut. (Die Musical-Fabrik Website befindet

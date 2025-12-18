@@ -122,6 +122,8 @@ export const codeFontFamily = [
   "monospace",
 ].join(",");
 
+const baseTheme = createTheme();
+
 export const mfTheme = createTheme({
   cssVariables: {
     cssVarPrefix: "mf",
@@ -132,24 +134,52 @@ export const mfTheme = createTheme({
     fontFamily: mainFontFamiliy,
 
     h1: {
-      fontSize: "4rem",
       fontWeight: "bold",
+
+      fontSize: "2rem",
+      [baseTheme.breakpoints.up("md")]: {
+        fontSize: "4rem",
+      },
     },
     h2: {
-      fontSize: "3.4rem",
       fontWeight: "bold",
+
+      fontSize: "1.6rem",
+      [baseTheme.breakpoints.up("md")]: {
+        fontSize: "3.4rem",
+      },
     },
     h3: {
       fontWeight: "bold",
+
+      fontSize: "1.4rem",
+      [baseTheme.breakpoints.up("md")]: {
+        fontSize: "3rem",
+      },
     },
     h4: {
       fontWeight: "bold",
+
+      fontSize: "1.2rem",
+      [baseTheme.breakpoints.up("md")]: {
+        fontSize: "2.125rem",
+      },
     },
     h5: {
       fontWeight: "bold",
+
+      fontSize: "1rem",
+      [baseTheme.breakpoints.up("md")]: {
+        fontSize: "1.5rem",
+      },
     },
     h6: {
       fontWeight: "bold",
+
+      fontSize: "1rem",
+      [baseTheme.breakpoints.up("md")]: {
+        fontSize: "1.25rem",
+      },
     },
 
     bodyXS: {

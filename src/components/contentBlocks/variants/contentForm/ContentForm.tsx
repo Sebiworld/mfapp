@@ -24,6 +24,7 @@ import { useReward } from "react-rewards";
 import { useGlobalStore } from "@src/store/global.store";
 import { useLocation } from "react-router";
 import { selectProjects } from "@src/store/projects/projects.selectors";
+import { useAppContext } from "@src/context/appContext/useAppContext";
 
 export interface FormMessage {
   id: string;
@@ -40,6 +41,7 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
   const { t } = useTranslation();
   const location = useLocation();
   const currentPath = location.pathname;
+  const appContext = useAppContext();
 
   const loadedProjects = useGlobalStore(selectProjects);
   const projectColors = useMemo(() => {
@@ -290,6 +292,16 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
           reward();
         }
 
+        const matomo = appContext?.matomoInstance;
+        if (matomo) {
+          matomo.trackEvent(
+            "form",
+            "submit",
+            "success",
+            response?.data?.request_id
+          );
+        }
+
         if (response?.data?.success?.finished) {
           toast.success(response.data.success.finished, {
             toastId: "form_submit_succes",
@@ -303,6 +315,11 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
         setFormValidationResponse(response.data);
       } catch (error) {
         console.error("Api Request error", error);
+
+        const matomo = appContext?.matomoInstance;
+        if (matomo) {
+          matomo.trackEvent("form", "submit", "error");
+        }
 
         if (axios.isAxiosError(error)) {
           toast.error(
@@ -326,7 +343,15 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
       }
       setLoading(false);
     },
-    [block.form.form_origin, currentPath, isRewardAnimating, loading, reward, t]
+    [
+      appContext?.matomoInstance,
+      block.form.form_origin,
+      currentPath,
+      isRewardAnimating,
+      loading,
+      reward,
+      t,
+    ]
   );
 
   const formState = useMemo((): undefined | "error" | "success" => {

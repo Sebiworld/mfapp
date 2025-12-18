@@ -7,9 +7,12 @@ import "./index.css";
 
 import { RouterProvider } from "react-router";
 import { router } from "./routing/routes";
+import { AppContextProvider } from "./context/appContext/AppContextProvider";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <AppContextProvider>
+      <RouterProvider router={router} />
+    </AppContextProvider>
   </React.StrictMode>
 );

@@ -16,4 +16,5 @@ export interface FormValidationResponseDto {
   error: { [key: string]: string };
   success: { [key: string]: string };
   fields: { [key: string]: FormValidationFieldResponseDto };
+  request_id?: number;
 }

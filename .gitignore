@@ -27,3 +27,4 @@ dist-ssr
 
 /ios
 /android
+.env*.local

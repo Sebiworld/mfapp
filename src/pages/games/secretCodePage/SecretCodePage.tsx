@@ -14,8 +14,22 @@ import { useReward } from "react-rewards";
 import { useGlobalStore } from "@src/store/global.store";
 import { selectProjects } from "@src/store/projects/projects.selectors";
 import { isValidObject } from "@utils/functions/isValidObject";
+import { useAppContext } from "@src/context/appContext/useAppContext";
 
 export const SecretCodePage = () => {
+  const appContext = useAppContext();
+
+  useEffect(() => {
+    const matomo = appContext.matomoInstance;
+    if (!matomo) {
+      return;
+    }
+
+    matomo.trackPageView();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const loadedProjects = useGlobalStore(selectProjects);
   const projectColors = useMemo(() => {
     if (!isValidObject(loadedProjects)) {

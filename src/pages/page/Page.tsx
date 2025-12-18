@@ -12,6 +12,7 @@ import { selectPage } from "@src/store/pages/pages.selectors";
 import { pagesStoreActions } from "@src/store/pages/pages.actions";
 import { SeoHeaders } from "@components/SeoHeaders";
 import { Breadcrumbs } from "@components/breadcrumbs/Breadcrumbs";
+import { useAppContext } from "@src/context/appContext/useAppContext";
 
 export const Page = () => {
   const location = useLocation();
@@ -53,6 +54,23 @@ export const Page = () => {
       }, 100);
     }
   }, [location, isLoading]);
+
+  const appContext = useAppContext();
+
+  useEffect(() => {
+    if (!page?.id) {
+      return;
+    }
+
+    const matomo = appContext.matomoInstance;
+    if (!matomo) {
+      return;
+    }
+
+    matomo.trackPageView();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page?.id]);
 
   return (
     <Box

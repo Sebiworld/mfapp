@@ -8,6 +8,15 @@ export const globalContentStyles: Interpolation<Theme>[] = [
       scrollPaddingTop: "72px",
     },
 
+    // [theme.breakpoints.down("md")]: {
+    //   h1: "2.5rem",
+    //   h2: "2rem",
+    //   h3: "1.5rem",
+    //   h4: "1.5rem",
+    //   // h5: "4rem",
+    //   // h6: "4rem",
+    // },
+
     ".content-block": {
       position: "relative",
       textAlign: "left",
@@ -35,6 +44,15 @@ export const globalContentStyles: Interpolation<Theme>[] = [
           marginBottom: 0,
         },
       },
+
+      // [theme.breakpoints.up("md")]: {
+      //   h1: "4rem",
+      //   h2: "3.5rem",
+      //   h3: "3rem",
+      //   h4: "2rem",
+      //   // h5: "4rem",
+      //   // h6: "4rem",
+      // },
 
       dt: {
         display: "block",

@@ -29,6 +29,13 @@ const setDidReceiveWelcomeMessage = (value: boolean) => {
   });
 };
 
+const setAreCookiesAllowed = (value: boolean | null) => {
+  useGlobalStore.setState((state) => {
+    state.areCookiesAllowed = value;
+    return state;
+  });
+};
+
 const resetApp = async (includeAuth?: boolean) => {
   if (includeAuth !== false) {
     await authStoreActions.resetAuth();
@@ -45,5 +52,6 @@ export const initializationStoreActions = {
   registerUninitializedPart,
   setPartInitialized,
   setDidReceiveWelcomeMessage,
+  setAreCookiesAllowed,
   resetApp,
 };

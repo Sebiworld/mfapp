@@ -44,7 +44,15 @@ export const useGlobalStore = create<GlobalStore>()(
         ...createConfigurationSlice(...a),
         ...createSettingsSlice(...a),
       })),
-      { name: "mfStore" }
+      {
+        name: "mfStore",
+        partialize: (state) =>
+          Object.fromEntries(
+            Object.entries(state).filter(
+              ([key]) => !["intializedParts"].includes(key)
+            )
+          ),
+      }
     )
   )
 );

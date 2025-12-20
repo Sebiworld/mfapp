@@ -2,6 +2,7 @@ import { Components, Theme } from "@mui/material/styles";
 
 declare module "@mui/material/Button" {
   interface ButtonPropsColorOverrides {
+    muted: true;
     light: true;
     dark: true;
     bg: true;

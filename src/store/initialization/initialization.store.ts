@@ -4,6 +4,7 @@ import { GlobalStore } from "../global.store";
 export interface InitializationSlice {
   intializedParts: { [key: string]: boolean };
   didReceiveWelcomeMessage?: boolean;
+  areCookiesAllowed: boolean | null;
 }
 
 export const createInitializationSlice: StateCreator<
@@ -19,5 +20,5 @@ export const createInitializationSlice: StateCreator<
   },
 
   didReceiveWelcomeMessage: false,
+  areCookiesAllowed: null,
 });
-

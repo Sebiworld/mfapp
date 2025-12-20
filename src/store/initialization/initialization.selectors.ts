@@ -7,3 +7,5 @@ export const selectIsInitialized = (state: GlobalStore) =>
   Object.values(state.intializedParts).every((value) => value);
 export const selectDidReceiveWelcomeMessage = (state: GlobalStore) =>
   state.didReceiveWelcomeMessage;
+export const selectAreCookiesAllowed = (state: GlobalStore) =>
+  state.areCookiesAllowed;

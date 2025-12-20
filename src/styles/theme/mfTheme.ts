@@ -29,6 +29,7 @@ import { ColorPartial } from "node_modules/@mui/material/esm/styles/createPalett
 import { MuiInputOverwrites } from "./MuiOverwrites/MuiInput";
 import { MuiTabsOverwrites } from "./MuiOverwrites/MuiTabs";
 import { MuiLinearProgressOverwrites } from "./MuiOverwrites/MuiLinearProgress";
+import { MuiSnackbarOverwrites } from "./MuiOverwrites/MuiSnackbar";
 
 export type ExtendedPaletteColor = Partial<SimplePaletteColorOptions> &
   Partial<ColorPartial> &
@@ -257,5 +258,6 @@ export const mfTheme = createTheme({
     ...MuiInputOverwrites,
     ...MuiTabsOverwrites,
     ...MuiLinearProgressOverwrites,
+    ...MuiSnackbarOverwrites,
   },
 });

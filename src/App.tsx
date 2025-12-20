@@ -37,13 +37,12 @@ export const App = () => {
 
   return (
     <>
-      <AppContextPage />
-
       <ThemeProvider theme={{ [THEME_ID]: mfTheme }} noSsr defaultMode="light">
         <CssBaseline />
         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="de">
           <GlobalStylesElement></GlobalStylesElement>
           <ScrollRestoration />
+          <AppContextPage />
 
           {!isMaintenanceModeActive && <Layout />}
 

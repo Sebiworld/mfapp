@@ -28,6 +28,12 @@ export const ContentGallerySliderItem: React.FC<
         }
       }}
       title={`${image?.description || "Bild"} in Galerie öffnen`}
+      sx={{
+        position: "relative",
+        display: "block",
+        width: "auto",
+        height: "auto",
+      }}
     >
       <LazyPicture
         image={image}

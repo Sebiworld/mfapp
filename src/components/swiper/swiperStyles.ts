@@ -75,6 +75,13 @@ export const swiperStyles: SystemStyleObject<Theme> = {
 
     "&::slotted(swiper-slide), .swiper-slide": {
       textAlign: "center",
+
+      "&>button, &>a": {
+        position: "relative",
+        display: "block",
+        width: "auto",
+        height: "auto",
+      },
     },
 
     "&::part(button-prev), .swiper-button-prev": {

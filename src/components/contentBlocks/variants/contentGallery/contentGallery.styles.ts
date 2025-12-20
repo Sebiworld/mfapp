@@ -44,15 +44,37 @@ export const contentGalleryStyles: SxProps<Theme> = [
           overflow: "hidden",
           alignItems: "center",
 
-          [theme.breakpoints.up("sm")]: {
-            marginLeft: "-48px",
-            marginRight: "-48px",
-          },
+          // [theme.breakpoints.up("sm")]: {
+          //   marginLeft: "-48px",
+          //   marginRight: "-48px",
+          // },
 
           "&.featured-slider": {
             width: "850px",
             maxWidth: "100%",
-          }
+          },
+
+          "&.panorama-slider": {
+            width: "100%",
+            maxWidth: "100%",
+            marginLeft: "0",
+            marginRight: "0",
+            // overflow: "visible",
+
+            // ".swiper": {
+            //   width: "100%",
+            //   height: "280px",
+            // },
+
+            // ".lazy-picture": {
+            //   img: {
+            //     width: " 100%",
+            //     height: "100%",
+            //     objectFit: "cover",
+            //     pointerEvents: "none",
+            //   },
+            // },
+          },
         },
       },
     },

@@ -44,7 +44,12 @@ export const LazyPictureWithoutFallback: React.FC<
   const [hasError, setHasError] = useState(false);
 
   const sources = useMemo(() => {
-    if (!image?.basename || !sizes || !isValidArray(sizes)) {
+    if (
+      !image?.basename ||
+      !sizes ||
+      !isValidArray(sizes) ||
+      image.ext === "svg"
+    ) {
       return;
     }
 

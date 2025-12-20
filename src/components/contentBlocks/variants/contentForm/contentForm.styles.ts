@@ -123,4 +123,12 @@ export const contentFormStyles: SxProps<Theme> = (theme) => ({
     display: "none",
     visibility: "hidden",
   },
+
+  ".form-messages": {
+    position: "relative",
+    display: "flex",
+    flexDirection: "column",
+    gap: "8px",
+    overflow: "hidden",
+  }
 });

@@ -2,6 +2,7 @@ import { authStoreActions } from "../auth/auth.actions";
 import { configurationStoreActions } from "../configuration/configuration.actions";
 import { useGlobalStore } from "../global.store";
 import { pagesStoreActions } from "../pages/pages.actions";
+import { projectRolesStoreActions } from "../projectRoles/projectRoles.actions";
 import { projectsStoreActions } from "../projects/projects.actions";
 
 const registerUninitializedPart = (key: string) =>
@@ -18,7 +19,9 @@ const setPartInitialized = (key: string) =>
     if (typeof state.intializedParts !== "object") {
       state.intializedParts = {};
     }
+
     state.intializedParts[key] = true;
+
     return state;
   });
 
@@ -38,14 +41,13 @@ const setAreCookiesAllowed = (value: boolean | null) => {
 
 const resetApp = async (includeAuth?: boolean) => {
   if (includeAuth !== false) {
-    await authStoreActions.resetAuth();
+    await authStoreActions.resetSlice();
   }
 
-  await configurationStoreActions.resetConfiguration();
-  await pagesStoreActions.resetPages();
-  await projectsStoreActions.resetProjects();
-
-  // TODO reset other stores
+  await configurationStoreActions.resetSlice();
+  await pagesStoreActions.resetSlice();
+  await projectsStoreActions.resetSlice();
+  await projectRolesStoreActions.resetSlice();
 };
 
 export const initializationStoreActions = {

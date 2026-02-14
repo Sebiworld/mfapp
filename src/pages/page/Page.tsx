@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { pageStyles } from "./page.styles";
 // import WarningIcon from "@mui/icons-material/Warning";
 import { useTranslation } from "react-i18next";
@@ -9,24 +9,47 @@ import { LoadingOverlay } from "@components/loadingOverlay/LoadingOverlay";
 import { Alert, AlertTitle, Box, Button, Typography } from "@mui/material";
 import { Link, useLocation } from "react-router";
 import { selectPage } from "@src/store/pages/pages.selectors";
-import { pagesStoreActions } from "@src/store/pages/pages.actions";
 import { SeoHeaders } from "@components/SeoHeaders";
 import { Breadcrumbs } from "@components/breadcrumbs/Breadcrumbs";
 import { useAppContext } from "@src/context/appContext/useAppContext";
+import { usePagesApi } from "@api/hooks/usePagesApi";
+import { PageDtoVariant } from "@models/page/page-dto-variant.model";
+import { isError } from "@utils/functions/isError";
+import { ErrorResponseDto } from "@models/error-response-dto.model";
+import { AxiosError } from "axios";
 
 export const Page = () => {
   const location = useLocation();
   const currentPath = location.pathname;
   const { t, i18n } = useTranslation();
+  const { loadPage } = usePagesApi();
 
-  const loadedPage = useGlobalStore(selectPage(currentPath));
-  const page = loadedPage?.data;
+  const [loadResponse, setLoadResponse] = useState<
+    PageDtoVariant | true | Error | null
+  >(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const errorResponse = useMemo(() => {
+    if (!isError(loadResponse)) {
+      return null;
+    }
 
-  const isLoading = loadedPage?.status === "loading";
+    return loadResponse as unknown as AxiosError<ErrorResponseDto>;
+  }, [loadResponse]);
+
+  const page = useGlobalStore(selectPage(currentPath));
+
+  const load = useCallback(async () => {
+    setIsLoading(true);
+
+    const response = await loadPage(currentPath);
+    setLoadResponse(response);
+
+    setIsLoading(false);
+  }, [currentPath, loadPage]);
 
   useEffect(() => {
-    pagesStoreActions.loadPage(currentPath);
-  }, [currentPath, loadedPage?.data?.id]);
+    load();
+  }, [currentPath, load]);
 
   // useEffect(() => {
   //   console.log("page", { page });
@@ -88,21 +111,21 @@ export const Page = () => {
         <PageContents page={page}></PageContents>
       </ProjectPage>
 
-      {loadedPage?.status === "error" && (
+      {isError(loadResponse) && (
         <Alert
           // startDecorator={<WarningIcon fontSize="large" />}
           className="alert"
           color="error"
         >
           <Box className="alert-content">
-            {i18n.exists(`errors.${loadedPage?.code}`) ? (
+            {i18n.exists(`errors.${errorResponse?.code}`) ? (
               <>
                 <AlertTitle className="alert-title">
-                  {t(`errors.${loadedPage?.code}.title`)}
+                  {t(`errors.${errorResponse?.code}.title`)}
                 </AlertTitle>
 
                 <Typography className="alert-content">
-                  {t(`errors.${loadedPage?.code}.description`)}
+                  {t(`errors.${errorResponse?.code}.description`)}
                 </Typography>
 
                 <Box className="alert-footer">

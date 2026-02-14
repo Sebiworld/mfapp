@@ -42,13 +42,13 @@ export const AppContextPage: FC<AppContextPageProps> = ({ children }) => {
       return;
     }
 
-    if (!currentUser?.data?.id) {
+    if (!currentUser?.id) {
       matomo.setUserId(null);
       return;
     }
 
-    matomo.setUserId(currentUser.data.id);
-  }, [appContext.matomoInstance, currentUser?.data?.id]);
+    matomo.setUserId(currentUser.id);
+  }, [appContext.matomoInstance, currentUser?.id]);
 
   useEffect(() => {
     const matomo = appContext.matomoInstance;

@@ -16,10 +16,22 @@ const setMenues = async (menuesResponse: GetMenuesResponse) => {
   });
 };
 
-const resetConfiguration = async () => {
+const setGlobalCss = (vars: { [key: string]: string | number }) =>
+  useGlobalStore.setState((state) => {
+    state.globalCss = vars;
+    return state;
+  });
+const resetGlobalCss = () =>
+  useGlobalStore.setState((state) => {
+    state.globalCss = undefined;
+    return state;
+  });
+
+const resetSlice = async () => {
   useGlobalStore.setState((state) => {
     state.configurationParams = undefined;
     state.menues = undefined;
+    state.globalCss = undefined;
     return state;
   });
 };
@@ -27,5 +39,7 @@ const resetConfiguration = async () => {
 export const configurationStoreActions = {
   setConfigurationParams,
   setMenues,
-  resetConfiguration,
+  setGlobalCss,
+  resetGlobalCss,
+  resetSlice,
 };

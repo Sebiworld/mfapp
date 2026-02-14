@@ -13,7 +13,9 @@ import {
   FormLabel,
   TextField,
 } from "@mui/material";
-import { authStoreActions } from "@src/store/auth/auth.actions";
+import { useAuthApi } from "@api/hooks/useAuthApi";
+import { useGlobalStore } from "@src/store/global.store";
+import { selectIsRegistrationActivated } from "@src/store/configuration/configuration.selectors";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email").min(1, "Email is required"),
@@ -32,6 +34,8 @@ export const StartupModalLoginForm = ({
   setIsRegistrationActive: Dispatch<SetStateAction<boolean>>;
 }) => {
   const { t } = useTranslation();
+  const { login } = useAuthApi();
+  const isRegistrationActivated = useGlobalStore(selectIsRegistrationActivated);
 
   const {
     handleSubmit,
@@ -48,7 +52,7 @@ export const StartupModalLoginForm = ({
       return;
     }
 
-    await authStoreActions.login(data.email, data.password);
+    await login(data.email, data.password);
 
     if (closeModal && typeof closeModal === "function") {
       closeModal();
@@ -61,26 +65,28 @@ export const StartupModalLoginForm = ({
       component="form"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <section className="form-section">
-        <p className="content-block layout-block">
-          <strong>Bist du bereits ein Mitglied der Musical-Fabrik?</strong>
-          <br />
-          Melde dich an, um Zugang zu internen Nachrichten und Probenplänen zu
-          bekommen!
-        </p>
+      {isRegistrationActivated && (
+        <section className="form-section">
+          <p className="content-block layout-block">
+            <strong>Bist du bereits ein Mitglied der Musical-Fabrik?</strong>
+            <br />
+            Melde dich an, um Zugang zu internen Nachrichten und Probenplänen zu
+            bekommen!
+          </p>
 
-        <Button
-          color="primary"
-          variant="outlined"
-          onClick={() => {
-            setIsRegistrationActive(true);
-          }}
-        >
-          Mitgliedszugang anfragen
-        </Button>
+          <Button
+            color="primary"
+            variant="outlined"
+            onClick={() => {
+              setIsRegistrationActive(true);
+            }}
+          >
+            Mitgliedszugang anfragen
+          </Button>
 
-        <p className="content-block layout-block center">oder einloggen:</p>
-      </section>
+          <p className="content-block layout-block center">oder einloggen:</p>
+        </section>
+      )}
 
       <section className="form-section">
         <FormControl>

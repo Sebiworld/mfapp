@@ -3,7 +3,7 @@ import { globalContentStyles } from "./content.styles";
 import { globalVariablesStyles } from "./variables.styles";
 import { toastifyStyles } from "./vendors/toastify.styles";
 import { useGlobalStore } from "@src/store/global.store";
-import { selectGlobalCss } from "@src/store/settings/settings.selectors";
+import { selectGlobalCss } from "@src/store/configuration/configuration.selectors";
 import { useMemo } from "react";
 import { GlobalStyles, Interpolation, Theme } from "@mui/material";
 import { globalAspectRatioStyles } from "./aspect-ratio.styles";

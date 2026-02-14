@@ -1,6 +1,5 @@
 import { StateCreator } from "zustand";
 import { GlobalStore } from "../global.store";
-import { LoadingStatus } from "@models/loading-status.model";
 
 import {
   ProjectRoleDto,
@@ -12,7 +11,7 @@ import { ProjectPortraitDto } from "@models/project-role/project-portrait-dto.mo
 
 export interface ProjectRolesSlice {
   roles: {
-    [key: number]: LoadingStatus<ProjectRoleDto | ProjectRolesContainerDto>;
+    [key: number]: ProjectRoleDto | ProjectRolesContainerDto;
   };
   casts: { [key: number]: ProjectCastDto };
   seasons: { [key: number]: ProjectSeasonDto };

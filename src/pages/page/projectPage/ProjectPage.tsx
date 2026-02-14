@@ -11,11 +11,11 @@ import {
 import { LazyPicture } from "@components/lazyPicture/LazyPicture";
 import { Link } from "react-router";
 import { useShallow } from "zustand/shallow";
-import { projectsStoreActions } from "@src/store/projects/projects.actions";
-import { settingsStoreActions } from "@src/store/settings/settings.actions";
 import { Alerts } from "@components/alerts/Alerts";
 import { AlertDto } from "@models/utility-types/alert-dto.model";
 import { isValidArray } from "@utils/functions/isValidArray";
+import { configurationStoreActions } from "@src/store/configuration/configuration.actions";
+import { useProjectsApi } from "@api/hooks/useProjectsApi";
 
 export interface ProjectPageProps {
   page?: PageDtoVariant;
@@ -23,6 +23,8 @@ export interface ProjectPageProps {
 }
 
 export const ProjectPage: React.FC<ProjectPageProps> = ({ page, children }) => {
+  const { loadProjectDetails } = useProjectsApi();
+
   const projectPage = useGlobalStore(
     selectProjectPageDetails(page?.project_id)
   );
@@ -33,11 +35,11 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({ page, children }) => {
 
   useEffect(() => {
     if (cssVars) {
-      settingsStoreActions.setGlobalCss(cssVars);
+      configurationStoreActions.setGlobalCss(cssVars);
     }
 
     return () => {
-      settingsStoreActions.resetGlobalCss();
+      configurationStoreActions.resetGlobalCss();
     };
   }, [cssVars]);
 
@@ -46,8 +48,8 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({ page, children }) => {
       return;
     }
 
-    projectsStoreActions.loadProjectDetails(projectPage.id);
-  }, [projectPage?.id]);
+    loadProjectDetails(projectPage.id);
+  }, [loadProjectDetails, projectPage?.id]);
 
   const pageStyles = useMemo((): SxProps<Theme> => {
     if (!cssVars) {

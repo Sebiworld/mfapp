@@ -30,6 +30,7 @@ export interface ProjectDetailsDto extends ProjectDto {
   sponsors?: SponsorDto[];
   main_navigation?: NavigationItemDto[];
   alerts?: AlertDto[];
+  hash?: string;
 }
 
 export interface ProjectGeneralDataBlock {

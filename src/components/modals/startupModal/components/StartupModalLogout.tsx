@@ -2,12 +2,13 @@ import { useTranslation } from "react-i18next";
 import { StartupModalContentProps } from "../StartupModal";
 import { Box, Button, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { authStoreActions } from "@src/store/auth/auth.actions";
+import { useAuthApi } from "@api/hooks/useAuthApi";
 
 export const StartupModalLogout = ({
   closeModal,
 }: StartupModalContentProps) => {
   const { t } = useTranslation();
+  const { logout } = useAuthApi();
 
   return (
     <>
@@ -25,7 +26,7 @@ export const StartupModalLogout = ({
         <Button
           color="error"
           onClick={() => {
-            authStoreActions.logout();
+            logout();
           }}
         >
           {t("auth.logout")}

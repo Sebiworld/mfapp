@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { useGlobalStore } from "@src/store/global.store";
 import { Box, Button, ButtonGroup } from "@mui/material";
 import { projectRoleStyles } from "./projectRole.styles";
@@ -13,7 +13,7 @@ import { ProjectRoleDto } from "@models/project-role/project-role-dto.model";
 import { ProjectSeasonDto } from "@models/project-role/project-season-dto.model";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { Link, useSearchParams } from "react-router";
-import { projectRolesStoreActions } from "@src/store/projectRoles/projectRoles.actions";
+import { useProjectRolesApi } from "@api/hooks/useProjectsRolesApi";
 
 interface ProjectRoleProps {
   id?: number;
@@ -22,10 +22,36 @@ interface ProjectRoleProps {
 export const ProjectRole: FC<ProjectRoleProps> = ({ id }) => {
   const projectRoles = useGlobalStore(selectProjectRoles);
   const projectSeasons = useGlobalStore(selectProjectSeasons);
+  const { loadProjectRoles } = useProjectRolesApi();
 
   const [searchParams] = useSearchParams();
 
-  const currentRoleLoadingStatus = useMemo(() => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (!id) {
+      return;
+    }
+
+    let cancelled = false;
+
+    const load = async () => {
+      setIsLoading(true);
+      await loadProjectRoles(id);
+
+      if (!cancelled) {
+        setIsLoading(false);
+      }
+    };
+
+    void load();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [id, loadProjectRoles]);
+
+  const currentRole = useMemo(() => {
     if (!id) {
       return undefined;
     }
@@ -33,21 +59,13 @@ export const ProjectRole: FC<ProjectRoleProps> = ({ id }) => {
     return projectRoles[id];
   }, [id, projectRoles]);
 
-  const currentRole = useMemo(() => {
-    if (!currentRoleLoadingStatus?.data?.id) {
-      return undefined;
-    }
-
-    return currentRoleLoadingStatus.data;
-  }, [currentRoleLoadingStatus]);
-
   const subRoles = useMemo((): ProjectRoleDto[] | undefined => {
     if (!currentRole?.child_ids?.length) {
       return undefined;
     }
 
     return currentRole.child_ids
-      .map((id) => projectRoles[id]?.data)
+      .map((id) => projectRoles[id])
       .filter((subrole) => subrole?.id) as ProjectRoleDto[];
   }, [currentRole, projectRoles]);
 
@@ -56,19 +74,6 @@ export const ProjectRole: FC<ProjectRoleProps> = ({ id }) => {
     () => getPortraitIdsTree(currentRole, projectRoles),
     [currentRole, projectRoles]
   );
-
-  const isLoading = useMemo(
-    () => currentRoleLoadingStatus?.status === "loading",
-    [currentRoleLoadingStatus?.status]
-  );
-
-  useEffect(() => {
-    if (!id) {
-      return;
-    }
-
-    projectRolesStoreActions.loadProjectRoles(id);
-  }, [id]);
 
   const currentViewType = useMemo(() => {
     return (currentRole as ProjectRoleDto)?.view_type;

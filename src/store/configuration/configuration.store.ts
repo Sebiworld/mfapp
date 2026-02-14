@@ -6,6 +6,7 @@ import { ConfigurationDto } from "@models/utility-types/configuration-dto.model"
 export interface ConfigurationSlice {
   configurationParams?: ConfigurationDto;
   menues?: GetMenuesResponse;
+  globalCss?: { [key: string]: string | number };
 }
 
 export const createConfigurationSlice: StateCreator<
@@ -16,4 +17,5 @@ export const createConfigurationSlice: StateCreator<
 > = () => ({
   configuration: undefined,
   menues: undefined,
+  globalCss: undefined,
 });

@@ -15,10 +15,13 @@ interface UseConfigurationApiOutput {
     hash?: string;
   }) => Promise<GetMenuesResponse | true | Error>;
 
-  initializeConfiguration: () => Promise<void>;
+  initialize: () => Promise<void>;
 }
 
 export const useConfigurationApi = (): UseConfigurationApiOutput => {
+  /**
+   * Loads global configuration parameters
+   */
   const loadConfigurationParams = useCallback(
     async (params: {
       hash?: string;
@@ -51,6 +54,9 @@ export const useConfigurationApi = (): UseConfigurationApiOutput => {
     []
   );
 
+  /**
+   * Loads global menu data
+   */
   const loadMenues = useCallback(
     async (params: {
       hash?: string;
@@ -81,16 +87,19 @@ export const useConfigurationApi = (): UseConfigurationApiOutput => {
     []
   );
 
-  const initializeConfiguration = async () => {
+  /**
+   * Initializes configuration & menu data
+   */
+  const initialize = useCallback(async () => {
     await loadConfigurationParams({});
     await loadMenues({});
 
     initializationStoreActions.setPartInitialized("configuration");
-  };
+  }, [loadConfigurationParams, loadMenues]);
 
   return {
     loadConfigurationParams,
     loadMenues,
-    initializeConfiguration,
+    initialize,
   };
 };

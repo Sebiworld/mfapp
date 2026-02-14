@@ -15,7 +15,7 @@ import {
   FormLabel,
   TextField,
 } from "@mui/material";
-import { authStoreActions } from "@src/store/auth/auth.actions";
+import { useAuthApi } from "@api/hooks/useAuthApi";
 
 const registrationSchema = z
   .object({
@@ -68,6 +68,7 @@ export const StartupModalRegistrationForm = ({
   setIsRegistrationActive: Dispatch<SetStateAction<boolean>>;
 }) => {
   const { t } = useTranslation();
+  const { registration } = useAuthApi();
 
   const {
     handleSubmit,
@@ -79,7 +80,7 @@ export const StartupModalRegistrationForm = ({
   });
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
-    await authStoreActions.registration(
+    await registration(
       data.email,
       data.password,
       data.firstname,

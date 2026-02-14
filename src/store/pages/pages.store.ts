@@ -1,10 +1,15 @@
 import { PageDtoVariant } from "@models/page/page-dto-variant.model";
 import { StateCreator } from "zustand";
 import { GlobalStore } from "../global.store";
-import { LoadingStatus } from "@models/loading-status.model";
+import { PageCardDto } from "@models/page/page-card-dto.model";
+
+export interface PageCardDtoWithIndex extends PageCardDto {
+  indexData?: { [key: string]: { [key: string]: number } }; // key is projectId or 'global'. Inner key is the sort order
+}
 
 export interface PagesSlice {
-  pages: { [key: string]: LoadingStatus<PageDtoVariant> };
+  pages: { [key: string]: PageDtoVariant };
+  pageCards: { [key: string]: PageCardDtoWithIndex };
 }
 
 export const createPagesSlice: StateCreator<
@@ -14,4 +19,5 @@ export const createPagesSlice: StateCreator<
   PagesSlice
 > = () => ({
   pages: {},
+  pageCards: {},
 });

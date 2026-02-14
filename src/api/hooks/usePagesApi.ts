@@ -1,17 +1,15 @@
 import { MFApi } from "@api/axios/mfApi";
-import { GetPageListResponse } from "@api/axios/pageListApi";
-import { pageCardsStoreActions } from "@src/store/pageCards/pageCards.actions";
-import { getFilterHash } from "@src/store/pageCards/pageCards.selectors";
+import { GetPageListResponse } from "@api/axios/pageApi";
+import { PageDtoVariant } from "@models/page/page-dto-variant.model";
+import { initializationStoreActions } from "@src/store/initialization/initialization.actions";
+import { pagesStoreActions } from "@src/store/pages/pages.actions";
+import { getFilterHash } from "@src/store/pages/pages.selectors";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { useCallback } from "react";
 
-export interface PageListPositioning {
-  lastElementIndex: number;
-  moreAvailable: boolean;
-  totalNumber: number;
-}
+interface UsePagesApiOutput {
+  loadPage: (path: string) => Promise<PageDtoVariant | true | Error>;
 
-interface UsePageListApiOutput {
   loadPageListItems: (params: {
     offset?: number;
     limit?: number;
@@ -20,9 +18,33 @@ interface UsePageListApiOutput {
     templates?: string[];
     hashes?: { index: number; id: number; hash?: string }[];
   }) => Promise<GetPageListResponse | true | Error>;
+
+  initialize: () => Promise<void>;
 }
 
-export const usePageListApi = (): UsePageListApiOutput => {
+export const usePagesApi = (): UsePagesApiOutput => {
+  const loadPage = useCallback(
+    async (path: string): Promise<PageDtoVariant | true | Error> => {
+      try {
+        const response = await MFApi.getPage(path);
+
+        if (response.status === 204) {
+          return true;
+        }
+
+        const page = response.data as PageDtoVariant;
+
+        pagesStoreActions.addPage(path, page);
+
+        return page ?? true;
+      } catch (error) {
+        console.error("Error in data fetch:", error);
+        return error as Error;
+      }
+    },
+    []
+  );
+
   const loadPageListItems = useCallback(
     async (params: {
       offset?: number;
@@ -54,7 +76,7 @@ export const usePageListApi = (): UsePageListApiOutput => {
           const indexKey = params?.projectId ? `${params.projectId}` : "global";
           const filterHash = getFilterHash(params?.templates, params?.sortBy);
 
-          pageCardsStoreActions.addPageCards(items, {
+          pagesStoreActions.addPageCards(items, {
             indexKey,
             filterHash,
             startIndex: params?.offset || 0,
@@ -71,5 +93,9 @@ export const usePageListApi = (): UsePageListApiOutput => {
     []
   );
 
-  return { loadPageListItems };
+  const initialize = useCallback(async () => {
+    initializationStoreActions.setPartInitialized("pages");
+  }, []);
+
+  return { loadPage, loadPageListItems, initialize };
 };

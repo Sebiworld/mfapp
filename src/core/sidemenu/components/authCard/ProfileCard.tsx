@@ -12,8 +12,8 @@ import {
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { useId, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { authStoreActions } from "@src/store/auth/auth.actions";
 import { authCardStyles } from "./authCard.styles";
+import { useAuthApi } from "@api/hooks/useAuthApi";
 
 export interface ProfileCardProps {
   user: UserDto;
@@ -22,6 +22,7 @@ export interface ProfileCardProps {
 
 export const ProfileCard = ({ user, setSidemenuOpen }: ProfileCardProps) => {
   const { t } = useTranslation();
+  const { logout } = useAuthApi();
 
   const name = useMemo(() => {
     if (user.nickname && user.nickname.length > 0) {
@@ -155,7 +156,7 @@ export const ProfileCard = ({ user, setSidemenuOpen }: ProfileCardProps) => {
         {/* <MenuItem onClick={handleClose}>Mein Account</MenuItem> */}
         <MenuItem
           onClick={() => {
-            authStoreActions.logout();
+            logout();
             handleClose();
             setSidemenuOpen(false);
           }}

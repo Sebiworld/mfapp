@@ -20,7 +20,7 @@ import { useCallback, useMemo } from "react";
 import { SectionSpacer } from "@components/sectionSpacer/SectionSpacer";
 import { selectCurrentUser } from "@src/store/auth/auth.selectors";
 import {
-  selectConfigurationParams,
+  selectIsLoginActivated,
   selectMenues,
 } from "@src/store/configuration/configuration.selectors";
 import { AuthCard } from "./components/authCard/AuthCard";
@@ -38,7 +38,7 @@ export const Sidemenu = ({ sidemenuOpen, setSidemenuOpen }: SidemenuProps) => {
   const [isStartupModalOpen, setIsStartupModalOpen] = React.useState(false);
 
   const loadedMenues = useGlobalStore(selectMenues);
-  const configuration = useGlobalStore(selectConfigurationParams);
+  const isLoginActivated = useGlobalStore(selectIsLoginActivated);
 
   const menueItems = React.useMemo(() => {
     const items = [];
@@ -62,24 +62,20 @@ export const Sidemenu = ({ sidemenuOpen, setSidemenuOpen }: SidemenuProps) => {
   // Neuen Hook einbauen und bei der Initialisierung der App aufrufen
 
   const footerMode = useMemo(() => {
-    if (!configuration?.disable_login) {
+    if (!isLoginActivated) {
       return "logo";
     }
 
-    if (!currentUser?.data?.isLoggedIn) {
+    if (!currentUser?.isLoggedIn) {
       return "login";
     }
 
-    if (
-      !currentUser?.data?.roles?.some(
-        (role) => role?.name === "vereinsmitglied"
-      )
-    ) {
+    if (!currentUser?.roles?.some((role) => role?.name === "vereinsmitglied")) {
       return "mitglied-werden";
     }
 
     return "logo";
-  }, [configuration, currentUser?.data?.isLoggedIn, currentUser?.data?.roles]);
+  }, [isLoginActivated, currentUser?.isLoggedIn, currentUser?.roles]);
 
   const versionNumber = useMemo(() => {
     return __VERSION__;
@@ -106,7 +102,7 @@ export const Sidemenu = ({ sidemenuOpen, setSidemenuOpen }: SidemenuProps) => {
 
         <Box className="sidemenu-subheader">
           <AuthCard
-            user={currentUser?.data}
+            user={currentUser}
             setSidemenuOpen={setSidemenuOpen}
           ></AuthCard>
         </Box>

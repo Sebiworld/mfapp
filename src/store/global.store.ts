@@ -7,7 +7,6 @@ import {
 } from "./initialization/initialization.store";
 import { AuthSlice, createAuthSlice } from "./auth/auth.store";
 import { createPagesSlice, PagesSlice } from "./pages/pages.store";
-import { createSettingsSlice, SettingsSlice } from "./settings/settings.store";
 import { createProjectsSlice, ProjectsSlice } from "./projects/projects.store";
 import {
   ConfigurationSlice,
@@ -17,19 +16,13 @@ import {
   createProjectRolesSlice,
   ProjectRolesSlice,
 } from "./projectRoles/projectRoles.store";
-import {
-  createPageCardsSlice,
-  PageCardsSlice,
-} from "./pageCards/pageCards.store";
 
 export type GlobalStore = InitializationSlice &
   AuthSlice &
   PagesSlice &
-  PageCardsSlice &
   ProjectsSlice &
   ProjectRolesSlice &
-  ConfigurationSlice &
-  SettingsSlice;
+  ConfigurationSlice;
 
 export const useGlobalStore = create<GlobalStore>()(
   devtools(
@@ -38,11 +31,9 @@ export const useGlobalStore = create<GlobalStore>()(
         ...createInitializationSlice(...a),
         ...createAuthSlice(...a),
         ...createPagesSlice(...a),
-        ...createPageCardsSlice(...a),
         ...createProjectsSlice(...a),
         ...createProjectRolesSlice(...a),
         ...createConfigurationSlice(...a),
-        ...createSettingsSlice(...a),
       })),
       {
         name: "mfStore",

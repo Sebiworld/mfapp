@@ -1,13 +1,13 @@
 import { StateCreator } from "zustand";
 import { GlobalStore } from "../global.store";
-import { LoadingStatus } from "@models/loading-status.model";
 
-import { ProjectDetailsDto } from "@models/project-dto.model";
-import { GetProjectsResponse } from "@api/axios/projectsApi";
+import { ProjectDetailsDto, ProjectDto } from "@models/project-dto.model";
 
 export interface ProjectsSlice {
-  projects: LoadingStatus<GetProjectsResponse>;
-  projectDetails: { [key: number]: LoadingStatus<ProjectDetailsDto> };
+  projects: { [key: number]: ProjectDto };
+  projectsHash?: string;
+
+  projectDetails: { [key: number]: ProjectDetailsDto };
 }
 
 export const createProjectsSlice: StateCreator<
@@ -16,8 +16,6 @@ export const createProjectsSlice: StateCreator<
   [],
   ProjectsSlice
 > = () => ({
-  projects: {
-    status: "uninitialized",
-  },
+  projects: {},
   projectDetails: {},
 });

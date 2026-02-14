@@ -1,8 +1,7 @@
 // import { ErrorResponseDto } from "@models/error-response-dto.model";
-import { ErrorResponseDto } from "@models/error-response-dto.model";
-import { authStoreActions } from "@src/store/auth/auth.actions";
+
 import { useGlobalStore } from "@src/store/global.store";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import axiosRetry from "axios-retry";
 
 export const axiosInstance = axios.create({
@@ -30,54 +29,55 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-const isRenewableRequest = (error: AxiosError<ErrorResponseDto>): boolean => {
-  if (
-    error?.config &&
-    (error.config as unknown as { _retry?: boolean })._retry
-  ) {
-    return false;
-  }
+// const isRenewableRequest = (error: AxiosError<ErrorResponseDto>): boolean => {
+//   if (
+//     error?.config &&
+//     (error.config as unknown as { _retry?: boolean })._retry
+//   ) {
+//     return false;
+//   }
 
-  console.log("isRenewableRequest", error);
+//   console.log("isRenewableRequest", error);
 
-  if (error?.response?.data?.errorcode === "access_token_expired") {
-    return true;
-  }
+//   if (error?.response?.data?.errorcode === "access_token_expired") {
+//     return true;
+//   }
 
-  // if (
-  //   error?.response?.status === 400 &&
-  //   (error?.response?.data as ErrorResponseDto)?.errorcode ===
-  //     "access_token_invalid"
-  // ) {
-  //   return true;
-  // }
+//   // if (
+//   //   error?.response?.status === 400 &&
+//   //   (error?.response?.data as ErrorResponseDto)?.errorcode ===
+//   //     "access_token_invalid"
+//   // ) {
+//   //   return true;
+//   // }
 
-  return false;
-};
+//   return false;
+// };
 
-axiosInstance.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  async (error) => {
-    const originalRequest = error.config;
+// TODO
+// axiosInstance.interceptors.response.use(
+//   (response) => {
+//     return response;
+//   },
+//   async (error) => {
+//     const originalRequest = error.config;
 
-    if (isRenewableRequest(error)) {
-      // TODO Add additionals.can_renew === true
-      originalRequest._retry = true;
+//     if (isRenewableRequest(error)) {
+//       // TODO Add additionals.can_renew === true
+//       originalRequest._retry = true;
 
-      try {
-        await authStoreActions.renewAccess();
-        const accessToken = useGlobalStore.getState().accessToken;
-        originalRequest.headers["Authorization"] = `Bearer ${accessToken}`;
-        return axiosInstance(originalRequest);
-      } catch (err) {
-        // TODO User Feedback
-        await authStoreActions.logout();
-        return Promise.reject(err);
-      }
-    }
+//       try {
+//         await authStoreActions.renewAccess();
+//         const accessToken = useGlobalStore.getState().accessToken;
+//         originalRequest.headers["Authorization"] = `Bearer ${accessToken}`;
+//         return axiosInstance(originalRequest);
+//       } catch (err) {
+//         // TODO User Feedback
+//         await authStoreActions.logout();
+//         return Promise.reject(err);
+//       }
+//     }
 
-    return Promise.reject(error);
-  }
-);
+//     return Promise.reject(error);
+//   }
+// );

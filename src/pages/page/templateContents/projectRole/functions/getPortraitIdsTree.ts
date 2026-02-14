@@ -1,4 +1,3 @@
-import { LoadingStatus } from "@models/loading-status.model";
 import {
   ProjectRoleDto,
   ProjectRolesContainerDto,
@@ -86,7 +85,7 @@ export const getPortraitIdsTreeForRole = (
 export const getPortraitIdsTree = (
   role?: ProjectRoleDto | ProjectRolesContainerDto,
   projectRoles?: {
-    [key: number]: LoadingStatus<ProjectRoleDto | ProjectRolesContainerDto>;
+    [key: number]: ProjectRoleDto | ProjectRolesContainerDto;
   },
   maxDepth = -1
 ): Map<number, Map<number, Set<number>>> | undefined => {
@@ -108,7 +107,7 @@ export const getPortraitIdsTree = (
 
   // Run through child roles:
   return role?.child_ids
-    ?.map((id) => projectRoles[id]?.data)
+    ?.map((id) => projectRoles[id])
     .reduce((acc, childRole) => {
       if (!childRole) {
         return acc;

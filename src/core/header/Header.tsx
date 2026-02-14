@@ -26,7 +26,7 @@ export const Header = () => {
   const location = useLocation();
   const currentPath = location.pathname;
   const loadedPage = useGlobalStore(selectPage(currentPath));
-  const page = loadedPage?.data as DefaultPageDto;
+  const page = loadedPage as DefaultPageDto;
   const loadedMenues = useGlobalStore(selectMenues);
   const primaryNavigation = loadedMenues?.main_navigation;
 

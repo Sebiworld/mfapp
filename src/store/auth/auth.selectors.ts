@@ -3,12 +3,12 @@ import { GlobalStore } from "../global.store";
 
 export const selectCurrentUser = (state: GlobalStore) => state.user;
 export const selectIsLoggedIn = (state: GlobalStore) =>
-  !!state.user?.data?.isLoggedIn;
+  !!state.user?.isLoggedIn;
 export const selectRoles = (state: GlobalStore): RoleDto[] =>
-  state.user?.data?.roles || [];
+  state.user?.roles || [];
 export const selectPermissions = (state: GlobalStore): PermissionDto[] =>
-  state.user?.data?.permissions || [];
-export const selectUserHash = (state: GlobalStore) => state.user?.data?.hash;
+  state.user?.permissions || [];
+export const selectUserHash = (state: GlobalStore) => state.user?.hash;
 
 export const selectNickname = (state: GlobalStore) => state.nickname;
 

@@ -4,8 +4,7 @@ import { ProjectDetailsDto } from "@models/project-dto.model";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { hexToRgb } from "@utils/functions/hexToRgb";
 
-export const selectProjects = (state: GlobalStore) =>
-  state.projects?.data?.projects;
+export const selectProjects = (state: GlobalStore) => state.projects;
 
 export const selectProjectColors = (state: GlobalStore) => {
   const projects = selectProjects(state);
@@ -38,8 +37,8 @@ export const selectProjectPageDetails =
     }
 
     const projectDetails = state.projectDetails?.[id];
-    if (projectDetails?.data?.id) {
-      return projectDetails.data;
+    if (projectDetails?.id) {
+      return projectDetails;
     }
 
     return selectProject(id)?.(state);
@@ -160,9 +159,8 @@ export const selectProjectCssVars =
 
     // Alert standard bg
     if (!output["--mf-palette-Alert-projectPrimaryStandardBg"]) {
-      output[
-        "--mf-palette-Alert-projectPrimaryStandardBg"
-      ] = `rgba(${output["--mf-palette-projectPrimary-mainRgb"]}, 0.2)`;
+      output["--mf-palette-Alert-projectPrimaryStandardBg"] =
+        `rgba(${output["--mf-palette-projectPrimary-mainRgb"]}, 0.2)`;
     }
 
     return output;

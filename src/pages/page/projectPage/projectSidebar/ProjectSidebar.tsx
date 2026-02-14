@@ -18,6 +18,7 @@ export interface ProjectSidebarProps {
 }
 
 export const ProjectSidebar: React.FC<ProjectSidebarProps> = ({ project }) => {
+  console.log("ProjectSidebar render", { project });
   return (
     <>
       <Box

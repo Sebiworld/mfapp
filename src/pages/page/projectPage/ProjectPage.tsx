@@ -73,6 +73,7 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({ page, children }) => {
     return output;
   }, [page, projectPage]);
 
+  console.log("ProjectPage render", { page, projectPage, alerts });
   if (!projectPage?.id) {
     return (
       <>

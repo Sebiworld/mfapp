@@ -1,14 +1,14 @@
 import { PageCard } from "@components/pageCard/PageCard";
 import { Box, Pagination, PaginationItem } from "@mui/material";
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { usePageListApi } from "@api/hooks/usePageListApi";
 import { useGlobalStore } from "@src/store/global.store";
-import { selectPageCards } from "@src/store/pageLists/pageCards.selectors";
 import { useShallow } from "zustand/shallow";
 import { Link, useLocation, useSearchParams } from "react-router";
 import { LoadingOverlay } from "@components/loadingOverlay/LoadingOverlay";
 import { ListContainerPageDto } from "@models/page/list-container-page-dto.model";
 import { listContainerStyles } from "./listContainer.styles";
+import { usePagesApi } from "@api/hooks/usePagesApi";
+import { selectPageCards } from "@src/store/pages/pages.selectors";
 
 const pageSize = 12;
 
@@ -18,7 +18,7 @@ interface ListContainerProps {
 }
 
 export const ListContainer: FC<ListContainerProps> = ({ page, templates }) => {
-  const { loadPageListItems } = usePageListApi();
+  const { loadPageListItems } = usePagesApi();
   // const resetPageCards = useGlobalStore(selectResetPageCards);
   const location = useLocation();
   const [searchParams] = useSearchParams();

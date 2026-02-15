@@ -13,6 +13,7 @@ import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { useReset } from "./useReset";
 
 interface UseAuthApiOutput {
   loadUser: () => Promise<UserDto | true | Error>;
@@ -40,7 +41,10 @@ export const useAuthApi = (): UseAuthApiOutput => {
   const refreshToken = useGlobalStore(selectRefreshToken);
   const user = useGlobalStore(selectCurrentUser);
 
-  // const { reset } = useInitialization();
+  const { reset } = useReset();
+
+  // TODO So weiter:
+  // Login Flow funktioniert nicht richtig. User wird sofort wieder ausgeloggt
 
   const loadUser = useCallback(async (): Promise<UserDto | true | Error> => {
     try {
@@ -91,11 +95,11 @@ export const useAuthApi = (): UseAuthApiOutput => {
     } catch (error) {
       console.error("Error while trying to renew access: ", error);
 
-      // await reset();
+      await reset();
     }
 
     return false;
-  }, [loadUser, refreshToken]);
+  }, [loadUser, refreshToken, reset]);
 
   const login = useCallback(
     async (email: string, password: string): Promise<boolean> => {
@@ -115,7 +119,7 @@ export const useAuthApi = (): UseAuthApiOutput => {
 
         await renewAccess();
 
-        // await reset(false);
+        await reset(false);
 
         toast.success(
           t("auth.login-successful", {
@@ -127,7 +131,7 @@ export const useAuthApi = (): UseAuthApiOutput => {
       } catch (error) {
         console.error("Error while trying to login: ", error);
 
-        // await reset();
+        await reset();
 
         if (axios.isAxiosError(error)) {
           toast.error(
@@ -148,7 +152,7 @@ export const useAuthApi = (): UseAuthApiOutput => {
 
       return false;
     },
-    [config?.disable_login, renewAccess, t, user?.name, user?.nickname]
+    [config?.disable_login, renewAccess, reset, t, user?.name, user?.nickname]
   );
 
   const logout = useCallback(async () => {
@@ -175,10 +179,10 @@ export const useAuthApi = (): UseAuthApiOutput => {
       }
     }
 
-    // await reset();
+    await reset();
 
     return true;
-  }, [t]);
+  }, [reset, t]);
 
   const registration = useCallback(
     async (
@@ -323,7 +327,7 @@ export const useAuthApi = (): UseAuthApiOutput => {
   const initialize = useCallback(async () => {
     await loadUser();
 
-    initializationStoreActions.setPartInitialized("projects");
+    initializationStoreActions.setPartInitialized("auth");
   }, [loadUser]);
 
   return {

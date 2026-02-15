@@ -12,6 +12,7 @@ import {
 import { FormValidationResponseDto } from "@models/utility-types/form-validation-response-dto.model";
 import Check from "@mui/icons-material/Check";
 import { autocompleteNamesMap } from "../functions/autocompleteNamesMap";
+import { parseHtml } from "@utils/functions/parseHtml";
 
 export interface ContentFormInputTextProps {
   item: FormInputTextVariant;
@@ -311,6 +312,22 @@ export const ContentFormInputText: React.FC<ContentFormInputTextProps> = ({
     errors,
   ]);
 
+  const label = useMemo(() => {
+    if (!item.label) {
+      return null;
+    }
+
+    return parseHtml(item.label);
+  }, [item.label]);
+
+  const description = useMemo(() => {
+    if (!item.description) {
+      return null;
+    }
+
+    return parseHtml(item.description);
+  }, [item.description]);
+
   return (
     <FormControl
       required={item?.required}
@@ -324,15 +341,13 @@ export const ContentFormInputText: React.FC<ContentFormInputTextProps> = ({
         id={`${inputId}-label`}
         htmlFor={`${inputId}-input`}
       >
-        {item.label}
+        {label}
       </FormLabel>
 
-      {item.description && (
-        <Box
-          className="form-input-description"
-          dangerouslySetInnerHTML={{ __html: item.description }}
-          id={`${inputId}-description`}
-        ></Box>
+      {description && (
+        <Box className="form-input-description" id={`${inputId}-description`}>
+          {description}
+        </Box>
       )}
 
       {inputElement}

@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router";
 
 interface DownloadFileDialogProps {
   fileData: Blob | undefined;
@@ -62,7 +63,8 @@ export const DownloadFileDialog: React.FC<DownloadFileDialogProps> = ({
 
         <Button
           variant="contained"
-          href={fileDataUrl || ""}
+          component={Link}
+          to={fileDataUrl || ""}
           download={filename}
           disabled={!fileDataUrl}
         >

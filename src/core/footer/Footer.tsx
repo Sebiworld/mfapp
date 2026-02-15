@@ -25,6 +25,7 @@ import { useCallback, useId } from "react";
 import { useReward } from "react-rewards";
 import { Link as RouterLink } from "react-router";
 import { selectMenues } from "@src/store/configuration/configuration.selectors";
+import { parseHtml } from "@utils/functions/parseHtml";
 
 const heartAnimationOptions = {
   loop: true,
@@ -162,13 +163,9 @@ export const Footer = () => {
                       hash: item.section,
                     }}
                   >
-                    <Box
-                      component="span"
-                      className="nav-item-title"
-                      dangerouslySetInnerHTML={{
-                        __html: item.title || item?.page?.title || "",
-                      }}
-                    />
+                    <Box component="span" className="nav-item-title">
+                      {parseHtml(item.title || item?.page?.title || "")}
+                    </Box>
                   </ListItemButton>
                 </ListItem>
               ))}

@@ -1,16 +1,20 @@
 import { RoleDto } from "@models/user-dto.model";
 import { Chip } from "@mui/material";
+import { parseHtml } from "@utils/functions/parseHtml";
+import { useMemo } from "react";
 
 export interface RoleBadgeProps {
   role: RoleDto;
 }
 
 export const RoleBadge = ({ role }: RoleBadgeProps) => {
-  return (
-    <Chip
-      label={<span dangerouslySetInnerHTML={{ __html: role.title }}></span>}
-      size="small"
-      className="role-badge"
-    ></Chip>
-  );
+  const title = useMemo(() => {
+    if (!role.title) {
+      return null;
+    }
+
+    return parseHtml(role.title);
+  }, [role.title]);
+
+  return <Chip label={title} size="small" className="role-badge"></Chip>;
 };

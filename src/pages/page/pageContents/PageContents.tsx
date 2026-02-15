@@ -10,6 +10,7 @@ import { formatDate } from "@utils/functions/formatDate";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { ListContainerPageDto } from "@models/page/list-container-page-dto.model";
 import React from "react";
+import { parseHtml } from "@utils/functions/parseHtml";
 
 const ProjectRole = React.lazy(() =>
   import("../templateContents/projectRole/ProjectRole").then((module) => ({
@@ -64,6 +65,22 @@ export const PageContents: React.FC<PagesContentsProps> = ({ page }) => {
     return authorNames.join(" & ");
   }, [defaultPage?.authors]);
 
+  const title = useMemo(() => {
+    if (!page?.title) {
+      return null;
+    }
+
+    return parseHtml(page.title);
+  }, [page]);
+
+  const intro = useMemo(() => {
+    if (!(page as DefaultPageDto)?.intro) {
+      return null;
+    }
+
+    return parseHtml((page as DefaultPageDto).intro);
+  }, [page]);
+
   if (!page?.id) {
     return null;
   }
@@ -81,11 +98,9 @@ export const PageContents: React.FC<PagesContentsProps> = ({ page }) => {
           {page?.template?.name !== "project" && (
             <Box className="page-header">
               {!!showCreationDate && !!page.created && (
-                <Typography
-                  variant="subtitle1"
-                  className="creation-date"
-                  dangerouslySetInnerHTML={{
-                    __html: authors
+                <Typography variant="subtitle1" className="creation-date">
+                  {parseHtml(
+                    authors
                       ? t("page.published-on-by", {
                           date: formatDate(defaultPage.datetime_from * 1000),
                           date_raw: formatDate(
@@ -100,27 +115,18 @@ export const PageContents: React.FC<PagesContentsProps> = ({ page }) => {
                             defaultPage.datetime_from * 1000,
                             "yyyy-MM-dd"
                           ),
-                        }),
-                  }}
-                ></Typography>
+                        })
+                  )}
+                </Typography>
               )}
 
-              <Typography
-                variant="h1"
-                className="page-title"
-                dangerouslySetInnerHTML={{ __html: page.title }}
-              ></Typography>
+              <Typography variant="h1" className="page-title">
+                {title}
+              </Typography>
             </Box>
           )}
 
-          {!!defaultPage.intro && (
-            <Box
-              className="intro"
-              dangerouslySetInnerHTML={{
-                __html: defaultPage.intro,
-              }}
-            ></Box>
-          )}
+          {!!defaultPage.intro && <Box className="intro">{intro}</Box>}
 
           {!!defaultPage?.contents?.length && (
             <ContentBlocks blocks={defaultPage.contents}></ContentBlocks>

@@ -13,7 +13,7 @@ import { ProjectRoleDto } from "@models/project-role/project-role-dto.model";
 import { ProjectSeasonDto } from "@models/project-role/project-season-dto.model";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { Link, useSearchParams } from "react-router";
-import { useProjectRolesApi } from "@api/hooks/useProjectsRolesApi";
+import { useProjectRolesApi } from "@api/hooks/useProjectRolesApi";
 
 interface ProjectRoleProps {
   id?: number;

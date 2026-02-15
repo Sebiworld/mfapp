@@ -7,6 +7,7 @@ import { useMemo } from "react";
 import { ProjectDetailsDto } from "@models/project-dto.model";
 import { ImageDto } from "@models/image-dto.model";
 import { ContentGallerySlider } from "@components/contentBlocks/variants/contentGallery/galleryTypes/contentGallerySlider/ContentGallerySlider";
+import { Link } from "react-router";
 
 type SidebarBoxGalleriesData = ProjectDetailsDto["images"];
 
@@ -64,7 +65,8 @@ export const SidebarBoxGalleries: React.FC<SidebarBoxGalleriesProps> = ({
         <Button
           variant="contained"
           color="secondary"
-          href={data.galleries_page_url}
+          component={Link}
+          to={data.galleries_page_url}
           fullWidth
           size="small"
           onClick={onClose}

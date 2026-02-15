@@ -19,6 +19,7 @@ import { isValidArray } from "@utils/functions/isValidArray";
 import { Link, NavLink, useLocation } from "react-router";
 import { selectPage } from "@src/store/pages/pages.selectors";
 import { selectMenues } from "@src/store/configuration/configuration.selectors";
+import { parseHtml } from "@utils/functions/parseHtml";
 
 export const Header = () => {
   const [sidemenuOpen, setSidemenuOpen] = React.useState(false);
@@ -72,13 +73,9 @@ export const Header = () => {
                             hash: item.section,
                           }}
                         >
-                          <Box
-                            component="span"
-                            className="nav-item-title"
-                            dangerouslySetInnerHTML={{
-                              __html: item.title || item?.page?.title || "",
-                            }}
-                          />
+                          <Box component="span" className="nav-item-title">
+                            {parseHtml(item.title || item?.page?.title || "")}
+                          </Box>
                         </ListItemButton>
                       </ListItem>
                     ))}

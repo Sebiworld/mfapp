@@ -16,6 +16,7 @@ import { AlertDto } from "@models/utility-types/alert-dto.model";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { configurationStoreActions } from "@src/store/configuration/configuration.actions";
 import { useProjectsApi } from "@api/hooks/useProjectsApi";
+import { parseHtml } from "@utils/functions/parseHtml";
 
 export interface ProjectPageProps {
   page?: PageDtoVariant;
@@ -73,6 +74,30 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({ page, children }) => {
     return output;
   }, [page, projectPage]);
 
+  const title = useMemo(() => {
+    if (!projectPage?.title) {
+      return null;
+    }
+
+    return parseHtml(projectPage.title);
+  }, [projectPage]);
+
+  const infoOverlay = useMemo(() => {
+    if (!projectPage?.info_overlay) {
+      return null;
+    }
+
+    return parseHtml(projectPage.info_overlay);
+  }, [projectPage]);
+
+  const shortDescription = useMemo(() => {
+    if (!projectPage?.short_description) {
+      return null;
+    }
+
+    return parseHtml(projectPage.short_description);
+  }, [projectPage]);
+
   if (!projectPage?.id) {
     return (
       <>
@@ -98,21 +123,19 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({ page, children }) => {
 
         <Box className="project-subheader">
           {projectPage?.info_overlay && (
-            <Paper
-              color="projectPrimary"
-              className="project-teaser"
-              dangerouslySetInnerHTML={{ __html: projectPage.info_overlay }}
-            ></Paper>
+            <Paper color="projectPrimary" className="project-teaser">
+              {infoOverlay}
+            </Paper>
           )}
 
           <Box className="project-meta">
             <Typography className="project-title" variant="h3">
-              {projectPage.title}
+              {title}
             </Typography>
 
             {projectPage.short_description && (
               <Typography className="project-description">
-                {projectPage.short_description}
+                {shortDescription}
               </Typography>
             )}
           </Box>

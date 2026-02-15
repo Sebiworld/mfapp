@@ -3,6 +3,7 @@ import { isValidArray } from "@utils/functions/isValidArray";
 import { sidebarBoxSponsorsStyles } from "./sidebarBoxSponsors.styles";
 import { SponsorDto } from "@models/utility-types/sponsor-dto.model";
 import { Box, Typography } from "@mui/material";
+import { parseHtml } from "@utils/functions/parseHtml";
 
 export interface SidebarBoxSponsorsProps {
   data?: SponsorDto[];
@@ -42,12 +43,7 @@ export const SidebarBoxSponsors: React.FC<SidebarBoxSponsorsProps> = ({
             text += ", ";
           }
 
-          return (
-            <span
-              key={item.id}
-              dangerouslySetInnerHTML={{ __html: text }}
-            ></span>
-          );
+          return <span key={item.id}>{parseHtml(text || "")}</span>;
         })}
       </Box>
     </Box>

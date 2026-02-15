@@ -1,5 +1,6 @@
 import { ContentBlockTextDto } from "@models/content/content-block-text-dto.model";
 import { Box, Typography } from "@mui/material";
+import { parseHtml } from "@utils/functions/parseHtml";
 import React, { useMemo } from "react";
 
 export interface ContentTextProps {
@@ -26,21 +27,31 @@ export const ContentText: React.FC<ContentTextProps> = ({ block }) => {
     return output.join(" ");
   }, [block]);
 
+  const title = useMemo(() => {
+    if (!block.title) {
+      return null;
+    }
+
+    return parseHtml(block.title);
+  }, [block.title]);
+
+  const text = useMemo(() => {
+    if (!block.text) {
+      return null;
+    }
+
+    return parseHtml(block.text);
+  }, [block.text]);
+
   return (
     <Box className={classes}>
-      {block.title && (
+      {title && (
         <Box className="content-text-title">
-          <Typography
-            variant="h3"
-            dangerouslySetInnerHTML={{ __html: block.title }}
-          ></Typography>
+          <Typography variant="h3">{title}</Typography>
         </Box>
       )}
 
-      <Box
-        className="content-text-inner"
-        dangerouslySetInnerHTML={{ __html: block.text }}
-      ></Box>
+      <Box className="content-text-inner">{text}</Box>
     </Box>
   );
 };

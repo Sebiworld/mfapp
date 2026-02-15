@@ -9,6 +9,7 @@ import {
 import React, { useMemo } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { isValidArray } from "@utils/functions/isValidArray";
+import { parseHtml } from "@utils/functions/parseHtml";
 
 export interface ContentCollapsibleProps {
   block: ContentBlockCollapsibleDto;
@@ -49,17 +50,14 @@ export const ContentCollapsible: React.FC<ContentCollapsibleProps> = ({
             aria-controls={`${item.id}-content`}
             id={`${item.id}-header`}
           >
-            <Typography
-              component="span"
-              className="accordion-title"
-              dangerouslySetInnerHTML={{ __html: item.title || "" }}
-            ></Typography>
+            <Typography component="span" className="accordion-title">
+              {parseHtml(item.title || "")}
+            </Typography>
           </AccordionSummary>
 
-          <AccordionDetails
-            id={`${item.id}-content`}
-            dangerouslySetInnerHTML={{ __html: item.content || "" }}
-          ></AccordionDetails>
+          <AccordionDetails id={`${item.id}-content`}>
+            {parseHtml(item.content || "")}
+          </AccordionDetails>
         </Accordion>
       ))}
     </Box>

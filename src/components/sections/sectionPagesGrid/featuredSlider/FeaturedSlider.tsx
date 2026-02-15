@@ -36,6 +36,8 @@ import {
   TimelineOppositeContent,
   TimelineSeparator,
 } from "@mui/lab";
+import { Link as RouterLink } from "react-router";
+import { parseHtml } from "@utils/functions/parseHtml";
 
 export interface FeaturedSliderProps {
   section: SectionPagesGridDto;
@@ -99,7 +101,8 @@ export const FeaturedSlider: React.FC<FeaturedSliderProps> = ({ section }) => {
             return (
               <SwiperSlide key={card.id}>
                 <Link
-                  href={card.url}
+                  component={RouterLink}
+                  to={card.url}
                   color="primary"
                   underline="always"
                   className="card-wrapper"
@@ -120,19 +123,15 @@ export const FeaturedSlider: React.FC<FeaturedSliderProps> = ({ section }) => {
                   {!!(card.description || card.info_overlay) && (
                     <Box className="slide-label swiper-material-animate-opacity">
                       {!!card.description && (
-                        <Box
-                          className="description"
-                          dangerouslySetInnerHTML={{ __html: card.description }}
-                        />
+                        <Box className="description">
+                          {parseHtml(card.description)}
+                        </Box>
                       )}
 
                       {!!card.info_overlay && (
-                        <Box
-                          className="info_overlay"
-                          dangerouslySetInnerHTML={{
-                            __html: card.info_overlay,
-                          }}
-                        />
+                        <Box className="info_overlay">
+                          {parseHtml(card.info_overlay)}
+                        </Box>
                       )}
                     </Box>
                   )}
@@ -204,10 +203,9 @@ export const FeaturedSlider: React.FC<FeaturedSliderProps> = ({ section }) => {
                 return (
                   <TimelineItem key={card.id}>
                     {!!card.info_overlay && (
-                      <TimelineOppositeContent
-                        color="text.secondary"
-                        dangerouslySetInnerHTML={{ __html: card.info_overlay }}
-                      ></TimelineOppositeContent>
+                      <TimelineOppositeContent color="text.secondary">
+                        {parseHtml(card.info_overlay)}
+                      </TimelineOppositeContent>
                     )}
 
                     <TimelineSeparator>
@@ -238,19 +236,20 @@ export const FeaturedSlider: React.FC<FeaturedSliderProps> = ({ section }) => {
                           variant="h6"
                           className="title"
                           component="span"
-                          dangerouslySetInnerHTML={{ __html: card.title }}
-                        ></Typography>
+                        >
+                          {parseHtml(card.title)}
+                        </Typography>
                       )}
 
                       {card.description && (
-                        <Box
-                          className="description"
-                          dangerouslySetInnerHTML={{ __html: card.description }}
-                        ></Box>
+                        <Box className="description">
+                          {parseHtml(card.description)}
+                        </Box>
                       )}
 
                       <Button
-                        href={card.url}
+                        component={RouterLink}
+                        to={card.url}
                         color="contrast"
                         variant="contained"
                         size="small"

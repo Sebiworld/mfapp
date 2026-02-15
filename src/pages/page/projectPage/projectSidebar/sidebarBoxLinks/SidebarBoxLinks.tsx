@@ -14,6 +14,7 @@ import { sidebarBoxLinksStyles } from "./sidebarBoxLinks.styles";
 import { IonIcon } from "@ionic/react";
 import { link } from "ionicons/icons";
 import { Link } from "react-router";
+import { parseHtml } from "@utils/functions/parseHtml";
 
 export interface SidebarBoxLinksProps {
   navItems?: NavigationItemDto[];
@@ -60,13 +61,9 @@ export const SidebarBoxLinks: React.FC<SidebarBoxLinksProps> = ({
               </ListItemIcon>
 
               <ListItemText>
-                <Box
-                  component="span"
-                  className="nav-item-title"
-                  dangerouslySetInnerHTML={{
-                    __html: item.title || item?.page?.title || "",
-                  }}
-                />
+                <Box component="span" className="nav-item-title">
+                  {parseHtml(item.title || item?.page?.title || "")}
+                </Box>
               </ListItemText>
             </ListItemButton>
           </ListItem>

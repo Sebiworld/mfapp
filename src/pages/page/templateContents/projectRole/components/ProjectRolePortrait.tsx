@@ -9,6 +9,7 @@ import { getRandomNumberBetween } from "@utils/functions/getRandomNumberBetween"
 import { isValidArray } from "@utils/functions/isValidArray";
 import { FC, Fragment, useMemo } from "react";
 import { ProjectRolePortraitActionWrapper } from "./ProjectRolePortraitActionWrapper";
+import { parseHtml } from "@utils/functions/parseHtml";
 
 const placeholderPathsMale = [
   "/img/portrait-single/portrait-placeholder-single-1.jpg",
@@ -45,11 +46,11 @@ export const ProjectRolePortrait: FC<ProjectRolePortraitProps> = ({
     }
 
     if (portrait.title_separable) {
-      return portrait.title_separable.replaceAll("_", "&shy;");
+      return parseHtml(portrait.title_separable.replaceAll("_", "&shy;"));
     }
 
     if (portrait.title) {
-      return portrait.title;
+      return parseHtml(portrait.title);
     }
 
     return "";
@@ -125,19 +126,16 @@ export const ProjectRolePortrait: FC<ProjectRolePortraitProps> = ({
         /> */}
 
         <CardContent>
-          <Typography
-            className="portrait-title"
-            variant="h6"
-            dangerouslySetInnerHTML={{ __html: title }}
-          ></Typography>
+          <Typography className="portrait-title" variant="h6">
+            {title}
+          </Typography>
 
           {projectRoles.map((projectRole) => (
             <Fragment key={projectRole.id}>
               {!!projectRole?.title && (
-                <Typography
-                  className="portrait-role"
-                  dangerouslySetInnerHTML={{ __html: projectRole.title }}
-                ></Typography>
+                <Typography className="portrait-role">
+                  {parseHtml(projectRole.title)}
+                </Typography>
               )}
             </Fragment>
           ))}

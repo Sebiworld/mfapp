@@ -13,6 +13,7 @@ import { isValidArray } from "@utils/functions/isValidArray";
 import { useTranslation } from "react-i18next";
 import { Swiper, SwiperRef, SwiperSlide } from "swiper/react";
 import { Alerts } from "@components/alerts/Alerts";
+import { Link } from "react-router";
 
 export interface SectionArticlesCarouselProps {
   section: SectionArticlesCarouselDto;
@@ -109,7 +110,8 @@ export const SectionArticlesCarousel: React.FC<
           <Button
             variant="contained"
             color="projectPrimary"
-            href={section.articles_page_url}
+            component={Link}
+            to={section.articles_page_url}
             className="all-articles-button"
           >
             {t("news.see-all")}

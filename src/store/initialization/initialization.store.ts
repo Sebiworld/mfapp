@@ -14,9 +14,12 @@ export const createInitializationSlice: StateCreator<
   InitializationSlice
 > = () => ({
   intializedParts: {
+    auth: false,
     configuration: false,
     pages: false,
     projects: false,
+    projectRoles: false,
+    app: false
   },
 
   didReceiveWelcomeMessage: false,

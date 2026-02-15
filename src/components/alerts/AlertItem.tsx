@@ -3,6 +3,7 @@ import React, { ReactNode, useMemo, useState } from "react";
 import { Alert, AlertTitle, Box } from "@mui/material";
 import { AlertDto } from "@models/utility-types/alert-dto.model.ts";
 import { IonIcon } from "@ionic/react";
+import { parseHtml } from "@utils/functions/parseHtml";
 
 export interface AlertItemProps {
   alert: AlertDto;
@@ -35,6 +36,22 @@ export const AlertItem: React.FC<AlertItemProps> = ({ alert, action }) => {
     return undefined;
   }, [alert]);
 
+  const title = useMemo(() => {
+    if (!alert.title) {
+      return null;
+    }
+
+    return parseHtml(alert.title);
+  }, [alert.title]);
+
+  const text = useMemo(() => {
+    if (!alert.text) {
+      return null;
+    }
+
+    return parseHtml(alert.text);
+  }, [alert.text]);
+
   if (!alert?.id) {
     return null;
   }
@@ -53,19 +70,9 @@ export const AlertItem: React.FC<AlertItemProps> = ({ alert, action }) => {
       onClose={alert?.closable ? () => setIsClosed(true) : undefined}
       action={action}
     >
-      {!!alert.title && (
-        <AlertTitle
-          className="alert-title"
-          dangerouslySetInnerHTML={{ __html: alert.title || "" }}
-        ></AlertTitle>
-      )}
+      {!!title && <AlertTitle className="alert-title">{title}</AlertTitle>}
 
-      {!!alert.text && (
-        <Box
-          className="alert-content"
-          dangerouslySetInnerHTML={{ __html: alert.text || "" }}
-        ></Box>
-      )}
+      {!!text && <Box className="alert-content">{text}</Box>}
     </Alert>
   );
 };

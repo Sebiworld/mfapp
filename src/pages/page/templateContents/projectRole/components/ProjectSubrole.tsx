@@ -5,6 +5,8 @@ import { ProjectRolePortraits } from "./ProjectRolePortraits";
 import { LazyPicture } from "@components/lazyPicture/LazyPicture";
 import { useTranslation } from "react-i18next";
 import { getRandomNumberBetween } from "@utils/functions/getRandomNumberBetween";
+import { Link } from "react-router";
+import { parseHtml } from "@utils/functions/parseHtml";
 
 const placeholderPaths = [
   "/img/portrait-group/portrait-placeholder-group-1.jpg",
@@ -48,6 +50,22 @@ export const ProjectSubrole: FC<ProjectSubroleProps> = ({
     );
   }, [currentSeasonId, portraitIdsTree, role]);
 
+  const title = useMemo(() => {
+    if (!role?.title) {
+      return null;
+    }
+
+    return parseHtml(role.title);
+  }, [role]);
+
+  const description = useMemo(() => {
+    if (!role?.description) {
+      return null;
+    }
+
+    return parseHtml(role.description);
+  }, [role]);
+
   return (
     <Box
       data-testid="project-subrole"
@@ -67,19 +85,14 @@ export const ProjectSubrole: FC<ProjectSubroleProps> = ({
         </Box>
       )}
 
-      {role?.title && (
-        <Typography
-          variant="h3"
-          className="subrole-title"
-          dangerouslySetInnerHTML={{ __html: role.title }}
-        ></Typography>
+      {title && (
+        <Typography variant="h3" className="subrole-title">
+          {title}
+        </Typography>
       )}
 
       {role?.description && (
-        <Box
-          className="subrole-description content-block"
-          dangerouslySetInnerHTML={{ __html: role.description }}
-        ></Box>
+        <Box className="subrole-description content-block">{description}</Box>
       )}
 
       {role?.url && (
@@ -88,7 +101,8 @@ export const ProjectSubrole: FC<ProjectSubroleProps> = ({
             variant="outlined"
             color="contrast"
             size="small"
-            href={role?.url}
+            component={Link}
+            to={role?.url}
           >
             {t("page_card.btn_more")}
           </Button>

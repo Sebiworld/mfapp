@@ -4,6 +4,7 @@ import { Control, Controller, FieldErrors, FieldValues } from "react-hook-form";
 import { Box, Checkbox, FormControl, FormControlLabel } from "@mui/material";
 import { FormValidationResponseDto } from "@models/utility-types/form-validation-response-dto.model";
 import { isValidArray } from "@utils/functions/isValidArray";
+import { parseHtml } from "@utils/functions/parseHtml";
 
 export interface ContentFormInputCheckboxProps {
   item: FormInputCheckbox;
@@ -90,6 +91,22 @@ export const ContentFormInputCheckbox: React.FC<
     return output.join(" ");
   }, [customInputClasses, fieldSuccess]);
 
+  const label = useMemo(() => {
+    if (!item.label) {
+      return null;
+    }
+
+    return parseHtml(item.label);
+  }, [item.label]);
+
+  const description = useMemo(() => {
+    if (!item.description) {
+      return null;
+    }
+
+    return parseHtml(item.description);
+  }, [item.description]);
+
   return (
     <FormControl
       required={item?.required}
@@ -104,18 +121,10 @@ export const ContentFormInputCheckbox: React.FC<
               className="form-input-label-container"
               label={
                 <>
-                  {item.label && (
-                    <Box
-                      className="form-input-label"
-                      dangerouslySetInnerHTML={{ __html: item.label }}
-                    ></Box>
-                  )}
+                  {label && <Box className="form-input-label">{label}</Box>}
 
-                  {item.description && (
-                    <Box
-                      className="form-input-description"
-                      dangerouslySetInnerHTML={{ __html: item.description }}
-                    ></Box>
+                  {description && (
+                    <Box className="form-input-description">{description}</Box>
                   )}
 
                   {errors?.[item.name]?.message && (

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 import { useTranslation } from "react-i18next";
 import {
@@ -15,6 +15,7 @@ import { HeadingLevel } from "@models/utility-types/heading-level.model";
 import { LazyPicture } from "@components/lazyPicture/LazyPicture";
 import { IonIcon } from "@ionic/react";
 import { Link } from "react-router";
+import { parseHtml } from "@utils/functions/parseHtml";
 
 export interface PageCardProps {
   card: PageCardDto;
@@ -28,6 +29,30 @@ export const PageCard: React.FC<PageCardProps> = ({
   style,
 }) => {
   const { t } = useTranslation();
+
+  const title = useMemo(() => {
+    if (!card.title) {
+      return null;
+    }
+
+    return parseHtml(card.title);
+  }, [card.title]);
+
+  const intro = useMemo(() => {
+    if (!card.intro) {
+      return null;
+    }
+
+    return parseHtml(card.intro);
+  }, [card.intro]);
+
+  const description = useMemo(() => {
+    if (!card.description) {
+      return null;
+    }
+
+    return parseHtml(card.description);
+  }, [card.description]);
 
   if (!card?.id) {
     return null;
@@ -72,20 +97,18 @@ export const PageCard: React.FC<PageCardProps> = ({
               <Typography
                 variant={`h${headingLevel || 2}`}
                 gutterBottom
-                dangerouslySetInnerHTML={{ __html: card.title }}
                 className="card-title"
                 component="div"
-              ></Typography>
+              >
+                {title}
+              </Typography>
             )
           )}
 
           {!!card.intro && (
-            <Typography
-              variant="body2"
-              component="div"
-              className="card-intro"
-              dangerouslySetInnerHTML={{ __html: card.intro }}
-            ></Typography>
+            <Typography variant="body2" component="div" className="card-intro">
+              {intro}
+            </Typography>
           )}
 
           {!!card.description && (
@@ -93,8 +116,9 @@ export const PageCard: React.FC<PageCardProps> = ({
               variant="body2"
               component="div"
               className="card-description"
-              dangerouslySetInnerHTML={{ __html: card.description }}
-            ></Typography>
+            >
+              {description}
+            </Typography>
           )}
         </CardContent>
       )}

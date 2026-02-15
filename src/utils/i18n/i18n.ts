@@ -13,6 +13,7 @@ const resources = {
 };
 
 i18n.use(initReactI18next).init({
+  showSupportNotice: false,
   resources,
   lng: "de",
 

@@ -1,6 +1,3 @@
-// import { ErrorResponseDto } from "@models/error-response-dto.model";
-
-import { useGlobalStore } from "@src/store/global.store";
 import axios from "axios";
 import axiosRetry from "axios-retry";
 
@@ -16,18 +13,18 @@ axiosRetry(axiosInstance, { retries: 2 });
 
 axiosInstance.defaults.withCredentials = true;
 
-axiosInstance.interceptors.request.use(
-  (config) => {
-    const accessToken = useGlobalStore.getState().accessToken;
-    if (accessToken) {
-      config.headers["Authorization"] = `Bearer ${accessToken}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
+// axiosInstance.interceptors.request.use(
+//   (config) => {
+//     const accessToken = useGlobalStore.getState().accessToken;
+//     if (accessToken) {
+//       config.headers["Authorization"] = `Bearer ${accessToken}`;
+//     }
+//     return config;
+//   },
+//   (error) => {
+//     return Promise.reject(error);
+//   }
+// );
 
 // const isRenewableRequest = (error: AxiosError<ErrorResponseDto>): boolean => {
 //   if (

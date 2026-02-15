@@ -9,6 +9,7 @@ import { FC, useMemo } from "react";
 import { breadcrumbsStyles } from "./breadcrumbs.styles";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { BreadcrumbList, ListItem, WithContext } from "schema-dts";
+import { NavLink } from "react-router";
 
 export interface BreadcrumbsProps {
   items?: BreadcrumbDto[];
@@ -49,7 +50,11 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = ({ items }) => {
           {items?.map((item) => {
             if (item.url && !item.active && item.viewable) {
               return (
-                <Link key={item.id} href={item.url}>
+                <Link
+                  key={item.id}
+                  component={NavLink}
+                  to={{ pathname: item.url }}
+                >
                   {item.title}
                 </Link>
               );

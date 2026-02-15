@@ -23,6 +23,7 @@ import {
 import { FormValidationResponseDto } from "@models/utility-types/form-validation-response-dto.model";
 import Check from "@mui/icons-material/Check";
 import { autocompleteNamesMap } from "../functions/autocompleteNamesMap";
+import { parseHtml } from "@utils/functions/parseHtml";
 
 export interface ContentFormInputProps {
   item: FormInputVariant | FormElementDto;
@@ -322,8 +323,9 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
           aria-describedby={
             item.description ? `${inputId}-description` : undefined
           }
-          dangerouslySetInnerHTML={{ __html: item.value as string }}
-        ></Box>
+        >
+          {parseHtml(item.value as string)}
+        </Box>
       );
     }
 
@@ -568,11 +570,9 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
       )}
 
       {item.description && (
-        <Box
-          className="form-input-description"
-          dangerouslySetInnerHTML={{ __html: item.description }}
-          id={`${inputId}-description`}
-        ></Box>
+        <Box className="form-input-description" id={`${inputId}-description`}>
+          {parseHtml(item.description)}
+        </Box>
       )}
 
       {inputElement}

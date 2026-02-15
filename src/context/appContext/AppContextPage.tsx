@@ -6,6 +6,7 @@ import { selectCurrentUser } from "@src/store/auth/auth.selectors";
 import { useAppContext } from "./useAppContext";
 import { Button, Link, Snackbar, Typography } from "@mui/material";
 import { initializationStoreActions } from "@src/store/initialization/initialization.actions";
+import { Link as RouterLink } from "react-router";
 
 interface AppContextPageProps {
   children?: ReactNode;
@@ -107,7 +108,9 @@ export const AppContextPage: FC<AppContextPageProps> = ({ children }) => {
                 Nein
               </Button>
               <span className="spacer"></span>
-              <Link href="/datenschutz">mehr zum Datenschutz</Link>
+              <Link component={RouterLink} to="/datenschutz">
+                mehr zum Datenschutz
+              </Link>
             </>
           }
           slotProps={{

@@ -1,15 +1,8 @@
 import { ContentBlockCollapsibleDto } from "@models/content/content-block-collapsible-dto.model";
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Box,
-  Typography,
-} from "@mui/material";
+import { Box } from "@mui/material";
 import React, { useMemo } from "react";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { isValidArray } from "@utils/functions/isValidArray";
-import { parseHtml } from "@utils/functions/parseHtml";
+import { ContentCollapsibleItem } from "./components/ContentCollapsibleItem";
 
 export interface ContentCollapsibleProps {
   block: ContentBlockCollapsibleDto;
@@ -44,21 +37,7 @@ export const ContentCollapsible: React.FC<ContentCollapsibleProps> = ({
   return (
     <Box className={classes}>
       {block.items.map((item) => (
-        <Accordion color="contrast" key={item.id}>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls={`${item.id}-content`}
-            id={`${item.id}-header`}
-          >
-            <Typography component="span" className="accordion-title">
-              {parseHtml(item.title || "")}
-            </Typography>
-          </AccordionSummary>
-
-          <AccordionDetails id={`${item.id}-content`}>
-            {parseHtml(item.content || "")}
-          </AccordionDetails>
-        </Accordion>
+        <ContentCollapsibleItem key={item.id} item={item} />
       ))}
     </Box>
   );

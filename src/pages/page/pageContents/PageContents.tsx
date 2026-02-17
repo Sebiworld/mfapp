@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/preserve-manual-memoization */
 import { SectionsContainer } from "@components/sections/SectionsContainer";
 import { ContentBlocks } from "@components/contentBlocks/ContentBlocks";
 import { pageContentsStyles } from "./pageContents.styles";
@@ -34,7 +35,7 @@ export const PageContents: React.FC<PagesContentsProps> = ({ page }) => {
   //   console.log("page", page);
   // }, [page]);
 
-  const defaultPage = page as DefaultPageDto;
+  const defaultPage = useMemo(() => page as DefaultPageDto, [page]);
 
   const showCreationDate = useMemo(
     () => page?.template?.name && ["article"].includes(page?.template?.name),
@@ -66,20 +67,43 @@ export const PageContents: React.FC<PagesContentsProps> = ({ page }) => {
   }, [defaultPage?.authors]);
 
   const title = useMemo(() => {
-    if (!page?.title) {
+    if (!defaultPage?.title) {
       return null;
     }
 
-    return parseHtml(page.title);
-  }, [page]);
+    return parseHtml(defaultPage.title);
+  }, [defaultPage?.title]);
 
   const intro = useMemo(() => {
-    if (!(page as DefaultPageDto)?.intro) {
+    if (!defaultPage?.intro) {
       return null;
     }
 
-    return parseHtml((page as DefaultPageDto).intro);
-  }, [page]);
+    return parseHtml(defaultPage.intro);
+  }, [defaultPage?.intro]);
+
+  const creationDate = useMemo(() => {
+    if (!defaultPage?.datetime_from) {
+      return null;
+    }
+
+    if (authors) {
+      return parseHtml(
+        t("page.published-on-by", {
+          date: formatDate(defaultPage.datetime_from * 1000),
+          date_raw: formatDate(defaultPage.datetime_from * 1000, "yyyy-MM-dd"),
+          authors,
+        })
+      );
+    }
+
+    return parseHtml(
+      t("page.published-on", {
+        date: formatDate(defaultPage.datetime_from * 1000),
+        date_raw: formatDate(defaultPage.datetime_from * 1000, "yyyy-MM-dd"),
+      })
+    );
+  }, [authors, defaultPage?.datetime_from, t]);
 
   if (!page?.id) {
     return null;
@@ -97,26 +121,9 @@ export const PageContents: React.FC<PagesContentsProps> = ({ page }) => {
         <Paper className="page-content" elevation={0}>
           {page?.template?.name !== "project" && (
             <Box className="page-header">
-              {!!showCreationDate && !!page.created && (
+              {!!showCreationDate && !!creationDate && (
                 <Typography variant="subtitle1" className="creation-date">
-                  {parseHtml(
-                    authors
-                      ? t("page.published-on-by", {
-                          date: formatDate(defaultPage.datetime_from * 1000),
-                          date_raw: formatDate(
-                            defaultPage.datetime_from * 1000,
-                            "yyyy-MM-dd"
-                          ),
-                          authors,
-                        })
-                      : t("page.published-on", {
-                          date: formatDate(defaultPage.datetime_from * 1000),
-                          date_raw: formatDate(
-                            defaultPage.datetime_from * 1000,
-                            "yyyy-MM-dd"
-                          ),
-                        })
-                  )}
+                  {creationDate}
                 </Typography>
               )}
 

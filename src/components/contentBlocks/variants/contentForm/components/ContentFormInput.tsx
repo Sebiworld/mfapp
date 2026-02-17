@@ -53,6 +53,14 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
   const autoId = useId();
   const inputId = id || autoId;
 
+  const description = useMemo(() => {
+    if (!item.description) {
+      return null;
+    }
+
+    return parseHtml(item.description);
+  }, [item.description]);
+
   const fieldError = useMemo((): ReactNode => {
     // Local zod validation errors
     if (errors?.[item.name]?.message) {
@@ -569,9 +577,9 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
         </Typography>
       )}
 
-      {item.description && (
+      {description && (
         <Box className="form-input-description" id={`${inputId}-description`}>
-          {parseHtml(item.description)}
+          {description}
         </Box>
       )}
 

@@ -3,7 +3,7 @@ import { isValidArray } from "@utils/functions/isValidArray";
 import { sidebarBoxSponsorsStyles } from "./sidebarBoxSponsors.styles";
 import { SponsorDto } from "@models/utility-types/sponsor-dto.model";
 import { Box, Typography } from "@mui/material";
-import { parseHtml } from "@utils/functions/parseHtml";
+import { SidebarBoxSponsorsItem } from "./components/SidebarBoxSponsorsItem";
 
 export interface SidebarBoxSponsorsProps {
   data?: SponsorDto[];
@@ -37,13 +37,14 @@ export const SidebarBoxSponsors: React.FC<SidebarBoxSponsorsProps> = ({
 
       <Box className="list-container">
         {data.map((item, index, all) => {
-          let text = item.title;
-
-          if (index + 1 < all.length) {
-            text += ", ";
-          }
-
-          return <span key={item.id}>{parseHtml(text || "")}</span>;
+          return (
+            <SidebarBoxSponsorsItem
+              key={item.id}
+              item={item}
+              index={index}
+              total={all.length}
+            />
+          );
         })}
       </Box>
     </Box>

@@ -1,19 +1,18 @@
 import { useTranslation } from "react-i18next";
 import { isValidArray } from "@utils/functions/isValidArray";
-import { SponsorDto } from "@models/utility-types/sponsor-dto.model";
-import CloseIcon from "@mui/icons-material/Close";
 import { Box, Button, IconButton, Modal, Paper } from "@mui/material";
+import { NavigationItemDto } from "@models/navigation-item-dto.model";
+import CloseIcon from "@mui/icons-material/Close";
 import { useCallback, useState } from "react";
-import { SidebarBoxSponsors } from "./SidebarBoxSponsors";
+import { SidebarBoxLinks } from "../SidebarBoxLinks";
 
-export interface SidebarBoxSponsorsModalProps {
-  data?: SponsorDto[];
-  type?: string;
+export interface SidebarBoxLinksModalProps {
+  navItems?: NavigationItemDto[];
 }
 
-export const SidebarBoxSponsorsModal: React.FC<
-  SidebarBoxSponsorsModalProps
-> = ({ data, type = "sponsors" }) => {
+export const SidebarBoxLinksModal: React.FC<SidebarBoxLinksModalProps> = ({
+  navItems,
+}) => {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -21,7 +20,7 @@ export const SidebarBoxSponsorsModal: React.FC<
     setIsOpen(false);
   }, []);
 
-  if (!isValidArray(data) || !data.length) {
+  if (!isValidArray(navItems) || !navItems.length) {
     return null;
   }
 
@@ -32,18 +31,18 @@ export const SidebarBoxSponsorsModal: React.FC<
         variant="contained"
         onClick={() => setIsOpen(true)}
       >
-        {t(`project.${type}`)}
+        {t("project.links")}
       </Button>
 
       <Modal
-        className="sidebar-box-sponsors-modal"
-        data-testid="sidebar-box-sponsors-modal"
+        className="sidebar-box-links-modal"
+        data-testid="sidebar-box-links-modal"
         open={isOpen}
         onClose={onClose}
       >
         <Paper className="modal-container" variant="outlined">
           <Box className="modal-header">
-            <Box className="title">{t(`project.${type}`)}</Box>
+            <Box className="title">{t("project.links")}</Box>
 
             <Box className="actions">
               <IconButton
@@ -57,12 +56,11 @@ export const SidebarBoxSponsorsModal: React.FC<
           </Box>
 
           <Box className="modal-content">
-            <SidebarBoxSponsors
-              data={data}
-              type={type}
+            <SidebarBoxLinks
+              navItems={navItems}
               showTitle={false}
               onClose={onClose}
-            ></SidebarBoxSponsors>
+            ></SidebarBoxLinks>
           </Box>
         </Paper>
       </Modal>

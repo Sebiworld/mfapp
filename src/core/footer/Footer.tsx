@@ -9,23 +9,14 @@ import { Trans, useTranslation } from "react-i18next";
 import heartAnimation from "@assets/lotties/heart.json";
 import { useCurrentDate } from "@utils/hooks/useCurrentDate";
 import { useLottie } from "lottie-react";
-import {
-  Box,
-  Button,
-  IconButton,
-  Link,
-  List,
-  ListItem,
-  ListItemButton,
-  Paper,
-} from "@mui/material";
+import { Box, Button, IconButton, Link, List, Paper } from "@mui/material";
 import { useGlobalStore } from "@src/store/global.store";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { useCallback, useId } from "react";
 import { useReward } from "react-rewards";
 import { Link as RouterLink } from "react-router";
 import { selectMenues } from "@src/store/configuration/configuration.selectors";
-import { parseHtml } from "@utils/functions/parseHtml";
+import { ToolbarNavItem } from "@components/ToolbarNavItem";
 
 const heartAnimationOptions = {
   loop: true,
@@ -155,19 +146,7 @@ export const Footer = () => {
           {isValidArray(tertiaryNavigation) && !!tertiaryNavigation.length && (
             <List className="nav-list tertiary-navigation">
               {tertiaryNavigation.map((item) => (
-                <ListItem key={item.id} disablePadding>
-                  <ListItemButton
-                    component={RouterLink}
-                    to={{
-                      pathname: item?.page?.url || item.link || "/",
-                      hash: item.section,
-                    }}
-                  >
-                    <Box component="span" className="nav-item-title">
-                      {parseHtml(item.title || item?.page?.title || "")}
-                    </Box>
-                  </ListItemButton>
-                </ListItem>
+                <ToolbarNavItem key={item.id} item={item} />
               ))}
             </List>
           )}

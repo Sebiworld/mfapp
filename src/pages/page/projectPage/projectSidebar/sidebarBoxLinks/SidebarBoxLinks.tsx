@@ -1,20 +1,9 @@
 import { useTranslation } from "react-i18next";
 import { isValidArray } from "@utils/functions/isValidArray";
-import {
-  Box,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Typography,
-} from "@mui/material";
+import { Box, List, Typography } from "@mui/material";
 import { NavigationItemDto } from "@models/navigation-item-dto.model";
 import { sidebarBoxLinksStyles } from "./sidebarBoxLinks.styles";
-import { IonIcon } from "@ionic/react";
-import { link } from "ionicons/icons";
-import { Link } from "react-router";
-import { parseHtml } from "@utils/functions/parseHtml";
+import { SidebarBoxNavItem } from "./components/SidebarBoxNavItem";
 
 export interface SidebarBoxLinksProps {
   navItems?: NavigationItemDto[];
@@ -47,26 +36,7 @@ export const SidebarBoxLinks: React.FC<SidebarBoxLinksProps> = ({
 
       <List className="nav-list" component="ul">
         {navItems.map((item, index) => (
-          <ListItem key={index} disablePadding>
-            <ListItemButton
-              component={Link}
-              to={{
-                pathname: item?.page?.url || item.link,
-                hash: item.section,
-              }}
-              onClick={onClose}
-            >
-              <ListItemIcon>
-                <IonIcon aria-hidden="true" icon={link}></IonIcon>
-              </ListItemIcon>
-
-              <ListItemText>
-                <Box component="span" className="nav-item-title">
-                  {parseHtml(item.title || item?.page?.title || "")}
-                </Box>
-              </ListItemText>
-            </ListItemButton>
-          </ListItem>
+          <SidebarBoxNavItem key={index} item={item} onClick={onClose} />
         ))}
       </List>
     </Box>

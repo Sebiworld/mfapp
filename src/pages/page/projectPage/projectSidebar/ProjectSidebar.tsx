@@ -10,8 +10,8 @@ import { SidebarBoxGalleries } from "./sidebarBoxGalleries/SidebarBoxGalleries";
 import { SidebarBoxGeneralModal } from "./sidebarBoxGeneral/SidebarBoxGeneralModal";
 import { SidebarBoxGalleriesModal } from "./sidebarBoxGalleries/SidebarBoxGalleriesModal";
 import { SidebarBoxEventsModal } from "./sidebarBoxEvents/SidebarBoxEventsModal";
-import { SidebarBoxLinksModal } from "./sidebarBoxLinks/SidebarBoxLinksModal";
-import { SidebarBoxSponsorsModal } from "./sidebarBoxSponsors/SidebarBoxSponsorsModal";
+import { SidebarBoxLinksModal } from "./sidebarBoxLinks/components/SidebarBoxLinksModal";
+import { SidebarBoxSponsorsModal } from "./sidebarBoxSponsors/components/SidebarBoxSponsorsModal";
 
 export interface ProjectSidebarProps {
   project?: ProjectDetailsDto;

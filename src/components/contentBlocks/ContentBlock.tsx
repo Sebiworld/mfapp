@@ -41,7 +41,7 @@ const ContentFiles = React.lazy(() =>
   }))
 );
 const ContentCollapsible = React.lazy(() =>
-  import("./variants/ContentCollapsible").then((module) => ({
+  import("./variants/contentCollapsible/ContentCollapsible").then((module) => ({
     default: module.ContentCollapsible,
   }))
 );

@@ -7,9 +7,10 @@ import { ProjectRoleDto } from "@models/project-role/project-role-dto.model";
 import { Box, Card, CardContent, Typography } from "@mui/material";
 import { getRandomNumberBetween } from "@utils/functions/getRandomNumberBetween";
 import { isValidArray } from "@utils/functions/isValidArray";
-import { FC, Fragment, useMemo } from "react";
+import { FC, useMemo } from "react";
 import { ProjectRolePortraitActionWrapper } from "./ProjectRolePortraitActionWrapper";
 import { parseHtml } from "@utils/functions/parseHtml";
+import { ProjectRolePortraitDescriptionItem } from "./ProjectRolePortraitDescriptionItem";
 
 const placeholderPathsMale = [
   "/img/portrait-single/portrait-placeholder-single-1.jpg",
@@ -131,13 +132,10 @@ export const ProjectRolePortrait: FC<ProjectRolePortraitProps> = ({
           </Typography>
 
           {projectRoles.map((projectRole) => (
-            <Fragment key={projectRole.id}>
-              {!!projectRole?.title && (
-                <Typography className="portrait-role">
-                  {parseHtml(projectRole.title)}
-                </Typography>
-              )}
-            </Fragment>
+            <ProjectRolePortraitDescriptionItem
+              key={projectRole.id}
+              item={projectRole}
+            />
           ))}
         </CardContent>
       </ProjectRolePortraitActionWrapper>

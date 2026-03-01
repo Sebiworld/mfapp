@@ -7,7 +7,7 @@ import { useCallback, useEffect } from "react";
 import { useGlobalStore } from "@src/store/global.store";
 import { selectAccessToken } from "@src/store/auth/auth.selectors";
 import { axiosInstance } from "@api/axios/axios";
-import { AxiosError } from "axios";
+import { AxiosError, InternalAxiosRequestConfig } from "axios";
 import { ErrorResponseDto } from "@models/error-response-dto.model";
 import { initializationStoreActions } from "@src/store/initialization/initialization.actions";
 
@@ -30,17 +30,24 @@ export const useInitialization = (): UseInitializationOutput => {
       return;
     }
 
-    axiosInstance.interceptors.request.use(
-      (config) => {
+    const requestInterceptor = axiosInstance.interceptors.request.use(
+      (config: InternalAxiosRequestConfig<unknown>) => {
         if (accessToken) {
           config.headers["Authorization"] = `Bearer ${accessToken}`;
         }
+
         return config;
       },
-      (error) => {
-        return Promise.reject(error);
+      null,
+      {
+        synchronous: true,
+        // runWhen: () => !!accessToken,
       }
     );
+
+    return () => {
+      axiosInstance.interceptors.request.eject(requestInterceptor); // remove if deps change
+    };
   }, [accessToken]);
 
   const isRenewableRequest = (error: AxiosError<ErrorResponseDto>): boolean => {
@@ -57,13 +64,13 @@ export const useInitialization = (): UseInitializationOutput => {
       return true;
     }
 
-    // if (
-    //   error?.response?.status === 400 &&
-    //   (error?.response?.data as ErrorResponseDto)?.errorcode ===
-    //     "access_token_invalid"
-    // ) {
-    //   return true;
-    // }
+    if (
+      error?.response?.status === 400 &&
+      (error?.response?.data as ErrorResponseDto)?.errorcode ===
+        "access_token_invalid"
+    ) {
+      return true;
+    }
 
     return false;
   };
@@ -73,7 +80,7 @@ export const useInitialization = (): UseInitializationOutput => {
       return;
     }
 
-    axiosInstance.interceptors.response.use(
+    const responseInterceptor = axiosInstance.interceptors.response.use(
       (response) => {
         return response;
       },
@@ -81,17 +88,20 @@ export const useInitialization = (): UseInitializationOutput => {
         const originalRequest = error.config;
 
         if (isRenewableRequest(error)) {
-          // TODO Add additionals.can_renew === true
           originalRequest._retry = true;
 
           try {
-            await renewAccess();
-            const accessToken = useGlobalStore.getState().accessToken;
-            originalRequest.headers["Authorization"] = `Bearer ${accessToken}`;
-            return axiosInstance(originalRequest);
+            const accessToken = await renewAccess();
+
+            if (accessToken) {
+              originalRequest.headers["Authorization"] =
+                `Bearer ${accessToken}`;
+              return axiosInstance(originalRequest);
+            }
           } catch (err) {
             // TODO User Feedback
             await logout();
+
             return Promise.reject(err);
           }
         }
@@ -99,6 +109,10 @@ export const useInitialization = (): UseInitializationOutput => {
         return Promise.reject(error);
       }
     );
+
+    return () => {
+      axiosInstance.interceptors.response.eject(responseInterceptor); // remove if deps change
+    };
   }, [logout, renewAccess]);
 
   /**

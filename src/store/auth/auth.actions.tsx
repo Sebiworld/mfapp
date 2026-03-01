@@ -7,26 +7,27 @@ const setNickname = (nickname?: string) => {
   });
 };
 
-const setUser = async (user: UserDto | undefined) => {
+const setUser = (user: UserDto | undefined) => {
   useGlobalStore.setState({
     user,
   });
 };
 
-const setRefreshToken = async (refreshToken: string) => {
+const setRefreshToken = (refreshToken: string) => {
+  console.log("Setting refresh token:", { refreshToken });
   useGlobalStore.setState({
     refreshToken,
   });
 };
 
-const setAccessToken = async (accessToken: string, refreshToken: string) => {
+const setAccessToken = (accessToken: string, refreshToken: string) => {
   useGlobalStore.setState({
     accessToken,
     refreshToken,
   });
 };
 
-const resetSlice = async () => {
+const resetSlice = () => {
   useGlobalStore.setState((state) => {
     state.accessToken = undefined;
     state.refreshToken = undefined;

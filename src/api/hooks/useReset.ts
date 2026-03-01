@@ -37,7 +37,6 @@ export const useReset = (): UseResetOutput => {
    */
   const reset = useCallback(
     async (includeAuth?: boolean) => {
-      console.log("Resetting app...");
       // Reset everything:
       initializationStoreActions.resetApp(includeAuth);
 

@@ -2,7 +2,7 @@ import { ConfigurationDto } from "@models/utility-types/configuration-dto.model"
 import { useGlobalStore } from "../global.store";
 import { GetMenuesResponse } from "@api/axios/configApi";
 
-const setConfigurationParams = async (
+const setConfigurationParams = (
   configurationParamsResponse: ConfigurationDto
 ) => {
   useGlobalStore.setState({
@@ -10,7 +10,7 @@ const setConfigurationParams = async (
   });
 };
 
-const setMenues = async (menuesResponse: GetMenuesResponse) => {
+const setMenues = (menuesResponse: GetMenuesResponse) => {
   useGlobalStore.setState({
     menues: menuesResponse,
   });
@@ -27,7 +27,7 @@ const resetGlobalCss = () =>
     return state;
   });
 
-const resetSlice = async () => {
+const resetSlice = () => {
   useGlobalStore.setState((state) => {
     state.configurationParams = undefined;
     state.menues = undefined;

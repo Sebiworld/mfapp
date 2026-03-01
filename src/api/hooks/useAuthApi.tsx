@@ -2,6 +2,7 @@ import { MFApi } from "@api/axios/mfApi";
 import { UserDto } from "@models/user-dto.model";
 import { authStoreActions } from "@src/store/auth/auth.actions";
 import {
+  selectAccessToken,
   selectCurrentUser,
   selectRefreshToken,
   selectUserHash,
@@ -14,10 +15,11 @@ import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useReset } from "./useReset";
+import { sleep } from "@utils/functions/sleep";
 
 interface UseAuthApiOutput {
   loadUser: () => Promise<UserDto | true | Error>;
-  renewAccess: () => Promise<boolean>;
+  renewAccess: () => Promise<string | false>;
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => Promise<boolean>;
   registration: (
@@ -38,13 +40,11 @@ export const useAuthApi = (): UseAuthApiOutput => {
 
   const userHash = useGlobalStore(selectUserHash);
   const config = useGlobalStore(selectConfigurationParams);
-  const refreshToken = useGlobalStore(selectRefreshToken);
+  const refreshTokenFromStore = useGlobalStore(selectRefreshToken);
+  const accessTokenFromStore = useGlobalStore(selectAccessToken);
   const user = useGlobalStore(selectCurrentUser);
 
   const { reset } = useReset();
-
-  // TODO So weiter:
-  // Login Flow funktioniert nicht richtig. User wird sofort wieder ausgeloggt
 
   const loadUser = useCallback(async (): Promise<UserDto | true | Error> => {
     try {
@@ -71,35 +71,42 @@ export const useAuthApi = (): UseAuthApiOutput => {
       console.error("Error in data fetch:", error);
       return error as Error;
     }
-  }, [userHash]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userHash, accessTokenFromStore]);
 
-  const renewAccess = useCallback(async () => {
-    try {
-      if (!refreshToken) {
-        throw new Error("No refresh token found");
+  const renewAccess = useCallback(
+    async (refreshToken?: string) => {
+      try {
+        const refreshTokenForCall = refreshToken || refreshTokenFromStore;
+        if (!refreshTokenForCall || typeof refreshTokenForCall !== "string") {
+          throw new Error("No refresh token found");
+        }
+
+        const response = await MFApi.loginAccess(refreshTokenForCall);
+        console.log("Access token renewed:", response.data);
+        if (!response.data?.access_token) {
+          throw new Error("No valid access token retrieved");
+        }
+
+        authStoreActions.setAccessToken(
+          response.data.access_token,
+          response.data.refresh_token
+        );
+        await sleep(10);
+
+        await loadUser();
+
+        return response.data.access_token;
+      } catch (error) {
+        console.error("Error while trying to renew access: ", error);
+
+        await reset();
       }
 
-      const response = await MFApi.loginAccess(refreshToken);
-      if (!response.data?.access_token) {
-        throw new Error("No valid access token retrieved");
-      }
-
-      authStoreActions.setAccessToken(
-        response.data.access_token,
-        response.data.refresh_token
-      );
-
-      await loadUser();
-
-      return true;
-    } catch (error) {
-      console.error("Error while trying to renew access: ", error);
-
-      await reset();
-    }
-
-    return false;
-  }, [loadUser, refreshToken, reset]);
+      return false;
+    },
+    [loadUser, refreshTokenFromStore, reset]
+  );
 
   const login = useCallback(
     async (email: string, password: string): Promise<boolean> => {
@@ -110,20 +117,24 @@ export const useAuthApi = (): UseAuthApiOutput => {
 
       try {
         const response = await MFApi.login(email, password);
+        console.log("Login response:", response.data);
 
         if (!response.data?.refresh_token) {
           throw new Error("No valid refresh token retrieved.");
         }
 
-        authStoreActions.setRefreshToken(response?.data?.refresh_token);
-
-        await renewAccess();
+        await renewAccess(response?.data?.refresh_token);
 
         await reset(false);
 
+        const loadedUser = (await loadUser()) as UserDto;
+        if (!loadedUser?.id) {
+          throw new Error("No valid user object found after login.");
+        }
+
         toast.success(
           t("auth.login-successful", {
-            name: user?.nickname || user?.name,
+            name: loadedUser?.nickname || loadedUser?.name,
           })
         );
 
@@ -152,12 +163,13 @@ export const useAuthApi = (): UseAuthApiOutput => {
 
       return false;
     },
-    [config?.disable_login, renewAccess, reset, t, user?.name, user?.nickname]
+    [config?.disable_login, loadUser, renewAccess, reset, t]
   );
 
   const logout = useCallback(async () => {
     try {
       await MFApi.logout();
+
       toast.success(t("auth.logout-successful"));
     } catch (error) {
       console.error("Error while trying to logout: ", error);
@@ -178,6 +190,9 @@ export const useAuthApi = (): UseAuthApiOutput => {
         );
       }
     }
+
+    authStoreActions.resetSlice();
+    await sleep(1000);
 
     await reset();
 

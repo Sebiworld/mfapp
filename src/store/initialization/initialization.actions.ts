@@ -39,15 +39,15 @@ const setAreCookiesAllowed = (value: boolean | null) => {
   });
 };
 
-const resetApp = async (includeAuth?: boolean) => {
+const resetApp = (includeAuth?: boolean) => {
   if (includeAuth !== false) {
-    await authStoreActions.resetSlice();
+    authStoreActions.resetSlice();
   }
 
-  await configurationStoreActions.resetSlice();
-  await pagesStoreActions.resetSlice();
-  await projectsStoreActions.resetSlice();
-  await projectRolesStoreActions.resetSlice();
+  configurationStoreActions.resetSlice();
+  pagesStoreActions.resetSlice();
+  projectsStoreActions.resetSlice();
+  projectRolesStoreActions.resetSlice();
 };
 
 export const initializationStoreActions = {

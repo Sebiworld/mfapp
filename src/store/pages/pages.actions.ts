@@ -4,7 +4,7 @@ import { PageCardDtoWithIndex } from "./pages.store";
 import { isValidObject } from "@utils/functions/isValidObject";
 import { cloneDeep as _cloneDeep } from "lodash";
 
-const addPage = async (path: string, page: PageDtoVariant) => {
+const addPage = (path: string, page: PageDtoVariant) => {
   useGlobalStore.setState((state) => {
     const stateChanges = {
       pages: { ...state.pages, [path]: page },
@@ -14,7 +14,7 @@ const addPage = async (path: string, page: PageDtoVariant) => {
   });
 };
 
-const addPageCards = async (
+const addPageCards = (
   pageCards: PageCardDtoWithIndex[],
   indexData: { indexKey: string; filterHash: string; startIndex: number }
 ) => {
@@ -103,7 +103,7 @@ const addPageCards = async (
   });
 };
 
-const resetPageCards = async (projectId?: number, template?: string) => {
+const resetPageCards = (projectId?: number, template?: string) => {
   if (!projectId && !template) {
     useGlobalStore.setState((state) => {
       state.pageCards = {};
@@ -136,7 +136,7 @@ const resetPageCards = async (projectId?: number, template?: string) => {
   });
 };
 
-const resetSlice = async () => {
+const resetSlice = () => {
   useGlobalStore.setState((state) => {
     state.pages = {};
     state.pageCards = {};

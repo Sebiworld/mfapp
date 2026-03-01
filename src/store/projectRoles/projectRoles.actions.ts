@@ -61,7 +61,7 @@ const setProjectRoles = (
   });
 };
 
-const resetSlice = async () => {
+const resetSlice = () => {
   useGlobalStore.setState((state) => {
     state.roles = {};
     state.casts = {};

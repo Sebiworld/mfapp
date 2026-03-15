@@ -14,7 +14,6 @@ const setUser = (user: UserDto | undefined) => {
 };
 
 const setRefreshToken = (refreshToken: string) => {
-  console.log("Setting refresh token:", { refreshToken });
   useGlobalStore.setState({
     refreshToken,
   });

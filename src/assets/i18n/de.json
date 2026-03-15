@@ -46,8 +46,8 @@
       "description": "Beim Laden der Seite ist ein Fehler aufgetreten."
     },
     "not_found_exception": {
-      "title": "404 Seite nicht gefunden",
-      "description": "Diese Seite konnte leider nicht gefunden werden."
+      "title": "Seite nicht gefunden (404)",
+      "description": "Die angeforderte Seite wurde leider nicht gefunden."
     }
   },
 

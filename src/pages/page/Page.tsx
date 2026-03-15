@@ -1,13 +1,12 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { pageStyles } from "./page.styles";
 // import WarningIcon from "@mui/icons-material/Warning";
-import { useTranslation } from "react-i18next";
 import { useGlobalStore } from "@src/store/global.store";
 import { PageContents } from "./pageContents/PageContents";
 import { ProjectPage } from "./projectPage/ProjectPage";
 import { LoadingOverlay } from "@components/loadingOverlay/LoadingOverlay";
-import { Alert, AlertTitle, Box, Button, Typography } from "@mui/material";
-import { Link, useLocation } from "react-router";
+import { Box } from "@mui/material";
+import { useLocation } from "react-router";
 import { selectPage } from "@src/store/pages/pages.selectors";
 import { SeoHeaders } from "@components/SeoHeaders";
 import { Breadcrumbs } from "@components/breadcrumbs/Breadcrumbs";
@@ -17,24 +16,17 @@ import { PageDtoVariant } from "@models/page/page-dto-variant.model";
 import { isError } from "@utils/functions/isError";
 import { ErrorResponseDto } from "@models/error-response-dto.model";
 import { AxiosError } from "axios";
+import { ErrorCard } from "@components/errorCard/ErrorCard";
 
 export const Page = () => {
   const location = useLocation();
   const currentPath = location.pathname;
-  const { t, i18n } = useTranslation();
   const { loadPage } = usePagesApi();
 
   const [loadResponse, setLoadResponse] = useState<
     PageDtoVariant | true | Error | null
   >(null);
   const [isLoading, setIsLoading] = useState(false);
-  const errorResponse = useMemo(() => {
-    if (!isError(loadResponse)) {
-      return null;
-    }
-
-    return loadResponse as unknown as AxiosError<ErrorResponseDto>;
-  }, [loadResponse]);
 
   const page = useGlobalStore(selectPage(currentPath));
 
@@ -112,47 +104,9 @@ export const Page = () => {
       </ProjectPage>
 
       {isError(loadResponse) && (
-        <Alert
-          // startDecorator={<WarningIcon fontSize="large" />}
-          className="alert"
-          color="error"
-        >
-          <Box className="alert-content">
-            {i18n.exists(`errors.${errorResponse?.code}`) ? (
-              <>
-                <AlertTitle className="alert-title">
-                  {t(`errors.${errorResponse?.code}.title`)}
-                </AlertTitle>
-
-                <Typography className="alert-content">
-                  {t(`errors.${errorResponse?.code}.description`)}
-                </Typography>
-
-                <Box className="alert-footer">
-                  <Button color="light" component={Link} to="/">
-                    {t("actions.back-to-home")}
-                  </Button>
-                </Box>
-              </>
-            ) : (
-              <>
-                <AlertTitle className="alert-title">
-                  {t(`error.default_error.title`)}
-                </AlertTitle>
-
-                <Typography className="alert-content">
-                  {t(`error.default_error.description`)}
-                </Typography>
-
-                <Box className="alert-footer">
-                  <Button color="light" component={Link} to="/">
-                    {t("general.actions.back-to-home")}
-                  </Button>
-                </Box>
-              </>
-            )}
-          </Box>
-        </Alert>
+        <ErrorCard
+          errorResponse={loadResponse as AxiosError<ErrorResponseDto>}
+        />
       )}
 
       <Breadcrumbs items={page?.breadcrumbs}></Breadcrumbs>

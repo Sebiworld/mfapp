@@ -2,7 +2,7 @@ import { SxProps, Theme } from "@mui/material";
 
 export const footerStyles: SxProps<Theme> = (theme) => ({
   position: "relative",
-  marginTop: "64px",
+  marginTop: "72px",
 
   ".mf-logo": {
     width: "200px",

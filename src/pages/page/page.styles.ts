@@ -2,7 +2,7 @@ import { SxProps } from "@mui/material";
 
 export const pageStyles: SxProps = {
   position: "relative",
-  minHeight: "600px",
+  minHeight: "calc(100vh - 600px)",
 
   "&.template-project_role, &.template-project_roles_container, &.template-articles_container":
     {

@@ -83,7 +83,6 @@ export const useAuthApi = (): UseAuthApiOutput => {
         }
 
         const response = await MFApi.loginAccess(refreshTokenForCall);
-        console.log("Access token renewed:", response.data);
         if (!response.data?.access_token) {
           throw new Error("No valid access token retrieved");
         }
@@ -117,7 +116,6 @@ export const useAuthApi = (): UseAuthApiOutput => {
 
       try {
         const response = await MFApi.login(email, password);
-        console.log("Login response:", response.data);
 
         if (!response.data?.refresh_token) {
           throw new Error("No valid refresh token retrieved.");

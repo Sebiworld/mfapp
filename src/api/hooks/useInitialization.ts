@@ -58,7 +58,7 @@ export const useInitialization = (): UseInitializationOutput => {
       return false;
     }
 
-    console.log("isRenewableRequest", error);
+    // console.log("isRenewableRequest", error);
 
     if (error?.response?.data?.errorcode === "access_token_expired") {
       return true;

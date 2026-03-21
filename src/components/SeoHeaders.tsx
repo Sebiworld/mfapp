@@ -114,11 +114,23 @@ export const SeoHeaders: React.FC<SeoHeadersProps> = ({ page }) => {
       };
 
       if (isValidArray(articlePage.authors) && articlePage.authors.length) {
-        output.author = articlePage.authors.map((authorName) => ({
-          "@type": "Person",
-          name: authorName,
-          // TODO: add author url if available
-        }));
+        output.author = articlePage.authors.map((author) => {
+          let name: string = "";
+          if (typeof author === "string") {
+            name = author;
+          } else if (author.first_name || author.last_name) {
+            name =
+              `${author.first_name ?? ""} ${author.last_name ?? ""}`.trim();
+          } else if (author.nickname) {
+            name = author.nickname;
+          }
+
+          return {
+            "@type": "Person",
+            name: name,
+            // TODO: add author url if available
+          };
+        });
       } else {
         output.author = {
           "@type": "Organization",

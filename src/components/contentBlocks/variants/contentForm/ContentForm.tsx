@@ -148,8 +148,10 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
           continue;
         }
 
+        console.log('Field: ', fieldData);
+
         if (fieldData.type === "checkbox") {
-          fieldValidations[fieldData.id] = zod.optional(
+          fieldValidations[fieldData.name] = zod.optional(
             zod.preprocess((value) => {
               return (
                 value === "on" ||
@@ -162,7 +164,7 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
           );
 
           if (fieldData.required) {
-            fieldValidations[fieldData.id] = zod
+            fieldValidations[fieldData.name] = zod
               .preprocess((value) => {
                 return (
                   value === "on" ||
@@ -177,20 +179,20 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
               });
           }
         } else if (fieldData.type === "options") {
-          fieldValidations[fieldData.id] = zod.nullable(
+          fieldValidations[fieldData.name] = zod.nullable(
             zod.array(zod.union([zod.string(), zod.number()]))
           );
 
           if (fieldData.required) {
-            fieldValidations[fieldData.id] = zod
+            fieldValidations[fieldData.name] = zod
               .array(zod.union([zod.string(), zod.number()]))
               .min(1);
           }
         } else {
-          fieldValidations[fieldData.id] = zod.string();
+          fieldValidations[fieldData.name] = zod.string();
 
           if (fieldData.required) {
-            fieldValidations[fieldData.id] = zod
+            fieldValidations[fieldData.name] = zod
               .string()
               // .min(1)
               .superRefine(superRefineIsNotEmpty);
@@ -221,9 +223,9 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
         }
 
         if (fieldData.type === "options" && fieldData.isMultiselect) {
-          output[fieldData.id] = [];
+          output[fieldData.name] = [];
         } else {
-          output[fieldData.id] = "";
+          output[fieldData.name] = "";
         }
       }
     }

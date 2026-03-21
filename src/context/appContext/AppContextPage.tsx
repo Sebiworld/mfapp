@@ -43,12 +43,23 @@ export const AppContextPage: FC<AppContextPageProps> = ({ children }) => {
       return;
     }
 
-    if (!currentUser?.id) {
+    if (
+      !currentUser?.id ||
+      (currentUser.id as unknown) === 40 ||
+      currentUser.id === "40"
+    ) {
       matomo.setUserId(null);
       return;
     }
 
-    matomo.setUserId(currentUser.id);
+    if (typeof currentUser.id === "number") {
+      matomo.setUserId(`${currentUser.id}`);
+      return;
+    }
+
+    matomo.setUserId(
+      typeof currentUser.id === "string" ? currentUser.id : null
+    );
   }, [appContext.matomoInstance, currentUser?.id]);
 
   useEffect(() => {

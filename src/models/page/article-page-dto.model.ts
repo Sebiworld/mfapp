@@ -38,7 +38,15 @@ export interface ArticlePageDto extends PageDto {
   main_image: ImageDto;
   intro: string;
   contents: ContentBlockDtoVariant[];
-  authors: string[];
+  authors: (
+    | {
+        id: number;
+        first_name?: string;
+        last_name?: string;
+        nickname?: string;
+      }
+    | string
+  )[];
   tags: PageDto[];
   detailsLoaded: boolean;
   alerts?: AlertDto[];

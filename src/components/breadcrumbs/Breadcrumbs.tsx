@@ -21,23 +21,32 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = ({ items }) => {
       return;
     }
 
-    const output: WithContext<BreadcrumbList> = {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      itemListElement: items.map((item, index) => {
+    const listItems = items
+      .map((item, index) => {
+        if (!item.httpUrl || !item.viewable) {
+          return null;
+        }
+
         const itemOutput: ListItem = {
           "@type": "ListItem",
           position: index + 1,
           "@id": `${item.id}`,
           name: item.title,
+          item: item.httpUrl,
         };
 
-        if (item.httpUrl && item.viewable) {
-          itemOutput.item = item.httpUrl;
-        }
-
         return itemOutput;
-      }),
+      })
+      .filter((item) => !!item);
+
+    if (!isValidArray(listItems) || !listItems.length) {
+      return;
+    }
+
+    const output: WithContext<BreadcrumbList> = {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: listItems,
     };
 
     return output;

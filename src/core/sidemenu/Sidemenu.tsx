@@ -1,14 +1,31 @@
-import * as React from 'react';
-import Box from '@mui/joy/Box';
-import Drawer from '@mui/joy/Drawer';
-import Input from '@mui/joy/Input';
-import List from '@mui/joy/List';
-import ListItemButton from '@mui/joy/ListItemButton';
-import ModalClose from '@mui/joy/ModalClose';
-import Search from '@mui/icons-material/Search';
-import ThemeSelect from '@components/ThemeSelect';
-import { Stack } from '@mui/joy';
-import { sidemenuStyles } from './sidemenu.styles';
+import * as React from "react";
+import ThemeSelect from "@components/ThemeSelect";
+import { sidemenuStyles } from "./sidemenu.styles";
+import { useTranslation } from "react-i18next";
+import { useGlobalStore } from "@src/store/global.store";
+import {
+  Box,
+  Button,
+  Drawer,
+  IconButton,
+  List,
+  Stack,
+  Typography,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import { isValidArray } from "@utils/functions/isValidArray";
+import { MenueItem } from "./components/MenueItem";
+import { Link as RouterLink } from "react-router";
+import { useCallback, useMemo } from "react";
+import { SectionSpacer } from "@components/sectionSpacer/SectionSpacer";
+import { selectCurrentUser } from "@src/store/auth/auth.selectors";
+import {
+  selectIsLoginActivated,
+  selectMenues,
+} from "@src/store/configuration/configuration.selectors";
+import { AuthCard } from "./components/authCard/AuthCard";
+import { StartupModal } from "@components/modals/startupModal/StartupModal";
+import { MfLogo } from "@components/mfLogo/MfLogo";
 
 export interface SidemenuProps {
   sidemenuOpen: boolean;
@@ -16,64 +33,186 @@ export interface SidemenuProps {
 }
 
 export const Sidemenu = ({ sidemenuOpen, setSidemenuOpen }: SidemenuProps) => {
-  return (
-    <Drawer open={sidemenuOpen} onClose={() => setSidemenuOpen(false)} sx={sidemenuStyles}>
-      <Box className="sidemenu-header">
-        <Stack className="header-left">
-          <ThemeSelect></ThemeSelect>
-        </Stack>
+  const { t } = useTranslation();
+  const currentUser = useGlobalStore(selectCurrentUser);
+  const [isStartupModalOpen, setIsStartupModalOpen] = React.useState(false);
 
-        <Stack className="header-right">
-          <ModalClose id="close-icon" sx={{ position: 'initial' }} />
-        </Stack>
-      </Box>
-      <Input
-        size="sm"
-        placeholder="Search"
-        variant="plain"
-        endDecorator={<Search />}
-        slotProps={{
-          input: {
-            'aria-label': 'Search anything',
-          },
-        }}
-        sx={{
-          m: 3,
-          borderRadius: 0,
-          borderBottom: '2px solid',
-          borderColor: 'neutral.outlinedBorder',
-          '&:hover': {
-            borderColor: 'neutral.outlinedHoverBorder',
-          },
-          '&::before': {
-            border: '1px solid var(--Input-focusedHighlight)',
-            transform: 'scaleX(0)',
-            left: 0,
-            right: 0,
-            bottom: '-2px',
-            top: 'unset',
-            transition: 'transform .15s cubic-bezier(0.1,0.9,0.2,1)',
-            borderRadius: 0,
-          },
-          '&:focus-within::before': {
-            transform: 'scaleX(1)',
-          },
-        }}
-      />
-      <List
-        size="lg"
-        component="nav"
-        sx={{
-          flex: 'none',
-          fontSize: 'xl',
-          '& > div': { justifyContent: 'center' },
-        }}
-      >
-        <ListItemButton sx={{ fontWeight: 'lg' }}>Home</ListItemButton>
-        <ListItemButton>About</ListItemButton>
-        <ListItemButton>Studio</ListItemButton>
-        <ListItemButton>Contact</ListItemButton>
-      </List>
-    </Drawer>
+  const loadedMenues = useGlobalStore(selectMenues);
+  const isLoginActivated = useGlobalStore(selectIsLoginActivated);
+
+  const menueItems = React.useMemo(() => {
+    const items = [];
+
+    if (isValidArray(loadedMenues?.main_navigation)) {
+      items.push(...loadedMenues.main_navigation);
+    }
+
+    if (isValidArray(loadedMenues?.secondary_navigation)) {
+      items.push(...loadedMenues.secondary_navigation);
+    }
+
+    return items;
+  }, [loadedMenues]);
+
+  const closeSidemenu = useCallback(() => {
+    setSidemenuOpen(false);
+  }, [setSidemenuOpen]);
+
+  // TODO: Prüfen, ob initializeConfig richtig eingebunden ist
+  // Neuen Hook einbauen und bei der Initialisierung der App aufrufen
+
+  const footerMode = useMemo(() => {
+    if (!isLoginActivated) {
+      return "logo";
+    }
+
+    if (!currentUser?.isLoggedIn) {
+      return "login";
+    }
+
+    if (!currentUser?.roles?.some((role) => role?.name === "vereinsmitglied")) {
+      return "mitglied-werden";
+    }
+
+    return "logo";
+  }, [isLoginActivated, currentUser?.isLoggedIn, currentUser?.roles]);
+
+  const versionNumber = useMemo(() => {
+    return __VERSION__;
+  }, []);
+
+  return (
+    <>
+      <Drawer open={sidemenuOpen} onClose={closeSidemenu} sx={sidemenuStyles}>
+        <Box className="sidemenu-header">
+          <Stack className="header-left">
+            <ThemeSelect></ThemeSelect>
+          </Stack>
+
+          <Stack className="header-right">
+            <IconButton
+              id="close-icon"
+              sx={{ position: "initial" }}
+              onClick={closeSidemenu}
+            >
+              <CloseIcon></CloseIcon>
+            </IconButton>
+          </Stack>
+        </Box>
+
+        <Box className="sidemenu-subheader">
+          <AuthCard
+            user={currentUser}
+            setSidemenuOpen={setSidemenuOpen}
+          ></AuthCard>
+        </Box>
+
+        <Box className="sidemenu-content">
+          {!!menueItems?.length && (
+            <Box className="nav-container">
+              <Typography className="nav-title">
+                {t("sidemenu.menu")}
+              </Typography>
+
+              <List component="nav" className="navigation-list">
+                {/* <ListItem>
+                  <ListItemButton
+                    component={NavLink}
+                    to="/shop"
+                    disabled
+                    onClick={closeSidemenu}
+                  >
+                    Merch-Shop
+                  </ListItemButton>
+                </ListItem>
+
+                <ListItem>
+                  <ListItemButton
+                    component={NavLink}
+                    to="/events"
+                    disabled
+                    onClick={closeSidemenu}
+                  >
+                    Probenplan
+                  </ListItemButton>
+                </ListItem> */}
+
+                {menueItems.map((item) => (
+                  <MenueItem
+                    key={item.id}
+                    item={item}
+                    onClick={closeSidemenu}
+                  ></MenueItem>
+                ))}
+              </List>
+            </Box>
+          )}
+        </Box>
+
+        <Box className={`sidemenu-footer mode-${footerMode}`}>
+          {footerMode === "login" && (
+            <>
+              <Typography variant="h5">Mitgliederbereich</Typography>
+
+              <Typography variant="body2">
+                Jetzt anmelden und die Mitgliederfunktionen nutzen!
+              </Typography>
+
+              <Button
+                variant="contained"
+                size="small"
+                fullWidth
+                color="primary"
+                onClick={() => {
+                  setIsStartupModalOpen(true);
+                  // setSidemenuOpen(false);
+                }}
+              >
+                {t("auth.login")}
+              </Button>
+            </>
+          )}
+
+          {footerMode === "mitglied-werden" && (
+            <Button
+              variant="contained"
+              color="primary"
+              size="medium"
+              component={RouterLink}
+              to={{ pathname: "/", hash: "#mitglied-werden" }}
+              onClick={closeSidemenu}
+            >
+              {t("footer.cta")}
+            </Button>
+          )}
+
+          {footerMode === "logo" && (
+            <Box
+              className="logo-container"
+              component={RouterLink}
+              to="/"
+              onClick={closeSidemenu}
+            >
+              <MfLogo layout="vertical"></MfLogo>
+            </Box>
+          )}
+
+          {!!versionNumber && (
+            <Box className="version-number">v{versionNumber}</Box>
+          )}
+
+          <SectionSpacer
+            logo={footerMode !== "logo" ? "wide" : undefined}
+            position="top"
+          ></SectionSpacer>
+        </Box>
+      </Drawer>
+
+      {!!isStartupModalOpen && (
+        <StartupModal
+          setIsStartupModalOpen={setIsStartupModalOpen}
+        ></StartupModal>
+      )}
+    </>
   );
 };

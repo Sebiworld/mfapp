@@ -1,0 +1,74 @@
+import { splashScreenStyles } from "./splashScreen.styles";
+import { ReactNode, useEffect, useState } from "react";
+import { MfLogo } from "@components/mfLogo/MfLogo";
+import { useTranslation } from "react-i18next";
+import { Box, LinearProgress, Paper, Typography } from "@mui/material";
+import { RemoveScroll } from "react-remove-scroll";
+
+export interface SplashScreenProps {
+  visible?: boolean;
+  showProgressBar?: boolean;
+  message?: ReactNode;
+}
+
+// Number of currently available loading-messages
+const numberOfMessages = 22;
+
+export const SplashScreen = ({
+  visible,
+  showProgressBar,
+  message,
+}: SplashScreenProps) => {
+  const [messageNumber, setMessageNumber] = useState<number>(1);
+  const { t } = useTranslation();
+
+  useEffect(() => {
+    if (!message) {
+      return;
+    }
+
+    const timer = setInterval(() => {
+      setMessageNumber((prev) => {
+        if (prev >= numberOfMessages || prev <= 0) {
+          return 1;
+        }
+        return prev + 1;
+      });
+    }, 5000);
+
+    return () => {
+      if (timer) {
+        clearInterval(timer);
+      }
+    };
+  }, [message]);
+
+  if (!visible) {
+    return;
+  }
+
+  return (
+    <RemoveScroll>
+      <Paper
+        className="splash-screen"
+        data-testid="splash-screen"
+        sx={splashScreenStyles}
+      >
+        <Box className="logo-container">
+          <MfLogo layout="vertical"></MfLogo>
+          {showProgressBar !== false && (
+            <LinearProgress className="progressbar" />
+          )}
+        </Box>
+
+        <Box className="message-container">
+          {message || (
+            <Typography className="loading-message">
+              {t(`splash.${messageNumber}`)}
+            </Typography>
+          )}
+        </Box>
+      </Paper>
+    </RemoveScroll>
+  );
+};

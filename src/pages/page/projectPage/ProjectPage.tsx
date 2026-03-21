@@ -1,0 +1,163 @@
+import { PageDtoVariant } from "@models/page/page-dto-variant.model";
+import { projectPageStyles } from "./projectPage.styles";
+import { useGlobalStore } from "@src/store/global.store";
+import { useEffect, useMemo } from "react";
+import { ProjectSidebar } from "./projectSidebar/ProjectSidebar";
+import { Box, Paper, SxProps, Theme, Typography } from "@mui/material";
+import {
+  selectProjectCssVars,
+  selectProjectPageDetails,
+} from "@src/store/projects/projects.selectors";
+import { LazyPicture } from "@components/lazyPicture/LazyPicture";
+import { Link } from "react-router";
+import { useShallow } from "zustand/shallow";
+import { Alerts } from "@components/alerts/Alerts";
+import { AlertDto } from "@models/utility-types/alert-dto.model";
+import { isValidArray } from "@utils/functions/isValidArray";
+import { configurationStoreActions } from "@src/store/configuration/configuration.actions";
+import { useProjectsApi } from "@api/hooks/useProjectsApi";
+import { parseHtml } from "@utils/functions/parseHtml";
+
+export interface ProjectPageProps {
+  page?: PageDtoVariant;
+  children?: React.ReactNode;
+}
+
+export const ProjectPage: React.FC<ProjectPageProps> = ({ page, children }) => {
+  const { loadProjectDetails } = useProjectsApi();
+
+  const projectPage = useGlobalStore(
+    selectProjectPageDetails(page?.project_id)
+  );
+
+  const cssVars = useGlobalStore(
+    useShallow(selectProjectCssVars(page?.project_id))
+  );
+
+  useEffect(() => {
+    if (cssVars) {
+      configurationStoreActions.setGlobalCss(cssVars);
+    }
+
+    return () => {
+      configurationStoreActions.resetGlobalCss();
+    };
+  }, [cssVars]);
+
+  useEffect(() => {
+    if (!projectPage?.id) {
+      return;
+    }
+
+    loadProjectDetails(projectPage.id);
+  }, [loadProjectDetails, projectPage?.id]);
+
+  const pageStyles = useMemo((): SxProps<Theme> => {
+    if (!cssVars) {
+      return projectPageStyles;
+    }
+
+    return [projectPageStyles, cssVars];
+  }, [cssVars]);
+
+  const alerts = useMemo(() => {
+    const output: AlertDto[] = [];
+
+    if (isValidArray(projectPage?.alerts) && projectPage.alerts.length) {
+      output.push(...projectPage.alerts);
+    }
+
+    if (isValidArray(page?.alerts) && page.alerts.length) {
+      output.push(...page.alerts);
+    }
+
+    return output;
+  }, [page, projectPage]);
+
+  const title = useMemo(() => {
+    if (!projectPage?.title) {
+      return null;
+    }
+
+    return parseHtml(projectPage.title);
+  }, [projectPage]);
+
+  const infoOverlay = useMemo(() => {
+    if (!projectPage?.info_overlay) {
+      return null;
+    }
+
+    return parseHtml(projectPage.info_overlay);
+  }, [projectPage]);
+
+  const shortDescription = useMemo(() => {
+    if (!projectPage?.short_description) {
+      return null;
+    }
+
+    return parseHtml(projectPage.short_description);
+  }, [projectPage]);
+
+  if (!projectPage?.id) {
+    return (
+      <>
+        {!!alerts?.length && <Alerts alerts={alerts}></Alerts>}
+        {children}
+      </>
+    );
+  }
+
+  return (
+    <Box className="project-page" data-testid="project-page" sx={pageStyles}>
+      <Box className="project-header" data-testid="project-header">
+        <Box
+          className="main-image aspect-ratio ar-3-1"
+          component={Link}
+          to={projectPage.url}
+        >
+          <LazyPicture
+            image={projectPage.main_image}
+            className="ar-content"
+          ></LazyPicture>
+        </Box>
+
+        <Box className="project-subheader">
+          {projectPage?.info_overlay && (
+            <Paper color="projectPrimary" className="project-teaser">
+              {infoOverlay}
+            </Paper>
+          )}
+
+          <Box className="project-meta">
+            <Typography className="project-title" variant="h3">
+              {title}
+            </Typography>
+
+            {projectPage.short_description && (
+              <Typography className="project-description">
+                {shortDescription}
+              </Typography>
+            )}
+          </Box>
+
+          <Box className="project-menu empty"></Box>
+        </Box>
+      </Box>
+
+      <Box className="layout-wrapper">
+        <Box className="project-sidebar-wrapper">
+          <ProjectSidebar project={projectPage}></ProjectSidebar>
+        </Box>
+
+        <Box
+          className="project-main-content"
+          data-testid="project-main-content"
+        >
+          {!!alerts?.length && <Alerts alerts={alerts}></Alerts>}
+
+          {children}
+        </Box>
+      </Box>
+    </Box>
+  );
+};

@@ -1,0 +1,16 @@
+import { TemplateDto } from "@models/template-dto.model";
+
+export interface BasicPageDto {
+  id: number;
+  name: string;
+  language: string;
+  url: string;
+  urls?: { [key: string]: string };
+  httpUrl: string;
+  template: TemplateDto;
+  created: number;
+  modified: number;
+  title: string;
+  project_id?: number;
+  hash?: string;
+}

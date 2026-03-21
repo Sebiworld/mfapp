@@ -1,0 +1,22 @@
+import { ImageDto } from "@models/image-dto.model";
+import { ProjectRoleDto } from "./project-role-dto.model";
+
+export interface ProjectPortraitDto {
+  id: number;
+  name: string;
+  url?: string;
+  httpUrl?: string;
+  main_image?: ImageDto;
+  first_name?: string;
+  last_name?: string;
+  title: string;
+  title_separable?: string;
+  intro?: string;
+  user_account_ids?: number[];
+  portrait_mode?: string;
+  hash?: string;
+}
+
+export interface ProjectPortraitWithRoles extends ProjectPortraitDto {
+  projectRoles: ProjectRoleDto[];
+}

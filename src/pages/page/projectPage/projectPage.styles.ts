@@ -1,0 +1,165 @@
+import { Theme } from "@mui/material";
+import { SystemStyleObject } from "@mui/system";
+
+export const projectPageStyles = (theme: Theme): SystemStyleObject<Theme> => ({
+  ".project-header": {
+    gridArea: "header",
+
+    ".main-image": {
+      display: "flex",
+      flexDirection: "column",
+      maxWidth: "100%",
+      width: "1600px",
+
+      ".MuiAspectRatio-root": {
+        border: "0 none",
+        borderRadius: 0,
+      },
+    },
+
+    ".project-subheader": {
+      position: "relative",
+      // minHeight: "90px",
+      paddingTop: "20px",
+      // margin: "0 32px",
+      paddingLeft: "32px",
+      paddingRight: "32px",
+      display: "flex",
+      flexDirection: "column",
+      gap: "4px",
+
+      [theme.breakpoints.down("md")]: {
+        paddingLeft: "80px",
+        paddingRight: "80px",
+      },
+
+      [theme.breakpoints.down("sm")]: {
+        paddingLeft: "40px",
+        paddingRight: "40px",
+      },
+
+      ".project-menu": {
+        display: "flex",
+        flexDirection: "row",
+        gap: "16px",
+        // marginTop: "16px",
+
+        "&.empty": {
+          display: "none",
+        },
+      },
+    },
+
+    ".project-teaser": {
+      display: "block",
+
+      [theme.breakpoints.down("md")]: {
+        backgroundColor: "transparent",
+        boxShadow: "none",
+        backgroundImage: "none",
+      },
+    },
+  },
+
+  ".layout-wrapper": {
+    position: "relative",
+    display: "block",
+    width: "100%",
+  },
+
+  ".project-sidebar-wrapper": {
+    position: "relative",
+
+    ".project-sidebar": {
+      position: "relative",
+
+      [theme.breakpoints.down("md")]: {
+        marginLeft: "64px",
+        marginRight: "64px",
+      },
+
+      [theme.breakpoints.down("sm")]: {
+        marginLeft: "24px",
+        marginRight: "24px",
+      },
+    },
+  },
+
+  ".project-title": {
+    fontSize: "32px",
+    lineHeight: "1.0",
+    fontWeight: 700,
+  },
+
+  ".project-main-content": {
+    position: "relative",
+  },
+
+  ".section": {
+    ".section-title.section-title": {
+      fontSize: "28px",
+      paddingLeft: "16px",
+      paddingRight: "16px",
+    },
+  },
+
+  [theme.breakpoints.up("sm")]: {
+    ".project-subheader.project-subheader": {
+      flexDirection: "row",
+    },
+  },
+
+  [theme.breakpoints.up("md")]: {
+    ".layout-wrapper.layout-wrapper": {
+      display: "flex",
+      flexDirection: "row",
+      maxWidth: "100%",
+    },
+
+    ".project-sidebar-wrapper": {
+      padding: "20px 0",
+      width: "550px",
+      maxWidth: "33%",
+      flexGrow: 0,
+      flexShrink: 0,
+      marginRight: "-2px",
+      zIndex: 1,
+    },
+
+    ".project-subheader.project-subheader.project-subheader": {
+      flexDirection: "row",
+      paddingTop: "42px",
+      paddingLeft: "0",
+      paddingRight: "0",
+
+      ".project-teaser.project-teaser": {
+        position: "absolute",
+        display: "block",
+        top: "-28px",
+        left: 0,
+        padding: "16px",
+        backgroundColor: theme.vars.palette.projectPrimary.main,
+        color: theme.vars.palette.projectPrimary.contrastText,
+        borderRadius: 0,
+      },
+
+      ".project-meta": {
+        padding: "20px 40px",
+        width: "550px",
+        maxWidth: "33%",
+        flexGrow: 0,
+        flexShrink: 0,
+        marginRight: "-2px",
+        zIndex: 1,
+        textAlign: "right",
+      },
+    },
+
+    ".project-main-content": {
+      width: "auto",
+      flexGrow: 1,
+      flexShrink: 1,
+      overflowX: "hidden",
+    },
+  },
+});

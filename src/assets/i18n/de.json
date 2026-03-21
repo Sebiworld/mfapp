@@ -1,26 +1,130 @@
 {
+  "general": {
+    "required": "Pflichtfeld",
+    "loading": "Wird geladen...",
+    "no-data": "Keine Daten",
+    "no-selection": "Keine Auswahl",
+    "yes": "Ja",
+    "no": "Nein",
+    "o-clock": "Uhr",
+    "download-progress": "Download-Fortschritt: {{progress}}%",
+    "form-submit-success": "Das Formular wurde erfolgreich abgeschickt.",
+
+    "actions": {
+      "back-to-home": "Zurück zur Startseite",
+      "lets-go": "Los geht's!",
+      "confirm": "Bestätigen",
+      "back": "Zurück",
+      "forward": "Weiter",
+      "cancel": "Abbrechen",
+      "submit": "Abschicken",
+      "to-left": "Nach links",
+      "to-right": "Nach rechts",
+      "close": "Schließen",
+      "done": "Ok",
+      "clear": "Zurücksetzen",
+      "login": "Anmelden",
+      "download": "Herunterladen",
+      "save": "Speichern",
+      "load-more": "Mehr laden"
+    }
+  },
+
+  "error": {
+    "title": "Fehler",
+    "general": "Ein Fehler ist aufgetreten",
+    "general_label_x": "Fehler: {{x}}",
+    "general_message_code": "Ein Fehler ist aufgetreten. {{message}} [Fehlercode {{code}}]",
+    "form_checkbox_required": "Bitte bestätigen.",
+
+    "form_error": {
+      "title": "Formularfehler",
+      "description": "Einige Formularfelder wurden nicht richtig ausgefüllt."
+    },
+    "default_error": {
+      "title": "Fehler",
+      "description": "Beim Laden der Seite ist ein Fehler aufgetreten."
+    },
+    "not_found_exception": {
+      "title": "Seite nicht gefunden (404)",
+      "description": "Die angeforderte Seite wurde leider nicht gefunden."
+    }
+  },
+
   "languages": {
     "label": "Sprachen"
   },
-  "not-found": {
-    "title": "404 Seite nicht gefunden",
-    "description": "Diese Seite konnte leider nicht gefunden werden.",
-    "back-to-home": "Zurück zur Startseite"
+
+  "splash": {
+    "1": "Die Website wird initialisiert...",
+    "2": "Projekte werden geladen...",
+    "3": "Inhalte werden abgerufen...",
+    "4": "Musicals werden geschrieben...",
+    "5": "Kostüme werden geschneidert...",
+    "6": "Kabel werden verlegt...",
+    "7": "Lieder werden komponiert...",
+    "8": "Instrumente werden warmgespielt...",
+    "9": "Kulissen werden bemalt...",
+    "10": "Tänzer werden eingetanzt...",
+    "11": "Stühle werden gerückt...",
+    "12": "Stühle werden wieder entfernt, weil die Technik aufgebaut werden muss...",
+    "13": "Stühle werden erneut gerückt...",
+    "14": "Soundcheck wird gemacht...",
+    "15": "Darsteller werden geschminkt...",
+    "16": "Darsteller werden eingekleidet...",
+    "17": "Töne werden gefunden...",
+    "18": "App wird programmiert...",
+    "19": "Witze werden eingefügt...",
+    "20": "Server werden aufgetankt...",
+    "21": "System wird defragmentiert...",
+    "22": "Bits werden geschubst"
   },
+
+  "auth": {
+    "login": "Anmelden",
+    "login-successful": "Du bist jetzt eingeloggt. Herzlich Willkommen, {{name}}",
+    "login-error": "Die Anmeldung ist fehlgeschlagen. [Fehlercode {{code}}]",
+    "logout": "Abmelden",
+    "logout-successful": "Du bist jetzt ausgeloggt.",
+    "logout-error": "Die Abmeldung ist fehlgeschlagen. [Fehlercode {{code}}]",
+    "registration-successful": "Deine Registrierung wurde abgeschickt. Bitte halte in deinem Email-Postfach nach unserer Bestätigungs-Email Ausschau!",
+    "registration-error": "Die Registrierung ist fehlgeschlagen. [Fehlercode {{code}}]",
+    "registration-confirm-successful": "Deine Registrierung war erfolgreich. Du kannst dich jetzt mit deiner Emailadresse und dem gewählten Passwort anmelden. Es kann allerdings ein paar Tage dauern, bis auch deine Benutzerrollen für die Projekte richtig angelegt sind. Sobald das geschafft ist, hast du auch Zugriff auf die Mitwirkenden-Bereiche der ensprechenden Projekte.",
+    "registration-confirm-error": "Die Registrierung konnte nicht abgeschlossen werden. [Fehlercode {{code}}]"
+  },
+
+  "sidemenu": {
+    "home": "Startseite",
+    "settings": "Einstellungen",
+    "menu": "Menü"
+  },
+
   "footer": {
     "cta": "Werden Sie Mitglied!",
     "description": "Jetzt Vereinsmitglied werden, die Ziele unterstützen und das nächste Musical-Projekt fördern.",
     "external": "Besuchen Sie uns auch hier:",
     "by": "Entwickelt mit <heart/> von <a>Sebastian Schendel</a>",
-    "copyright": "© 2023"
+    "copyright": "Copyright 2012 - {{year}} Musical-Fabrik e.V."
   },
+
+  "page": {
+    "published-on": "Veröffentlicht am <time datetime='{{date_raw}}' class='publish-date'>{{date}}</time>",
+    "published-on-by": "Veröffentlicht am <time datetime='{{date_raw}}' class='publish-date'>{{date}}</time> von <strong class='authors'>{{authors}}</strong>"
+  },
+
   "home": {
     "title": "Home",
     "menu": "Home"
   },
+
+  "role": {
+    "available-position": "Zu besetzen"
+  },
+
   "user": {
     "title": "Deine Benutzereinstellungen"
   },
+
   "calendar": {
     "title": "Kalender",
     "menu": "Kalender",
@@ -55,8 +159,10 @@
   "news": {
     "title": "Neuigkeiten",
     "menu": "Neuigkeiten",
-    "view-archive": "Archiv ansehen"
+    "view-archive": "Archiv ansehen",
+    "see-all": "Alle Neuigkeiten ansehen"
   },
+
   "settings": {
     "title": "Einstellungen",
     "menu": "Einstellungen",
@@ -66,26 +172,57 @@
     "auto": "automatisch",
     "save": "speichern"
   },
-  "page-card": {
-    "btn-more": "Mehr dazu..."
+
+  "page_card": {
+    "facebook_title": "Musical-Fabrik e.V. auf Facebook:",
+    "btn_more": "Mehr dazu...",
+    "btn_more_on_facebook": "Mehr dazu auf Facebook..."
   },
+
+  "project": {
+    "general_data": "Kurzinfos",
+    "events": {
+      "title": "Aufführungen",
+      "get-tickets": "Jetzt Tickets sichern!",
+      "already-passed": "bereits vergangen"
+    },
+    "galleries": {
+      "title": "Galerie",
+      "more": "Mehr Bildergalerien"
+    },
+    "share": "Weitersagen!",
+    "links": "Links",
+    "partners": "Unsere Partner",
+    "sponsors": "Unsere Förderer"
+  },
+
   "startup": {
-    "go": "Los geht's!"
-  },
-  "general": {
-    "required": "Pflichtfeld",
-    "done": "Ok",
-    "cancel": "Abbrechen",
-    "clear": "Zurücksetzen",
-    "loading": "Daten werden geladen",
-    "no-selection": "Keine Auswahl",
-    "yes": "Ja",
-    "no": "Nein",
-    "close": "Schließen"
-  },
-  "errors": {
-    "title": "Fehler:",
-    "not_found": "Daten nicht gefunden.",
-    "event_not_found": "Der Kalender-Eintrag wurde nicht gefunden."
+    "error-no-nickname": "Bitte gib einen Spitznamen an!",
+    "nickname-success": "Danke dir! Herzlich Willkommen, {{name}}!",
+    "error-no-email-password": "Bitte trag deine Email-Adresse und dein Passwort ein.",
+    "email": "Email",
+    "password": "Passwort",
+    "error-wrong-credentials": "Entweder die Email-Adresse oder das Passwort sind nicht korrekt.",
+    "password-repeat": "Passwort wiederholen",
+    "firstname": "Vorname",
+    "lastname": "Nachname",
+    "nickname": "Spitzname",
+    "birthdate": "Geburtstag",
+    "roles": "Rollen",
+
+    "error": {
+      "invalid_email": "Keine valide Email-Adresse",
+      "email_required": "Bitte gib eine Email-Adresse ein!",
+      "password_required": "Bitte gib ein Passwort ein!",
+      "password_min_6_chars": "Das Passwort muss mindestens 6 Zeichen lang sein.",
+      "password_uppercase_letters": "Das Passwort muss Großbuchstaben enthalten",
+      "password_lowercase_letters": "Das Passwort muss Kleinbuchstaben enthalten",
+      "password_numbers": "Das Passwort muss Zahlen enthalten",
+      "passwordrepeat_required": "Bitte wiederhole das eingegebene Passwort.",
+      "passwords_dont_match": "Die beiden eingegebenen Passwörter stimmen nicht überein.",
+      "firstname_required": "Bitte gib deinen Vornamen ein.",
+      "lastname_required": "Bitte gib deinen Nachnamen ein.",
+      "birthdate_required": "Bitte gib deinen Geburtstag ein."
+    }
   }
 }

@@ -7,12 +7,15 @@
     "description": "Diese Seite konnte leider nicht gefunden werden.",
     "back-to-home": "Zurück zur Startseite"
   },
+  "sidemenu": {
+    "menu": "Menü",
+    "settings": "Einstellungen"
+  },
   "footer": {
     "cta": "Werden Sie Mitglied!",
     "description": "Jetzt Vereinsmitglied werden, die Ziele unterstützen und das nächste Musical-Projekt fördern.",
     "external": "Besuchen Sie uns auch hier:",
-    "by": "Entwickelt mit ❤ von <a href='https://www.sebi.dev' target='_blank'>Sebastian Schendel</a>.",
-    "copyright": "© 2023"
+    "by": "Entwickelt mit ❤ von <a href='https://www.sebi.dev' target='_blank'>Sebastian Schendel</a>."
   },
   "home": {
     "title": "Home",

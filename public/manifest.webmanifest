@@ -15,49 +15,49 @@
   "orientation": "any",
   "icons": [
     {
-      "src": "favicons/favicon-72-precomposed.png",
+      "src": "assets/favicons/favicon-72-precomposed.png",
       "sizes": "72x72",
       "type": "image/png",
       "purpose": "maskable any"
     },
     {
-      "src": "favicons/favicon-96.png",
+      "src": "assets/favicons/favicon-96.png",
       "sizes": "96x96",
       "type": "image/png",
       "purpose": "maskable any"
     },
     {
-      "src": "favicons/favicon-120-precomposed.png",
+      "src": "assets/favicons/favicon-120-precomposed.png",
       "sizes": "120x120",
       "type": "image/png",
       "purpose": "maskable any"
     },
     {
-      "src": "favicons/favicon-144-precomposed.png",
+      "src": "assets/favicons/favicon-144-precomposed.png",
       "sizes": "144x144",
       "type": "image/png",
       "purpose": "maskable any"
     },
     {
-      "src": "favicons/favicon-152-precomposed.png",
+      "src": "assets/favicons/favicon-152-precomposed.png",
       "sizes": "152x152",
       "type": "image/png",
       "purpose": "maskable any"
     },
     {
-      "src": "favicons/favicon-192.png",
+      "src": "assets/favicons/favicon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable any"
     },
     {
-      "src": "favicons/icon_xxxxhdpi.png",
+      "src": "assets/favicons/icon_xxxxhdpi.png",
       "sizes": "384x384",
       "type": "image/png",
       "purpose": "maskable any"
     },
     {
-      "src": "favicons/play_store.png",
+      "src": "assets/favicons/play_store.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable any"

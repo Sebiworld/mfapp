@@ -1,15 +1,10 @@
 import { BreadcrumbDto } from "@models/utility-types/breadcrumb-dto.model";
-import {
-  Box,
-  Link,
-  Breadcrumbs as MuiBreadcrumbs,
-  Typography,
-} from "@mui/material";
+import { Box, Breadcrumbs as MuiBreadcrumbs } from "@mui/material";
 import { FC, useMemo } from "react";
 import { breadcrumbsStyles } from "./breadcrumbs.styles";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { BreadcrumbList, ListItem, WithContext } from "schema-dts";
-import { NavLink } from "react-router";
+import { BreadcrumbItem } from "./BreadcrumbItem";
 
 export interface BreadcrumbsProps {
   items?: BreadcrumbDto[];
@@ -56,21 +51,9 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = ({ items }) => {
     <>
       <Box className="breadcrumbs" sx={breadcrumbsStyles}>
         <MuiBreadcrumbs separator="›" aria-label="breadcrumb">
-          {items?.map((item) => {
-            if (item.url && !item.active && item.viewable) {
-              return (
-                <Link
-                  key={item.id}
-                  component={NavLink}
-                  to={{ pathname: item.url }}
-                >
-                  {item.title}
-                </Link>
-              );
-            }
-
-            return <Typography key={item.id}>{item.title}</Typography>;
-          })}
+          {items?.map((item) => (
+            <BreadcrumbItem key={item.id} item={item} />
+          ))}
         </MuiBreadcrumbs>
       </Box>
 

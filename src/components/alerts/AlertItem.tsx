@@ -72,7 +72,7 @@ export const AlertItem: React.FC<AlertItemProps> = ({ alert, action }) => {
     >
       {!!title && <AlertTitle className="alert-title">{title}</AlertTitle>}
 
-      {!!text && <Box className="alert-content">{text}</Box>}
+      {!!text && <Box className="alert-content content-block">{text}</Box>}
     </Alert>
   );
 };

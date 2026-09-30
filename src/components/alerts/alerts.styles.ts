@@ -5,6 +5,7 @@ export const alertsStyles: SxProps<Theme> = {
   flexDirection: "column",
   padding: "20px 32px 0 32px",
   gap: "8px",
+  alignItems: "center",
 
   ".alert-item": {
     "&>.MuiAlert-icon": {
@@ -28,6 +29,22 @@ export const alertsStyles: SxProps<Theme> = {
       "&>p:last-child": {
         marginBottom: 0,
       },
+    },
+
+    "&.width-full": {
+      width: "100%",
+    },
+
+    "&.width-600": {
+      width: "600px",
+    },
+
+    "&.width-800": {
+      width: "800px",
+    },
+
+    "&.width-1000": {
+      width: "1000px",
     },
   },
 };

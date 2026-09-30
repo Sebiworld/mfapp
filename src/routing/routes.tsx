@@ -7,6 +7,11 @@ const Page = React.lazy(() =>
     default: module.Page,
   }))
 );
+const PerformancePage = React.lazy(() =>
+  import("@pages/performancePage/PerformancePage").then((module) => ({
+    default: module.PerformancePage,
+  }))
+);
 const SettingsPage = React.lazy(() =>
   import("@pages/settingsPage/SettingsPage").then((module) => ({
     default: module.SettingsPage,
@@ -35,6 +40,10 @@ export const router = createBrowserRouter([
       {
         path: "secret-code",
         Component: SecretCodePage,
+      },
+      {
+        path: "projekte/:projectName/auffuehrungen/:performanceId",
+        Component: PerformancePage,
       },
       {
         path: "*",

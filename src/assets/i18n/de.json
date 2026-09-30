@@ -184,7 +184,8 @@
     "events": {
       "title": "Aufführungen",
       "get-tickets": "Jetzt Tickets sichern!",
-      "already-passed": "bereits vergangen"
+      "already-passed": "bereits vergangen",
+      "next-performance": "Nächste Aufführung"
     },
     "galleries": {
       "title": "Galerie",
@@ -194,6 +195,23 @@
     "links": "Links",
     "partners": "Unsere Partner",
     "sponsors": "Unsere Förderer"
+  },
+
+  "performance": {
+    "visit": "Zum Besuch",
+    "admission": "Einlass",
+    "time-suffix": "{{time}}\u00a0Uhr",
+    "duration-one": "Dauer ca. 1 Stunde",
+    "duration-other": "Dauer ca. {{hours}} Stunden",
+    "location": "Ort",
+    "route": "Route planen",
+    "directions": "Anfahrt und Parken",
+    "close": "Schließen",
+    "accessibility": "Barrierefreiheit",
+    "visitor-info": "Infos für Besucher",
+    "special": "Besonderes",
+    "past-notice": "Diese Aufführung hat bereits stattgefunden",
+    "roles": "Darsteller"
   },
 
   "startup": {

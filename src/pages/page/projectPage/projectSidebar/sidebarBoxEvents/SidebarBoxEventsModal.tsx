@@ -8,10 +8,12 @@ import { SidebarBoxEvents } from "./SidebarBoxEvents";
 
 export interface SidebarBoxEventsModalProps {
   data?: ProjectEventsData;
+  projectUrl?: string;
 }
 
 export const SidebarBoxEventsModal: React.FC<SidebarBoxEventsModalProps> = ({
   data,
+  projectUrl,
 }) => {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -58,6 +60,7 @@ export const SidebarBoxEventsModal: React.FC<SidebarBoxEventsModalProps> = ({
           <Box className="modal-content">
             <SidebarBoxEvents
               data={data}
+              projectUrl={projectUrl}
               showTitle={false}
               onClose={onClose}
             ></SidebarBoxEvents>

@@ -29,7 +29,10 @@ export const ProjectSidebar: React.FC<ProjectSidebarProps> = ({ project }) => {
 
         <SidebarBoxGalleries data={project?.images}></SidebarBoxGalleries>
 
-        <SidebarBoxEvents data={project?.events}></SidebarBoxEvents>
+        <SidebarBoxEvents
+          data={project?.events}
+          projectUrl={project?.url}
+        ></SidebarBoxEvents>
 
         {/* <SidebarBoxShare data={project?.sharing}></SidebarBoxShare> */}
 
@@ -59,7 +62,10 @@ export const ProjectSidebar: React.FC<ProjectSidebarProps> = ({ project }) => {
           data={project?.images}
         ></SidebarBoxGalleriesModal>
 
-        <SidebarBoxEventsModal data={project?.events}></SidebarBoxEventsModal>
+        <SidebarBoxEventsModal
+          data={project?.events}
+          projectUrl={project?.url}
+        ></SidebarBoxEventsModal>
 
         {/* <SidebarBoxShareModal data={project?.sharing}></SidebarBoxShareModal> */}
 

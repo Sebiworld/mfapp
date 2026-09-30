@@ -11,10 +11,21 @@ export const projectRoleStyles: SxProps<Theme> = (theme) => ({
   },
 
   ".casts-container": {
+    // Equal columns; below the minimum width the container scrolls instead of the page.
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-    paddingLeft: "48px",
-    paddingRight: "48px",
+    gridAutoFlow: "column",
+    gridAutoColumns: "minmax(200px, 1fr)",
+    overflowX: "auto",
+    overscrollBehaviorX: "contain",
+    scrollSnapType: "x proximity",
+    maxWidth: "100%",
+    paddingLeft: "16px",
+    paddingRight: "16px",
+
+    [theme.breakpoints.up("md")]: {
+      paddingLeft: "48px",
+      paddingRight: "48px",
+    },
 
     ".project-role-portraits": {
       width: "100%",
@@ -26,8 +37,16 @@ export const projectRoleStyles: SxProps<Theme> = (theme) => ({
     },
 
     ".cast": {
+      minWidth: 0,
+      scrollSnapAlign: "start",
+
+      "&:not(:first-of-type)": {
+        borderLeft: `1px solid ${theme.palette.contrast[50]}`,
+      },
+
       ".cast-title": {
         textAlign: "center",
+        fontWeight: "bold",
         paddingLeft: "16px",
         paddingRight: "16px",
       },
@@ -36,37 +55,6 @@ export const projectRoleStyles: SxProps<Theme> = (theme) => ({
         paddingLeft: "16px",
         paddingRight: "16px",
         justifyContent: "center",
-      },
-    },
-
-    "&.casts-2": {
-      ".cast": {
-        ".cast-title": {
-          borderLeft: `1px solid ${theme.palette.contrast[50]}`,
-          borderRight: `1px solid ${theme.palette.contrast[50]}`,
-        },
-
-        "&:first-of-type": {
-          ".cast-title": {
-            textAlign: "right",
-            borderLeft: "0 none",
-          },
-
-          ".portraits-container": {
-            justifyContent: "flex-end",
-          },
-        },
-
-        "&:last-of-type": {
-          ".cast-title": {
-            textAlign: "left",
-            borderRight: "0 none",
-          },
-
-          ".portraits-container": {
-            justifyContent: "flex-start",
-          },
-        },
       },
     },
   },

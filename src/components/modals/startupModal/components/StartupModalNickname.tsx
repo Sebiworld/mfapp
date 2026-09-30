@@ -1,4 +1,4 @@
-import { FormEventHandler, useState } from "react";
+import { SubmitEventHandler, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { StartupModalContentProps } from "../StartupModal";
@@ -9,9 +9,6 @@ import { authStoreActions } from "@src/store/auth/auth.actions";
 interface FormElements extends HTMLFormControlsCollection {
   nickname: HTMLInputElement;
 }
-interface NicknameFormElement extends HTMLFormElement {
-  readonly elements: FormElements;
-}
 
 export const StartupModalNickname = ({
   closeModal,
@@ -20,9 +17,10 @@ export const StartupModalNickname = ({
 
   const [nicknameInput, setNicknameInput] = useState("");
 
-  const handleSubmit: FormEventHandler<NicknameFormElement> = (event) => {
+  const handleSubmit: SubmitEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
-    const nickname = event.currentTarget.elements?.nickname?.value;
+    const elements = event.currentTarget.elements as FormElements | undefined;
+    const nickname = elements?.nickname?.value;
     if (!nickname) {
       toast.error(t("startup.error-no-nickname"), {});
       return;

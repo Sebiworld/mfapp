@@ -43,6 +43,9 @@ export const useAuthApi = (): UseAuthApiOutput => {
   const refreshTokenFromStore = useGlobalStore(selectRefreshToken);
   const accessTokenFromStore = useGlobalStore(selectAccessToken);
   const user = useGlobalStore(selectCurrentUser);
+  // Primitive copies keep the registration callbacks stable when only other user fields change.
+  const userName = user?.name;
+  const userNickname = user?.nickname;
 
   const { reset } = useReset();
 
@@ -224,7 +227,7 @@ export const useAuthApi = (): UseAuthApiOutput => {
 
         toast.success(
           t("auth.registration-successful", {
-            name: user?.nickname || user?.name,
+            name: userNickname || userName,
           })
         );
 
@@ -268,7 +271,7 @@ export const useAuthApi = (): UseAuthApiOutput => {
         return false;
       }
     },
-    [t, user?.name, user?.nickname]
+    [t, userName, userNickname]
   );
 
   const registrationConfirm = useCallback(
@@ -284,7 +287,7 @@ export const useAuthApi = (): UseAuthApiOutput => {
 
         toast.success(
           t("auth.registration-confirm-successful", {
-            name: user?.nickname || user?.name,
+            name: userNickname || userName,
           })
         );
       } catch (error) {
@@ -334,7 +337,7 @@ export const useAuthApi = (): UseAuthApiOutput => {
 
       return true;
     },
-    [t, user?.name, user?.nickname]
+    [t, userName, userNickname]
   );
 
   const initialize = useCallback(async () => {

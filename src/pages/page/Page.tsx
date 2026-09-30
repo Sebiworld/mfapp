@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { pageStyles } from "./page.styles";
 // import WarningIcon from "@mui/icons-material/Warning";
 import { useGlobalStore } from "@src/store/global.store";
@@ -23,25 +23,41 @@ export const Page = () => {
   const currentPath = location.pathname;
   const { loadPage } = usePagesApi();
 
-  const [loadResponse, setLoadResponse] = useState<
-    PageDtoVariant | true | Error | null
-  >(null);
-  const [isLoading, setIsLoading] = useState(false);
+  // Every path change starts a new request; only the response to the newest request is kept, so a slower
+  // earlier one (also for the same path, e.g. A -> B -> A) can neither end loading nor overwrite the result.
+  const [request, setRequest] = useState({ path: currentPath, id: 0 });
+
+  if (request.path !== currentPath) {
+    setRequest({ path: currentPath, id: request.id + 1 });
+  }
+
+  const requestId = request.id;
+  const [loadResult, setLoadResult] = useState<{
+    requestId: number;
+    response: PageDtoVariant | true | Error;
+  } | null>(null);
+  const loadResponse = loadResult?.response ?? null;
+  const isLoading = loadResult?.requestId !== requestId;
 
   const page = useGlobalStore(selectPage(currentPath));
 
-  const load = useCallback(async () => {
-    setIsLoading(true);
-
-    const response = await loadPage(currentPath);
-    setLoadResponse(response);
-
-    setIsLoading(false);
-  }, [currentPath, loadPage]);
-
   useEffect(() => {
+    let isCurrent = true;
+
+    const load = async () => {
+      const response = await loadPage(currentPath);
+
+      if (isCurrent) {
+        setLoadResult({ requestId, response });
+      }
+    };
+
     load();
-  }, [currentPath, load]);
+
+    return () => {
+      isCurrent = false;
+    };
+  }, [currentPath, loadPage, requestId]);
 
   // useEffect(() => {
   //   console.log("page", { page });

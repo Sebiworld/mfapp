@@ -1,21 +1,14 @@
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import TrendingFlatIcon from "@mui/icons-material/TrendingFlat";
-import React from "react";
 import { useColorScheme } from "@mui/material/styles";
 import { IconButton, Stack } from "@mui/material";
 
 export default function ThemeSelect() {
   const { mode, setMode } = useColorScheme();
-  const [mounted, setMounted] = React.useState(false);
 
-  // necessary for server-side rendering
-  // because mode is undefined on the server
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
+  // mode stays undefined until the color scheme is known on the client (e.g. without noSsr).
+  if (!mode) {
     return null;
   }
 

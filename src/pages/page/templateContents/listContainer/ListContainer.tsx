@@ -1,6 +1,14 @@
 import { PageCard } from "@components/pageCard/PageCard";
 import { Box, Pagination, PaginationItem } from "@mui/material";
-import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  FC,
+  useCallback,
+  useEffect,
+  useEffectEvent,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useGlobalStore } from "@src/store/global.store";
 import { useShallow } from "zustand/shallow";
 import { Link, useLocation, useSearchParams } from "react-router";
@@ -9,6 +17,7 @@ import { ListContainerPageDto } from "@models/page/list-container-page-dto.model
 import { listContainerStyles } from "./listContainer.styles";
 import { usePagesApi } from "@api/hooks/usePagesApi";
 import { selectPageCards } from "@src/store/pages/pages.selectors";
+import { GetPageListResponse } from "@api/axios/pageApi";
 
 const pageSize = 12;
 
@@ -40,14 +49,22 @@ export const ListContainer: FC<ListContainerProps> = ({ page, templates }) => {
   }, [currentPageNum]);
 
   const offset = useMemo(() => (currentPage - 1) * pageSize, [currentPage]);
+  const projectId = page?.project_id;
+
+  // Callers pass inline arrays; a content key keeps the load effects from re-running on every parent render.
+  const templatesKey = templates ? JSON.stringify(templates) : undefined;
+  const stableTemplates = useMemo<string[] | undefined>(
+    () => (templatesKey ? JSON.parse(templatesKey) : undefined),
+    [templatesKey]
+  );
 
   const items = useGlobalStore(
     useShallow(
       selectPageCards({
-        projectId: page?.project_id,
+        projectId,
         offset,
         limit: pageSize,
-        templates, // Pass the template names for filtering
+        templates: stableTemplates, // Pass the template names for filtering
       })
     )
   );
@@ -57,65 +74,107 @@ export const ListContainer: FC<ListContainerProps> = ({ page, templates }) => {
     return totalCount ? Math.ceil(totalCount / pageSize) : 1;
   }, [totalCount]);
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const loadListHandler = useCallback(
-    async (offset: number = 0, limit: number = pageSize) => {
-      if (isLoading) {
-        return;
-      }
+  // Every change of list or page starts a new request; loading lasts until the newest request has answered,
+  // so an earlier response (also for the same page, e.g. 1 -> 2 -> 1) cannot end it.
+  const requestKey = `${projectId ?? "global"}|${templatesKey ?? ""}|${currentPage}`;
+  const [request, setRequest] = useState({ key: requestKey, id: 0 });
 
-      setIsLoading(true);
+  if (request.key !== requestKey) {
+    setRequest({ key: requestKey, id: request.id + 1 });
+  }
 
-      // Determine the offset for the next request
-      const requestHashes = items
-        .slice(offset, offset + pageSize)
-        .map((item, index) => ({
-          index: index,
-          id: item.id,
-          hash: item.hash,
-        }));
+  const requestId = request.id;
+  const [loadedRequestId, setLoadedRequestId] = useState<number>();
+  const isLoading = loadedRequestId !== requestId;
 
-      const response = await loadPageListItems({
-        projectId: page?.project_id,
-        offset,
-        limit,
-        templates,
-        hashes: requestHashes,
-      });
-      setIsLoading(false);
+  // Reads the cached cards at request time, so they are not a dependency of the load effects.
+  const getRequestHashes = useEffectEvent((requestOffset: number) =>
+    items.slice(requestOffset, requestOffset + pageSize).map((item, index) => ({
+      index: index,
+      id: item.id,
+      hash: item.hash,
+    }))
+  );
 
+  /**
+   * Takes over the total number from a list response and scrolls to the list top.
+   * @param response The API result of a list request; `true` (204) and errors are ignored.
+   */
+  const applyListResponse = useCallback(
+    (response: GetPageListResponse | true | Error) => {
       if (response instanceof Error || response === true) {
         return;
       }
 
       setTotalCount(response.totalNumber);
 
-      scrollToTop();
+      containerRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
     },
-    [isLoading, items, loadPageListItems, page?.project_id, templates]
+    []
   );
 
+  // Meta data (total number) runs in parallel to the page request: a 204 page response carries no totalNumber.
   useEffect(() => {
-    loadListHandler(0, 0); // Load Meta
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    let isCurrent = true;
+
+    const loadMeta = async () => {
+      const response = await loadPageListItems({
+        projectId,
+        offset: 0,
+        limit: 0,
+        templates: stableTemplates,
+        hashes: getRequestHashes(0),
+      });
+
+      if (isCurrent) {
+        applyListResponse(response);
+      }
+    };
+
+    loadMeta();
+
+    return () => {
+      isCurrent = false;
+    };
+  }, [applyListResponse, loadPageListItems, projectId, stableTemplates]);
 
   useEffect(() => {
-    const offset = (currentPage - 1) * pageSize;
-    loadListHandler(offset, pageSize);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage]);
+    let isCurrent = true;
 
-  const scrollToTop = () => {
-    if (!containerRef.current) {
-      return;
-    }
+    const loadListPage = async () => {
+      const response = await loadPageListItems({
+        projectId,
+        offset,
+        limit: pageSize,
+        templates: stableTemplates,
+        hashes: getRequestHashes(offset),
+      });
 
-    containerRef.current.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-  };
+      // A response for a page that is no longer requested is dropped.
+      if (!isCurrent) {
+        return;
+      }
+
+      setLoadedRequestId(requestId);
+      applyListResponse(response);
+    };
+
+    loadListPage();
+
+    return () => {
+      isCurrent = false;
+    };
+  }, [
+    applyListResponse,
+    loadPageListItems,
+    offset,
+    projectId,
+    requestId,
+    stableTemplates,
+  ]);
 
   return (
     <Box className="list-container" sx={listContainerStyles}>

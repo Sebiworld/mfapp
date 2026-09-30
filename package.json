@@ -1,14 +1,17 @@
 {
   "name": "dev.sebi.mfapp2",
   "private": true,
-  "version": "4.1.0",
+  "version": "4.2.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build-preview": "tsc && vite build --mode preview",
-    "build": "tsc && vite build --mode production",
+    "build-preview": "tsc -b && vite build --mode preview",
+    "build": "tsc -b && vite build --mode production",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@capacitor/android": "^8.5.2",
@@ -62,9 +65,11 @@
   "devDependencies": {
     "@capacitor/cli": "^8.4.3",
     "@eslint/js": "^9.39.1",
+    "@playwright/test": "^1.63.0",
     "@storybook/react": "^10.6.0",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
     "@types/blueimp-md5": "^2.18.2",
-    "@types/jest": "^29.5.14",
     "@types/lodash": "^4.17.25",
     "@types/node": "^24.13.6",
     "@types/react": "^19.3.0",
@@ -78,11 +83,13 @@
     "eslint": "^9.39.5",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.4.26",
+    "jsdom": "^29.1.1",
     "sass": "^1.105.0",
     "schema-dts": "^1.1.5",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.70.1",
     "vite": "^7.3.6",
-    "vite-tsconfig-paths": "^5.1.4"
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^5.0.2"
   }
 }

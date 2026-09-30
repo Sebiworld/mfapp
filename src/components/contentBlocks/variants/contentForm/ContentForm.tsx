@@ -67,6 +67,12 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
     }
   );
 
+  // Plain locals so the memo dependencies match exactly what the memo bodies read.
+  const blockId = block?.id;
+  const blockClasses = block?.classes;
+  const formFields = block?.form?.fields;
+  const matomoInstance = appContext?.matomoInstance;
+
   const blockDepth = useMemo(() => {
     if ((block as ContentBlockFormDto)?.depth !== undefined) {
       return (block as ContentBlockFormDto).depth;
@@ -76,7 +82,7 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
   }, [block]);
 
   const classes: string = useMemo(() => {
-    if (!block?.id) {
+    if (!blockId) {
       return "";
     }
 
@@ -86,22 +92,22 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
       output.push(`block-depth-${blockDepth}`);
     }
 
-    if (block.classes && typeof block.classes === "string") {
-      output.push(...block.classes.split(" "));
+    if (blockClasses && typeof blockClasses === "string") {
+      output.push(...blockClasses.split(" "));
     }
 
     return output.join(" ");
-  }, [block?.classes, blockDepth, block?.id]);
+  }, [blockClasses, blockDepth, blockId]);
 
   const groupedFields = useMemo((): FormGroupedElement => {
     const output: FormGroupedElement = { fields: [], type: "group" };
 
-    if (!isValidArray(block?.form?.fields)) {
+    if (!isValidArray(formFields)) {
       return output;
     }
 
     const cursors: FormGroupedElement[] = []; // Is used to hold the current group object when in multi-level groups.
-    for (const fieldData of block.form.fields) {
+    for (const fieldData of formFields) {
       if (!fieldData?.id) {
         continue;
       }
@@ -128,15 +134,15 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
     }
 
     return output;
-  }, [block?.form?.fields]);
+  }, [formFields]);
 
   const validationSchema = useMemo(() => {
     const fieldValidations: { [key: string]: ZodTypeAny } = {
       data: zod.optional(zod.boolean()),
     };
 
-    if (isValidArray(block?.form?.fields)) {
-      for (const fieldData of block.form.fields) {
+    if (isValidArray(formFields)) {
+      for (const fieldData of formFields) {
         if (!fieldData?.id) {
           continue;
         }
@@ -200,15 +206,15 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
     }
 
     return zod.object(fieldValidations);
-  }, [block?.form?.fields, t]);
+  }, [formFields, t]);
 
   type FormData = zod.infer<typeof validationSchema>;
 
   const formDataDefaults: FormData = useMemo(() => {
     const output: FormData = {};
 
-    if (isValidArray(block?.form?.fields)) {
-      for (const fieldData of block.form.fields) {
+    if (isValidArray(formFields)) {
+      for (const fieldData of formFields) {
         if (!fieldData?.id) {
           continue;
         }
@@ -229,7 +235,7 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
     }
 
     return output;
-  }, [block?.form?.fields]);
+  }, [formFields]);
 
   const {
     handleSubmit,
@@ -292,7 +298,7 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
           reward();
         }
 
-        const matomo = appContext?.matomoInstance;
+        const matomo = matomoInstance;
         if (matomo) {
           matomo.trackEvent(
             "form",
@@ -316,7 +322,7 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
       } catch (error) {
         console.error("Api Request error", error);
 
-        const matomo = appContext?.matomoInstance;
+        const matomo = matomoInstance;
         if (matomo) {
           matomo.trackEvent("form", "submit", "error");
         }
@@ -344,7 +350,7 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
       setLoading(false);
     },
     [
-      appContext?.matomoInstance,
+      matomoInstance,
       block.form.form_origin,
       currentPath,
       isRewardAnimating,
@@ -354,12 +360,15 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
     ]
   );
 
+  const formValidationError = formValidationResponse?.error;
+  const formValidationSuccess = formValidationResponse?.success;
+
   const formState = useMemo((): undefined | "error" | "success" => {
-    if (formValidationResponse?.success) {
+    if (formValidationSuccess) {
       return "success";
     }
 
-    if (formValidationResponse?.error) {
+    if (formValidationError) {
       return "error";
     }
 
@@ -371,11 +380,7 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
     }
 
     return undefined;
-  }, [
-    formValidationResponse?.error,
-    formValidationResponse?.success,
-    localFormErrors,
-  ]);
+  }, [formValidationError, formValidationSuccess, localFormErrors]);
 
   const formMessages = useMemo((): FormMessage[] => {
     const output: FormMessage[] = [];
@@ -392,8 +397,8 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
       }
     }
 
-    if (isValidObject(formValidationResponse?.error)) {
-      for (const [key, value] of Object.entries(formValidationResponse.error)) {
+    if (isValidObject(formValidationError)) {
+      for (const [key, value] of Object.entries(formValidationError)) {
         output.push({
           id: key,
           type: "error",
@@ -402,10 +407,8 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
       }
     }
 
-    if (isValidObject(formValidationResponse?.success)) {
-      for (const [key, value] of Object.entries(
-        formValidationResponse.success
-      )) {
+    if (isValidObject(formValidationSuccess)) {
+      for (const [key, value] of Object.entries(formValidationSuccess)) {
         output.push({
           id: key,
           type: "success",
@@ -415,12 +418,7 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
     }
 
     return output;
-  }, [
-    formValidationResponse?.error,
-    formValidationResponse?.success,
-    localFormErrors,
-    t,
-  ]);
+  }, [formValidationError, formValidationSuccess, localFormErrors, t]);
 
   if (!groupedFields?.fields?.length) {
     return null;

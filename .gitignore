@@ -37,3 +37,8 @@ CLAUDE.local.md
 PRODUCT.md
 DESIGN.md
 .impeccable/
+
+# Playwright output
+/test-results/
+/playwright-report/
+/blob-report/

@@ -8,7 +8,7 @@ type PerformanceTimes = Pick<
 /**
  * Computes the admission time of a performance.
  * @param performance Performance with `timestamp` and `admission_minutes`.
- * @returns Unix timestamp in seconds, or `null` when no admission time is set.
+ * @returns Unix timestamp in seconds, or `null` when no admission time is set (missing or 0 minutes).
  */
 export const getAdmissionTimestamp = (
   performance: PerformanceTimes
@@ -19,7 +19,11 @@ export const getAdmissionTimestamp = (
     return null;
   }
 
-  if (typeof minutes !== "number" || !Number.isFinite(minutes) || minutes < 0) {
+  if (
+    typeof minutes !== "number" ||
+    !Number.isFinite(minutes) ||
+    minutes <= 0
+  ) {
     return null;
   }
 

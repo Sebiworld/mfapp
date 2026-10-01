@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, Fragment, useEffect, useMemo, useState } from "react";
 import { useLocation, useParams, Link } from "react-router";
 import { useTranslation } from "react-i18next";
 import { Box, Button, Chip, Paper, Typography } from "@mui/material";
@@ -6,6 +6,11 @@ import { Page } from "@pages/page/Page";
 import { ProjectPage } from "@pages/page/projectPage/ProjectPage";
 import { SeoHeaders } from "@components/SeoHeaders";
 import { ErrorCard } from "@components/errorCard/ErrorCard";
+import { PerformanceFilmstrip } from "@components/performanceFilmstrip/PerformanceFilmstrip";
+import {
+  collectFilmstripItems,
+  FilmstripItem,
+} from "@components/performanceFilmstrip/functions/collectFilmstripItems";
 import { LoadingOverlay } from "@components/loadingOverlay/LoadingOverlay";
 import { usePerformancesApi } from "@api/hooks/usePerformancesApi";
 import { useAppContext } from "@src/context/appContext/useAppContext";
@@ -19,6 +24,7 @@ import { parseHtml } from "@utils/functions/parseHtml";
 import { PerformanceVisitInfo } from "./components/PerformanceVisitInfo";
 import { PerformanceRoles } from "./components/PerformanceRoles";
 import { PerformanceDirections } from "./components/PerformanceDirections";
+import { getPerformanceHeadline } from "./functions/getPerformanceHeadline";
 import {
   getDurationLabel,
   getPerformanceStatus,
@@ -26,6 +32,8 @@ import {
 import { performancePageStyles } from "./performancePage.styles";
 
 const CLOCK_INTERVAL_MS = 30_000;
+/** One shared empty list keeps the filmstrip input stable while nothing is loaded. */
+const NO_FILMSTRIP_ITEMS: FilmstripItem[] = [];
 
 interface LoadResult {
   id: number;
@@ -137,10 +145,22 @@ const PerformanceView: FC<PerformanceViewProps> = ({ performanceId }) => {
     return buildSeoPage(performance, title, location.pathname, description);
   }, [location.pathname, performance, title]);
 
-  const showEventLabel =
-    !!performance?.event?.title &&
-    performance.event.title.trim().toLowerCase() !==
-      performance.title?.trim().toLowerCase();
+  // Built once per loaded performance, so the clock does not repaint the band.
+  const filmstripItems = useMemo(
+    () =>
+      performance ? collectFilmstripItems(performance) : NO_FILMSTRIP_ITEMS,
+    [performance]
+  );
+
+  // Category and title of the performance in one line below the project; when one is missing the other stands alone.
+  const headlineNodes = performance
+    ? getPerformanceHeadline(performance).map((part, index) => (
+        <Fragment key={index}>
+          {index > 0 && " · "}
+          {parseHtml(part)}
+        </Fragment>
+      ))
+    : [];
 
   const durationLabel = performance ? getDurationLabel(performance, t) : null;
   const status = performance ? getPerformanceStatus(performance, now) : null;
@@ -165,31 +185,28 @@ const PerformanceView: FC<PerformanceViewProps> = ({ performanceId }) => {
           >
             <Box component="header" className="performance-header">
               <Typography
-                className="project-link"
-                component={Link}
-                to={performance.project.url}
-                color="inherit"
-              >
-                {parseHtml(performance.project.title)}
-              </Typography>
-
-              {showEventLabel && (
-                <Chip
-                  className="event-label"
-                  data-testid="event-label"
-                  label={performance.event.title}
-                  color="contrast"
-                  size="small"
-                />
-              )}
-
-              <Typography
                 variant="h1"
                 component="h1"
                 className="performance-title"
               >
-                {parseHtml(title)}
+                <Link
+                  className="project-link"
+                  to={performance.project.url}
+                  data-testid="performance-project"
+                >
+                  {parseHtml(performance.project.title)}
+                </Link>
               </Typography>
+
+              {headlineNodes.length > 0 && (
+                <Typography
+                  className="performance-subtitle"
+                  data-testid="performance-subtitle"
+                  component="p"
+                >
+                  {headlineNodes}
+                </Typography>
+              )}
 
               {performance.timestamp !== null && (
                 <Typography className="performance-date">
@@ -234,6 +251,9 @@ const PerformanceView: FC<PerformanceViewProps> = ({ performanceId }) => {
 
                 <PerformanceDirections location={performance.location} />
               </Box>
+
+              {/* Below the actions, so tickets and directions stay right under the date. */}
+              <PerformanceFilmstrip items={filmstripItems} />
             </Box>
 
             <PerformanceVisitInfo performance={performance} />

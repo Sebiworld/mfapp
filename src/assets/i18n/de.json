@@ -182,10 +182,10 @@
   "project": {
     "general_data": "Kurzinfos",
     "events": {
-      "title": "Aufführungen",
+      "title": "Vorstellungen",
       "get-tickets": "Jetzt Tickets sichern!",
       "already-passed": "bereits vergangen",
-      "next-performance": "Nächste Aufführung"
+      "next-performance": "Nächste Vorstellung"
     },
     "galleries": {
       "title": "Galerie",
@@ -210,8 +210,40 @@
     "accessibility": "Barrierefreiheit",
     "visitor-info": "Infos für Besucher",
     "special": "Besonderes",
-    "past-notice": "Diese Aufführung hat bereits stattgefunden",
+    "past-notice": "Diese Vorstellung hat bereits stattgefunden",
     "roles": "Darsteller"
+  },
+
+  "load_error": {
+    "heading": "Da ist etwas schiefgelaufen.",
+    "text": "Wahrscheinlich gibt es gerade eine neue Version. Einmal neu laden, dann geht’s weiter.",
+    "reload": "Neu laden",
+    "home": "Zur Startseite"
+  },
+
+  "next_performance": {
+    "status-before": "Nächste Vorstellung",
+    "status-admission": "Einlass läuft",
+    "status-running": "Die Vorstellung läuft gerade",
+    "admission-from": "Einlass ab {{time}}\u00a0Uhr",
+    "starts-in": "Beginn in",
+    "next-in": "Nächste Vorstellung in",
+    "to-performance": "Infos zur Vorstellung",
+    "tickets": "Tickets",
+    "cast": "Darsteller dieser Vorstellung",
+    "countdown": {
+      "days_one": "Tag",
+      "days_other": "Tage",
+      "hours": "Std",
+      "minutes": "Min",
+      "seconds": "Sek",
+      "days-long_one": "{{count}} Tag",
+      "days-long_other": "{{count}} Tage",
+      "hours-long_one": "{{count}} Stunde",
+      "hours-long_other": "{{count}} Stunden",
+      "minutes-long_one": "{{count}} Minute",
+      "minutes-long_other": "{{count}} Minuten"
+    }
   },
 
   "startup": {

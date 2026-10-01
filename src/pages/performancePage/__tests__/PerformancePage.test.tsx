@@ -9,6 +9,8 @@ import { ProjectRoleDto } from "@models/project-role/project-role-dto.model";
 import { useGlobalStore } from "@src/store/global.store";
 import { projectRolesStoreActions } from "@src/store/projectRoles/projectRoles.actions";
 import { PerformancePage } from "../PerformancePage";
+import { performancePageStyles } from "../performancePage.styles";
+import { nextPerformanceCardStyles } from "@components/nextPerformanceCard/nextPerformanceCard.styles";
 import "@utils/i18n/i18n";
 
 // Runs before the imports so all date formatters are created under a non-Berlin process zone.
@@ -131,11 +133,11 @@ const rolesFor = (list: ProjectRoleDto[]): PerformanceDetailDto["roles"] => ({
   child_ids: [],
 });
 
-const renderPage = (path = "/projekte/annie/auffuehrungen/7") => {
+const renderPage = (path = "/projekte/annie/vorstellungen/7") => {
   const router = createMemoryRouter(
     [
       {
-        path: "projekte/:projectName/auffuehrungen/:performanceId",
+        path: "projekte/:projectName/vorstellungen/:performanceId",
         element: (
           <ThemeProvider
             theme={{ [THEME_ID]: mfTheme }}
@@ -169,6 +171,11 @@ const showWithContainer = async (data: PerformanceDetailDto) => {
   return { container: document.body };
 };
 
+const header = (): HTMLElement =>
+  screen
+    .getByTestId("performance-content")
+    .querySelector("header") as HTMLElement;
+
 const nowAt = (seconds: number, offsetMs = 0): void => {
   vi.setSystemTime(seconds * 1000 + offsetMs);
 };
@@ -190,12 +197,14 @@ describe("PerformancePage", () => {
     it("shows title, Berlin start, casts, ticket button, admission and duration", async () => {
       await show(performance());
 
-      expect(
-        screen.getByRole("heading", { level: 1, name: "Abendvorstellung" })
-      ).toBeInTheDocument();
-      expect(screen.getByRole("link", { name: "Annie" })).toHaveAttribute(
+      const heading = screen.getByRole("heading", { level: 1, name: "Annie" });
+
+      expect(within(heading).getByRole("link")).toHaveAttribute(
         "href",
         "/projekte/annie/"
+      );
+      expect(screen.getByTestId("performance-subtitle")).toHaveTextContent(
+        /^Premiere · Abendvorstellung$/
       );
       expect(
         screen.getByText(
@@ -275,7 +284,7 @@ describe("PerformancePage", () => {
       await show(performance());
 
       expect(screen.getByTestId("past-notice")).toHaveTextContent(
-        "Diese Aufführung hat bereits stattgefunden"
+        "Diese Vorstellung hat bereits stattgefunden"
       );
       expect(screen.queryByTestId("ticket-button")).not.toBeInTheDocument();
     });
@@ -586,17 +595,176 @@ describe("PerformancePage", () => {
     });
   });
 
-  describe("event label", () => {
-    it("shows the event title when it differs from the performance title", async () => {
+  describe("heading", () => {
+    it("leads with the project, then category and title in one line, then the date", async () => {
       await show(performance());
 
-      expect(screen.getByTestId("event-label")).toHaveTextContent("Premiere");
+      const lines = Array.from(header().children).map(
+        (child) => child.className.match(/performance-[a-z]+/)?.[0]
+      );
+
+      expect(lines.slice(0, 3)).toEqual([
+        "performance-title",
+        "performance-subtitle",
+        "performance-date",
+      ]);
+      expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
+      expect(header().querySelector(".event-label")).toBeNull();
     });
 
-    it("hides the event title when it equals the performance title", async () => {
-      await show(performance({ event: { id: 3, title: "abendvorstellung " } }));
+    it("shows only the category when the title is missing", async () => {
+      await show(performance({ title: "" }));
 
-      expect(screen.queryByTestId("event-label")).not.toBeInTheDocument();
+      expect(screen.getByTestId("performance-subtitle")).toHaveTextContent(
+        /^Premiere$/
+      );
+    });
+
+    it("shows only the title when the category is missing", async () => {
+      await show(performance({ event: { id: 3, title: "" } }));
+
+      expect(screen.getByTestId("performance-subtitle")).toHaveTextContent(
+        /^Abendvorstellung$/
+      );
+    });
+
+    it("shows a name that is both category and title once", async () => {
+      await show(performance({ title: "premiere " }));
+
+      expect(screen.getByTestId("performance-subtitle")).toHaveTextContent(
+        /^Premiere$/
+      );
+    });
+
+    it("keeps the date at most as large as the line below the project on small screens", () => {
+      // Cast: the sx object is only read here as a plain tree of selectors.
+      const styles = (
+        performancePageStyles as unknown as (
+          theme: typeof mfTheme
+        ) => Record<string, Record<string, Record<string, unknown>>>
+      )(mfTheme);
+      const headerStyles = styles[".performance-header"];
+      const small = mfTheme.breakpoints.down("sm");
+
+      expect(headerStyles[".performance-subtitle"][small]).toEqual({
+        fontSize: "1rem",
+      });
+      expect(headerStyles[".performance-date"][small]).toEqual({
+        fontSize: "1rem",
+        fontWeight: 400,
+      });
+    });
+
+    it("gives the project title the size of the project title on the card", () => {
+      // Cast: the sx objects are only read here as plain trees of selectors.
+      const styles = (
+        performancePageStyles as unknown as (
+          theme: typeof mfTheme
+        ) => Record<string, Record<string, Record<string, unknown>>>
+      )(mfTheme);
+      const cardStyles = nextPerformanceCardStyles(
+        mfTheme
+      ) as unknown as Record<string, Record<string, Record<string, unknown>>>;
+      const title = styles[".performance-header"][".performance-title"];
+      const cardTitle = cardStyles[".card-info"][".card-title"];
+      const small = mfTheme.breakpoints.down("sm");
+
+      expect(title.fontSize).toBe("clamp(1.75rem, 4vw, 2.5rem)");
+      expect(title[small]).toEqual({ fontSize: "1.5rem" });
+      expect(title.fontSize).toBe(cardTitle.fontSize);
+      expect(title[small]).toEqual(cardTitle[small]);
+    });
+  });
+
+  describe("filmstrip", () => {
+    it("runs the people on stage in the header below the date and keeps the grid", async () => {
+      await show(
+        performance({
+          roles: rolesFor([
+            role({
+              id: 11,
+              title: "Grace",
+              participants: [{ portrait_ids: [1, 2], cast_ids: [100] }],
+            }),
+          ]),
+        })
+      );
+
+      const filmstrip = screen.getByTestId("filmstrip");
+      const date = header().querySelector(".performance-date") as Node;
+
+      expect(header()).toContainElement(filmstrip);
+      // Tickets and directions come first, the band follows them.
+      expect(
+        screen.getByTestId("ticket-button").compareDocumentPosition(filmstrip) &
+          Node.DOCUMENT_POSITION_FOLLOWING
+      ).toBeTruthy();
+      expect(header().lastElementChild).toBe(filmstrip);
+      expect(
+        date.compareDocumentPosition(filmstrip) &
+          Node.DOCUMENT_POSITION_FOLLOWING
+      ).toBeTruthy();
+      expect(
+        within(filmstrip)
+          .getAllByTestId("filmstrip-tile")
+          .filter((tile) => tile.dataset.reachable === "true")
+          .map((tile) => tile.querySelector(".filmstrip-name")?.textContent)
+      ).toEqual(["Anna A", "Berta B"]);
+      expect(
+        within(screen.getByTestId("performance-roles")).getAllByTestId(
+          "project-role-portrait"
+        )
+      ).toHaveLength(2);
+      // The page's own data feeds the band; the performance is not loaded a second time.
+      expect(loadPerformance).toHaveBeenCalledTimes(1);
+    });
+
+    it("takes the place of the actions when there are none", async () => {
+      await show(
+        performance({
+          ticket_url: null,
+          roles: rolesFor([
+            role({
+              id: 11,
+              participants: [{ portrait_ids: [1], cast_ids: [100] }],
+            }),
+          ]),
+        })
+      );
+
+      const actions = header().querySelector(".header-actions") as Element;
+
+      expect(actions.children).toHaveLength(0);
+      expect(actions.nextElementSibling).toBe(screen.getByTestId("filmstrip"));
+    });
+
+    it("is shown before admission too", async () => {
+      nowAt(START, -30 * 86_400_000);
+      await show(
+        performance({
+          roles: rolesFor([
+            role({
+              id: 11,
+              participants: [{ portrait_ids: [1], cast_ids: [100] }],
+            }),
+          ]),
+        })
+      );
+
+      expect(screen.getByTestId("filmstrip")).toBeInTheDocument();
+    });
+
+    it("is left out without people on stage", async () => {
+      await show(
+        performance({
+          roles: rolesFor([
+            role({ id: 11, participants: [{ portrait_ids: [1] }] }),
+          ]),
+        })
+      );
+
+      expect(screen.getByTestId("performance-roles")).toBeInTheDocument();
+      expect(screen.queryByTestId("filmstrip")).not.toBeInTheDocument();
     });
   });
 
@@ -617,7 +785,7 @@ describe("PerformancePage", () => {
     });
 
     it("hands non-numeric ids to the generic page renderer", async () => {
-      renderPage("/projekte/annie/auffuehrungen/programm");
+      renderPage("/projekte/annie/vorstellungen/programm");
 
       expect(await screen.findByTestId("generic-page")).toBeInTheDocument();
       expect(loadPerformance).not.toHaveBeenCalled();
@@ -649,7 +817,9 @@ describe("PerformancePage", () => {
         })
       );
 
-      expect(screen.getByText("Anna A")).toBeInTheDocument();
+      expect(
+        within(screen.getByTestId("performance-roles")).getByText("Anna A")
+      ).toBeInTheDocument();
 
       const stored = useGlobalStore.getState().roles[11];
       expect(stored.hash).toBe("stored");

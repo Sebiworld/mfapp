@@ -10,7 +10,7 @@ import { CastDto, CategoryDto, SeasonDto } from "./performance-dto.model";
 export interface PerformanceLocationDto {
   id: number;
   title: string;
-  /** HTML without an outer paragraph. */
+  /** HTML, paragraphs included. */
   address?: string | null;
   lat?: number | string | null;
   lng?: number | string | null;

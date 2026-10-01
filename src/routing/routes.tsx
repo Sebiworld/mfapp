@@ -1,4 +1,5 @@
 import { App } from "@src/App";
+import { ErrorPage } from "@core/errorPage/ErrorPage";
 import React from "react";
 import { createBrowserRouter } from "react-router";
 
@@ -27,6 +28,7 @@ export const router = createBrowserRouter([
   {
     path: "/",
     Component: App,
+    ErrorBoundary: ErrorPage,
 
     children: [
       {
@@ -42,7 +44,7 @@ export const router = createBrowserRouter([
         Component: SecretCodePage,
       },
       {
-        path: "projekte/:projectName/auffuehrungen/:performanceId",
+        path: "projekte/:projectName/vorstellungen/:performanceId",
         Component: PerformancePage,
       },
       {

@@ -10,6 +10,7 @@ import { isValidArray } from "@utils/functions/isValidArray";
 import { FC, useMemo } from "react";
 import { ProjectRolePortraitActionWrapper } from "./ProjectRolePortraitActionWrapper";
 import { parseHtml } from "@utils/functions/parseHtml";
+import { getSeparableTitle } from "@utils/functions/getSeparableTitle";
 import { ProjectRolePortraitDescriptionItem } from "./ProjectRolePortraitDescriptionItem";
 
 const placeholderPathsMale = [
@@ -46,12 +47,10 @@ export const ProjectRolePortrait: FC<ProjectRolePortraitProps> = ({
       return "";
     }
 
-    if (portrait.title_separable) {
-      return parseHtml(portrait.title_separable.replaceAll("_", "&shy;"));
-    }
+    const separableTitle = getSeparableTitle(portrait);
 
-    if (portrait.title) {
-      return parseHtml(portrait.title);
+    if (separableTitle) {
+      return parseHtml(separableTitle);
     }
 
     return "";

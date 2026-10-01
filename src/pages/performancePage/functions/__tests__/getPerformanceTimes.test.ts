@@ -20,6 +20,16 @@ describe("getAdmissionTimestamp", () => {
     ).toBe(START - 3600);
   });
 
+  it("returns null for 0 minutes, like a missing admission", () => {
+    expect(
+      getAdmissionTimestamp({
+        timestamp: START,
+        timestamp_until: null,
+        admission_minutes: 0,
+      })
+    ).toBeNull();
+  });
+
   it("returns null when no admission is set", () => {
     expect(
       getAdmissionTimestamp({

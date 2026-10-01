@@ -10,14 +10,16 @@ test("performance page of the seed performance loads from the project sidebar", 
   await link.click();
 
   await expect(page).toHaveURL(
-    /\/projekte\/test-fixture-project\/auffuehrungen\/\d+$/
+    /\/projekte\/test-fixture-project\/vorstellungen\/\d+$/
   );
 
   const content = page.getByTestId("performance-content");
   await expect(content).toBeVisible();
-  await expect(
-    content.getByRole("heading", { level: 1, name: "Test Fixture Performance" })
-  ).toBeVisible();
+  // The project is the page title; the performance title follows in the line below it.
+  await expect(content.getByRole("heading", { level: 1 })).toBeVisible();
+  await expect(content.getByTestId("performance-subtitle")).toContainText(
+    "Test Fixture Performance"
+  );
   await expect(content.getByText("Freitag, 01.01.2100 - 19:00")).toBeVisible();
   await expect(content.getByText("Test Fixture Cast 1").first()).toBeVisible();
 });
@@ -57,10 +59,31 @@ test("performance page shows the playing cast, location details and no ticket bu
 });
 
 test("unknown performance id shows the not-found view", async ({ page }) => {
-  await page.goto("/projekte/test-fixture-project/auffuehrungen/2147483000");
+  await page.goto("/projekte/test-fixture-project/vorstellungen/2147483000");
 
   await expect(
     page.locator(".error-card").getByText("Seite nicht gefunden (404)")
   ).toBeVisible();
   await expect(page.getByTestId("performance-content")).toHaveCount(0);
+});
+
+test("next performance card on the seed project page links the seed performance", async ({
+  page,
+}) => {
+  await page.goto("/projekte/test-fixture-project/");
+
+  const card = page.getByTestId("next-performance-card");
+  await expect(card).toBeVisible();
+  await expect(card).toHaveAttribute("data-phase", "before");
+  await expect(card.getByText("Freitag, 01.01.2100 - 19:00")).toBeVisible();
+  await expect(card.getByTestId("countdown-large")).toBeVisible();
+
+  await card.getByTestId("next-performance-link").click();
+
+  await expect(page).toHaveURL(
+    /\/projekte\/test-fixture-project\/vorstellungen\/\d+$/
+  );
+  await expect(
+    page.getByTestId("performance-content").getByTestId("performance-subtitle")
+  ).toContainText("Test Fixture Performance");
 });

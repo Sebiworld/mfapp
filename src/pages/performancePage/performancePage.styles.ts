@@ -1,4 +1,5 @@
 import { SxProps, Theme } from "@mui/material";
+import { projectTitleFontSize } from "@components/nextPerformanceCard/nextPerformanceCard.styles";
 
 /** Spacing for backend HTML: headings get room above unless first, blocks keep one rhythm. */
 export const richTextStyles = {
@@ -21,7 +22,9 @@ export const richTextStyles = {
     marginBottom: "0.25em",
   },
 
-  "&>:first-child, &>:first-child:is(h1, h2, h3, h4, h5, h6)": {
+  // A child without an element before it is the first child; written without ":first-child", which emotion
+  // reports as unsafe for server rendering. ":first-of-type" would also match a heading after a paragraph.
+  "&>:not(* + *), &>:is(h1, h2, h3, h4, h5, h6):not(* + *)": {
     marginTop: 0,
   },
 
@@ -81,16 +84,54 @@ export const performancePageStyles: SxProps<Theme> = (theme) => ({
     alignItems: "flex-start",
     gap: "8px",
 
-    ".project-link": {
-      fontWeight: "bold",
+    // Same size as the project title on the next-performance card.
+    ".performance-title": {
+      ...projectTitleFontSize(theme),
+      lineHeight: "1.05",
+      // Long compound words break at syllables (html lang is de) and only as a last resort anywhere else.
+      hyphens: "auto",
+      overflowWrap: "break-word",
     },
 
-    ".performance-title": {
-      lineHeight: "1.05",
+    ".performance-title .project-link": {
+      color: "inherit",
+      textDecoration: "none",
+
+      "&:hover, &:focus-visible": {
+        textDecoration: "underline",
+      },
+    },
+
+    ".performance-subtitle": {
+      fontSize: "clamp(1.15rem, 2.4vw, 1.5rem)",
+      lineHeight: 1.2,
+      fontWeight: 600,
+      hyphens: "auto",
+      overflowWrap: "break-word",
+
+      [theme.breakpoints.down("sm")]: {
+        fontSize: "1rem",
+      },
     },
 
     ".performance-date": {
       fontSize: "1.25em",
+
+      // Never above the line "category · title" on small screens, so the order of importance stays visible.
+      [theme.breakpoints.down("sm")]: {
+        fontSize: "1rem",
+        fontWeight: 400,
+      },
+    },
+
+    // The band runs from edge to edge of the page card, as on the next-performance card.
+    ".filmstrip": {
+      alignSelf: "stretch",
+      margin: "8px -48px",
+
+      [theme.breakpoints.down("sm")]: {
+        marginX: "-24px",
+      },
     },
 
     ".casts-container": {

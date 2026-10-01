@@ -57,8 +57,8 @@ describe("SidebarBoxEvents", () => {
 
     expect(links.map((el) => el.getAttribute("href"))).toEqual(
       expect.arrayContaining([
-        "/projekte/annie/auffuehrungen/100",
-        "/projekte/annie/auffuehrungen/101",
+        "/projekte/annie/vorstellungen/100",
+        "/projekte/annie/vorstellungen/101",
       ])
     );
     // Future one in the highlight only, past one in the list.
@@ -70,10 +70,10 @@ describe("SidebarBoxEvents", () => {
 
     const next = screen.getByTestId("next-performance");
 
-    expect(next).toHaveTextContent("Nächste Aufführung");
+    expect(next).toHaveTextContent("Nächste Vorstellung");
     expect(within(next).getByTestId("event-item")).toHaveAttribute(
       "href",
-      "/projekte/annie/auffuehrungen/101"
+      "/projekte/annie/vorstellungen/101"
     );
     expect(next).toHaveTextContent("Cast A");
   });
@@ -93,8 +93,8 @@ describe("SidebarBoxEvents", () => {
     ).toHaveLength(1);
     expect(hrefs).toEqual(
       expect.arrayContaining([
-        "/projekte/annie/auffuehrungen/100",
-        "/projekte/annie/auffuehrungen/102",
+        "/projekte/annie/vorstellungen/100",
+        "/projekte/annie/vorstellungen/102",
       ])
     );
     expect(items).toHaveLength(3);
@@ -110,7 +110,7 @@ describe("SidebarBoxEvents", () => {
     renderBox(data([nowSeconds - 3600, nowSeconds - 86400]));
 
     expect(screen.queryByTestId("next-performance")).toBeNull();
-    expect(screen.queryByText(/Nächste Aufführung/)).toBeNull();
+    expect(screen.queryByText(/Nächste Vorstellung/)).toBeNull();
   });
 
   it("shows the time in Europe/Berlin regardless of the process time zone", () => {

@@ -5,11 +5,13 @@ import { fileApi } from "./fileApi";
 import { authApi } from "./authApi";
 import { configApi } from "./configApi";
 import { projectRolesApi } from "./projectRolesApi";
+import { performancesApi } from "./performancesApi";
 
 export const MFApi = {
   ...pageApi,
   ...projectsApi,
   ...projectRolesApi,
+  ...performancesApi,
   ...fileApi,
   ...authApi,
   ...configApi,

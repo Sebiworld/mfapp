@@ -1,10 +1,16 @@
 import { App } from "@src/App";
+import { ErrorPage } from "@core/errorPage/ErrorPage";
 import React from "react";
 import { createBrowserRouter } from "react-router";
 
 const Page = React.lazy(() =>
   import("@pages/page/Page").then((module) => ({
     default: module.Page,
+  }))
+);
+const PerformancePage = React.lazy(() =>
+  import("@pages/performancePage/PerformancePage").then((module) => ({
+    default: module.PerformancePage,
   }))
 );
 const SettingsPage = React.lazy(() =>
@@ -22,6 +28,7 @@ export const router = createBrowserRouter([
   {
     path: "/",
     Component: App,
+    ErrorBoundary: ErrorPage,
 
     children: [
       {
@@ -35,6 +42,10 @@ export const router = createBrowserRouter([
       {
         path: "secret-code",
         Component: SecretCodePage,
+      },
+      {
+        path: "projekte/:projectName/vorstellungen/:performanceId",
+        Component: PerformancePage,
       },
       {
         path: "*",

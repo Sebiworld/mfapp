@@ -1,7 +1,7 @@
 import { ProjectPortraitWithRoles } from "@models/project-role/project-portrait-dto.model";
 import { ProjectRoleDto } from "@models/project-role/project-role-dto.model";
 import { CastDto } from "@models/utility-types/performance-dto.model";
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { useGlobalStore } from "@src/store/global.store";
 import {
   selectProjectCasts,
@@ -12,6 +12,10 @@ import { isValidObject } from "@utils/functions/isValidObject";
 import { uniqBy } from "lodash";
 import { FC, useMemo } from "react";
 import { ProjectRolePortrait } from "./ProjectRolePortrait";
+import {
+  ProjectRoleCastColumn,
+  ProjectRoleCastColumns,
+} from "./ProjectRoleCastColumns";
 import { useTranslation } from "react-i18next";
 
 interface ProjectRolePortraitsProps {
@@ -385,7 +389,9 @@ export const ProjectRolePortraits: FC<ProjectRolePortraitsProps> = ({
       return [];
     }
 
-    return castsWithPortraits.filter((item) => item.cast?.id);
+    return castsWithPortraits.filter(
+      (item): item is ProjectRoleCastColumn => !!item.cast?.id
+    );
   }, [castsWithPortraits]);
 
   if (!isValidObject(portraitsByCastIds)) {
@@ -422,28 +428,7 @@ export const ProjectRolePortraits: FC<ProjectRolePortraitsProps> = ({
       data-testid="project-role-portraits"
       className="project-role-portraits casts-with-portraits"
     >
-      <Box
-        className={`casts-container casts-${
-          castsWithPortraitsFiltered.length || 0
-        }`}
-      >
-        {castsWithPortraitsFiltered
-          .filter((item) => item.cast?.id)
-          .map((item) => (
-            <Box className="cast" key={item.cast?.id || 0}>
-              <Typography className="cast-title">{item.cast?.title}</Typography>
-
-              <Box className="portraits-container">
-                {item.portraits.map((portrait) => (
-                  <ProjectRolePortrait
-                    key={portrait.id}
-                    portrait={portrait}
-                  ></ProjectRolePortrait>
-                ))}
-              </Box>
-            </Box>
-          ))}
-      </Box>
+      <ProjectRoleCastColumns columns={castsWithPortraitsFiltered} />
     </Box>
   );
 };

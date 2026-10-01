@@ -1,17 +1,28 @@
-import { formatDate } from "@utils/functions/formatDate";
+import { formatBerlinDate } from "@utils/functions/formatBerlinDate";
+import { getPerformanceUrl } from "@utils/functions/getPerformanceUrl";
 import { PerformanceDto } from "@models/utility-types/performance-dto.model";
 import { Box, Chip, Typography } from "@mui/material";
+import { Link } from "react-router";
 
 export interface SidebarBoxEventsEventItemProps {
   item: PerformanceDto;
+  projectUrl?: string;
   onClose?: () => void;
 }
 
 export const SidebarBoxEventsEventItem: React.FC<
   SidebarBoxEventsEventItemProps
-> = ({ item }) => {
+> = ({ item, projectUrl, onClose }) => {
+  const linkProps = projectUrl
+    ? {
+        component: Link,
+        to: getPerformanceUrl(projectUrl, item.id),
+        onClick: onClose,
+      }
+    : {};
+
   return (
-    <Box className="event-item" data-testid="event-item">
+    <Box className="event-item" data-testid="event-item" {...linkProps}>
       <Box className="seasons-container">
         {item.seasons?.map((season) => (
           <Chip
@@ -25,7 +36,7 @@ export const SidebarBoxEventsEventItem: React.FC<
       </Box>
 
       <Typography className="date" title={item.title}>
-        {`${formatDate(item.timestamp * 1000, "EEEE, P - p")}`}
+        {formatBerlinDate(item.timestamp)}
       </Typography>
 
       <Box className="casts-container">

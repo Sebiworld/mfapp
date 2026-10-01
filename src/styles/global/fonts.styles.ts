@@ -8,7 +8,8 @@ import { Theme } from "@mui/material";
 // import '@assets/fonts/aileron/Aileron-Black.woff';
 // import '@assets/fonts/aileron/Aileron-Black.woff2';
 
-const fontPath = "./assets/fonts/";
+// Absolute so the fonts load on every path depth.
+const fontPath = "/assets/fonts/";
 
 export const globalFontsStyles: Interpolation<Theme>[] = [
   {

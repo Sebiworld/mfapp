@@ -29,11 +29,13 @@ export const ErrorCard = ({ errorResponse }: ErrorCardProps) => {
       return null;
     }
 
-    return (
+    const code =
       errorResponse.response?.data?.errorcode ||
       errorResponse.code ||
-      "default_error"
-    );
+      "default_error";
+
+    // A missing performance looks like any other missing page.
+    return code === "performance_not_found" ? "not_found_exception" : code;
   }, [errorResponse]);
 
   if (errorCode === "not_found_exception") {

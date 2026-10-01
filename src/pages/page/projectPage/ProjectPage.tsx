@@ -1,4 +1,4 @@
-import { PageDtoVariant } from "@models/page/page-dto-variant.model";
+import { PageDto } from "@models/page/page-dto.model";
 import { projectPageStyles } from "./projectPage.styles";
 import { useGlobalStore } from "@src/store/global.store";
 import { useEffect, useMemo } from "react";
@@ -19,7 +19,7 @@ import { useProjectsApi } from "@api/hooks/useProjectsApi";
 import { parseHtml } from "@utils/functions/parseHtml";
 
 export interface ProjectPageProps {
-  page?: PageDtoVariant;
+  page?: Pick<PageDto, "project_id" | "alerts">;
   children?: React.ReactNode;
 }
 

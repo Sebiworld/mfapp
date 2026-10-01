@@ -29,6 +29,13 @@ export const sidebarBoxEventsStyles: SxProps = {
   ".event-item": {
     overflow: "visible",
     paddingLeft: "16px",
+    display: "block",
+    color: "inherit",
+    textDecoration: "none",
+
+    "&:is(a):hover .date, &:is(a):focus-visible .date": {
+      textDecoration: "underline",
+    },
     // paddingRight: '16px',
 
     // ".MuiCardContent-root": {

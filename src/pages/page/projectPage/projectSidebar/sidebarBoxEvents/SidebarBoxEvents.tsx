@@ -8,15 +8,18 @@ import { useCurrentDate } from "@utils/hooks/useCurrentDate";
 import { Box, Button, Typography } from "@mui/material";
 import { SidebarBoxEventsEventItem } from "./SidebarBoxEventsEventItem";
 import { Link } from "react-router";
+import { getNextPerformance } from "@utils/functions/getNextPerformance";
 
 export interface SidebarBoxEventsProps {
   data?: ProjectEventsData;
+  projectUrl?: string;
   showTitle?: boolean;
   onClose?: () => void;
 }
 
 export const SidebarBoxEvents: React.FC<SidebarBoxEventsProps> = ({
   data,
+  projectUrl,
   showTitle,
   onClose,
 }) => {
@@ -26,6 +29,15 @@ export const SidebarBoxEvents: React.FC<SidebarBoxEventsProps> = ({
   // useEffect(() => {
   //   console.log("SidebarBoxEvents data:", data);
   // }, [data]);
+
+  const nextPerformance = useMemo(
+    () =>
+      getNextPerformance(
+        data?.performances ?? [],
+        Math.floor(currentDate.getTime() / 1000)
+      ),
+    [data, currentDate]
+  );
 
   const sortedPerformances = useMemo(() => {
     const output: {
@@ -41,6 +53,11 @@ export const SidebarBoxEvents: React.FC<SidebarBoxEventsProps> = ({
     }
 
     for (const performance of data.performances) {
+      // The next performance is shown in its own highlight above the list.
+      if (performance.id === nextPerformance?.id) {
+        continue;
+      }
+
       if (performance.timestamp * 1000 > currentDate.getTime()) {
         output.future.push(performance);
       } else {
@@ -49,7 +66,7 @@ export const SidebarBoxEvents: React.FC<SidebarBoxEventsProps> = ({
     }
 
     return output;
-  }, [data, currentDate]);
+  }, [data, currentDate, nextPerformance]);
 
   if (!isValidArray(data?.performances) || !data.performances.length) {
     return null;
@@ -68,6 +85,24 @@ export const SidebarBoxEvents: React.FC<SidebarBoxEventsProps> = ({
       )}
 
       <Box className="lists-wrapper">
+        {nextPerformance && (
+          <Box
+            component="section"
+            className="events-section next"
+            data-testid="next-performance"
+          >
+            <Typography variant="bodyXS" className="description">
+              {t("project.events.next-performance")}:
+            </Typography>
+
+            <SidebarBoxEventsEventItem
+              item={nextPerformance}
+              projectUrl={projectUrl}
+              onClose={onClose}
+            />
+          </Box>
+        )}
+
         {!!sortedPerformances.future?.length && (
           <Box component="section" className="events-section future">
             <Box className="events-container">
@@ -75,6 +110,7 @@ export const SidebarBoxEvents: React.FC<SidebarBoxEventsProps> = ({
                 <SidebarBoxEventsEventItem
                   key={item.id}
                   item={item}
+                  projectUrl={projectUrl}
                   onClose={onClose}
                 />
               ))}
@@ -105,6 +141,7 @@ export const SidebarBoxEvents: React.FC<SidebarBoxEventsProps> = ({
                 <SidebarBoxEventsEventItem
                   key={item.id}
                   item={item}
+                  projectUrl={projectUrl}
                   onClose={onClose}
                 />
               ))}

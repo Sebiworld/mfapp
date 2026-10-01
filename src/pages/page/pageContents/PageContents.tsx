@@ -12,6 +12,10 @@ import { isValidArray } from "@utils/functions/isValidArray";
 import { ListContainerPageDto } from "@models/page/list-container-page-dto.model";
 import React from "react";
 import { parseHtml } from "@utils/functions/parseHtml";
+import { NextPerformanceCard } from "@components/nextPerformanceCard/NextPerformanceCard";
+
+/** The home page only points to performances that are at most this many days away. */
+const HOME_MAX_DAYS_AHEAD = 30;
 
 const ProjectRole = React.lazy(() =>
   import("../templateContents/projectRole/ProjectRole").then((module) => ({
@@ -105,6 +109,16 @@ export const PageContents: React.FC<PagesContentsProps> = ({ page }) => {
     );
   }, [authors, defaultPage?.datetime_from, t]);
 
+  // On the home page the next performance card follows a leading hero, which sits below the translucent header.
+  const homeHero =
+    page?.template?.name === "home" &&
+    defaultPage?.sections?.[0]?.type === "hero"
+      ? defaultPage.sections[0]
+      : null;
+  const sections = (defaultPage?.sections ?? []).filter(
+    (section) => section !== homeHero
+  );
+
   if (!page?.id) {
     return null;
   }
@@ -117,6 +131,10 @@ export const PageContents: React.FC<PagesContentsProps> = ({ page }) => {
       data-testid="page-contents"
       sx={pageContentsStyles}
     >
+      {page?.template?.name === "project" && !!page.project_id && (
+        <NextPerformanceCard projectId={page.project_id} />
+      )}
+
       {page?.template?.name !== "home" && (
         <Paper className="page-content" elevation={0}>
           {page?.template?.name !== "project" && (
@@ -160,9 +178,17 @@ export const PageContents: React.FC<PagesContentsProps> = ({ page }) => {
         />
       )}
 
-      {!!defaultPage?.sections?.length && (
-        <SectionsContainer sections={defaultPage.sections} />
+      {!!homeHero && <SectionsContainer sections={[homeHero]} />}
+
+      {page?.template?.name === "home" && (
+        <NextPerformanceCard
+          showProject
+          centered
+          maxDaysAhead={HOME_MAX_DAYS_AHEAD}
+        />
       )}
+
+      {!!sections.length && <SectionsContainer sections={sections} />}
     </Box>
   );
 };

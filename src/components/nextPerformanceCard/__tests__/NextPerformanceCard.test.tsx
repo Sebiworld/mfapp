@@ -277,6 +277,22 @@ describe("NextPerformanceCard", () => {
     expect(unit("seconds")).toBe("04");
   });
 
+  it("keeps date, admission and casts together in reading order, so small screens can put date and casts in one line", async () => {
+    vi.setSystemTime((START - DAY) * 1000);
+
+    await renderCard();
+
+    const meta = screen.getByTestId("next-performance-meta");
+    const parts = Array.from(meta.children).map(
+      (child) => child.textContent ?? ""
+    );
+
+    expect(parts).toHaveLength(3);
+    expect(parts[0]).toMatch(/Donnerstag, 01\.10\.2026 - 19:30\sUhr/);
+    expect(parts[1]).toMatch(/^Einlass ab 18:30\sUhr$/);
+    expect(parts[2]).toBe("Cast A");
+  });
+
   it("goes from admission to running to the next date without reloading the page", async () => {
     vi.setSystemTime((START - 30 * 60) * 1000);
 

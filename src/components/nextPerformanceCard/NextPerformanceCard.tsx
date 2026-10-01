@@ -128,30 +128,32 @@ export const NextPerformanceCard: FC<NextPerformanceCardProps> = ({
             </Typography>
           )}
 
-          <Typography className="card-date">
-            {t("performance.time-suffix", {
-              time: formatBerlinDate(performance.timestamp),
-            })}
-          </Typography>
-
-          {phase === "before" && admission !== null && (
-            <Typography
-              className="card-admission"
-              data-testid="next-performance-admission"
-            >
-              {t("next_performance.admission-from", {
-                time: formatBerlinTime(admission),
+          <Box className="card-meta" data-testid="next-performance-meta">
+            <Typography className="card-date">
+              {t("performance.time-suffix", {
+                time: formatBerlinDate(performance.timestamp),
               })}
             </Typography>
-          )}
 
-          {performance.casts?.length > 0 && (
-            <Box className="casts-container">
-              {performance.casts.map((cast) => (
-                <Chip key={cast.id} label={cast.title} size="small" />
-              ))}
-            </Box>
-          )}
+            {phase === "before" && admission !== null && (
+              <Typography
+                className="card-admission"
+                data-testid="next-performance-admission"
+              >
+                {t("next_performance.admission-from", {
+                  time: formatBerlinTime(admission),
+                })}
+              </Typography>
+            )}
+
+            {performance.casts?.length > 0 && (
+              <Box className="casts-container">
+                {performance.casts.map((cast) => (
+                  <Chip key={cast.id} label={cast.title} size="small" />
+                ))}
+              </Box>
+            )}
+          </Box>
         </Box>
 
         {countdownTarget && (

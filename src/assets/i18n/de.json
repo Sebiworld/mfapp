@@ -200,6 +200,8 @@
   "performance": {
     "visit": "Zum Besuch",
     "admission": "Einlass",
+    "admission-foyer": "Einlass ins Foyer",
+    "admission-hall": "Einlass in den Saal",
     "time-suffix": "{{time}}\u00a0Uhr",
     "duration-one": "Dauer ca. 1 Stunde",
     "duration-other": "Dauer ca. {{hours}} Stunden",
@@ -224,8 +226,12 @@
   "next_performance": {
     "status-before": "Nächste Vorstellung",
     "status-admission": "Einlass läuft",
+    "status-foyer": "Einlass ins Foyer",
+    "status-hall": "Einlass in den Saal",
     "status-running": "Die Vorstellung läuft gerade",
-    "admission-from": "Einlass ab {{time}}\u00a0Uhr",
+    "admission-from": "Einlass ab\u00a0{{time}}\u00a0Uhr",
+    "admission-both": "Einlass ins Foyer ab\u00a0{{foyer}}\u00a0Uhr · Saal ab\u00a0{{hall}}\u00a0Uhr",
+    "hall-from": "Saal ab\u00a0{{time}}\u00a0Uhr",
     "starts-in": "Beginn in",
     "next-in": "Nächste Vorstellung in",
     "to-performance": "Infos zur Vorstellung",

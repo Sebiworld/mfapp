@@ -2,23 +2,33 @@ import { PerformanceDetailDto } from "@models/utility-types/performance-detail-d
 
 type PerformanceTimes = Pick<
   PerformanceDetailDto,
-  "timestamp" | "timestamp_until" | "admission_minutes"
+  "timestamp" | "timestamp_until"
 >;
 
+type PerformanceAdmission = Pick<
+  PerformanceDetailDto,
+  "timestamp" | "admission_minutes" | "hall_admission_minutes"
+>;
+
+export interface AdmissionTimes {
+  /** The only admission in seconds, when there are not two separate ones; then `foyer` and `hall` are `null`. */
+  common: number | null;
+  /** Opening of the foyer in seconds; set only together with a later `hall`. */
+  foyer: number | null;
+  /** Opening of the hall in seconds; set only together with an earlier `foyer`. */
+  hall: number | null;
+}
+
 /**
- * Computes the admission time of a performance.
- * @param performance Performance with `timestamp` and `admission_minutes`.
- * @returns Unix timestamp in seconds, or `null` when no admission time is set (missing or 0 minutes).
+ * Turns minutes before the start into a point in time.
+ * @param start Start in seconds.
+ * @param minutes Minutes before the start; missing, 0 or invalid means not set.
+ * @returns Unix timestamp in seconds, or `null` when not set.
  */
-export const getAdmissionTimestamp = (
-  performance: PerformanceTimes
+const minutesBefore = (
+  start: number,
+  minutes: number | null | undefined
 ): number | null => {
-  const minutes = performance.admission_minutes;
-
-  if (performance.timestamp === null) {
-    return null;
-  }
-
   if (
     typeof minutes !== "number" ||
     !Number.isFinite(minutes) ||
@@ -27,7 +37,52 @@ export const getAdmissionTimestamp = (
     return null;
   }
 
-  return performance.timestamp - minutes * 60;
+  return start - minutes * 60;
+};
+
+/**
+ * Computes when foyer and hall open. Foyer and hall are told apart only when the foyer opens before the hall;
+ * in every other case visitors get a single admission time, the earliest one that is set.
+ * @param performance Performance with `timestamp`, `admission_minutes` (foyer) and `hall_admission_minutes`.
+ * @returns Opening times in seconds; all `null` without a start or without any admission time.
+ */
+export const getAdmissionTimes = (
+  performance: PerformanceAdmission
+): AdmissionTimes => {
+  if (performance.timestamp === null) {
+    return { common: null, foyer: null, hall: null };
+  }
+
+  const hall = minutesBefore(
+    performance.timestamp,
+    performance.hall_admission_minutes
+  );
+  const foyer = minutesBefore(
+    performance.timestamp,
+    performance.admission_minutes
+  );
+
+  if (foyer !== null && hall !== null && foyer < hall) {
+    return { common: null, foyer, hall };
+  }
+
+  const earliest =
+    foyer !== null && hall !== null ? Math.min(foyer, hall) : (foyer ?? hall);
+
+  return { common: earliest, foyer: null, hall: null };
+};
+
+/**
+ * Computes the first admission of a performance, into the foyer or the hall, whichever opens first.
+ * @param performance Performance with `timestamp` and both admission times.
+ * @returns Unix timestamp in seconds, or `null` when no admission time is set (missing or 0 minutes).
+ */
+export const getAdmissionTimestamp = (
+  performance: PerformanceAdmission
+): number | null => {
+  const { common, foyer, hall } = getAdmissionTimes(performance);
+
+  return common ?? foyer ?? hall;
 };
 
 /**

@@ -20,6 +20,7 @@ const item = (
   timestamp: START,
   timestamp_until: START + 9_000,
   admission_minutes: 60,
+  hall_admission_minutes: 30,
   ticket_url: null,
   event: { id: 9, title: "Premiere" },
   project: { id: 5, title: "Annie", url: "/projekte/annie/" },
@@ -54,14 +55,99 @@ describe("getNextPerformanceCardState", () => {
     expect(state?.countdownTarget?.id).toBe(1);
   });
 
-  it("switches to admission when admission starts and counts down to the start", () => {
-    const state = getNextPerformanceCardState(
-      data(null, first),
-      at(START - 3_600)
-    );
+  it("opens the foyer first, then the hall, and counts down to the start", () => {
+    const phaseAt = (seconds: number) =>
+      getNextPerformanceCardState(data(null, first), at(seconds));
 
-    expect(state?.phase).toBe("admission");
-    expect(state?.countdownTarget?.id).toBe(1);
+    expect(phaseAt(START - 3_600)?.phase).toBe("foyer");
+    expect(phaseAt(START - 3_600)?.countdownTarget?.id).toBe(1);
+    expect(phaseAt(START - 1_801)?.phase).toBe("foyer");
+    expect(phaseAt(START - 1_800)?.phase).toBe("hall");
+    expect(phaseAt(START - 1_800)?.countdownTarget?.id).toBe(1);
+    expect(phaseAt(START - 1)?.phase).toBe("hall");
+    expect(phaseAt(START)?.phase).toBe("running");
+  });
+
+  it("has a single admission phase when only the foyer is set", () => {
+    const foyerOnly = item({ hall_admission_minutes: null });
+    const phaseAt = (seconds: number) =>
+      getNextPerformanceCardState(data(null, foyerOnly), at(seconds))?.phase;
+
+    expect(phaseAt(START - 3_601)).toBe("before");
+    expect(phaseAt(START - 3_600)).toBe("admission");
+    expect(phaseAt(START - 1_800)).toBe("admission");
+    expect(phaseAt(START)).toBe("running");
+  });
+
+  it("has a single admission phase when only the hall is set", () => {
+    const hallOnly = item({ admission_minutes: null });
+    const phaseAt = (seconds: number) =>
+      getNextPerformanceCardState(data(null, hallOnly), at(seconds))?.phase;
+
+    expect(phaseAt(START - 1_801)).toBe("before");
+    expect(phaseAt(START - 1_800)).toBe("admission");
+    expect(phaseAt(START)).toBe("running");
+  });
+
+  it("has a single admission phase when foyer and hall open at the same time", () => {
+    const together = item({ hall_admission_minutes: 60 });
+    const phaseAt = (seconds: number) =>
+      getNextPerformanceCardState(data(null, together), at(seconds))?.phase;
+
+    expect(phaseAt(START - 3_601)).toBe("before");
+    expect(phaseAt(START - 3_600)).toBe("admission");
+    expect(phaseAt(START - 1_800)).toBe("admission");
+    expect(phaseAt(START - 1)).toBe("admission");
+    expect(phaseAt(START)).toBe("running");
+  });
+
+  it("has a single admission phase from the hall when the hall opens earlier", () => {
+    const early = item({ hall_admission_minutes: 90 });
+    const phaseAt = (seconds: number) =>
+      getNextPerformanceCardState(data(null, early), at(seconds))?.phase;
+
+    expect(phaseAt(START - 5_401)).toBe("before");
+    expect(phaseAt(START - 5_400)).toBe("admission");
+    expect(phaseAt(START - 3_600)).toBe("admission");
+    expect(phaseAt(START)).toBe("running");
+  });
+
+  it("treats 0 and null alike and opens at the start without any admission", () => {
+    for (const [foyer, hall] of [
+      [0, 0],
+      [null, null],
+      [0, null],
+      [null, 0],
+    ] as const) {
+      const none = item({
+        admission_minutes: foyer,
+        hall_admission_minutes: hall,
+      });
+      const phaseAt = (seconds: number) =>
+        getNextPerformanceCardState(data(null, none), at(seconds))?.phase;
+
+      expect(phaseAt(START - 1)).toBe("before");
+      expect(phaseAt(START)).toBe("running");
+    }
+  });
+
+  it("has a single admission phase with one field 0 and the other set", () => {
+    for (const [foyer, hall, minutes] of [
+      [0, 30, 30],
+      [60, 0, 60],
+    ] as const) {
+      const mixed = item({
+        admission_minutes: foyer,
+        hall_admission_minutes: hall,
+      });
+      const phaseAt = (seconds: number) =>
+        getNextPerformanceCardState(data(null, mixed), at(seconds))?.phase;
+
+      expect(phaseAt(START - minutes * 60 - 1)).toBe("before");
+      expect(phaseAt(START - minutes * 60)).toBe("admission");
+      expect(phaseAt(START - 1)).toBe("admission");
+      expect(phaseAt(START)).toBe("running");
+    }
   });
 
   it("switches to running at the start and counts down to the following performance", () => {
@@ -104,7 +190,10 @@ describe("getNextPerformanceCardState", () => {
   });
 
   it("has no admission phase without an admission time", () => {
-    const noAdmission = item({ admission_minutes: null });
+    const noAdmission = item({
+      admission_minutes: null,
+      hall_admission_minutes: 0,
+    });
 
     expect(
       getNextPerformanceCardState(data(null, noAdmission), at(START - 60))
@@ -141,16 +230,22 @@ describe("getNextPerformanceCardState", () => {
   });
 
   it("builds a key that changes with phase and performance", () => {
-    const keys = [START - 4_000, START - 3_600, START, START + 9_000].map(
-      (seconds) =>
-        getNextPerformanceCardStateKey(
-          getNextPerformanceCardState(data(first, second), at(seconds))
-        )
+    const keys = [
+      START - 4_000,
+      START - 3_600,
+      START - 1_800,
+      START,
+      START + 9_000,
+    ].map((seconds) =>
+      getNextPerformanceCardStateKey(
+        getNextPerformanceCardState(data(first, second), at(seconds))
+      )
     );
 
     expect(keys).toEqual([
       "before:1:1",
-      "admission:1:1",
+      "foyer:1:1",
+      "hall:1:1",
       "running:1:2",
       "before:2:2",
     ]);

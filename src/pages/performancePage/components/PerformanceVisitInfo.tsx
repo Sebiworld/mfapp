@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { PerformanceDetailDto } from "@models/utility-types/performance-detail-dto.model";
 import { formatBerlinTime } from "@utils/functions/formatBerlinTime";
 import { parseHtml } from "@utils/functions/parseHtml";
-import { getAdmissionTimestamp } from "../functions/getPerformanceTimes";
+import { getAdmissionTimes } from "../functions/getPerformanceTimes";
 
 interface PerformanceVisitInfoProps {
   performance: PerformanceDetailDto;
@@ -36,15 +36,33 @@ export const PerformanceVisitInfo: FC<PerformanceVisitInfoProps> = ({
   const { t } = useTranslation();
   const { location } = performance;
 
-  const admission = getAdmissionTimestamp(performance);
+  const admission = getAdmissionTimes(performance);
 
   const facts: { label: string; value: string }[] = [];
 
-  if (admission !== null) {
+  if (admission.common !== null) {
     facts.push({
       label: t("performance.admission"),
       value: t("performance.time-suffix", {
-        time: formatBerlinTime(admission),
+        time: formatBerlinTime(admission.common),
+      }),
+    });
+  }
+
+  if (admission.foyer !== null) {
+    facts.push({
+      label: t("performance.admission-foyer"),
+      value: t("performance.time-suffix", {
+        time: formatBerlinTime(admission.foyer),
+      }),
+    });
+  }
+
+  if (admission.hall !== null) {
+    facts.push({
+      label: t("performance.admission-hall"),
+      value: t("performance.time-suffix", {
+        time: formatBerlinTime(admission.hall),
       }),
     });
   }

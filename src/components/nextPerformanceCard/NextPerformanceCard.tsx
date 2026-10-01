@@ -1,11 +1,15 @@
 import { FC, Fragment } from "react";
 import { Link } from "react-router";
+import { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
 import { Box, Button, Chip, Paper, Typography } from "@mui/material";
 import { useShallow } from "zustand/shallow";
 import { useGlobalStore } from "@src/store/global.store";
 import { selectProjectCssVars } from "@src/store/projects/projects.selectors";
-import { getAdmissionTimestamp } from "@pages/performancePage/functions/getPerformanceTimes";
+import {
+  AdmissionTimes,
+  getAdmissionTimes,
+} from "@pages/performancePage/functions/getPerformanceTimes";
 import { getPerformanceHeadline } from "@pages/performancePage/functions/getPerformanceHeadline";
 import { formatBerlinDate } from "@utils/functions/formatBerlinDate";
 import { formatBerlinTime } from "@utils/functions/formatBerlinTime";
@@ -16,6 +20,7 @@ import { PerformanceFilmstrip } from "@components/performanceFilmstrip/Performan
 import { nextPerformanceCardStyles } from "./nextPerformanceCard.styles";
 import { useFilmstripItems } from "@components/performanceFilmstrip/useFilmstripItems";
 import { useNextPerformanceCard } from "./useNextPerformanceCard";
+import { NextPerformanceCardPhase } from "./functions/getNextPerformanceCardState";
 
 export interface NextPerformanceCardProps {
   /** Project page id; without it performances of all projects are considered. */
@@ -29,8 +34,49 @@ export interface NextPerformanceCardProps {
 }
 
 /**
+ * Builds the admission line below the date.
+ * @param phase Current phase of the card.
+ * @param admission Opening times of foyer and hall.
+ * @param t Translation function.
+ * @returns Text, or `null` when the phase has no admission line.
+ */
+const getAdmissionLine = (
+  phase: NextPerformanceCardPhase,
+  admission: AdmissionTimes,
+  t: TFunction
+): string | null => {
+  const { common, foyer, hall } = admission;
+
+  // While the foyer is open only the hall is still ahead.
+  if (phase === "foyer") {
+    return hall !== null
+      ? t("next_performance.hall-from", { time: formatBerlinTime(hall) })
+      : null;
+  }
+
+  if (phase !== "before") {
+    return null;
+  }
+
+  if (common !== null) {
+    return t("next_performance.admission-from", {
+      time: formatBerlinTime(common),
+    });
+  }
+
+  if (foyer !== null && hall !== null) {
+    return t("next_performance.admission-both", {
+      foyer: formatBerlinTime(foyer),
+      hall: formatBerlinTime(hall),
+    });
+  }
+
+  return null;
+};
+
+/**
  * Highlights the next performance with a countdown to its start. From the start of admission until the end the
- * card switches to the running performance and shows its cast as a filmstrip; afterwards it moves on to the next
+ * card switches to the current performance and shows its cast as a filmstrip; afterwards it moves on to the next
  * date. Without a current or upcoming performance nothing is rendered.
  * @param projectId Project page id, or none for all projects.
  * @param showProject Whether the project title is shown.
@@ -73,7 +119,11 @@ export const NextPerformanceCard: FC<NextPerformanceCardProps> = ({
       </Fragment>
     )
   );
-  const admission = getAdmissionTimestamp(performance);
+  const admissionLine = getAdmissionLine(
+    phase,
+    getAdmissionTimes(performance),
+    t
+  );
 
   return (
     <Paper
@@ -135,14 +185,12 @@ export const NextPerformanceCard: FC<NextPerformanceCardProps> = ({
               })}
             </Typography>
 
-            {phase === "before" && admission !== null && (
+            {admissionLine !== null && (
               <Typography
                 className="card-admission"
                 data-testid="next-performance-admission"
               >
-                {t("next_performance.admission-from", {
-                  time: formatBerlinTime(admission),
-                })}
+                {admissionLine}
               </Typography>
             )}
 

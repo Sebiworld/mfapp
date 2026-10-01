@@ -39,7 +39,10 @@ export interface PerformanceDetailDto {
   /** Start in seconds; `null` when no start is set. */
   timestamp: number | null;
   timestamp_until: number | null;
+  /** Admission into the foyer, minutes before the start; 0 means no admission time, `null` not maintained. */
   admission_minutes: number | null;
+  /** Admission into the hall, minutes before the start; 0 means no admission time, `null` not maintained. */
+  hall_admission_minutes: number | null;
   ticket_url: string | null;
   /** HTML: special notes. */
   description: string | null;

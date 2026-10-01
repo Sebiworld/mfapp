@@ -2,15 +2,22 @@ import {
   NextPerformanceItemDto,
   NextPerformancesDto,
 } from "@models/utility-types/next-performances-dto.model";
-import { getAdmissionTimestamp } from "@pages/performancePage/functions/getPerformanceTimes";
+import {
+  getAdmissionTimes,
+  getAdmissionTimestamp,
+} from "@pages/performancePage/functions/getPerformanceTimes";
 
 /** Running time assumed for performances without an end, in seconds; matches the backend. */
 export const DEFAULT_DURATION_SECONDS = 3 * 60 * 60;
 
-export type NextPerformanceCardPhase = "before" | "admission" | "running";
+export type NextPerformanceCardPhase =
+  "before" | "admission" | "foyer" | "hall" | "running";
 
 export interface NextPerformanceCardState {
-  /** `before`: counting down; `admission`: doors are open; `running`: the performance is on. */
+  /**
+   * `before`: counting down; `admission`: the only admission is open; `foyer` / `hall`: admission into foyer or
+   * hall is open; `running`: the performance is on.
+   */
   phase: NextPerformanceCardPhase;
   /** The performance the card is about. */
   performance: NextPerformanceItemDto;
@@ -19,7 +26,7 @@ export interface NextPerformanceCardState {
 }
 
 interface PerformanceWindow {
-  /** Start of admission in seconds; equals `start` without an admission time. */
+  /** First admission in seconds; equals `start` without an admission time. */
   opens: number;
   start: number;
   end: number;
@@ -39,6 +46,30 @@ const getWindow = (performance: NextPerformanceItemDto): PerformanceWindow => {
       : start + DEFAULT_DURATION_SECONDS;
 
   return { opens: getAdmissionTimestamp(performance) ?? start, start, end };
+};
+
+/**
+ * Decides which part of its window a current performance is in.
+ * @param performance A performance whose window contains `now`.
+ * @param now Current time in seconds.
+ * @returns `running` from the start, `admission` with a single admission time, `hall` once the hall is open,
+ * otherwise `foyer`.
+ */
+const getActivePhase = (
+  performance: NextPerformanceItemDto,
+  now: number
+): NextPerformanceCardPhase => {
+  if (now >= performance.timestamp) {
+    return "running";
+  }
+
+  const { common, hall } = getAdmissionTimes(performance);
+
+  if (common !== null) {
+    return "admission";
+  }
+
+  return hall !== null && now >= hall ? "hall" : "foyer";
 };
 
 /**
@@ -79,10 +110,11 @@ export const getNextPerformanceCardState = (
   );
 
   if (active) {
-    const isAdmission = now < active.timestamp;
+    const phase = getActivePhase(active, now);
+    const isAdmission = phase !== "running";
 
     return {
-      phase: isAdmission ? "admission" : "running",
+      phase,
       performance: active,
       countdownTarget: isAdmission ? active : (upcoming ?? null),
     };

@@ -62,6 +62,7 @@ const performance = (
   timestamp: START,
   timestamp_until: END,
   admission_minutes: 60,
+  hall_admission_minutes: 30,
   ticket_url: "https://tickets.example/7",
   description: null,
   visitor_info: null,
@@ -218,10 +219,70 @@ describe("PerformancePage", () => {
       );
 
       const facts = screen.getByTestId("visit-facts");
-      expect(within(facts).getByText("18:30 Uhr")).toBeInTheDocument();
+      const rows = Array.from(facts.querySelectorAll(".visit-fact")).map(
+        (row) => [
+          row.querySelector("dt")?.textContent,
+          row.querySelector("dd")?.textContent,
+        ]
+      );
+      expect(rows).toEqual([
+        ["Einlass ins Foyer", "18:30\u00a0Uhr"],
+        ["Einlass in den Saal", "19:00\u00a0Uhr"],
+      ]);
       expect(within(facts).queryByText("Dauer")).not.toBeInTheDocument();
       expect(screen.queryByTestId("past-notice")).not.toBeInTheDocument();
     });
+
+    it("shows one admission line when foyer and hall open at the same time", async () => {
+      await show(
+        performance({ admission_minutes: 60, hall_admission_minutes: 60 })
+      );
+
+      const rows = Array.from(
+        screen.getByTestId("visit-facts").querySelectorAll(".visit-fact")
+      ).map((row) => [
+        row.querySelector("dt")?.textContent,
+        row.querySelector("dd")?.textContent,
+      ]);
+      expect(rows).toEqual([["Einlass", "18:30\u00a0Uhr"]]);
+    });
+
+    it("shows no admission line with foyer 0 and hall null", async () => {
+      await show(
+        performance({ admission_minutes: 0, hall_admission_minutes: null })
+      );
+
+      expect(screen.queryByTestId("visit-facts")).not.toBeInTheDocument();
+      expect(screen.queryByText(/Einlass/)).not.toBeInTheDocument();
+    });
+
+    it.each([
+      ["only the foyer is set", { hall_admission_minutes: null }, "18:30"],
+      ["only the hall is set", { admission_minutes: null }, "19:00"],
+      [
+        "the hall is 0 and the foyer 60",
+        { admission_minutes: 60, hall_admission_minutes: 0 },
+        "18:30",
+      ],
+      [
+        "the hall opens earlier than the foyer",
+        { admission_minutes: 30, hall_admission_minutes: 45 },
+        "18:45",
+      ],
+    ] as const)(
+      "shows one admission line when %s",
+      async (_case, fields, time) => {
+        await show(performance(fields));
+
+        const rows = Array.from(
+          screen.getByTestId("visit-facts").querySelectorAll(".visit-fact")
+        ).map((row) => [
+          row.querySelector("dt")?.textContent,
+          row.querySelector("dd")?.textContent,
+        ]);
+        expect(rows).toEqual([["Einlass", `${time}\u00a0Uhr`]]);
+      }
+    );
 
     it("shows Berlin times although the process runs in another time zone", async () => {
       // Proves the zone switch took effect.
@@ -309,6 +370,7 @@ describe("PerformancePage", () => {
       await show(
         performance({
           admission_minutes: null,
+          hall_admission_minutes: null,
           timestamp_until: null,
           location: null,
         })
@@ -323,6 +385,7 @@ describe("PerformancePage", () => {
       await show(
         performance({
           admission_minutes: null,
+          hall_admission_minutes: null,
           timestamp_until: null,
           visitor_info: "Bitte pünktlich sein.",
         })
@@ -332,7 +395,7 @@ describe("PerformancePage", () => {
         "Bitte pünktlich sein."
       );
       expect(screen.queryByText("Dauer")).not.toBeInTheDocument();
-      expect(screen.queryByText("Einlass")).not.toBeInTheDocument();
+      expect(screen.queryByText(/Einlass/)).not.toBeInTheDocument();
       expect(screen.queryByText("Barrierefreiheit")).not.toBeInTheDocument();
       expect(screen.queryByText("Besonderes")).not.toBeInTheDocument();
     });

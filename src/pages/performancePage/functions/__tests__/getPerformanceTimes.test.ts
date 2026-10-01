@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { i18n } from "@utils/i18n/i18n";
 import {
+  getAdmissionTimes,
   getAdmissionTimestamp,
   getDurationLabel,
   getDurationMinutes,
@@ -9,35 +10,74 @@ import {
 
 const START = 1_790_875_800;
 
+const admission = (
+  foyer: number | null,
+  hall: number | null
+): {
+  timestamp: number;
+  admission_minutes: number | null;
+  hall_admission_minutes: number | null;
+} => ({
+  timestamp: START,
+  admission_minutes: foyer,
+  hall_admission_minutes: hall,
+});
+
+const times = (
+  common: number | null,
+  foyer: number | null,
+  hall: number | null
+): { common: number | null; foyer: number | null; hall: number | null } => ({
+  common: common === null ? null : START - common * 60,
+  foyer: foyer === null ? null : START - foyer * 60,
+  hall: hall === null ? null : START - hall * 60,
+});
+
+describe("getAdmissionTimes", () => {
+  it("subtracts the minutes of foyer and hall from the start", () => {
+    expect(getAdmissionTimes(admission(60, 30))).toEqual(times(null, 60, 30));
+  });
+
+  it("has a single admission with only the foyer or only the hall", () => {
+    expect(getAdmissionTimes(admission(60, null))).toEqual(
+      times(60, null, null)
+    );
+    expect(getAdmissionTimes(admission(null, 30))).toEqual(
+      times(30, null, null)
+    );
+  });
+
+  it("treats 0 (no admission time) and null (not maintained) alike, per field", () => {
+    const none = times(null, null, null);
+
+    expect(getAdmissionTimes(admission(0, 0))).toEqual(none);
+    expect(getAdmissionTimes(admission(null, null))).toEqual(none);
+    expect(getAdmissionTimes(admission(0, null))).toEqual(none);
+    expect(getAdmissionTimes(admission(null, 0))).toEqual(none);
+    expect(getAdmissionTimes(admission(60, 0))).toEqual(times(60, null, null));
+    expect(getAdmissionTimes(admission(0, 30))).toEqual(times(30, null, null));
+  });
+
+  it("merges foyer and hall into one admission when both open at the same time", () => {
+    expect(getAdmissionTimes(admission(30, 30))).toEqual(times(30, null, null));
+  });
+
+  it("has a single admission from the hall when the hall opens earlier", () => {
+    expect(getAdmissionTimes(admission(30, 60))).toEqual(times(60, null, null));
+  });
+});
+
 describe("getAdmissionTimestamp", () => {
-  it("subtracts the admission minutes from the start", () => {
-    expect(
-      getAdmissionTimestamp({
-        timestamp: START,
-        timestamp_until: null,
-        admission_minutes: 60,
-      })
-    ).toBe(START - 3600);
+  it("returns the first admission, foyer or hall", () => {
+    expect(getAdmissionTimestamp(admission(60, 30))).toBe(START - 3600);
+    expect(getAdmissionTimestamp(admission(null, 30))).toBe(START - 1800);
+    expect(getAdmissionTimestamp(admission(30, 60))).toBe(START - 3600);
+    expect(getAdmissionTimestamp(admission(30, 30))).toBe(START - 1800);
   });
 
-  it("returns null for 0 minutes, like a missing admission", () => {
-    expect(
-      getAdmissionTimestamp({
-        timestamp: START,
-        timestamp_until: null,
-        admission_minutes: 0,
-      })
-    ).toBeNull();
-  });
-
-  it("returns null when no admission is set", () => {
-    expect(
-      getAdmissionTimestamp({
-        timestamp: START,
-        timestamp_until: null,
-        admission_minutes: null,
-      })
-    ).toBeNull();
+  it("returns null when neither is set", () => {
+    expect(getAdmissionTimestamp(admission(null, null))).toBeNull();
+    expect(getAdmissionTimestamp(admission(0, 0))).toBeNull();
   });
 });
 
@@ -47,14 +87,12 @@ describe("getDurationMinutes", () => {
       getDurationMinutes({
         timestamp: START,
         timestamp_until: START + 9000,
-        admission_minutes: null,
       })
     ).toBe(150);
     expect(
       getDurationMinutes({
         timestamp: START,
         timestamp_until: null,
-        admission_minutes: null,
       })
     ).toBeNull();
   });
@@ -64,7 +102,6 @@ describe("getDurationMinutes", () => {
       getDurationMinutes({
         timestamp: START,
         timestamp_until: START,
-        admission_minutes: null,
       })
     ).toBeNull();
   });
@@ -74,7 +111,6 @@ describe("getPerformanceStatus", () => {
   const withEnd = {
     timestamp: START,
     timestamp_until: START + 3600,
-    admission_minutes: null,
   };
 
   it("closes tickets exactly at the start", () => {
@@ -106,9 +142,15 @@ describe("without a start", () => {
     timestamp: null,
     timestamp_until: START,
     admission_minutes: 60,
+    hall_admission_minutes: 30,
   };
 
   it("has no admission time or duration", () => {
+    expect(getAdmissionTimes(noStart)).toEqual({
+      common: null,
+      foyer: null,
+      hall: null,
+    });
     expect(getAdmissionTimestamp(noStart)).toBeNull();
     expect(getDurationMinutes(noStart)).toBeNull();
   });
@@ -127,7 +169,6 @@ describe("getDurationLabel", () => {
       {
         timestamp: START,
         timestamp_until: minutes === null ? null : START + minutes * 60,
-        admission_minutes: null,
       },
       (key, options) => i18n.t(key, options) as string
     );

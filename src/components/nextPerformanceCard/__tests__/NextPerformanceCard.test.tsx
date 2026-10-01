@@ -47,6 +47,7 @@ const item = (
   timestamp: START,
   timestamp_until: START + 9_000,
   admission_minutes: 60,
+  hall_admission_minutes: 30,
   ticket_url: "https://tickets.example/11",
   event: { id: 9, title: "Premiere" },
   project: { id: 5, title: "Annie", url: "/projekte/annie/" },
@@ -61,18 +62,22 @@ const SECOND = item({
   timestamp: START + DAY,
   timestamp_until: null,
   admission_minutes: null,
+  hall_admission_minutes: null,
   ticket_url: null,
 });
 
-/** Answers like the backend: current from admission until the end, next is the earliest later one. */
+/** Answers like the backend: current from the first admission until the end, next is the earliest later one. */
 const serverAnswer = (
   performances: NextPerformanceItemDto[]
 ): NextPerformancesDto => {
   const now = Date.now() / 1000;
   const current =
     performances.find((performance) => {
-      const opens =
-        performance.timestamp - (performance.admission_minutes ?? 0) * 60;
+      const minutes = Math.max(
+        performance.admission_minutes ?? 0,
+        performance.hall_admission_minutes ?? 0
+      );
+      const opens = performance.timestamp - minutes * 60;
       const end = performance.timestamp_until ?? performance.timestamp + 10_800;
 
       return opens <= now && now < end;
@@ -250,7 +255,7 @@ describe("NextPerformanceCard", () => {
     expect(card()).toHaveTextContent("Premiere");
     expect(card()).toHaveTextContent(/Donnerstag, 01\.10\.2026 - 19:30\sUhr/);
     expect(screen.getByTestId("next-performance-admission")).toHaveTextContent(
-      /^Einlass ab 18:30\sUhr$/
+      /^Einlass ins Foyer ab\s18:30\sUhr · Saal ab\s19:00\sUhr$/
     );
     expect(card()).toHaveTextContent("Cast A");
     expect(unit("days")).toBe("02");
@@ -289,31 +294,60 @@ describe("NextPerformanceCard", () => {
 
     expect(parts).toHaveLength(3);
     expect(parts[0]).toMatch(/Donnerstag, 01\.10\.2026 - 19:30\sUhr/);
-    expect(parts[1]).toMatch(/^Einlass ab 18:30\sUhr$/);
+    expect(parts[1]).toMatch(
+      /^Einlass ins Foyer ab\s18:30\sUhr · Saal ab\s19:00\sUhr$/
+    );
     expect(parts[2]).toBe("Cast A");
   });
 
-  it("goes from admission to running to the next date without reloading the page", async () => {
-    vi.setSystemTime((START - 30 * 60) * 1000);
+  it("goes from foyer to hall to running to the next date without reloading the page", async () => {
+    vi.setSystemTime((START - 45 * 60) * 1000);
 
     await renderCard();
 
-    expect(card()).toHaveAttribute("data-phase", "admission");
+    expect(card()).toHaveAttribute("data-phase", "foyer");
     expect(screen.getByTestId("next-performance-status")).toHaveTextContent(
-      "Einlass läuft"
+      /^Einlass ins Foyer$/
     );
-    expect(screen.getByTestId("countdown-small")).toBeInTheDocument();
-    expect(unit("minutes")).toBe("30");
+    expect(screen.getByTestId("next-performance-admission")).toHaveTextContent(
+      /^Saal ab\s19:00\sUhr$/
+    );
+    expect(screen.getByTestId("countdown-small")).toHaveAccessibleName(
+      "Beginn in 0 Stunden 45 Minuten"
+    );
     expect(screen.getAllByTestId("filmstrip-tile").length).toBeGreaterThan(0);
     expect(loadPerformance).toHaveBeenCalledWith(11);
     expect(loadNextPerformances).toHaveBeenCalledTimes(1);
 
-    // One second before the start nothing changes yet.
+    // One second before the hall opens nothing changes yet.
+    vi.setSystemTime((START - 30 * 60 - 2) * 1000);
+    await flush(1000);
+
+    expect(card()).toHaveAttribute("data-phase", "foyer");
+    expect(loadNextPerformances).toHaveBeenCalledTimes(1);
+
+    await flush(1000);
+
+    expect(card()).toHaveAttribute("data-phase", "hall");
+    expect(screen.getByTestId("next-performance-status")).toHaveTextContent(
+      /^Einlass in den Saal$/
+    );
+    expect(screen.queryByTestId("next-performance-admission")).toBeNull();
+    expect(screen.getByTestId("countdown-small")).toBeInTheDocument();
+    expect(unit("minutes")).toBe("30");
+    expect(within(card()).getByTestId("filmstrip")).toBeInTheDocument();
+    expect(screen.getByTestId("next-performance-tickets")).toBeInTheDocument();
+    expect(loadNextPerformances).toHaveBeenCalledTimes(2);
+
+    // The clock keeps ticking without further requests while the phase stays.
+    await flush(5000);
+    expect(loadNextPerformances).toHaveBeenCalledTimes(2);
+
     vi.setSystemTime((START - 2) * 1000);
     await flush(1000);
 
-    expect(card()).toHaveAttribute("data-phase", "admission");
-    expect(loadNextPerformances).toHaveBeenCalledTimes(1);
+    expect(card()).toHaveAttribute("data-phase", "hall");
+    expect(loadNextPerformances).toHaveBeenCalledTimes(2);
 
     await flush(1000);
 
@@ -321,6 +355,7 @@ describe("NextPerformanceCard", () => {
     expect(screen.getByTestId("next-performance-status")).toHaveTextContent(
       "Die Vorstellung läuft gerade"
     );
+    expect(screen.queryByTestId("next-performance-admission")).toBeNull();
     expect(screen.queryByTestId("next-performance-tickets")).toBeNull();
     expect(within(card()).getByTestId("filmstrip")).toBeInTheDocument();
     // The small countdown now points to the following performance.
@@ -329,12 +364,11 @@ describe("NextPerformanceCard", () => {
     );
     expect(unit("days")).toBe("01");
     expect(unit("hours")).toBe("00");
-    expect(loadNextPerformances).toHaveBeenCalledTimes(2);
+    expect(loadNextPerformances).toHaveBeenCalledTimes(3);
     expect(loadNextPerformances).toHaveBeenLastCalledWith(5, "11-12");
 
-    // The clock keeps ticking without further requests while the phase stays.
     await flush(5000);
-    expect(loadNextPerformances).toHaveBeenCalledTimes(2);
+    expect(loadNextPerformances).toHaveBeenCalledTimes(3);
 
     vi.setSystemTime((START + 9_000 - 1) * 1000);
     await flush(1000);
@@ -351,8 +385,117 @@ describe("NextPerformanceCard", () => {
       "href",
       "/projekte/annie/vorstellungen/12"
     );
+    expect(loadNextPerformances).toHaveBeenCalledTimes(4);
+  });
+
+  it("reloads once per phase when the server answers an unchanged hash with 204", async () => {
+    loadNextPerformances.mockImplementation(
+      async (_projectId: number, hash?: string) => {
+        const answer = serverAnswer([FIRST, SECOND]);
+
+        return hash === answer.hash ? true : answer;
+      }
+    );
+    vi.setSystemTime((START - 30 * 60 - 1) * 1000);
+
+    await renderCard();
+
+    expect(card()).toHaveAttribute("data-phase", "foyer");
+    expect(loadNextPerformances).toHaveBeenCalledTimes(1);
+
+    await flush(1000);
+
+    expect(card()).toHaveAttribute("data-phase", "hall");
+    expect(loadNextPerformances).toHaveBeenCalledTimes(2);
+    expect(loadNextPerformances).toHaveBeenLastCalledWith(5, "11-12");
+
+    await flush(10_000);
+
+    expect(card()).toHaveAttribute("data-phase", "hall");
+    expect(loadNextPerformances).toHaveBeenCalledTimes(2);
+  });
+
+  it("shows one admission when foyer and hall open at the same time", async () => {
+    loadNextPerformances.mockImplementation(async () =>
+      serverAnswer([
+        item({ admission_minutes: 30, hall_admission_minutes: 30 }),
+      ])
+    );
+    vi.setSystemTime((START - 30 * 60 - 1) * 1000);
+
+    await renderCard();
+
+    expect(card()).toHaveAttribute("data-phase", "before");
+    expect(screen.getByTestId("next-performance-admission")).toHaveTextContent(
+      /^Einlass ab\s19:00\sUhr$/
+    );
+
+    await flush(1000);
+
+    expect(card()).toHaveAttribute("data-phase", "admission");
+    expect(screen.getByTestId("next-performance-status")).toHaveTextContent(
+      /^Einlass läuft$/
+    );
+    expect(screen.queryByTestId("next-performance-admission")).toBeNull();
+    expect(screen.getByTestId("countdown-small")).toBeInTheDocument();
+    expect(within(card()).getByTestId("filmstrip")).toBeInTheDocument();
+    expect(loadNextPerformances).toHaveBeenCalledTimes(2);
+
+    vi.setSystemTime((START - 1) * 1000);
+    await flush(1000);
+
+    expect(card()).toHaveAttribute("data-phase", "running");
     expect(loadNextPerformances).toHaveBeenCalledTimes(3);
   });
+
+  it.each([
+    ["only the foyer is set", { hall_admission_minutes: null }, 60, "18:30"],
+    ["only the hall is set", { admission_minutes: null }, 30, "19:00"],
+    [
+      "the hall is 0 and the foyer 60",
+      { admission_minutes: 60, hall_admission_minutes: 0 },
+      60,
+      "18:30",
+    ],
+    [
+      "the foyer is 0 and the hall 30",
+      { admission_minutes: 0, hall_admission_minutes: 30 },
+      30,
+      "19:00",
+    ],
+    [
+      "the hall opens earlier than the foyer",
+      { admission_minutes: 30, hall_admission_minutes: 45 },
+      45,
+      "18:45",
+    ],
+  ] as const)(
+    "shows one neutral admission when %s",
+    async (_case, fields, minutes, time) => {
+      loadNextPerformances.mockImplementation(async () =>
+        serverAnswer([item(fields)])
+      );
+      vi.setSystemTime((START - minutes * 60 - 1) * 1000);
+
+      await renderCard();
+
+      expect(card()).toHaveAttribute("data-phase", "before");
+      expect(
+        screen.getByTestId("next-performance-admission")
+      ).toHaveTextContent(new RegExp(`^Einlass ab\\s${time}\\sUhr$`));
+      expect(screen.queryByTestId("filmstrip")).toBeNull();
+
+      await flush(1000);
+
+      expect(card()).toHaveAttribute("data-phase", "admission");
+      expect(screen.getByTestId("next-performance-status")).toHaveTextContent(
+        /^Einlass läuft$/
+      );
+      expect(screen.queryByTestId("next-performance-admission")).toBeNull();
+      expect(screen.getByTestId("countdown-small")).toBeInTheDocument();
+      expect(within(card()).getByTestId("filmstrip")).toBeInTheDocument();
+    }
+  );
 
   it("skips the admission phase without an admission time", async () => {
     loadNextPerformances.mockImplementation(async () => serverAnswer([SECOND]));
@@ -651,9 +794,9 @@ describe("NextPerformanceCard", () => {
     });
   });
 
-  it("shows no admission time when the admission is 0 minutes", async () => {
+  it("shows no admission time when both admissions are 0 minutes", async () => {
     loadNextPerformances.mockImplementation(async () =>
-      serverAnswer([item({ admission_minutes: 0 })])
+      serverAnswer([item({ admission_minutes: 0, hall_admission_minutes: 0 })])
     );
     vi.setSystemTime((START - 3_600) * 1000);
 

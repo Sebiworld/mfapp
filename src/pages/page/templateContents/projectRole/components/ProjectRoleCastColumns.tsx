@@ -14,8 +14,8 @@ interface ProjectRoleCastColumnsProps {
 }
 
 /**
- * Shows one equally wide column per cast, headed by the cast name. Works for any number of columns;
- * on narrow screens the columns stay side by side and the container scrolls horizontally.
+ * Shows one column per cast, headed by the cast name. All columns share a fixed width of one portrait and are
+ * packed to the left, so they line up across roles; when they do not fit, the container scrolls horizontally.
  * @param columns Casts with the portraits to show below each cast name.
  */
 export const ProjectRoleCastColumns: FC<ProjectRoleCastColumnsProps> = ({

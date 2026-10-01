@@ -80,7 +80,8 @@ export const nextPerformanceCardStyles = (
     color: theme.vars.palette.projectPrimary.contrastText,
 
     [theme.breakpoints.down("sm")]: {
-      padding: "8px 24px",
+      gap: "8px",
+      padding: "6px 24px",
     },
 
     ".status-text": {
@@ -88,6 +89,11 @@ export const nextPerformanceCardStyles = (
       letterSpacing: "0.04em",
       textTransform: "uppercase",
       fontSize: "0.85rem",
+
+      [theme.breakpoints.down("sm")]: {
+        fontSize: "0.75rem",
+        letterSpacing: "0.02em",
+      },
     },
 
     ".live-dot": {
@@ -114,7 +120,7 @@ export const nextPerformanceCardStyles = (
 
     [theme.breakpoints.down("sm")]: {
       padding: "16px 24px 0",
-      gap: "20px",
+      gap: "16px",
     },
   },
 
@@ -169,6 +175,24 @@ export const nextPerformanceCardStyles = (
 
     ".card-admission": {
       fontWeight: "bold",
+    },
+
+    // A plain pass-through on larger screens, so date, admission and casts stay single rows of the column.
+    ".card-meta": {
+      display: "contents",
+
+      [theme.breakpoints.down("sm")]: {
+        display: "flex",
+        flexWrap: "wrap",
+        alignItems: "center",
+        gap: "8px",
+
+        // Date and casts share a line; the admission time keeps its own line below without changing the reading order.
+        ".card-admission": {
+          order: 1,
+          flexBasis: "100%",
+        },
+      },
     },
 
     ".casts-container": {
@@ -253,18 +277,39 @@ export const nextPerformanceCardStyles = (
       },
     },
 
+    // One compact row: label beside small tiles, left-aligned; the tiles wrap below only when the row is too narrow.
     [theme.breakpoints.down("sm")]: {
-      "&.countdown-large": {
+      // Both sizes, so the small variant's own tile rules do not outrank these.
+      "&.countdown-large, &.countdown-small": {
         width: "100%",
+        flexDirection: "row",
+        flexWrap: "wrap",
+        alignItems: "center",
+        gap: "6px 10px",
+
+        ".countdown-label": {
+          maxWidth: "7.5rem",
+          fontSize: "0.75rem",
+          letterSpacing: "0.02em",
+          lineHeight: 1.25,
+        },
 
         ".countdown-tiles": {
-          display: "grid",
-          gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
+          gap: "4px",
+        },
+
+        ".countdown-tile": {
+          gap: "2px",
         },
 
         ".countdown-value": {
-          minWidth: 0,
-          fontSize: "1.9rem",
+          minWidth: "36px",
+          padding: "6px",
+          fontSize: "1.25rem",
+        },
+
+        ".countdown-unit": {
+          fontSize: "0.65rem",
         },
       },
     },
@@ -282,7 +327,15 @@ export const nextPerformanceCardStyles = (
     padding: "24px 48px 32px",
 
     [theme.breakpoints.down("sm")]: {
-      padding: "20px 24px 24px",
+      padding: "16px 24px 20px",
+
+      // Smaller text and side padding keep both buttons in one row; the height stays a comfortable touch target.
+      ".MuiButton-root": {
+        minHeight: "40px",
+        paddingLeft: "12px",
+        paddingRight: "12px",
+        fontSize: "0.8125rem",
+      },
     },
   },
 });

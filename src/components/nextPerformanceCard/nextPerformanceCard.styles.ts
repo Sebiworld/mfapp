@@ -162,7 +162,7 @@ export const nextPerformanceCardStyles = (
       fontWeight: "bold",
       letterSpacing: "0.04em",
       textTransform: "uppercase",
-      fontSize: "0.85rem",
+      fontSize: "0.875rem",
 
       [theme.breakpoints.down("sm")]: {
         fontSize: "0.75rem",
@@ -225,7 +225,7 @@ export const nextPerformanceCardStyles = (
     },
 
     ".card-subtitle": {
-      fontSize: "clamp(1.15rem, 2.4vw, 1.5rem)",
+      fontSize: "clamp(1.25rem, 2.4vw, 1.5rem)",
       lineHeight: 1.2,
       fontWeight: 600,
       hyphens: "auto",
@@ -238,7 +238,7 @@ export const nextPerformanceCardStyles = (
     },
 
     ".card-date": {
-      fontSize: "1.15em",
+      fontSize: "1.25rem",
 
       // Never above the line "category · title" on small screens, so the order of importance stays visible.
       [theme.breakpoints.down("sm")]: {
@@ -283,7 +283,7 @@ export const nextPerformanceCardStyles = (
     flex: "none",
 
     ".countdown-label": {
-      fontSize: "0.85rem",
+      fontSize: "0.875rem",
       fontWeight: "bold",
       letterSpacing: "0.04em",
       textTransform: "uppercase",
@@ -347,7 +347,7 @@ export const nextPerformanceCardStyles = (
       },
 
       ".countdown-unit": {
-        fontSize: "0.65rem",
+        fontSize: "0.75rem",
       },
     },
 
@@ -383,7 +383,7 @@ export const nextPerformanceCardStyles = (
         },
 
         ".countdown-unit": {
-          fontSize: "0.65rem",
+          fontSize: "0.75rem",
         },
       },
     },
@@ -408,7 +408,7 @@ export const nextPerformanceCardStyles = (
         minHeight: "40px",
         paddingLeft: "12px",
         paddingRight: "12px",
-        fontSize: "0.8125rem",
+        fontSize: "0.875rem",
       },
     },
   },

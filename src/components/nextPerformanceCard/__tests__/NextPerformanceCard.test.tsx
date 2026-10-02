@@ -1305,3 +1305,65 @@ describe("NextPerformanceCard as a strip", () => {
     });
   });
 });
+
+describe("NextPerformanceCard type sizes", () => {
+  // Cast: the sx object is only read here as a plain tree of selectors.
+  const styles = nextPerformanceCardStyles(mfTheme) as unknown as Record<
+    string,
+    unknown
+  >;
+
+  /**
+   * Collects every font size in a style tree, with the selector path that sets it.
+   * @param node - style tree or value
+   * @param path - selectors leading to the node
+   * @returns pairs of path and font size
+   */
+  const fontSizes = (node: unknown, path = ""): [string, string][] => {
+    if (!node || typeof node !== "object") {
+      return [];
+    }
+
+    return Object.entries(node).flatMap(([key, value]) =>
+      key === "fontSize" && typeof value === "string"
+        ? [[path, value] as [string, string]]
+        : fontSizes(value, `${path} ${key}`)
+    );
+  };
+
+  it("sets no text smaller than 0.75rem, so units and labels stay readable", () => {
+    const tooSmall = fontSizes(styles).filter(([, size]) => {
+      const rem = /^([\d.]+)rem$/.exec(size);
+
+      return !!rem && parseFloat(rem[1]) < 0.75;
+    });
+
+    expect(tooSmall).toEqual([]);
+  });
+
+  it("sets the date one step below the subtitle on larger screens", () => {
+    const info = styles[".card-info"] as Record<
+      string,
+      Record<string, unknown>
+    >;
+
+    expect(info[".card-date"].fontSize).toBe("1.25rem");
+    expect(info[".card-subtitle"].fontSize).toBe(
+      "clamp(1.25rem, 2.4vw, 1.5rem)"
+    );
+  });
+
+  it("uses the label size for status and countdown label", () => {
+    const status = styles[".card-status"] as Record<
+      string,
+      Record<string, unknown>
+    >;
+    const countdown = styles[".countdown"] as Record<
+      string,
+      Record<string, unknown>
+    >;
+
+    expect(status[".status-text"].fontSize).toBe("0.875rem");
+    expect(countdown[".countdown-label"].fontSize).toBe("0.875rem");
+  });
+});

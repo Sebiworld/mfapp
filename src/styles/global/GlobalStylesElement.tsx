@@ -7,6 +7,7 @@ import { selectGlobalCss } from "@src/store/configuration/configuration.selector
 import { useMemo } from "react";
 import { GlobalStyles, Interpolation, Theme } from "@mui/material";
 import { globalAspectRatioStyles } from "./aspect-ratio.styles";
+import { globalTouchTargetStyles } from "./touchTargets.styles";
 import { lightgalleryStyles } from "./vendors/lightgallery.styles";
 import "react-virtualized/styles.css";
 
@@ -19,6 +20,7 @@ export const GlobalStylesElement = () => {
       ...globalContentStyles,
       ...globalFontsStyles,
       ...globalAspectRatioStyles,
+      ...globalTouchTargetStyles,
       ...toastifyStyles,
       ...lightgalleryStyles,
 

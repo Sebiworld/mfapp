@@ -4,40 +4,40 @@ import { gridLayoutStyles } from "@styles/utils/gridLayout.styles";
 export const contentFormStyles: SxProps<Theme> = (theme) => ({
   position: "relative",
   display: "grid",
+
+  // One column of fields reads best at the measure of running text; doubled so the content blocks' 100 % cap
+  // does not override it.
+  "&.content-form.content-form": {
+    maxWidth: "38em",
+  },
   gap: "16px",
   gridTemplateColumns: "1fr",
   paddingTop: "32px",
 
   ".form-group": gridLayoutStyles,
 
+  // Fieldsets stack in one column; inside, fields take the share of the row the CMS sets as column width.
   ".form-group.form-group": {
-    // position: "relative",
     alignSelf: "flex-start",
-    // gridColumnEnd: "span 12",
-    gap: "16px",
+    gridTemplateColumns: "repeat(12, minmax(0, 1fr))",
+    gap: "20px 16px",
 
-    // [theme.breakpoints.down("md")]: {
-    //   gridColumn: "span 6",
-    // },
+    "& > .layout-block": {
+      gridColumn: "span var(--column-span, 12)",
 
-    // "&>*": {
-    //   position: "relative",
-    //   // flex: "1 1 auto",
-    //   gridColumn: "span 12",
-    // },
-
-    "&.root": {
-      [theme.breakpoints.down("md")]: {
-        gridTemplateColumns: "repeat(12, 1fr)",
-      },
-
+      // Too narrow for side-by-side fields: a label like "Hausnummer" would wrap and push its field down.
       [theme.breakpoints.down("sm")]: {
-        gridTemplateColumns: "repeat(6, 1fr)",
+        gridColumn: "1 / -1",
       },
+    },
 
-      "&>.form-group": {
-        gridColumn: "span 6",
-      },
+    "& > .form-group": {
+      gridColumn: "1 / -1",
+    },
+
+    // A titled fieldset starts a new section; one without a title just continues the fields.
+    "& > .form-group:has(> .form-group-label)": {
+      marginTop: "28px",
     },
 
     "p, h1, h2, h3, h4, h5, h6": {
@@ -45,40 +45,25 @@ export const contentFormStyles: SxProps<Theme> = (theme) => ({
       maxWidth: "100%",
     },
 
-    "&>.form-group-label, &>.title-placeholder": {
-      position: "relative",
-      fontSize: "14px",
-      lineHeight: "16px",
-      minHeight: "22px",
-      display: "flex",
-      flexDirection: "row",
-      gap: "8px",
-      paddingRight: "16px",
-      alignItems: "center",
-      fontWeight: "lighter",
-      marginBottom: "-4px",
-      color: theme.vars.palette.contrast[600],
-
-      "&>*": {
-        flex: "0 0 auto",
-      },
-
-      "&>hr": {
-        height: "1px",
-        flex: "1 1 8px",
-        border: "0 none",
-        background: theme.vars.palette.contrast[800],
-
-        "&:first-of-type": {
-          width: "8px",
-          flex: "0 0 auto",
-        },
-      },
+    "& > .form-group-label": {
+      margin: 0,
+      paddingTop: "16px",
+      borderTop: `1px solid ${theme.vars.palette.divider}`,
+      fontSize: "1.25rem",
+      lineHeight: 1.2,
+      fontWeight: 700,
     },
   },
 
   ".content-form-input": {
     gap: "4px",
+
+    // Options and markup carry their label as text; set it like the labels of the other fields.
+    "&:not(.content-form-input-checkbox) > .form-input-label": {
+      alignSelf: "flex-start",
+      textAlign: "left",
+      fontWeight: 700,
+    },
 
     ".form-input-label": {
       color: theme.vars.palette.contrast[500],
@@ -130,5 +115,5 @@ export const contentFormStyles: SxProps<Theme> = (theme) => ({
     flexDirection: "column",
     gap: "8px",
     overflow: "hidden",
-  }
+  },
 });

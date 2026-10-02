@@ -13,6 +13,7 @@ import { FormValidationResponseDto } from "@models/utility-types/form-validation
 import Check from "@mui/icons-material/Check";
 import { autocompleteNamesMap } from "../functions/autocompleteNamesMap";
 import { parseHtml } from "@utils/functions/parseHtml";
+import { getColumnSpanStyle } from "../functions/getColumnSpanStyle";
 
 export interface ContentFormInputTextProps {
   item: FormInputTextVariant;
@@ -333,6 +334,7 @@ export const ContentFormInputText: React.FC<ContentFormInputTextProps> = ({
       required={item?.required}
       error={Boolean(errors?.[item.name])}
       className={classes}
+      style={getColumnSpanStyle(item.columnWidth)}
       // helperText={(errors?.[item.name]?.message as string) || ""}
     >
       <FormLabel

@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useId, useMemo } from "react";
 import {
   FormGroupedElement,
   FormInputTextVariant,
@@ -11,6 +11,10 @@ import { isTextInputType } from "../functions/isTextInputType";
 import { ContentFormInputText } from "./ContentFormInputText";
 import { ContentFormInputCheckbox } from "./ContentFormInputCheckbox";
 import { isValidArray } from "@utils/functions/isValidArray";
+import { parseHtml } from "@utils/functions/parseHtml";
+
+/** A `{{name}}` the CMS did not replace, because no text was entered for it. */
+const UNFILLED_PLACEHOLDER = /\{\{\s*[\w-]+\s*\}\}/;
 
 export interface ContentFormGroupProps {
   item: FormGroupedElement;
@@ -43,18 +47,40 @@ export const ContentFormGroup: React.FC<ContentFormGroupProps> = ({
     return output.join(" ");
   }, [customClasses, isRoot]);
 
+  const labelId = useId();
+  const hasLabel = !isRoot && !!item.label;
+
+  const description = useMemo(() => {
+    if (
+      isRoot ||
+      !item.description ||
+      UNFILLED_PLACEHOLDER.test(item.description)
+    ) {
+      return null;
+    }
+
+    return parseHtml(item.description);
+  }, [isRoot, item.description]);
+
   return (
-    <Box className={classes}>
-      {!isRoot &&
-        (item.label ? (
-          <Typography variant="h3" className="form-group-label layout-block">
-            <hr />
-            {item.label}
-            <hr />
-          </Typography>
-        ) : (
-          <Box className="title-placeholder"></Box>
-        ))}
+    <Box
+      className={classes}
+      role={isRoot ? undefined : "group"}
+      aria-labelledby={hasLabel ? labelId : undefined}
+    >
+      {hasLabel && (
+        <Typography
+          variant="h3"
+          id={labelId}
+          className="form-group-label layout-block"
+        >
+          {item.label}
+        </Typography>
+      )}
+
+      {!!description && (
+        <Box className="form-group-description layout-block">{description}</Box>
+      )}
 
       {!!item?.fields?.length &&
         item.fields.map((fieldData) => {

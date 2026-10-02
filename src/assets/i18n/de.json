@@ -104,7 +104,8 @@
     "description": "Jetzt Vereinsmitglied werden, die Ziele unterstützen und das nächste Musical-Projekt fördern.",
     "external": "Besuchen Sie uns auch hier:",
     "by": "Entwickelt mit <heart/> von <a>Sebastian Schendel</a>",
-    "copyright": "Copyright 2012 - {{year}} Musical-Fabrik e.V."
+    "copyright": "Copyright 2012 - {{year}} Musical-Fabrik e.V.",
+    "home_link": "Zur Startseite"
   },
 
   "page": {
@@ -114,7 +115,8 @@
 
   "home": {
     "title": "Home",
-    "menu": "Home"
+    "menu": "Home",
+    "heading": "Musical-Fabrik e.V."
   },
 
   "role": {
@@ -176,7 +178,9 @@
   "page_card": {
     "facebook_title": "Musical-Fabrik e.V. auf Facebook:",
     "btn_more": "Mehr dazu...",
-    "btn_more_on_facebook": "Mehr dazu auf Facebook..."
+    "btn_more_label": "Mehr zu „{{title}}“",
+    "btn_more_on_facebook": "Mehr dazu auf Facebook...",
+    "btn_more_on_facebook_label": "Auf Facebook: „{{title}}“"
   },
 
   "project": {

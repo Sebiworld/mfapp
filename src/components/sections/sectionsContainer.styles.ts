@@ -1,9 +1,37 @@
 import { SxProps, Theme } from "@mui/material";
+import { SystemStyleObject } from "@mui/system";
 
-/** Curtain Black, where the feature surface's gradient ends and the band after it starts. */
-const FEATURE_END_COLOR = "#121212";
+/** Curtain Black, where the secondary surface's gradient ends and the band after it starts. */
+const SECONDARY_END_COLOR = "#121212";
+
+/** Chapter surfaces with a flat colour; each has a `--surface-<name>` variable on the container. */
+const FLAT_SURFACES = ["page", "default", "paper", "secondary-light"];
+
+/**
+ * Defines one CSS variable per chapter surface (`--surface-<name>`), for every element that paints one.
+ * @param theme App theme.
+ * @returns The variable definitions, including the dark colour scheme.
+ */
+export const chapterSurfaceVariables = (
+  theme: Theme
+): SystemStyleObject<Theme> => ({
+  "--surface-page": theme.vars.palette.background.default,
+  "--surface-default": theme.vars.palette.background.default,
+  "--surface-paper": theme.vars.palette.background.paper,
+  "--surface-secondary-light": "var(--mf-palette-secondary-50)",
+  // Where the band enters the secondary gradient it meets the start colour, where it leaves it the end colour.
+  "--surface-secondary-start": theme.vars.palette.secondary.main,
+  "--surface-secondary-end": SECONDARY_END_COLOR,
+
+  ...theme.applyStyles("dark", {
+    "--surface-secondary-light": "var(--mf-palette-secondary-900)",
+  }),
+});
 
 export const sectionContainerStyles: SxProps<Theme> = (theme) => ({
+  // One colour per surface, shared by the chapters and the bands between them.
+  ...chapterSurfaceVariables(theme),
+
   // The band pulls into the paddings of both neighbours so it reads as the seam between them, not as a section.
   // It shows the surface it leaves; its wedge cuts in with the surface it opens.
   ".section-break": {
@@ -22,47 +50,63 @@ export const sectionContainerStyles: SxProps<Theme> = (theme) => ({
       "--background-color": "var(--to-surface)",
     },
 
-    "&.from-page, &.from-default": {
-      "--from-surface": theme.vars.palette.background.default,
+    "&.band-secondary .section-spacer.section-spacer": {
+      "--main-color": theme.vars.palette.secondary.main,
     },
 
-    "&.from-paper": {
-      "--from-surface": theme.vars.palette.background.paper,
+    ...Object.fromEntries(
+      FLAT_SURFACES.flatMap((surface) => [
+        [`&.from-${surface}`, { "--from-surface": `var(--surface-${surface})` }],
+        [`&.to-${surface}`, { "--to-surface": `var(--surface-${surface})` }],
+      ])
+    ),
+
+    "&.from-secondary": {
+      "--from-surface": "var(--surface-secondary-end)",
     },
 
-    "&.from-feature": {
-      "--from-surface": FEATURE_END_COLOR,
+    "&.to-secondary": {
+      "--to-surface": "var(--surface-secondary-start)",
     },
+  },
 
-    "&.to-default": {
-      "--to-surface": theme.vars.palette.background.default,
-    },
+  // A section that draws its own bottom band (partners) may close a chapter without a section break; its band then
+  // takes colour and wedge from the next chapter and lies above that chapter's surface where the two overlap.
+  ".chapter:has(+ .chapter) .section-spacer.position-bottom": {
+    zIndex: 1,
+  },
 
-    "&.to-paper": {
-      "--to-surface": theme.vars.palette.background.paper,
-    },
+  ".chapter:has(+ .chapter.band-secondary) .section-spacer.position-bottom": {
+    "--main-color": theme.vars.palette.secondary.main,
+  },
 
-    "&.to-feature": {
-      "--to-surface": theme.vars.palette.secondary.main,
-    },
+  ...Object.fromEntries(
+    FLAT_SURFACES.map((surface) => [
+      `.chapter:has(+ .chapter.surface-${surface}) .section-spacer.position-bottom`,
+      { "--background-color": `var(--surface-${surface})` },
+    ])
+  ),
+
+  ".chapter:has(+ .chapter.surface-secondary) .section-spacer.position-bottom": {
+    "--background-color": "var(--surface-secondary-start)",
   },
 
   ".chapter": {
     position: "relative",
 
-    "&.surface-default": {
-      backgroundColor: theme.vars.palette.background.default,
-    },
-
-    "&.surface-paper": {
-      backgroundColor: theme.vars.palette.background.paper,
-    },
+    ...Object.fromEntries(
+      FLAT_SURFACES.filter((surface) => surface !== "page").map((surface) => [
+        `&.surface-${surface}`,
+        { backgroundColor: `var(--surface-${surface})` },
+      ])
+    ),
 
     // Same in both colour schemes: next to true black (dark) and white (light) the slate surface stands out either way.
-    "&.surface-feature": {
+    "&.surface-secondary": {
       // At 170deg the top edge spans width × sin(10deg) ≈ 17.4vw along the gradient; holding the start colour that far
       // keeps the whole edge in the band wedge's colour.
-      background: `linear-gradient(170deg, ${theme.vars.palette.secondary.main} 18vw, ${FEATURE_END_COLOR} 65%)`,
+      background:
+        "linear-gradient(170deg, var(--surface-secondary-start) 18vw, var(--surface-secondary-end) 65%)",
       color: theme.vars.palette.common.white,
     },
   },

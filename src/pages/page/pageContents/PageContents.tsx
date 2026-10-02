@@ -131,6 +131,17 @@ export const PageContents: React.FC<PagesContentsProps> = ({ page }) => {
       data-testid="page-contents"
       sx={pageContentsStyles}
     >
+      {/* The hero carries the name only as artwork, so the home page needs its level-one heading for assistive tech. */}
+      {page?.template?.name === "home" && (
+        <Typography
+          variant="h1"
+          className="visually-hidden"
+          data-testid="home-heading"
+        >
+          {t("home.heading")}
+        </Typography>
+      )}
+
       {page?.template?.name === "project" && !!page.project_id && (
         <NextPerformanceCard projectId={page.project_id} />
       )}

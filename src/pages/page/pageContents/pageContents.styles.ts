@@ -3,6 +3,19 @@ import { SxProps, Theme } from "@mui/material";
 export const pageContentsStyles: SxProps<Theme> = (theme) => ({
   background: theme.vars.palette.background.default,
 
+  // Read by assistive tech, invisible on screen.
+  ".visually-hidden": {
+    position: "absolute",
+    width: "1px",
+    height: "1px",
+    margin: "-1px",
+    padding: 0,
+    overflow: "hidden",
+    clip: "rect(0 0 0 0)",
+    whiteSpace: "nowrap",
+    border: 0,
+  },
+
   ".page-content": {
     margin: "32px",
     marginBottom: "16px",

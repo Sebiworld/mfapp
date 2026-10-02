@@ -63,7 +63,7 @@ export const Footer = () => {
   return (
     <Box className="footer-wrapper" sx={footerStyles}>
       <Paper color="neutral" component="footer" className="footer">
-        <Box component={RouterLink} to="/">
+        <Box component={RouterLink} to="/" aria-label={t("footer.home_link")}>
           <MfLogo layout="vertical"></MfLogo>
         </Box>
 

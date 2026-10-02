@@ -233,7 +233,7 @@ export const nextPerformanceCardStyles = (
       minWidth: "64px",
       padding: "10px 8px",
       overflow: "hidden",
-      borderRadius: "6px",
+      borderRadius: 0,
       background: theme.vars.palette.projectPrimary.main,
       color: theme.vars.palette.projectPrimary.contrastText,
       fontSize: "2.25rem",

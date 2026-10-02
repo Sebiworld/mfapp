@@ -37,6 +37,11 @@ const leftAlignedSubroleHeader = (
       ...padding,
     },
 
+    // Content blocks centre paragraphs in a 38em measure; here they start at the left edge with the title.
+    ".subrole-description > *": {
+      alignSelf: "flex-start",
+    },
+
     ".subrole-actions": {
       justifyContent: "flex-start",
       ...padding,
@@ -65,6 +70,9 @@ export const projectRoleStyles: SxProps<Theme> = (theme) => ({
     overscrollBehaviorX: "contain",
     scrollSnapType: "x proximity",
     maxWidth: "100%",
+    // The scroll box clips everything outside it; this room keeps the portrait card shadows visible.
+    paddingTop: "4px",
+    paddingBottom: "8px",
     paddingLeft: "16px",
     paddingRight: "16px",
     // Snapping keeps the side padding visible instead of scrolling it away on load.

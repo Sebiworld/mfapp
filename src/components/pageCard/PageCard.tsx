@@ -16,6 +16,11 @@ import { LazyPicture } from "@components/lazyPicture/LazyPicture";
 import { IonIcon } from "@ionic/react";
 import { Link } from "react-router";
 import { parseHtml } from "@utils/functions/parseHtml";
+import { convertHtmlEntities } from "@utils/functions/convertHtmlEntities";
+import { trimWords } from "@utils/functions/trimWords";
+
+/** Longest card title, in characters, that goes into the accessible name of the card's link. */
+const LINK_LABEL_TITLE_LIMIT = 60;
 
 export interface PageCardProps {
   card: PageCardDto;
@@ -45,6 +50,17 @@ export const PageCard: React.FC<PageCardProps> = ({
 
     return parseHtml(card.intro);
   }, [card.intro]);
+
+  // Every card says "Mehr dazu..."; the card title in the accessible name keeps the links of a list apart.
+  const linkLabelTitle = useMemo(() => {
+    if (!card.title) {
+      return "";
+    }
+
+    const plainTitle = convertHtmlEntities(card.title.replace(/<[^>]*>/g, ""));
+
+    return trimWords(plainTitle.trim(), LINK_LABEL_TITLE_LIMIT);
+  }, [card.title]);
 
   const description = useMemo(() => {
     if (!card.description) {
@@ -133,6 +149,13 @@ export const PageCard: React.FC<PageCardProps> = ({
             variant="contained"
             color="contrast"
             target="_blank"
+            aria-label={
+              linkLabelTitle
+                ? t("page_card.btn_more_on_facebook_label", {
+                    title: linkLabelTitle,
+                  })
+                : undefined
+            }
             startIcon={
               <IonIcon aria-hidden="true" icon={"logo-facebook"}></IonIcon>
             }
@@ -145,6 +168,11 @@ export const PageCard: React.FC<PageCardProps> = ({
             to={card.url}
             variant="contained"
             color="contrast"
+            aria-label={
+              linkLabelTitle
+                ? t("page_card.btn_more_label", { title: linkLabelTitle })
+                : undefined
+            }
           >
             {t("page_card.btn_more")}
           </Button>

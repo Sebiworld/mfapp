@@ -15,6 +15,8 @@ import { formatBerlinDate } from "@utils/functions/formatBerlinDate";
 import { formatBerlinTime } from "@utils/functions/formatBerlinTime";
 import { getPerformanceUrl } from "@utils/functions/getPerformanceUrl";
 import { parseHtml } from "@utils/functions/parseHtml";
+import { isSameBerlinDay } from "@utils/functions/isSameBerlinDay";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { CountdownTiles } from "./components/CountdownTiles";
 import { PerformanceFilmstrip } from "@components/performanceFilmstrip/PerformanceFilmstrip";
 import { nextPerformanceCardStyles } from "./nextPerformanceCard.styles";
@@ -124,6 +126,36 @@ export const NextPerformanceCard: FC<NextPerformanceCardProps> = ({
     getAdmissionTimes(performance),
     t
   );
+  // Once the performance runs, online tickets are no longer an option.
+  const ticketUrl = phase !== "running" ? performance.ticket_url : null;
+  // Until the day of the performance the card sells tickets; on the day itself visitors come for the details.
+  const ticketsLead =
+    !!ticketUrl && !isSameBerlinDay(performance.timestamp, nowMs);
+
+  const infoButton = (
+    <Button
+      variant={ticketsLead ? "outlined" : "contained"}
+      color="projectPrimary"
+      component={Link}
+      to={getPerformanceUrl(performance.project.url, performance.id)}
+      data-testid="next-performance-link"
+    >
+      {t("next_performance.to-performance")}
+    </Button>
+  );
+  const ticketsButton = !!ticketUrl && (
+    <Button
+      variant={ticketsLead ? "contained" : "outlined"}
+      color="projectPrimary"
+      href={ticketUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      endIcon={<OpenInNewIcon aria-hidden="true" />}
+      data-testid="next-performance-tickets"
+    >
+      {t("next_performance.tickets")}
+    </Button>
+  );
 
   return (
     <Paper
@@ -221,27 +253,16 @@ export const NextPerformanceCard: FC<NextPerformanceCardProps> = ({
       {phase !== "before" && <PerformanceFilmstrip items={filmstripItems} />}
 
       <Box className="card-actions">
-        <Button
-          variant="contained"
-          color="projectPrimary"
-          component={Link}
-          to={getPerformanceUrl(performance.project.url, performance.id)}
-          data-testid="next-performance-link"
-        >
-          {t("next_performance.to-performance")}
-        </Button>
-
-        {phase !== "running" && performance.ticket_url && (
-          <Button
-            variant="outlined"
-            color="projectPrimary"
-            href={performance.ticket_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            data-testid="next-performance-tickets"
-          >
-            {t("next_performance.tickets")}
-          </Button>
+        {ticketsLead ? (
+          <>
+            {ticketsButton}
+            {infoButton}
+          </>
+        ) : (
+          <>
+            {infoButton}
+            {ticketsButton}
+          </>
         )}
       </Box>
     </Paper>

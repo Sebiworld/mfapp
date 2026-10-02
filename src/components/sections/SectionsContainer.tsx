@@ -40,24 +40,35 @@ const SectionForm = React.lazy(() =>
   }))
 );
 
-/** CMS classes (`spacer-down`, `spacer-tertiary-down`, …) that ask for a stripe band at the top of a section. */
+/** CMS classes (`spacer-down`, `spacer-secondary-down`, …) that ask for a stripe band at the top of a section. */
 const SECTION_BREAK_CLASS = /^spacer-(?:[a-z]+-)?(?:up|down)$/;
+
+/** CMS classes that draw the band in the secondary colour instead of the primary orange. */
+const SECONDARY_BAND_CLASS = /^spacer-secondary-(?:up|down)$/;
 
 /** Section types that draw their own stripe bands at top and bottom; a band next to them would double it. */
 const SELF_BANDED_SECTION_TYPES = ["partners-and-sponsors"];
 
-/** CMS class that turns a chapter into the feature surface. */
-const FEATURE_CLASS = "tertiary";
+/** Surfaces a CMS class can ask for; other chapters alternate between `default` and `paper`. */
+type ClassSurface = "secondary" | "secondary-light";
+
+/** CMS classes that give a chapter its own surface, in order of precedence. */
+const SURFACE_CLASSES: ClassSurface[] = ["secondary", "secondary-light"];
 
 /**
  * Background of a chapter: `page` keeps the page background (first chapter), `default` and `paper` alternate so
- * every band separates two different surfaces, `feature` is the dark textured surface.
+ * every band separates two different surfaces, `secondary` is the dark slate gradient, `secondary-light` a light
+ * slate tint.
  */
-type ChapterSurface = "page" | "default" | "paper" | "feature";
+type ChapterSurface = "page" | "default" | "paper" | ClassSurface;
 
-/** Run of sections between two stripe bands, sharing one background surface. */
+/** Run of sections sharing one background surface, usually opened by a stripe band. */
 interface Chapter {
   surface: ChapterSurface;
+  // False where a neighbouring section draws the band itself, or for the first chapter.
+  hasBand: boolean;
+  // Colour of the band that opens the chapter, also when a neighbouring section draws it.
+  bandColor: "primary" | "secondary";
   sections: SectionDtoVariant[];
 }
 
@@ -82,9 +93,28 @@ const hasSectionBreak = (
     return false;
   }
 
-  const classes = section.classes?.split(" ") ?? [];
+  return getClasses(section).some((cssClass) =>
+    SECTION_BREAK_CLASS.test(cssClass)
+  );
+};
 
-  return classes.some((cssClass) => SECTION_BREAK_CLASS.test(cssClass));
+/**
+ * Reads the CMS classes of a section.
+ * @param section - section to read
+ * @returns the class names
+ */
+const getClasses = (section: SectionDtoVariant): string[] =>
+  section.classes?.split(" ") ?? [];
+
+/**
+ * Finds the surface a section asks for through its CMS classes.
+ * @param section - section to check
+ * @returns the requested surface, or null if the section leaves it to the alternation
+ */
+const getClassSurface = (section: SectionDtoVariant): ClassSurface | null => {
+  const classes = getClasses(section);
+
+  return SURFACE_CLASSES.find((surface) => classes.includes(surface)) ?? null;
 };
 
 /**
@@ -97,15 +127,18 @@ const pickSurface = (
   section: SectionDtoVariant,
   previous: ChapterSurface
 ): ChapterSurface => {
-  if (section.classes?.split(" ").includes(FEATURE_CLASS)) {
-    return "feature";
+  const classSurface = getClassSurface(section);
+
+  if (classSurface) {
+    return classSurface;
   }
 
   return previous === "default" || previous === "page" ? "paper" : "default";
 };
 
 /**
- * Splits sections into chapters at every stripe band.
+ * Splits sections into chapters at every stripe band. A section with a surface class always opens its own chapter,
+ * also where the band is left to a neighbour that draws its own.
  * @param sections - sections in render order
  * @returns chapters in render order; the first one keeps the page background
  */
@@ -116,13 +149,26 @@ const buildChapters = (sections: SectionDtoVariant[]): Chapter[] => {
     const current = chapters[chapters.length - 1];
 
     if (!current) {
-      chapters.push({ surface: "page", sections: [section] });
+      chapters.push({
+        surface: "page",
+        hasBand: false,
+        bandColor: "primary",
+        sections: [section],
+      });
       continue;
     }
 
-    if (hasSectionBreak(section, sections[index - 1])) {
+    const hasBand = hasSectionBreak(section, sections[index - 1]);
+
+    if (hasBand || getClassSurface(section)) {
       chapters.push({
         surface: pickSurface(section, current.surface),
+        hasBand,
+        bandColor: getClasses(section).some((cssClass) =>
+          SECONDARY_BAND_CLASS.test(cssClass)
+        )
+          ? "secondary"
+          : "primary",
         sections: [section],
       });
       continue;
@@ -184,17 +230,18 @@ export const SectionsContainer: FC<SectionsContainerProps> = ({ sections }) => {
     <Box className="sections-container" sx={sectionContainerStyles}>
       {buildChapters(sections).map((chapter, index, chapters) => (
         <Fragment key={chapter.sections[0].id}>
-          {index > 0 && (
+          {chapter.hasBand && (
             <Box
-              className={`section-break from-${chapters[index - 1].surface} to-${chapter.surface}`}
+              className={`section-break from-${chapters[index - 1].surface} to-${chapter.surface} band-${chapter.bandColor}`}
               aria-hidden="true"
             >
               <SectionSpacer></SectionSpacer>
             </Box>
           )}
 
+          {/* The secondary surface is dark in both colour schemes, so its fields, cards and text use the dark one. */}
           <Box
-            className={`chapter surface-${chapter.surface}`}
+            className={`chapter surface-${chapter.surface} band-${chapter.bandColor}${chapter.surface === "secondary" ? " theme-dark" : ""}`}
             data-surface={chapter.surface}
           >
             {chapter.sections.map((section) => (

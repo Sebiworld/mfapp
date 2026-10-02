@@ -66,6 +66,7 @@ describe("PageContents with the next performance card", () => {
     );
 
     expect(order()).toEqual([
+      "home-heading",
       "sections:hero",
       "next-performance-card",
       "sections:pages-grid",
@@ -88,6 +89,7 @@ describe("PageContents with the next performance card", () => {
     );
 
     expect(order()).toEqual([
+      "home-heading",
       "next-performance-card",
       "sections:pages-grid,hero",
     ]);
@@ -124,5 +126,22 @@ describe("PageContents with the next performance card", () => {
 
     expect(screen.queryByTestId("next-performance-card")).toBeNull();
     expect(screen.getByTestId("sections")).toHaveTextContent("hero");
+  });
+});
+
+describe("PageContents heading", () => {
+  it("gives the home page a level-one heading, which its sections and hero do not provide", () => {
+    render(
+      <PageContents
+        page={page({
+          template: { id: 1, name: "home", label: "Home" },
+          sections: [section(1, "hero")],
+        })}
+      />
+    );
+
+    expect(
+      screen.getByRole("heading", { level: 1, name: "Musical-Fabrik e.V." })
+    ).toBeInTheDocument();
   });
 });

@@ -46,6 +46,7 @@ const buildSection = (
  * Renders the given sections and lists the rendered sequence of chapters, section names and breaks.
  * @param sections - sections to render
  * @returns in render order: "chapter:<surface>" per chapter, section names, and "break" per stripe band
+ *   ("break:secondary" for a band in the secondary colour)
  */
 const renderSequence = async (
   sections: SectionDtoVariant[]
@@ -70,7 +71,9 @@ const renderSequence = async (
     }
 
     if (element.classList.contains("section-break")) {
-      return "break";
+      return element.classList.contains("band-secondary")
+        ? "break:secondary"
+        : "break";
     }
 
     return element.textContent ?? "";
@@ -81,7 +84,10 @@ describe("SectionsContainer", () => {
   it("draws a stripe band before sections with a spacer class from the CMS", async () => {
     const sequence = await renderSequence([
       { ...buildSection("ziele", "spacer-follows"), id: 1 },
-      { ...buildSection("aktuelles", "tertiary spacer-tertiary-down"), id: 2 },
+      {
+        ...buildSection("aktuelles", "secondary spacer-secondary-down"),
+        id: 2,
+      },
       { ...buildSection("bereiche", "spacer-down spacer-follows"), id: 3 },
       { ...buildSection("verein", "center"), id: 4 },
     ]);
@@ -89,8 +95,8 @@ describe("SectionsContainer", () => {
     expect(sequence).toEqual([
       "chapter:page",
       "ziele",
-      "break",
-      "chapter:feature",
+      "break:secondary",
+      "chapter:secondary",
       "aktuelles",
       "break",
       "chapter:default",
@@ -122,13 +128,16 @@ describe("SectionsContainer", () => {
     ]);
   });
 
-  it("alternates the surfaces of plain chapters and starts over after a feature chapter", async () => {
+  it("alternates the surfaces of plain chapters and starts over after a secondary chapter", async () => {
     const sequence = await renderSequence([
       { ...buildSection("das-sind-wir"), id: 1 },
       { ...buildSection("projekte", "spacer-down"), id: 2 },
       { ...buildSection("verein", "spacer-down"), id: 3 },
       { ...buildSection("ziele", "spacer-down"), id: 4 },
-      { ...buildSection("aktuelles", "tertiary spacer-tertiary-down"), id: 5 },
+      {
+        ...buildSection("aktuelles", "secondary spacer-secondary-down"),
+        id: 5,
+      },
       { ...buildSection("bereiche", "spacer-down"), id: 6 },
     ]);
 
@@ -139,8 +148,70 @@ describe("SectionsContainer", () => {
       "chapter:paper",
       "chapter:default",
       "chapter:paper",
-      "chapter:feature",
+      "chapter:secondary",
       "chapter:default",
+    ]);
+  });
+
+  it("puts the secondary surface in the dark scheme", async () => {
+    await renderSequence([
+      { ...buildSection("ziele"), id: 1 },
+      {
+        ...buildSection("aktuelles", "secondary spacer-secondary-down"),
+        id: 2,
+      },
+    ]);
+
+    expect(
+      document.querySelector(".chapter[data-surface='secondary']")
+    ).toHaveClass("theme-dark");
+  });
+
+  it("starts a secondary-light chapter after the partners section without a band of its own", async () => {
+    const sequence = await renderSequence([
+      { ...buildSection("bereiche", "spacer-down"), id: 1 },
+      {
+        ...buildSection("partner", "spacer-follows", "partners-and-sponsors"),
+        id: 2,
+      },
+      {
+        ...buildSection(
+          "mitglied-werden",
+          "secondary-light spacer-secondary-down"
+        ),
+        id: 3,
+      },
+    ]);
+
+    expect(sequence).toEqual([
+      "chapter:page",
+      "bereiche",
+      "partner",
+      "chapter:secondary-light",
+      "mitglied-werden",
+    ]);
+
+    const chapter = document.querySelector(
+      ".chapter[data-surface='secondary-light']"
+    );
+
+    // The partners section draws the band; the chapter class tells it which colour to use.
+    expect(chapter).toHaveClass("band-secondary");
+    expect(chapter).not.toHaveClass("theme-dark");
+  });
+
+  it("ignores the former tertiary classes", async () => {
+    const sequence = await renderSequence([
+      { ...buildSection("ziele"), id: 1 },
+      { ...buildSection("aktuelles", "tertiary spacer-tertiary-down"), id: 2 },
+    ]);
+
+    expect(sequence).toEqual([
+      "chapter:page",
+      "ziele",
+      "break",
+      "chapter:paper",
+      "aktuelles",
     ]);
   });
 });

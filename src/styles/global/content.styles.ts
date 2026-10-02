@@ -8,6 +8,15 @@ export const globalContentStyles: Interpolation<Theme>[] = [
       scrollPaddingTop: "72px",
     },
 
+    // MUI removes the outline of its buttons and links; currentColor keeps the ring readable on light, dark and
+    // orange surfaces alike.
+    "a, button, [role='button'], [tabindex]:not([tabindex='-1'])": {
+      "&:focus-visible": {
+        outline: "2px solid currentColor",
+        outlineOffset: "2px",
+      },
+    },
+
     // [theme.breakpoints.down("md")]: {
     //   h1: "2.5rem",
     //   h2: "2rem",
@@ -139,25 +148,24 @@ export const globalContentStyles: Interpolation<Theme>[] = [
         fontFamily: "var(--mf-fontFamily-body)",
         fontWeight: "bold",
         lineHeight: "var(--mf-lineHeight-md)",
-        boxShadow: "var(--mf-shadows-2)",
         margin: "2px",
         backgroundColor:
           "var(--variant-solidBg, var(--mf-palette-primary-solidBg, var(--mf-palette-primary-500, #0B6BCB)))",
-        color: "var(--mf-palette-primary-solidColor, #FFF)",
+        color: "var(--mf-palette-primary-contrastText, #000)",
 
         "&:hover, &:focus": {
           backgroundColor: "var(--mf-palette-primary-600, #185EA5)",
-          color: "var(--mf-palette-primary-solidColor, #FFF)",
+          color: "var(--mf-palette-primary-contrastText, #000)",
         },
 
         "&.btn-primary": {
           backgroundColor:
             "var(--variant-solidBg, var(--mf-palette-primary-solidBg, var(--mf-palette-primary-500, #0B6BCB)))",
-          color: "var(--mf-palette-primary-solidColor, #FFF)",
+          color: "var(--mf-palette-primary-contrastText, #000)",
 
           "&:hover, &:focus": {
             backgroundColor: "var(--mf-palette-primary-600, #185EA5)",
-            color: "var(--mf-palette-primary-solidColor, #FFF)",
+            color: "var(--mf-palette-primary-contrastText, #000)",
           },
         },
 

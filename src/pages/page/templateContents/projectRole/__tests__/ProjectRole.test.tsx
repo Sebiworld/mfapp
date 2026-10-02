@@ -230,3 +230,54 @@ describe("ProjectRole cast columns", () => {
     expect(screen.queryByTestId("project-role-cast-columns")).toBeNull();
   });
 });
+
+describe("ProjectRole cast column layout", () => {
+  beforeEach(() => {
+    projectRolesStoreActions.resetSlice();
+  });
+
+  /** Stores a container role with one by-cast subrole that has a description and portraits in two casts. */
+  const storeByCastSubrole = (): void => {
+    store({
+      roles: {
+        1: role({ id: 1, child_ids: [2] }),
+        2: role({
+          id: 2,
+          view_type: "by_cast",
+          description: "<p>Ward / Cordell Hull</p>",
+          participants: [
+            { portrait_ids: [10], cast_ids: [100] },
+            { portrait_ids: [11], cast_ids: [101] },
+          ],
+        }),
+      },
+      casts: { 100: cast(100, "Cast A"), 101: cast(101, "Cast B") },
+      portraits: { 10: portrait(10, "Anna A"), 11: portrait(11, "Berta B") },
+    });
+  };
+
+  it("leaves room above and below the columns, so the scroll box does not cut off the card shadows", async () => {
+    storeByCastSubrole();
+    renderRole(1);
+
+    const style = getComputedStyle(
+      await screen.findByTestId("project-role-cast-columns")
+    );
+
+    expect(parseFloat(style.paddingTop)).toBeGreaterThan(0);
+    expect(parseFloat(style.paddingBottom)).toBeGreaterThan(0);
+  });
+
+  it("starts the role description at the left edge like the title, not centred in the measure", async () => {
+    storeByCastSubrole();
+    const { container } = renderRole(1);
+
+    await screen.findByTestId("project-role-cast-columns");
+    const paragraph = container.querySelector(".subrole-description p");
+
+    expect(paragraph).not.toBeNull();
+    expect(getComputedStyle(paragraph as Element).alignSelf).toBe(
+      "flex-start"
+    );
+  });
+});

@@ -146,6 +146,15 @@ export const projectRoleStyles: SxProps<Theme> = (theme) => ({
       paddingRight: "16px",
     },
 
+    // A description reads as a subline of the title, so it sits close to it and the actions follow closely.
+    ".subrole-title + .subrole-description": {
+      marginTop: "-12px",
+    },
+
+    ".subrole-description + .subrole-actions": {
+      marginTop: "-8px",
+    },
+
     ".subrole-actions": {
       display: "flex",
       flexDirection: "row",

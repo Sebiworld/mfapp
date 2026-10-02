@@ -1,7 +1,7 @@
 {
   "general": {
     "required": "Pflichtfeld",
-    "loading": "Wird geladen...",
+    "loading": "Wird geladen…",
     "no-data": "Keine Daten",
     "no-selection": "Keine Auswahl",
     "yes": "Ja",
@@ -56,27 +56,27 @@
   },
 
   "splash": {
-    "1": "Die Website wird initialisiert...",
-    "2": "Projekte werden geladen...",
-    "3": "Inhalte werden abgerufen...",
-    "4": "Musicals werden geschrieben...",
-    "5": "Kostüme werden geschneidert...",
-    "6": "Kabel werden verlegt...",
-    "7": "Lieder werden komponiert...",
-    "8": "Instrumente werden warmgespielt...",
-    "9": "Kulissen werden bemalt...",
-    "10": "Tänzer werden eingetanzt...",
-    "11": "Stühle werden gerückt...",
-    "12": "Stühle werden wieder entfernt, weil die Technik aufgebaut werden muss...",
-    "13": "Stühle werden erneut gerückt...",
-    "14": "Soundcheck wird gemacht...",
-    "15": "Darsteller werden geschminkt...",
-    "16": "Darsteller werden eingekleidet...",
-    "17": "Töne werden gefunden...",
-    "18": "App wird programmiert...",
-    "19": "Witze werden eingefügt...",
-    "20": "Server werden aufgetankt...",
-    "21": "System wird defragmentiert...",
+    "1": "Die Website wird initialisiert…",
+    "2": "Projekte werden geladen…",
+    "3": "Inhalte werden abgerufen…",
+    "4": "Musicals werden geschrieben…",
+    "5": "Kostüme werden geschneidert…",
+    "6": "Kabel werden verlegt…",
+    "7": "Lieder werden komponiert…",
+    "8": "Instrumente werden warmgespielt…",
+    "9": "Kulissen werden bemalt…",
+    "10": "Tänzer werden eingetanzt…",
+    "11": "Stühle werden gerückt…",
+    "12": "Stühle werden wieder entfernt, weil die Technik aufgebaut werden muss…",
+    "13": "Stühle werden erneut gerückt…",
+    "14": "Soundcheck wird gemacht…",
+    "15": "Darsteller werden geschminkt…",
+    "16": "Darsteller werden eingekleidet…",
+    "17": "Töne werden gefunden…",
+    "18": "App wird programmiert…",
+    "19": "Witze werden eingefügt…",
+    "20": "Server werden aufgetankt…",
+    "21": "System wird defragmentiert…",
     "22": "Bits werden geschubst"
   },
 
@@ -175,11 +175,14 @@
     "save": "speichern"
   },
 
+  "pages_grid": {
+    "see_all": "Alle ansehen"
+  },
   "page_card": {
     "facebook_title": "Musical-Fabrik e.V. auf Facebook:",
-    "btn_more": "Mehr dazu...",
+    "btn_more": "Mehr dazu…",
     "btn_more_label": "Mehr zu „{{title}}“",
-    "btn_more_on_facebook": "Mehr dazu auf Facebook...",
+    "btn_more_on_facebook": "Mehr dazu auf Facebook…",
     "btn_more_on_facebook_label": "Auf Facebook: „{{title}}“"
   },
 

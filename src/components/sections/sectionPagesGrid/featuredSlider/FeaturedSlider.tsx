@@ -169,7 +169,7 @@ export const FeaturedSlider: React.FC<FeaturedSliderProps> = ({ section }) => {
           color="projectPrimary"
           onClick={() => setIsOpen(true)}
         >
-          Alle ansehen
+          {t("pages_grid.see_all")}
         </Button>
       </Box>
 

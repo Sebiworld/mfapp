@@ -33,7 +33,6 @@ export const pageContentsStyles: SxProps<Theme> = (theme) => ({
     alignItems: "flex-start",
     gap: "16px",
     borderRadius: "sm",
-    boxShadow: "md",
     maxWidth: "1000px",
 
     [theme.breakpoints.down("sm")]: {

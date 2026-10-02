@@ -50,7 +50,6 @@ export const nextPerformanceCardStyles = (
   flexDirection: "column",
   overflow: "hidden",
   borderRadius: "sm",
-  boxShadow: "md",
   maxWidth: "1000px",
 
   "&.is-centered": {

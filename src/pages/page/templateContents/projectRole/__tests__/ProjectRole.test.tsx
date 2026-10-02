@@ -280,4 +280,38 @@ describe("ProjectRole cast column layout", () => {
       "flex-start"
     );
   });
+
+  it("sets the description as a subline right below the title, with the actions close below it", async () => {
+    storeByCastSubrole();
+    const { container } = renderRole(1);
+
+    await screen.findByTestId("project-role-cast-columns");
+    const description = container.querySelector(".subrole-description");
+    const actions = container.querySelector(".subrole-actions");
+
+    expect(getComputedStyle(description as Element).marginTop).toBe("-12px");
+    expect(getComputedStyle(actions as Element).marginTop).toBe("-8px");
+  });
+
+  it("keeps the usual gap between title and actions without a description", async () => {
+    store({
+      roles: {
+        1: role({ id: 1, child_ids: [2] }),
+        2: role({
+          id: 2,
+          view_type: "by_cast",
+          participants: [{ portrait_ids: [10], cast_ids: [100] }],
+        }),
+      },
+      casts: { 100: cast(100, "Cast A") },
+      portraits: { 10: portrait(10, "Anna A") },
+    });
+    const { container } = renderRole(1);
+
+    await screen.findByTestId("project-role-cast-columns");
+    const actions = container.querySelector(".subrole-actions");
+
+    expect(actions).not.toBeNull();
+    expect(getComputedStyle(actions as Element).marginTop).not.toBe("-8px");
+  });
 });

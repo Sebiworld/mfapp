@@ -65,6 +65,11 @@ export const sectionPartnersAndSponsorsStyles: SxProps<Theme> = (theme) => ({
         img: {
           width: "100%",
         },
+
+        // The logos are images with a white background baked in; dimmed, the white tiles no longer glare on black.
+        ...theme.applyStyles("dark", {
+          filter: "brightness(0.85)",
+        }),
       },
     },
 
@@ -84,6 +89,15 @@ export const sectionPartnersAndSponsorsStyles: SxProps<Theme> = (theme) => ({
         "&:hover, &:focus": {
           filter: "none",
         },
+
+        // Grey logos on white turn into light logos on dark tiles; hover and focus still show the original.
+        ...theme.applyStyles("dark", {
+          filter: "grayscale(100%) invert(100%)",
+
+          "&:hover, &:focus": {
+            filter: "none",
+          },
+        }),
       },
     },
   },

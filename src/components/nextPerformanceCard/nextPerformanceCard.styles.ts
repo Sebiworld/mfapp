@@ -60,6 +60,55 @@ export const nextPerformanceCardStyles = (
     width: "calc(100% - 64px)",
   },
 
+  // One row of info, countdown and actions; status bar and filmstrip span the full width. The component puts the
+  // actions before the filmstrip, so reading and tab order follow the row.
+  "&.is-strip": {
+    [theme.breakpoints.up("lg")]: {
+      display: "grid",
+      gridTemplateColumns: "minmax(0, 1fr) auto auto",
+      columnGap: "40px",
+      maxWidth: "1100px",
+      marginTop: "24px",
+
+      ".card-status": {
+        gridColumn: "1 / -1",
+      },
+
+      ".card-body": {
+        display: "contents",
+      },
+
+      ".card-info": {
+        padding: "20px 0 24px 48px",
+        gap: "4px",
+      },
+
+      ".card-info .card-meta": {
+        display: "flex",
+        flexWrap: "wrap",
+        alignItems: "center",
+        gap: "4px 16px",
+      },
+
+      ".countdown": {
+        alignSelf: "center",
+      },
+
+      // Fixed column, so the actions stay at the right edge when there is no countdown.
+      ".card-actions": {
+        gridColumn: "3",
+        flexDirection: "column",
+        alignSelf: "center",
+        padding: "0 48px 0 0",
+      },
+
+      ".filmstrip": {
+        gridColumn: "1 / -1",
+        marginTop: 0,
+      },
+    },
+  },
+
   [theme.breakpoints.down("sm")]: {
     margin: "16px",
     marginBottom: 0,

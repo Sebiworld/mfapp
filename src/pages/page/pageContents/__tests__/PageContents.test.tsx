@@ -6,6 +6,7 @@ import { mfTheme } from "@styles/theme/mfTheme";
 import { PageDtoVariant } from "@models/page/page-dto-variant.model";
 import { SectionDtoVariant } from "@models/section/section-dto-variant.model";
 import { PageContents } from "../PageContents";
+import { pageContentsStyles } from "../pageContents.styles";
 import "@utils/i18n/i18n";
 
 vi.mock("@components/nextPerformanceCard/NextPerformanceCard", () => ({
@@ -75,7 +76,12 @@ describe("PageContents with the next performance card", () => {
       JSON.parse(
         screen.getByTestId("next-performance-card").dataset.props ?? "{}"
       )
-    ).toEqual({ showProject: true, centered: true, maxDaysAhead: 30 });
+    ).toEqual({
+      showProject: true,
+      centered: true,
+      strip: true,
+      maxDaysAhead: 30,
+    });
   });
 
   it("puts the card first on a home page without leading hero", () => {
@@ -143,5 +149,22 @@ describe("PageContents heading", () => {
     expect(
       screen.getByRole("heading", { level: 1, name: "Musical-Fabrik e.V." })
     ).toBeInTheDocument();
+  });
+});
+
+describe("PageContents styles", () => {
+  it("limits the hero height on large screens once the strip card is shown, so the card fits in the first screen", () => {
+    // Cast: the sx function is only read here as a plain tree of selectors.
+    const styles = (
+      pageContentsStyles as unknown as (
+        theme: typeof mfTheme
+      ) => Record<string, Record<string, Record<string, unknown>>>
+    )(mfTheme);
+    const rule =
+      styles["&:has(.next-performance-card.is-strip) .section-hero"];
+
+    expect(rule[mfTheme.breakpoints.up("lg")]).toHaveProperty(
+      "--hero-max-height"
+    );
   });
 });

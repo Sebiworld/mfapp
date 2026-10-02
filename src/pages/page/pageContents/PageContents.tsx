@@ -195,6 +195,7 @@ export const PageContents: React.FC<PagesContentsProps> = ({ page }) => {
         <NextPerformanceCard
           showProject
           centered
+          strip
           maxDaysAhead={HOME_MAX_DAYS_AHEAD}
         />
       )}

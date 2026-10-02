@@ -1,5 +1,5 @@
 import { SectionSpacer } from "@components/sectionSpacer/SectionSpacer";
-import React, { useMemo } from "react";
+import React, { CSSProperties, useMemo } from "react";
 import { sectionHeroStyles } from "./section-hero.styles";
 import { SectionDto } from "@models/section/section-dto.model";
 import { LazyPicture } from "@components/lazyPicture/LazyPicture";
@@ -41,7 +41,16 @@ export const SectionHero: React.FC<SectionHeroProps> = ({ section }) => {
       >
         <Box className="image-container">
           {section.main_image?.basename && (
-            <Box className="hero-image">
+            <Box
+              className="hero-image"
+              style={
+                section.main_image.dimension_ratio > 0
+                  ? ({
+                      "--hero-ratio": section.main_image.dimension_ratio,
+                    } as CSSProperties)
+                  : undefined
+              }
+            >
               <LazyPicture image={section.main_image}></LazyPicture>
             </Box>
           )}

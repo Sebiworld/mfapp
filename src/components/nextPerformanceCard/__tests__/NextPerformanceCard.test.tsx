@@ -1221,3 +1221,66 @@ describe("NextPerformanceCard", () => {
     });
   });
 });
+
+describe("NextPerformanceCard as a strip", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    setReducedMotion(false);
+    useGlobalStore.setState({ projects: {} });
+    loadNextPerformances.mockImplementation(async () =>
+      serverAnswer([FIRST, SECOND])
+    );
+    loadPerformance.mockResolvedValue(detail());
+  });
+
+  afterEach(() => {
+    // @ts-expect-error jsdom provides no matchMedia; restore that state.
+    delete window.matchMedia;
+    vi.unstubAllGlobals();
+    vi.useRealTimers();
+  });
+
+  it("puts the actions before the filmstrip, so they sit beside the info and the tab order follows", async () => {
+    vi.setSystemTime(START * 1000);
+    await renderCard({ projectId: 5, strip: true });
+
+    const [anna] = within(screen.getByTestId("filmstrip")).getAllByRole(
+      "button"
+    );
+
+    expect(tabbable(card())).toEqual([
+      screen.getByTestId("next-performance-link"),
+      anna,
+    ]);
+  });
+
+  it("marks the card as a strip only when asked to", async () => {
+    vi.setSystemTime((START - DAY) * 1000);
+    const { unmount } = await renderCard({ showProject: true, strip: true });
+
+    expect(card()).toHaveClass("is-strip");
+    unmount();
+
+    await renderCard({ showProject: true });
+
+    expect(card()).not.toHaveClass("is-strip");
+  });
+
+  it("puts info, countdown and actions in one row on large screens, with status and filmstrip across", () => {
+    // Cast: the sx object is only read here as a plain tree of selectors.
+    const styles = nextPerformanceCardStyles(mfTheme) as unknown as Record<
+      string,
+      Record<string, Record<string, Record<string, unknown>>>
+    >;
+    const strip = styles["&.is-strip"][mfTheme.breakpoints.up("lg")];
+
+    expect(strip).toMatchObject({ display: "grid" });
+    expect(strip[".card-body"]).toMatchObject({ display: "contents" });
+    expect(strip[".card-status"]).toMatchObject({ gridColumn: "1 / -1" });
+    expect(strip[".filmstrip"]).toMatchObject({ gridColumn: "1 / -1" });
+    expect(strip[".card-actions"]).toMatchObject({
+      gridColumn: "3",
+      flexDirection: "column",
+    });
+  });
+});

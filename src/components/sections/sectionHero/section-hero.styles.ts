@@ -10,6 +10,33 @@ export const sectionHeroStyles: SxProps<Theme> = (theme) => ({
 
   ".image-container": {
     position: "relative",
+    // Lets the hero image derive its height from its own width (`cqw`).
+    containerType: "inline-size",
+  },
+
+  // From `lg` the image box has an explicit height, so a limit set by the page (`--hero-max-height`) can be
+  // animated; the image is cropped to it. Without a ratio the height stays that of the image.
+  ".hero-image": {
+    [theme.breakpoints.up("lg")]: {
+      "--hero-natural-height": "calc(100cqw / var(--hero-ratio))",
+      height:
+        "min(var(--hero-natural-height), var(--hero-max-height, var(--hero-natural-height)))",
+      overflow: "hidden",
+      transition: "height 300ms cubic-bezier(0.23, 1, 0.32, 1)",
+
+      ".lazy-picture, picture": {
+        height: "100%",
+      },
+
+      img: {
+        height: "100%",
+        objectFit: "cover",
+      },
+
+      "@media (prefers-reduced-motion: reduce)": {
+        transition: "none",
+      },
+    },
   },
 
   ".section-spacer.section-spacer": {

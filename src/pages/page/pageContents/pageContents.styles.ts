@@ -16,6 +16,14 @@ export const pageContentsStyles: SxProps<Theme> = (theme) => ({
     border: 0,
   },
 
+  // The strip card loads after the hero; once it is there the hero shrinks so the card fits in the first screen.
+  // 330px is the strip's height of about 250px plus its margin and some room below it.
+  "&:has(.next-performance-card.is-strip) .section-hero": {
+    [theme.breakpoints.up("lg")]: {
+      "--hero-max-height": "max(360px, calc(100svh - 330px))",
+    },
+  },
+
   ".page-content": {
     margin: "32px",
     marginBottom: "16px",

@@ -33,6 +33,8 @@ export interface NextPerformanceCardProps {
   maxDaysAhead?: number;
   /** Centers the card, for full-width pages without a sidebar. */
   centered?: boolean;
+  /** Lays info, countdown and actions out in one row on large screens, so the card fits below a hero. */
+  strip?: boolean;
 }
 
 /**
@@ -84,6 +86,7 @@ const getAdmissionLine = (
  * @param showProject Whether the project title is shown.
  * @param maxDaysAhead Optional limit for how far ahead the card looks.
  * @param centered Whether the card is centered horizontally.
+ * @param strip Whether the card is a single row on large screens.
  * With `showProject` the card takes the colour of the performance's project when the project has one.
  */
 export const NextPerformanceCard: FC<NextPerformanceCardProps> = ({
@@ -91,6 +94,7 @@ export const NextPerformanceCard: FC<NextPerformanceCardProps> = ({
   showProject,
   maxDaysAhead,
   centered,
+  strip,
 }) => {
   const { t } = useTranslation();
   const { state, nowMs } = useNextPerformanceCard(projectId, maxDaysAhead);
@@ -157,11 +161,30 @@ export const NextPerformanceCard: FC<NextPerformanceCardProps> = ({
     </Button>
   );
 
+  const actions = (
+    <Box className="card-actions">
+      {ticketsLead ? (
+        <>
+          {ticketsButton}
+          {infoButton}
+        </>
+      ) : (
+        <>
+          {infoButton}
+          {ticketsButton}
+        </>
+      )}
+    </Box>
+  );
+  const filmstrip = phase !== "before" && (
+    <PerformanceFilmstrip items={filmstripItems} />
+  );
+
   return (
     <Paper
       component="section"
       elevation={0}
-      className={`next-performance-card phase-${phase}${centered ? " is-centered" : ""}`}
+      className={`next-performance-card phase-${phase}${centered ? " is-centered" : ""}${strip ? " is-strip" : ""}`}
       data-testid="next-performance-card"
       data-phase={phase}
       aria-labelledby="next-performance-status"
@@ -250,21 +273,10 @@ export const NextPerformanceCard: FC<NextPerformanceCardProps> = ({
         )}
       </Box>
 
-      {phase !== "before" && <PerformanceFilmstrip items={filmstripItems} />}
-
-      <Box className="card-actions">
-        {ticketsLead ? (
-          <>
-            {ticketsButton}
-            {infoButton}
-          </>
-        ) : (
-          <>
-            {infoButton}
-            {ticketsButton}
-          </>
-        )}
-      </Box>
+      {/* In the strip the actions sit beside the info, so they come before the filmstrip in tab order too. */}
+      {!strip && filmstrip}
+      {actions}
+      {!!strip && filmstrip}
     </Paper>
   );
 };

@@ -34,6 +34,12 @@ export const sectionPartnersAndSponsorsStyles: SxProps<Theme> = (theme) => ({
       display: "grid",
       gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
       gap: "16px",
+
+      // Two partner logos per row on phones; one full-width square per logo makes the list several screens long.
+      [theme.breakpoints.down("sm")]: {
+        gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+        gap: "8px",
+      },
     },
 
     ".list-title": {
@@ -52,6 +58,10 @@ export const sectionPartnersAndSponsorsStyles: SxProps<Theme> = (theme) => ({
         padding: "16px",
         backgroundColor: "var(--mf-palette-light-100)",
 
+        [theme.breakpoints.down("sm")]: {
+          padding: "8px",
+        },
+
         img: {
           width: "100%",
         },
@@ -61,6 +71,10 @@ export const sectionPartnersAndSponsorsStyles: SxProps<Theme> = (theme) => ({
     "&.sponsors-list": {
       ".list": {
         gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))",
+
+        [theme.breakpoints.down("sm")]: {
+          gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+        },
       },
 
       ".list-item": {

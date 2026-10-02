@@ -9,11 +9,12 @@ export const featuredSliderStyles: SxProps<Theme> = [
   (theme) => ({
     width: "850px",
     maxWidth: "100%",
-    margin: "0 auto",
+    alignSelf: "center",
 
+    // Centred on the same axis as the next performance card and the image film above and below it.
     "&.slider-wrapper": {
-      marginLeft: "0",
-      marginRight: "0",
+      marginLeft: "auto",
+      marginRight: "auto",
     },
 
     ".card-wrapper": {
@@ -68,6 +69,7 @@ export const featuredSliderStyles: SxProps<Theme> = [
 export const featuredSliderActionsContainerStyles: SxProps<Theme> = {
   width: "850px",
   maxWidth: "100%",
+  alignSelf: "center",
 };
 
 export const featuredSliderModalStyles: SxProps<Theme> = {

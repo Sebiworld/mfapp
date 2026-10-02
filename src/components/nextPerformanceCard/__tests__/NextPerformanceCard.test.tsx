@@ -165,7 +165,7 @@ const flush = async (ms = 0): Promise<void> => {
 
 const renderCard = async (
   props: Parameters<typeof NextPerformanceCard>[0] = { projectId: 5 }
-): Promise<void> => {
+): Promise<{ unmount: () => void }> => {
   const router = createMemoryRouter(
     [
       {
@@ -184,8 +184,10 @@ const renderCard = async (
     { initialEntries: ["/"] }
   );
 
-  render(<RouterProvider router={router} />);
+  const { unmount } = render(<RouterProvider router={router} />);
   await flush();
+
+  return { unmount };
 };
 
 const tabbable = (root: HTMLElement): HTMLElement[] =>
@@ -238,6 +240,66 @@ describe("NextPerformanceCard", () => {
     await renderCard();
 
     expect(screen.queryByTestId("next-performance-card")).toBeNull();
+  });
+
+  it("retries a failed load when the browser comes back online", async () => {
+    vi.setSystemTime(START * 1000);
+    loadNextPerformances.mockResolvedValueOnce(new Error("offline"));
+
+    await renderCard();
+
+    expect(screen.queryByTestId("next-performance-card")).toBeNull();
+    expect(loadNextPerformances).toHaveBeenCalledTimes(1);
+
+    await act(async () => {
+      window.dispatchEvent(new Event("online"));
+    });
+    await flush();
+
+    expect(loadNextPerformances).toHaveBeenCalledTimes(2);
+    expect(screen.getByTestId("next-performance-card")).toBeInTheDocument();
+  });
+
+  it("retries a failed load once after the delay, and not again", async () => {
+    vi.setSystemTime(START * 1000);
+    loadNextPerformances.mockResolvedValue(new Error("offline"));
+
+    await renderCard();
+    expect(loadNextPerformances).toHaveBeenCalledTimes(1);
+
+    await flush(14_000);
+    expect(loadNextPerformances).toHaveBeenCalledTimes(1);
+
+    await flush(1_000);
+    expect(loadNextPerformances).toHaveBeenCalledTimes(2);
+
+    await flush(60_000);
+    expect(loadNextPerformances).toHaveBeenCalledTimes(2);
+
+    loadNextPerformances.mockImplementation(async () =>
+      serverAnswer([FIRST, SECOND])
+    );
+    await act(async () => {
+      window.dispatchEvent(new Event("online"));
+    });
+    await flush();
+
+    expect(screen.getByTestId("next-performance-card")).toBeInTheDocument();
+  });
+
+  it("stops retrying when unmounted", async () => {
+    vi.setSystemTime(START * 1000);
+    loadNextPerformances.mockResolvedValueOnce(new Error("offline"));
+
+    const { unmount } = await renderCard();
+
+    unmount();
+    await act(async () => {
+      window.dispatchEvent(new Event("online"));
+    });
+    await flush(60_000);
+
+    expect(loadNextPerformances).toHaveBeenCalledTimes(1);
   });
 
   it("counts down to the next performance with admission, casts and links", async () => {

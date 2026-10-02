@@ -14,6 +14,9 @@ interface LoadedData {
   response: NextPerformancesDto;
 }
 
+/** Delay of the single timed retry after a failed load, for weak networks at the venue. */
+const RETRY_DELAY_MS = 15_000;
+
 interface UseNextPerformanceCardOutput {
   state: NextPerformanceCardState | null;
   /** Current time in milliseconds, updated every second. */
@@ -24,7 +27,8 @@ interface UseNextPerformanceCardOutput {
  * Loads the current and next performance and derives the card state from a clock that ticks every second.
  * The data is kept in component state only: it describes a moment in time and must not outlive the visit.
  * Whenever the phase or the shown performance changes, the data is loaded again (with its hash, so an
- * unchanged answer costs a 204).
+ * unchanged answer costs a 204). A failed load is retried when the browser comes back online and once after
+ * a short delay.
  * @param projectId Project page id; without it performances of all projects are considered.
  * @param maxDaysAhead When set, upcoming performances further away than this many days are not shown.
  * @returns The card state (`null` without a card) and the current time.
@@ -36,6 +40,7 @@ export const useNextPerformanceCard = (
   const { loadNextPerformances } = usePerformancesApi();
   const nowMs = useSecondClock();
   const [loaded, setLoaded] = useState<LoadedData | null>(null);
+  const [loadFailed, setLoadFailed] = useState(false);
   const hashRef = useRef<{ projectId: number | undefined; hash: string }>(null);
 
   const load = useCallback(
@@ -47,7 +52,18 @@ export const useNextPerformanceCard = (
           : undefined;
       const response = await loadNextPerformances(projectId, hash);
 
-      if (!isCurrent() || response === true || isError(response)) {
+      if (!isCurrent()) {
+        return;
+      }
+
+      if (isError(response)) {
+        setLoadFailed(true);
+        return;
+      }
+
+      setLoadFailed(false);
+
+      if (response === true) {
         return;
       }
 
@@ -84,6 +100,29 @@ export const useNextPerformanceCard = (
       document.removeEventListener("visibilitychange", reloadWhenVisible);
     };
   }, [load]);
+
+  // The card stays invisible after a failed load, so it is tried again. The failed flag stays set across
+  // failing retries, which keeps this effect (and with it the timer) from restarting: one timed retry only.
+  useEffect(() => {
+    if (!loadFailed) {
+      return;
+    }
+
+    let isCurrent = true;
+
+    const retry = (): void => {
+      void load(() => isCurrent);
+    };
+    const timer = setTimeout(retry, RETRY_DELAY_MS);
+
+    window.addEventListener("online", retry);
+
+    return () => {
+      isCurrent = false;
+      clearTimeout(timer);
+      window.removeEventListener("online", retry);
+    };
+  }, [load, loadFailed]);
 
   // Data of another project must not flash up while the new one loads.
   const data =

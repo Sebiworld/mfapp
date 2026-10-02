@@ -12,6 +12,7 @@ import { useGlobalStore } from "./store/global.store";
 import { selectIsInitialized } from "./store/initialization/initialization.selectors";
 import { useEffect } from "react";
 import { useHandleRegistrationConfirm } from "@utils/hooks/useHandleRegistrationConfirm";
+import { useReloadOnNewVersion } from "@utils/hooks/useReloadOnNewVersion";
 import { mfTheme } from "@styles/theme/mfTheme";
 import { CssBaseline, Typography } from "@mui/material";
 
@@ -26,6 +27,7 @@ addIcons(ionIcons);
 export const App = () => {
   const isInitialized = useGlobalStore(selectIsInitialized);
   useHandleRegistrationConfirm();
+  useReloadOnNewVersion();
 
   const isMaintenanceModeActive = useGlobalStore(selectIsMaintenanceModeActive);
 

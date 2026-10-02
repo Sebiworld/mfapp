@@ -49,14 +49,14 @@ describe("SectionHero", () => {
     expect(renderHero().style.getPropertyValue("--hero-ratio")).toBe("");
   });
 
-  it("follows a height limit from the page smoothly on large screens, without motion when reduced motion is set", () => {
+  it("follows a height limit from the page smoothly from medium screens on, without motion when reduced motion is set", () => {
     // Cast: the sx function is only read here as a plain tree of selectors.
     const styles = (
       sectionHeroStyles as unknown as (
         theme: typeof mfTheme
       ) => Record<string, Record<string, Record<string, unknown>>>
     )(mfTheme);
-    const image = styles[".hero-image"][mfTheme.breakpoints.up("lg")];
+    const image = styles[".hero-image"][mfTheme.breakpoints.up("md")];
 
     expect(String(image.height)).toContain("var(--hero-max-height");
     expect(String(image.transition)).toContain("height");

@@ -59,13 +59,14 @@ export const nextPerformanceCardStyles = (
     width: "calc(100% - 64px)",
   },
 
-  // One row of info, countdown and actions; status bar and filmstrip span the full width. The component puts the
-  // actions before the filmstrip, so reading and tab order follow the row.
+  // From `md` the info sits beside countdown and actions, from `lg` all three share one row; status bar and
+  // filmstrip span the full width. The component puts the actions before the filmstrip, so reading and tab order
+  // follow the layout.
   "&.is-strip": {
-    [theme.breakpoints.up("lg")]: {
+    [theme.breakpoints.up("md")]: {
       display: "grid",
-      gridTemplateColumns: "minmax(0, 1fr) auto auto",
-      columnGap: "40px",
+      gridTemplateColumns: "minmax(0, 1fr) auto",
+      columnGap: "32px",
       maxWidth: "1100px",
       marginTop: "24px",
 
@@ -78,6 +79,8 @@ export const nextPerformanceCardStyles = (
       },
 
       ".card-info": {
+        gridRow: "2 / span 2",
+        alignSelf: "center",
         padding: "20px 0 24px 48px",
         gap: "4px",
       },
@@ -90,7 +93,35 @@ export const nextPerformanceCardStyles = (
       },
 
       ".countdown": {
+        gridColumn: "2",
+        alignSelf: "end",
+        padding: "20px 48px 0 0",
+      },
+
+      ".card-actions": {
+        gridColumn: "2",
+        alignSelf: "start",
+        padding: "16px 48px 24px 0",
+      },
+
+      ".filmstrip": {
+        gridColumn: "1 / -1",
+        marginTop: 0,
+      },
+    },
+
+    [theme.breakpoints.up("lg")]: {
+      gridTemplateColumns: "minmax(0, 1fr) auto auto",
+      columnGap: "40px",
+
+      ".card-info": {
+        gridRow: "auto",
+      },
+
+      ".countdown": {
+        gridColumn: "auto",
         alignSelf: "center",
+        padding: 0,
       },
 
       // Fixed column, so the actions stay at the right edge when there is no countdown.
@@ -99,11 +130,6 @@ export const nextPerformanceCardStyles = (
         flexDirection: "column",
         alignSelf: "center",
         padding: "0 48px 0 0",
-      },
-
-      ".filmstrip": {
-        gridColumn: "1 / -1",
-        marginTop: 0,
       },
     },
   },

@@ -153,7 +153,7 @@ describe("PageContents heading", () => {
 });
 
 describe("PageContents styles", () => {
-  it("limits the hero height on large screens once the strip card is shown, so the card fits in the first screen", () => {
+  it("limits the hero height from medium screens on once the strip card is shown, so the card fits in the first screen", () => {
     // Cast: the sx function is only read here as a plain tree of selectors.
     const styles = (
       pageContentsStyles as unknown as (
@@ -163,7 +163,7 @@ describe("PageContents styles", () => {
     const rule =
       styles["&:has(.next-performance-card.is-strip) .section-hero"];
 
-    expect(rule[mfTheme.breakpoints.up("lg")]).toHaveProperty(
+    expect(rule[mfTheme.breakpoints.up("md")]).toHaveProperty(
       "--hero-max-height"
     );
   });

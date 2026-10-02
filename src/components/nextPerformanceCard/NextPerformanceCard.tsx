@@ -33,7 +33,7 @@ export interface NextPerformanceCardProps {
   maxDaysAhead?: number;
   /** Centers the card, for full-width pages without a sidebar. */
   centered?: boolean;
-  /** Lays info, countdown and actions out in one row on large screens, so the card fits below a hero. */
+  /** Lays the card out compactly from medium screens on (one row on large screens), so it fits below a hero. */
   strip?: boolean;
 }
 
@@ -86,7 +86,7 @@ const getAdmissionLine = (
  * @param showProject Whether the project title is shown.
  * @param maxDaysAhead Optional limit for how far ahead the card looks.
  * @param centered Whether the card is centered horizontally.
- * @param strip Whether the card is a single row on large screens.
+ * @param strip Whether the card is laid out compactly from medium screens on.
  * With `showProject` the card takes the colour of the performance's project when the project has one.
  */
 export const NextPerformanceCard: FC<NextPerformanceCardProps> = ({

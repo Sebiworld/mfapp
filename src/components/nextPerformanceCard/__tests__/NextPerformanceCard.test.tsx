@@ -1266,7 +1266,27 @@ describe("NextPerformanceCard as a strip", () => {
     expect(card()).not.toHaveClass("is-strip");
   });
 
-  it("puts info, countdown and actions in one row on large screens, with status and filmstrip across", () => {
+  it("puts the info beside countdown and actions on medium screens, with status and filmstrip across", () => {
+    // Cast: the sx object is only read here as a plain tree of selectors.
+    const styles = nextPerformanceCardStyles(mfTheme) as unknown as Record<
+      string,
+      Record<string, Record<string, Record<string, unknown>>>
+    >;
+    const strip = styles["&.is-strip"][mfTheme.breakpoints.up("md")];
+
+    expect(strip).toMatchObject({
+      display: "grid",
+      gridTemplateColumns: "minmax(0, 1fr) auto",
+    });
+    expect(strip[".card-body"]).toMatchObject({ display: "contents" });
+    expect(strip[".card-status"]).toMatchObject({ gridColumn: "1 / -1" });
+    expect(strip[".filmstrip"]).toMatchObject({ gridColumn: "1 / -1" });
+    expect(strip[".card-info"]).toMatchObject({ gridRow: "2 / span 2" });
+    expect(strip[".countdown"]).toMatchObject({ gridColumn: "2" });
+    expect(strip[".card-actions"]).toMatchObject({ gridColumn: "2" });
+  });
+
+  it("puts info, countdown and actions in one row on large screens", () => {
     // Cast: the sx object is only read here as a plain tree of selectors.
     const styles = nextPerformanceCardStyles(mfTheme) as unknown as Record<
       string,
@@ -1274,10 +1294,11 @@ describe("NextPerformanceCard as a strip", () => {
     >;
     const strip = styles["&.is-strip"][mfTheme.breakpoints.up("lg")];
 
-    expect(strip).toMatchObject({ display: "grid" });
-    expect(strip[".card-body"]).toMatchObject({ display: "contents" });
-    expect(strip[".card-status"]).toMatchObject({ gridColumn: "1 / -1" });
-    expect(strip[".filmstrip"]).toMatchObject({ gridColumn: "1 / -1" });
+    expect(strip).toMatchObject({
+      gridTemplateColumns: "minmax(0, 1fr) auto auto",
+    });
+    expect(strip[".card-info"]).toMatchObject({ gridRow: "auto" });
+    expect(strip[".countdown"]).toMatchObject({ gridColumn: "auto" });
     expect(strip[".card-actions"]).toMatchObject({
       gridColumn: "3",
       flexDirection: "column",

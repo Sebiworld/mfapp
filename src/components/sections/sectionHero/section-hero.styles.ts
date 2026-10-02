@@ -14,10 +14,10 @@ export const sectionHeroStyles: SxProps<Theme> = (theme) => ({
     containerType: "inline-size",
   },
 
-  // From `lg` the image box has an explicit height, so a limit set by the page (`--hero-max-height`) can be
+  // From `md` the image box has an explicit height, so a limit set by the page (`--hero-max-height`) can be
   // animated; the image is cropped to it. Without a ratio the height stays that of the image.
   ".hero-image": {
-    [theme.breakpoints.up("lg")]: {
+    [theme.breakpoints.up("md")]: {
       "--hero-natural-height": "calc(100cqw / var(--hero-ratio))",
       height:
         "min(var(--hero-natural-height), var(--hero-max-height, var(--hero-natural-height)))",

@@ -1,3 +1,4 @@
+import { SessionChangedError, watchSession } from "@api/session/watchSession";
 import { MFApi } from "@api/axios/mfApi";
 import { GetProjectRolesResponse } from "@api/axios/projectRolesApi";
 import { useGlobalStore } from "@src/store/global.store";
@@ -23,7 +24,12 @@ export const useProjectRolesApi = (): UseProjectRolesApiOutput => {
           params.hash = hash;
         }
 
+        const isSameSession = watchSession();
         const response = await MFApi.getProjectRoles(id, params);
+
+        if (!isSameSession()) {
+          return new SessionChangedError();
+        }
 
         if (response.status === 204) {
           return true;

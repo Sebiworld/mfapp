@@ -6,9 +6,7 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import YoutubeIcon from "@mui/icons-material/YouTube";
 import { Trans, useTranslation } from "react-i18next";
-import heartAnimation from "@assets/lotties/heart.json";
 import { useCurrentDate } from "@utils/hooks/useCurrentDate";
-import { useLottie } from "lottie-react";
 import { Box, Button, IconButton, Link, List, Paper } from "@mui/material";
 import { useGlobalStore } from "@src/store/global.store";
 import { isValidArray } from "@utils/functions/isValidArray";
@@ -17,21 +15,7 @@ import { useReward } from "react-rewards";
 import { Link as RouterLink } from "react-router";
 import { selectMenues } from "@src/store/configuration/configuration.selectors";
 import { ToolbarNavItem } from "@components/ToolbarNavItem";
-
-const heartAnimationOptions = {
-  loop: true,
-  autoplay: true,
-  animationData: heartAnimation,
-  rendererSettings: {
-    preserveAspectRatio: "xMidYMid slice",
-  },
-  key: "heartAnimation",
-};
-const heartAnimationStyles = {
-  margin: " 0 -16px 0 -16px",
-  width: "3.5em",
-  height: "3em",
-};
+import { FooterHeart } from "./heart/FooterHeart";
 
 export const Footer = () => {
   const { t } = useTranslation();
@@ -55,15 +39,11 @@ export const Footer = () => {
 
   const loadedMenues = useGlobalStore(selectMenues);
   const tertiaryNavigation = loadedMenues?.tertiary_navigation;
-  const { View: heartElement } = useLottie(
-    heartAnimationOptions,
-    heartAnimationStyles
-  );
 
   return (
     <Box className="footer-wrapper" sx={footerStyles}>
       <Paper color="neutral" component="footer" className="footer">
-        <Box component={RouterLink} to="/">
+        <Box component={RouterLink} to="/" aria-label={t("footer.home_link")}>
           <MfLogo layout="vertical"></MfLogo>
         </Box>
 
@@ -135,7 +115,7 @@ export const Footer = () => {
                   title="Zur Website von Sebastian Schendel"
                 />
               ),
-              heart: heartElement,
+              heart: <FooterHeart />,
             }}
           ></Trans>
         </div>

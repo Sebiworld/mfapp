@@ -5,6 +5,7 @@ import react from "@vitejs/plugin-react-swc";
 // Separate from vite.config.ts so test runs never need the build-time env globals.
 export default defineConfig({
   plugins: [tsconfigPaths(), react()],
+  define: { __BUILD_ID__: JSON.stringify("test-build") },
   test: {
     environment: "jsdom",
     setupFiles: ["./src/test/setup.ts"],

@@ -1,3 +1,4 @@
+import { SessionChangedError, watchSession } from "@api/session/watchSession";
 import { MFApi } from "@api/axios/mfApi";
 import { GetProjectsResponse } from "@api/axios/projectsApi";
 import { ProjectDetailsDto } from "@models/project-dto.model";
@@ -28,7 +29,13 @@ export const useProjectsApi = (): UseProjectsApiOutput => {
         params.hash = hash;
       }
 
+      const isSameSession = watchSession();
       const response = await MFApi.getProjects(params);
+
+      if (!isSameSession()) {
+        return new SessionChangedError();
+      }
+
       const projectsResponse = response.data as GetProjectsResponse;
 
       if (response.status === 204) {
@@ -58,7 +65,13 @@ export const useProjectsApi = (): UseProjectsApiOutput => {
           params.hash = hash;
         }
 
+        const isSameSession = watchSession();
         const response = await MFApi.getProjectDetails(projectId, params);
+
+        if (!isSameSession()) {
+          return new SessionChangedError();
+        }
+
         const projectDetailsResponse = response.data as ProjectDetailsDto;
 
         if (response.status === 204) {

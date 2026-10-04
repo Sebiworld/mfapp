@@ -1,4 +1,4 @@
-import { MFApi } from "@api/axios/mfApi";
+import { getImageFileUrl } from "./getImageFileUrl";
 import { ImageDto } from "@models/image-dto.model";
 
 export const getImageVariantUrls = (
@@ -16,10 +16,7 @@ export const getImageVariantUrls = (
   }
 
   for (const [variantName, variantParams] of Object.entries(variants)) {
-    const url = MFApi.getFileByIdUrl(image.page_id, {
-      file: image.basename,
-      ...variantParams,
-    });
+    const url = getImageFileUrl(image, variantParams);
 
     if (!url) {
       continue;

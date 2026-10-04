@@ -50,7 +50,6 @@ export const nextPerformanceCardStyles = (
   flexDirection: "column",
   overflow: "hidden",
   borderRadius: "sm",
-  boxShadow: "md",
   maxWidth: "1000px",
 
   "&.is-centered": {
@@ -58,6 +57,81 @@ export const nextPerformanceCardStyles = (
     marginX: "auto",
     marginBottom: "32px",
     width: "calc(100% - 64px)",
+  },
+
+  // From `md` the info sits beside countdown and actions, from `lg` all three share one row; status bar and
+  // filmstrip span the full width. The component puts the actions before the filmstrip, so reading and tab order
+  // follow the layout.
+  "&.is-strip": {
+    [theme.breakpoints.up("md")]: {
+      display: "grid",
+      gridTemplateColumns: "minmax(0, 1fr) auto",
+      columnGap: "32px",
+      maxWidth: "1100px",
+      marginTop: "24px",
+
+      ".card-status": {
+        gridColumn: "1 / -1",
+      },
+
+      ".card-body": {
+        display: "contents",
+      },
+
+      ".card-info": {
+        gridRow: "2 / span 2",
+        alignSelf: "center",
+        padding: "20px 0 24px 48px",
+        gap: "4px",
+      },
+
+      ".card-info .card-meta": {
+        display: "flex",
+        flexWrap: "wrap",
+        alignItems: "center",
+        gap: "4px 16px",
+      },
+
+      ".countdown": {
+        gridColumn: "2",
+        alignSelf: "end",
+        padding: "20px 48px 0 0",
+      },
+
+      ".card-actions": {
+        gridColumn: "2",
+        alignSelf: "start",
+        padding: "16px 48px 24px 0",
+      },
+
+      ".filmstrip": {
+        gridColumn: "1 / -1",
+        marginTop: 0,
+      },
+    },
+
+    [theme.breakpoints.up("lg")]: {
+      gridTemplateColumns: "minmax(0, 1fr) auto auto",
+      columnGap: "40px",
+
+      ".card-info": {
+        gridRow: "auto",
+      },
+
+      ".countdown": {
+        gridColumn: "auto",
+        alignSelf: "center",
+        padding: 0,
+      },
+
+      // Fixed column, so the actions stay at the right edge when there is no countdown.
+      ".card-actions": {
+        gridColumn: "3",
+        flexDirection: "column",
+        alignSelf: "center",
+        padding: "0 48px 0 0",
+      },
+    },
   },
 
   [theme.breakpoints.down("sm")]: {
@@ -88,7 +162,7 @@ export const nextPerformanceCardStyles = (
       fontWeight: "bold",
       letterSpacing: "0.04em",
       textTransform: "uppercase",
-      fontSize: "0.85rem",
+      fontSize: "0.875rem",
 
       [theme.breakpoints.down("sm")]: {
         fontSize: "0.75rem",
@@ -151,7 +225,7 @@ export const nextPerformanceCardStyles = (
     },
 
     ".card-subtitle": {
-      fontSize: "clamp(1.15rem, 2.4vw, 1.5rem)",
+      fontSize: "clamp(1.25rem, 2.4vw, 1.5rem)",
       lineHeight: 1.2,
       fontWeight: 600,
       hyphens: "auto",
@@ -164,7 +238,7 @@ export const nextPerformanceCardStyles = (
     },
 
     ".card-date": {
-      fontSize: "1.15em",
+      fontSize: "1.25rem",
 
       // Never above the line "category · title" on small screens, so the order of importance stays visible.
       [theme.breakpoints.down("sm")]: {
@@ -209,7 +283,7 @@ export const nextPerformanceCardStyles = (
     flex: "none",
 
     ".countdown-label": {
-      fontSize: "0.85rem",
+      fontSize: "0.875rem",
       fontWeight: "bold",
       letterSpacing: "0.04em",
       textTransform: "uppercase",
@@ -233,7 +307,7 @@ export const nextPerformanceCardStyles = (
       minWidth: "64px",
       padding: "10px 8px",
       overflow: "hidden",
-      borderRadius: "6px",
+      borderRadius: 0,
       background: theme.vars.palette.projectPrimary.main,
       color: theme.vars.palette.projectPrimary.contrastText,
       fontSize: "2.25rem",
@@ -273,7 +347,7 @@ export const nextPerformanceCardStyles = (
       },
 
       ".countdown-unit": {
-        fontSize: "0.65rem",
+        fontSize: "0.75rem",
       },
     },
 
@@ -309,7 +383,7 @@ export const nextPerformanceCardStyles = (
         },
 
         ".countdown-unit": {
-          fontSize: "0.65rem",
+          fontSize: "0.75rem",
         },
       },
     },
@@ -334,7 +408,7 @@ export const nextPerformanceCardStyles = (
         minHeight: "40px",
         paddingLeft: "12px",
         paddingRight: "12px",
-        fontSize: "0.8125rem",
+        fontSize: "0.875rem",
       },
     },
   },

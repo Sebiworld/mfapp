@@ -4,9 +4,14 @@ import { Box, Card, Typography } from "@mui/material";
 import React, { useMemo } from "react";
 import { sectionPartnersAndSponsorsStyles } from "./sectionPartnersAndSponsors.styles";
 import { LazyPicture } from "@components/lazyPicture/LazyPicture";
+import { LazyPictureSize } from "@components/lazyPicture/components/LazyPictureWithoutFallback";
 import { useTranslation } from "react-i18next";
 import { SectionSpacer } from "@components/sectionSpacer/SectionSpacer";
 import { Alerts } from "@components/alerts/Alerts";
+
+/** Logo tiles are at most 272px (partners) and 178px (sponsors) wide at every breakpoint. */
+const PARTNER_IMAGE_SIZES: LazyPictureSize[] = [{ width: 300 }];
+const SPONSOR_IMAGE_SIZES: LazyPictureSize[] = [{ width: 200 }];
 
 export interface SectionPartnersAndSponsorsProps {
   section: SectionPartnersAndSponsorsDto;
@@ -66,7 +71,10 @@ export const SectionPartnersAndSponsors: React.FC<
                   <Card variant="outlined" className="item-wrapper ar-content">
                     <Box className="item-content">
                       {!!partner?.image && (
-                        <LazyPicture image={partner.image}></LazyPicture>
+                        <LazyPicture
+                          image={partner.image}
+                          sizes={PARTNER_IMAGE_SIZES}
+                        ></LazyPicture>
                       )}
                     </Box>
                   </Card>
@@ -93,7 +101,10 @@ export const SectionPartnersAndSponsors: React.FC<
                   <Card variant="outlined" className="item-wrapper ar-content">
                     <Box className="item-content">
                       {!!sponsor?.image && (
-                        <LazyPicture image={sponsor.image}></LazyPicture>
+                        <LazyPicture
+                          image={sponsor.image}
+                          sizes={SPONSOR_IMAGE_SIZES}
+                        ></LazyPicture>
                       )}
                     </Box>
                   </Card>

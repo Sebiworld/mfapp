@@ -3,7 +3,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router";
 import { THEME_ID, ThemeProvider } from "@mui/material/styles";
 import { mfTheme } from "@styles/theme/mfTheme";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { ContentForm } from "../ContentForm";
 import { pageApi } from "@api/axios/pageApi";
 import { ContentBlockFormDto } from "@models/content/content-block-form-dto.model";
@@ -124,5 +124,163 @@ describe("ContentForm", () => {
       expect(container.querySelector(".form-messages")).not.toBeNull();
     });
     expect(pageApi.submitPageForm).not.toHaveBeenCalled();
+  });
+
+  it("sends the honeypot field empty with every submission", async () => {
+    vi.mocked(pageApi.submitPageForm).mockResolvedValue(
+      response({ success: { finished: "Thanks" } })
+    );
+    const { container } = renderForm();
+
+    fillAndSubmit(container);
+
+    await screen.findByText("Thanks");
+    expect(pageApi.submitPageForm).toHaveBeenLastCalledWith(
+      "/kontakt",
+      5,
+      expect.objectContaining({ website: "" })
+    );
+  });
+
+  it("hides the honeypot input from people and assistive technology", () => {
+    const { container } = renderForm();
+    const honeypot = container.querySelector(
+      'input[name="website"]'
+    ) as HTMLInputElement;
+
+    expect(honeypot).toHaveAttribute("tabindex", "-1");
+    expect(honeypot).toHaveAttribute("autocomplete", "off");
+    expect(honeypot.closest("[aria-hidden='true']")).not.toBeNull();
+    expect(honeypot.closest(".hp-website")).not.toBeNull();
+  });
+
+  it("passes a filled honeypot value through unchanged", async () => {
+    vi.mocked(pageApi.submitPageForm).mockResolvedValue(
+      response({ success: { finished: "Thanks" } })
+    );
+    const { container } = renderForm();
+    const honeypot = container.querySelector(
+      'input[name="website"]'
+    ) as HTMLInputElement;
+    fireEvent.change(honeypot, { target: { value: "https://spam.invalid" } });
+
+    fillAndSubmit(container);
+
+    await screen.findByText("Thanks");
+    expect(pageApi.submitPageForm).toHaveBeenLastCalledWith(
+      "/kontakt",
+      5,
+      expect.objectContaining({ website: "https://spam.invalid" })
+    );
+  });
+
+  describe("rejected submissions", () => {
+    const reject = (
+      status: number,
+      data: Partial<FormValidationResponseDto> & { errorcode?: string },
+      headers: Record<string, string> = {}
+    ): void => {
+      vi.mocked(pageApi.submitPageForm).mockRejectedValue(
+        new AxiosError(
+          `Request failed with status code ${status}`,
+          "ERR_BAD_REQUEST",
+          undefined,
+          undefined,
+          { status, data, headers } as unknown as AxiosResponse
+        )
+      );
+    };
+
+    it("explains a 429 in German, keeps the input and hides the English backend text", async () => {
+      reject(
+        429,
+        {
+          errorcode: "too_many_requests",
+          error: "Too many submissions. Please try again later.",
+        },
+        { "retry-after": "3592" }
+      );
+      const { container } = renderForm();
+
+      fillAndSubmit(container);
+
+      expect(
+        await screen.findByText(
+          /zu viele Formulare.*Bitte versuchen Sie es später noch einmal\./
+        )
+      ).toBeInTheDocument();
+      expect(screen.queryByText(/Too many submissions/)).toBeNull();
+      expect(
+        (container.querySelector('input[name="firstname"]') as HTMLInputElement)
+          .value
+      ).toBe("Anna");
+    });
+
+    it("shows the general text without a wait time, also when Retry-After is readable", async () => {
+      reject(
+        429,
+        { errorcode: "too_many_requests" },
+        { "retry-after": "3600" }
+      );
+      const { container, unmount } = renderForm();
+      fillAndSubmit(container);
+      expect(
+        await screen.findByText(/Bitte versuchen Sie es später noch einmal\./)
+      ).toBeInTheDocument();
+      expect(screen.queryByText(/Minute/)).toBeNull();
+      unmount();
+
+      reject(429, { errorcode: "too_many_requests" });
+      const second = renderForm();
+      fillAndSubmit(second.container);
+      expect(
+        await screen.findByText(/Bitte versuchen Sie es später noch einmal\./)
+      ).toBeInTheDocument();
+    });
+
+    it("shows field errors at the field and a summary for form_validation_failed", async () => {
+      reject(400, {
+        errorcode: "form_validation_failed",
+        error: "Ein oder mehrere Felder sind noch nicht korrekt ausgefüllt.",
+        fields: {
+          firstname: {
+            name: "firstname",
+            error: ["Der Name ist ungültig"],
+            isSuccessful: false,
+          } as FormValidationResponseDto["fields"][string],
+        },
+        submission_blocked: true,
+        status: false,
+      });
+      const { container } = renderForm();
+
+      fillAndSubmit(container);
+
+      expect(
+        await screen.findByText("Der Name ist ungültig")
+      ).toBeInTheDocument();
+      expect(screen.getByText("Formularfehler")).toBeInTheDocument();
+    });
+
+    it("uses fixed German wording for known codes", async () => {
+      reject(400, { errorcode: "form_already_submitted", error: "english" });
+      const { container } = renderForm();
+
+      fillAndSubmit(container);
+
+      expect(
+        await screen.findByText(/mit denselben Angaben bereits abgeschickt/)
+      ).toBeInTheDocument();
+      expect(screen.queryByText("english")).toBeNull();
+    });
+
+    it("falls back to the backend text for unknown error codes", async () => {
+      reject(400, { errorcode: "form_error", error: "Backend text" });
+      const { container } = renderForm();
+
+      fillAndSubmit(container);
+
+      expect(await screen.findByText("Backend text")).toBeInTheDocument();
+    });
   });
 });

@@ -94,6 +94,23 @@ describe("Page", () => {
     expect(screen.queryByTestId("loading-overlay")).not.toBeInTheDocument();
   });
 
+  it("keeps room for a whole screen until the first content of the page arrives", async () => {
+    const pending = deferLoads();
+
+    renderPage("/kurse");
+
+    // Without the room the footer would show right below the header and be pushed down by the content.
+    expect(screen.getByTestId("page")).toHaveClass("is-awaiting-content");
+    await waitFor(() => {
+      expect(pending).toHaveLength(1);
+    });
+
+    await act(async () => {
+      findLoad(pending, "/kurse").resolve(true);
+    });
+    expect(screen.getByTestId("page")).not.toHaveClass("is-awaiting-content");
+  });
+
   it("shows the error card when the current page fails to load", async () => {
     const pending = deferLoads();
 

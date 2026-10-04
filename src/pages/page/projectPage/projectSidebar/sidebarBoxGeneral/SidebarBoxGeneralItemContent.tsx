@@ -1,7 +1,6 @@
 import { ProjectGeneralDataBlock } from "@models/project-dto.model";
 import { ListItemIcon, ListItemText } from "@mui/material";
-import { IonIcon } from "@ionic/react";
-import { arrowForward, chevronForward } from "ionicons/icons";
+import { AppIcon } from "@components/appIcon/AppIcon";
 import { useMemo } from "react";
 
 export interface SidebarBoxGeneralItemContentProps {
@@ -13,15 +12,15 @@ export const SidebarBoxGeneralItemContent: React.FC<
 > = ({ data }) => {
   const icon = useMemo(() => {
     if (data.depth <= 0) {
-      return chevronForward;
+      return "chevron-forward";
     }
-    return arrowForward;
+    return "arrow-forward";
   }, [data?.depth]);
 
   return (
     <>
       <ListItemIcon>
-        <IonIcon aria-hidden="true" icon={icon}></IonIcon>
+        <AppIcon name={icon}></AppIcon>
       </ListItemIcon>
 
       <ListItemText>{data.label}</ListItemText>

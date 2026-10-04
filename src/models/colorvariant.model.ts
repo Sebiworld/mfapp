@@ -1,7 +1,6 @@
 export type Colorvariant =
   | "primary"
   | "secondary"
-  | "tertiary"
   | "success"
   | "warning"
   | "danger"
@@ -17,7 +16,6 @@ export type Colorvariant =
 export const colorvariants: Colorvariant[] = [
   "primary",
   "secondary",
-  "tertiary",
   "success",
   "warning",
   "danger",

@@ -3,6 +3,28 @@ import { SxProps, Theme } from "@mui/material";
 export const pageContentsStyles: SxProps<Theme> = (theme) => ({
   background: theme.vars.palette.background.default,
 
+  // Read by assistive tech, invisible on screen.
+  ".visually-hidden": {
+    position: "absolute",
+    width: "1px",
+    height: "1px",
+    margin: "-1px",
+    padding: 0,
+    overflow: "hidden",
+    clip: "rect(0 0 0 0)",
+    whiteSpace: "nowrap",
+    border: 0,
+  },
+
+  // With the strip card the hero is lower, so the card fits in the first screen. The card's data is requested
+  // during app initialization, so the hero usually starts at this height instead of shrinking later.
+  // 330px is the strip's height of about 250px plus its margin and some room below it.
+  "&:has(.next-performance-card.is-strip) .section-hero": {
+    [theme.breakpoints.up("md")]: {
+      "--hero-max-height": "max(360px, calc(100svh - 330px))",
+    },
+  },
+
   ".page-content": {
     margin: "32px",
     marginBottom: "16px",
@@ -12,7 +34,6 @@ export const pageContentsStyles: SxProps<Theme> = (theme) => ({
     alignItems: "flex-start",
     gap: "16px",
     borderRadius: "sm",
-    boxShadow: "md",
     maxWidth: "1000px",
 
     [theme.breakpoints.down("sm")]: {

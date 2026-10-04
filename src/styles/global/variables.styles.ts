@@ -8,7 +8,6 @@ import { mfSecondary } from "@styles/theme/paletteColors/mfSecondary";
 // interface AlertPropsColorOverrides {
 //   primary: true;
 //   secondary: true;
-//   tertiary: true;
 //   success: true;
 //   warning: true;
 //   danger: true;

@@ -47,6 +47,11 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = ({ items }) => {
     return output;
   }, [items]);
 
+  // A trail of only the page itself points nowhere, so the home page shows none.
+  if (!isValidArray(items) || items.length < 2) {
+    return null;
+  }
+
   return (
     <>
       <Box className="breadcrumbs" sx={breadcrumbsStyles}>

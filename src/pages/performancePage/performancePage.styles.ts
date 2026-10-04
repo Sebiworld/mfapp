@@ -65,7 +65,6 @@ export const performancePageStyles: SxProps<Theme> = (theme) => ({
   alignItems: "flex-start",
   gap: "24px",
   borderRadius: "sm",
-  boxShadow: "md",
   maxWidth: "1000px",
   background: theme.vars.palette.background.default,
 

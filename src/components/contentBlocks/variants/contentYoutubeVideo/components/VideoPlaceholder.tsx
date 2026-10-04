@@ -1,7 +1,14 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
 import { LazyPicture } from "@components/lazyPicture/LazyPicture";
+import { LazyPictureSize } from "@components/lazyPicture/components/LazyPictureWithoutFallback";
 import { ImageDto } from "@models/image-dto.model";
+
+/** The player is at most 800px wide. */
+const VIDEO_PLACEHOLDER_IMAGE_SIZES: LazyPictureSize[] = [
+  { media: "sm-up", width: 800 },
+  { width: 600 },
+];
 
 export interface VideoPlaceholderProps {
   title?: string;
@@ -27,9 +34,9 @@ export const VideoPlaceholder: React.FC<VideoPlaceholderProps> = ({
       )}
 
       {image ? (
-        <LazyPicture image={image} />
+        <LazyPicture image={image} sizes={VIDEO_PLACEHOLDER_IMAGE_SIZES} />
       ) : (
-        <img src="img/mf-bg.jpg" loading="lazy" />
+        <img src="/img/mf-bg.jpg" loading="lazy" />
       )}
     </Box>
   );

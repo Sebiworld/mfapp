@@ -9,6 +9,7 @@ import "swiper/css/bundle";
 
 import { SectionPagesGridDto } from "@models/section/section-pages-grid-dto.model";
 import { LazyPicture } from "@components/lazyPicture/LazyPicture";
+import { LazyPictureSize } from "@components/lazyPicture/components/LazyPictureWithoutFallback";
 import {
   featuredSliderActionsContainerStyles,
   featuredSliderModalStyles,
@@ -38,6 +39,9 @@ import {
 } from "@mui/lab";
 import { Link as RouterLink } from "react-router";
 import { parseHtml } from "@utils/functions/parseHtml";
+
+/** Slides are 300px wide at every breakpoint. */
+const SLIDE_IMAGE_SIZES: LazyPictureSize[] = [{ width: 300 }];
 
 export interface FeaturedSliderProps {
   section: SectionPagesGridDto;
@@ -117,6 +121,7 @@ export const FeaturedSlider: React.FC<FeaturedSliderProps> = ({ section }) => {
                         "data-swiper-material-scale": 1.5,
                         "data-swiper-material-slide-size": "100%",
                       }}
+                      sizes={SLIDE_IMAGE_SIZES}
                     ></LazyPicture>
                   )}
 
@@ -169,7 +174,7 @@ export const FeaturedSlider: React.FC<FeaturedSliderProps> = ({ section }) => {
           color="projectPrimary"
           onClick={() => setIsOpen(true)}
         >
-          Alle ansehen
+          {t("pages_grid.see_all")}
         </Button>
       </Box>
 

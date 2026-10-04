@@ -7,15 +7,22 @@ import { useLightGallery } from "@components/lightGallery/useLightGallery";
 
 export interface ContentGalleryMasonryProps {
   images: ImageDto[];
+  /** Image to open the lightbox at without a click; `null` while there is none. */
+  openIndex?: number | null;
+  /** Called when the lightbox is closed. */
+  onClose?: () => void;
 }
 
 export const ContentGalleryMasonry: React.FC<ContentGalleryMasonryProps> = ({
   images,
+  openIndex,
+  onClose,
 }) => {
-  const { ref: lightGalleryRef, element: lightGalleryElement } =
-    useLightGallery({
-      images,
-    });
+  const { openGallery, element: lightGalleryElement } = useLightGallery({
+    images,
+    openIndex,
+    onClose,
+  });
 
   return (
     <>
@@ -31,7 +38,7 @@ export const ContentGalleryMasonry: React.FC<ContentGalleryMasonryProps> = ({
               key={`${image.page_id}#${image.basename}`}
               className="image-button"
               onClick={() => {
-                lightGalleryRef?.current?.openGallery(index);
+                openGallery(index);
               }}
             >
               <LazyPicture

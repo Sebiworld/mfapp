@@ -1,5 +1,8 @@
 import { SxProps, Theme } from "@mui/material";
 
+/** Minimum height of the header bar; the navigation from `md` makes it taller. */
+export const HEADER_MIN_HEIGHT = "64px";
+
 export const headerStyles: SxProps<Theme> = (theme) => ({
   "&.translucent": {
     backgroundColor: "transparent",
@@ -21,7 +24,7 @@ export const headerStyles: SxProps<Theme> = (theme) => ({
     flexDirection: "row",
     justifyContent: "space-between",
     gap: "16px",
-    minHeight: "64px",
+    minHeight: HEADER_MIN_HEIGHT,
     alignItems: "center",
     // backgroundColor: 'transparent',
     // backdropFilter: 'blur(10px)',

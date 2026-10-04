@@ -15,6 +15,8 @@ import { formatBerlinDate } from "@utils/functions/formatBerlinDate";
 import { formatBerlinTime } from "@utils/functions/formatBerlinTime";
 import { getPerformanceUrl } from "@utils/functions/getPerformanceUrl";
 import { parseHtml } from "@utils/functions/parseHtml";
+import { isSameBerlinDay } from "@utils/functions/isSameBerlinDay";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { CountdownTiles } from "./components/CountdownTiles";
 import { PerformanceFilmstrip } from "@components/performanceFilmstrip/PerformanceFilmstrip";
 import { nextPerformanceCardStyles } from "./nextPerformanceCard.styles";
@@ -31,6 +33,8 @@ export interface NextPerformanceCardProps {
   maxDaysAhead?: number;
   /** Centers the card, for full-width pages without a sidebar. */
   centered?: boolean;
+  /** Lays the card out compactly from medium screens on (one row on large screens), so it fits below a hero. */
+  strip?: boolean;
 }
 
 /**
@@ -82,6 +86,7 @@ const getAdmissionLine = (
  * @param showProject Whether the project title is shown.
  * @param maxDaysAhead Optional limit for how far ahead the card looks.
  * @param centered Whether the card is centered horizontally.
+ * @param strip Whether the card is laid out compactly from medium screens on.
  * With `showProject` the card takes the colour of the performance's project when the project has one.
  */
 export const NextPerformanceCard: FC<NextPerformanceCardProps> = ({
@@ -89,6 +94,7 @@ export const NextPerformanceCard: FC<NextPerformanceCardProps> = ({
   showProject,
   maxDaysAhead,
   centered,
+  strip,
 }) => {
   const { t } = useTranslation();
   const { state, nowMs } = useNextPerformanceCard(projectId, maxDaysAhead);
@@ -124,12 +130,61 @@ export const NextPerformanceCard: FC<NextPerformanceCardProps> = ({
     getAdmissionTimes(performance),
     t
   );
+  // Once the performance runs, online tickets are no longer an option.
+  const ticketUrl = phase !== "running" ? performance.ticket_url : null;
+  // Until the day of the performance the card sells tickets; on the day itself visitors come for the details.
+  const ticketsLead =
+    !!ticketUrl && !isSameBerlinDay(performance.timestamp, nowMs);
+
+  const infoButton = (
+    <Button
+      variant={ticketsLead ? "outlined" : "contained"}
+      color="projectPrimary"
+      component={Link}
+      to={getPerformanceUrl(performance.project.url, performance.id)}
+      data-testid="next-performance-link"
+    >
+      {t("next_performance.to-performance")}
+    </Button>
+  );
+  const ticketsButton = !!ticketUrl && (
+    <Button
+      variant={ticketsLead ? "contained" : "outlined"}
+      color="projectPrimary"
+      href={ticketUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      endIcon={<OpenInNewIcon aria-hidden="true" />}
+      data-testid="next-performance-tickets"
+    >
+      {t("next_performance.tickets")}
+    </Button>
+  );
+
+  const actions = (
+    <Box className="card-actions">
+      {ticketsLead ? (
+        <>
+          {ticketsButton}
+          {infoButton}
+        </>
+      ) : (
+        <>
+          {infoButton}
+          {ticketsButton}
+        </>
+      )}
+    </Box>
+  );
+  const filmstrip = phase !== "before" && (
+    <PerformanceFilmstrip items={filmstripItems} />
+  );
 
   return (
     <Paper
       component="section"
       elevation={0}
-      className={`next-performance-card phase-${phase}${centered ? " is-centered" : ""}`}
+      className={`next-performance-card phase-${phase}${centered ? " is-centered" : ""}${strip ? " is-strip" : ""}`}
       data-testid="next-performance-card"
       data-phase={phase}
       aria-labelledby="next-performance-status"
@@ -218,32 +273,10 @@ export const NextPerformanceCard: FC<NextPerformanceCardProps> = ({
         )}
       </Box>
 
-      {phase !== "before" && <PerformanceFilmstrip items={filmstripItems} />}
-
-      <Box className="card-actions">
-        <Button
-          variant="contained"
-          color="projectPrimary"
-          component={Link}
-          to={getPerformanceUrl(performance.project.url, performance.id)}
-          data-testid="next-performance-link"
-        >
-          {t("next_performance.to-performance")}
-        </Button>
-
-        {phase !== "running" && performance.ticket_url && (
-          <Button
-            variant="outlined"
-            color="projectPrimary"
-            href={performance.ticket_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            data-testid="next-performance-tickets"
-          >
-            {t("next_performance.tickets")}
-          </Button>
-        )}
-      </Box>
+      {/* In the strip the actions sit beside the info, so they come before the filmstrip in tab order too. */}
+      {!strip && filmstrip}
+      {actions}
+      {!!strip && filmstrip}
     </Paper>
   );
 };

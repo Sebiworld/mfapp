@@ -1,7 +1,7 @@
 {
   "general": {
     "required": "Pflichtfeld",
-    "loading": "Wird geladen...",
+    "loading": "Wird geladen…",
     "no-data": "Keine Daten",
     "no-selection": "Keine Auswahl",
     "yes": "Ja",
@@ -15,6 +15,7 @@
       "lets-go": "Los geht's!",
       "confirm": "Bestätigen",
       "back": "Zurück",
+      "previous": "Zurück",
       "forward": "Weiter",
       "cancel": "Abbrechen",
       "submit": "Abschicken",
@@ -24,6 +25,7 @@
       "done": "Ok",
       "clear": "Zurücksetzen",
       "login": "Anmelden",
+      "open": "Öffnen",
       "download": "Herunterladen",
       "save": "Speichern",
       "load-more": "Mehr laden"
@@ -36,6 +38,10 @@
     "general_label_x": "Fehler: {{x}}",
     "general_message_code": "Ein Fehler ist aufgetreten. {{message}} [Fehlercode {{code}}]",
     "form_checkbox_required": "Bitte bestätigen.",
+    "form_too_many_requests": "Es wurden zu viele Formulare in kurzer Zeit abgeschickt. Bitte versuchen Sie es später noch einmal. Ihre Eingaben bleiben erhalten.",
+    "form_already_submitted": "Dieses Formular wurde mit denselben Angaben bereits abgeschickt.",
+    "form_rejected": "Ihre Eingaben konnten nicht angenommen werden. Bitte laden Sie die Seite neu und versuchen Sie es noch einmal.",
+    "form_save_failed": "Ihre Eingaben konnten leider nicht gespeichert werden. Bitte versuchen Sie es später noch einmal.",
 
     "form_error": {
       "title": "Formularfehler",
@@ -56,27 +62,27 @@
   },
 
   "splash": {
-    "1": "Die Website wird initialisiert...",
-    "2": "Projekte werden geladen...",
-    "3": "Inhalte werden abgerufen...",
-    "4": "Musicals werden geschrieben...",
-    "5": "Kostüme werden geschneidert...",
-    "6": "Kabel werden verlegt...",
-    "7": "Lieder werden komponiert...",
-    "8": "Instrumente werden warmgespielt...",
-    "9": "Kulissen werden bemalt...",
-    "10": "Tänzer werden eingetanzt...",
-    "11": "Stühle werden gerückt...",
-    "12": "Stühle werden wieder entfernt, weil die Technik aufgebaut werden muss...",
-    "13": "Stühle werden erneut gerückt...",
-    "14": "Soundcheck wird gemacht...",
-    "15": "Darsteller werden geschminkt...",
-    "16": "Darsteller werden eingekleidet...",
-    "17": "Töne werden gefunden...",
-    "18": "App wird programmiert...",
-    "19": "Witze werden eingefügt...",
-    "20": "Server werden aufgetankt...",
-    "21": "System wird defragmentiert...",
+    "1": "Die Website wird initialisiert…",
+    "2": "Projekte werden geladen…",
+    "3": "Inhalte werden abgerufen…",
+    "4": "Musicals werden geschrieben…",
+    "5": "Kostüme werden geschneidert…",
+    "6": "Kabel werden verlegt…",
+    "7": "Lieder werden komponiert…",
+    "8": "Instrumente werden warmgespielt…",
+    "9": "Kulissen werden bemalt…",
+    "10": "Tänzer werden eingetanzt…",
+    "11": "Stühle werden gerückt…",
+    "12": "Stühle werden wieder entfernt, weil die Technik aufgebaut werden muss…",
+    "13": "Stühle werden erneut gerückt…",
+    "14": "Soundcheck wird gemacht…",
+    "15": "Darsteller werden geschminkt…",
+    "16": "Darsteller werden eingekleidet…",
+    "17": "Töne werden gefunden…",
+    "18": "App wird programmiert…",
+    "19": "Witze werden eingefügt…",
+    "20": "Server werden aufgetankt…",
+    "21": "System wird defragmentiert…",
     "22": "Bits werden geschubst"
   },
 
@@ -104,7 +110,8 @@
     "description": "Jetzt Vereinsmitglied werden, die Ziele unterstützen und das nächste Musical-Projekt fördern.",
     "external": "Besuchen Sie uns auch hier:",
     "by": "Entwickelt mit <heart/> von <a>Sebastian Schendel</a>",
-    "copyright": "Copyright 2012 - {{year}} Musical-Fabrik e.V."
+    "copyright": "Copyright 2012 - {{year}} Musical-Fabrik e.V.",
+    "home_link": "Zur Startseite"
   },
 
   "page": {
@@ -114,7 +121,8 @@
 
   "home": {
     "title": "Home",
-    "menu": "Home"
+    "menu": "Home",
+    "heading": "Musical-Fabrik e.V."
   },
 
   "role": {
@@ -173,10 +181,15 @@
     "save": "speichern"
   },
 
+  "pages_grid": {
+    "see_all": "Alle ansehen"
+  },
   "page_card": {
     "facebook_title": "Musical-Fabrik e.V. auf Facebook:",
-    "btn_more": "Mehr dazu...",
-    "btn_more_on_facebook": "Mehr dazu auf Facebook..."
+    "btn_more": "Mehr dazu…",
+    "btn_more_label": "Mehr zu „{{title}}“",
+    "btn_more_on_facebook": "Mehr dazu auf Facebook…",
+    "btn_more_on_facebook_label": "Auf Facebook: „{{title}}“"
   },
 
   "project": {

@@ -1,31 +1,37 @@
 import { ImageDto } from "@models/image-dto.model";
-import React, { RefObject } from "react";
+import React from "react";
 
 // Import Swiper styles
 import "swiper/css/bundle";
 import { ContentGallerySliderItemButton } from "./ContentGallerySliderItemButton";
-import { LightGallery } from "lightgallery/lightgallery";
 import { LazyPicture } from "@components/lazyPicture/LazyPicture";
+import { getGalleryImageLink } from "@components/contentBlocks/variants/contentGallery/galleryImageLink";
 
 export interface ContentGallerySliderItemProps {
   index: number;
   image: ImageDto;
-  lightGalleryRef?: RefObject<LightGallery | null>;
-  onClose?: () => void;
+  openGallery?: (index: number) => void;
+  /** Called when a slide that links to `detailLink` is clicked. */
+  onLinkClick?: () => void;
+  /** Gallery page the slide links to (opened at this image) instead of opening the lightbox. */
   detailLink?: string;
 }
 
 export const ContentGallerySliderItem: React.FC<
   ContentGallerySliderItemProps
-> = ({ index, image, lightGalleryRef, onClose, detailLink }) => {
+> = ({ index, image, openGallery, onLinkClick, detailLink }) => {
   return (
     <ContentGallerySliderItemButton
-      detailLink={detailLink}
+      detailLink={
+        detailLink ? getGalleryImageLink(detailLink, index) : undefined
+      }
       onClick={() => {
-        lightGalleryRef?.current?.openGallery(index);
-        if (typeof onClose === "function") {
-          onClose();
+        if (detailLink) {
+          onLinkClick?.();
+          return;
         }
+
+        openGallery?.(index);
       }}
       title={`${image?.description || "Bild"} in Galerie öffnen`}
       sx={{

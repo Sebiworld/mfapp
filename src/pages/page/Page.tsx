@@ -12,6 +12,12 @@ import { SeoHeaders } from "@components/SeoHeaders";
 import { Breadcrumbs } from "@components/breadcrumbs/Breadcrumbs";
 import { useAppContext } from "@src/context/appContext/useAppContext";
 import { usePagesApi } from "@api/hooks/usePagesApi";
+import {
+  findProjectOfPath,
+  usePrefetchProjectData,
+} from "@api/hooks/usePrefetchProjectData";
+import { selectProjects } from "@src/store/projects/projects.selectors";
+import { useShowPageBelowHeader } from "@core/header/useTranslucentHeader";
 import { PageDtoVariant } from "@models/page/page-dto-variant.model";
 import { isError } from "@utils/functions/isError";
 import { ErrorResponseDto } from "@models/error-response-dto.model";
@@ -22,16 +28,25 @@ export const Page = () => {
   const location = useLocation();
   const currentPath = location.pathname;
   const { loadPage } = usePagesApi();
+  const prefetchProjectData = usePrefetchProjectData();
+
+  const page = useGlobalStore(selectPage(currentPath));
 
   // Every path change starts a new request; only the response to the newest request is kept, so a slower
   // earlier one (also for the same path, e.g. A -> B -> A) can neither end loading nor overwrite the result.
-  const [request, setRequest] = useState({ path: currentPath, id: 0 });
+  // `hadPage` tells whether a stored copy of the page could be shown while the request runs.
+  const [request, setRequest] = useState({
+    path: currentPath,
+    id: 0,
+    hadPage: !!page?.id,
+  });
 
   if (request.path !== currentPath) {
-    setRequest({ path: currentPath, id: request.id + 1 });
+    setRequest({ path: currentPath, id: request.id + 1, hadPage: !!page?.id });
   }
 
   const requestId = request.id;
+  const hadPage = request.hadPage;
   const [loadResult, setLoadResult] = useState<{
     requestId: number;
     response: PageDtoVariant | true | Error;
@@ -39,13 +54,26 @@ export const Page = () => {
   const loadResponse = loadResult?.response ?? null;
   const isLoading = loadResult?.requestId !== requestId;
 
-  const page = useGlobalStore(selectPage(currentPath));
-
   useEffect(() => {
     let isCurrent = true;
 
     const load = async () => {
       const response = await loadPage(currentPath);
+
+      // A page shown for the first time waits for its project data, so sidebar and next performance card do
+      // not push the content down when they arrive.
+      if (
+        isCurrent &&
+        !hadPage &&
+        response !== true &&
+        !isError(response) &&
+        response?.project_id
+      ) {
+        await prefetchProjectData(
+          response.project_id,
+          response.template?.name === "project"
+        );
+      }
 
       if (isCurrent) {
         setLoadResult({ requestId, response });
@@ -57,7 +85,25 @@ export const Page = () => {
     return () => {
       isCurrent = false;
     };
-  }, [currentPath, loadPage, requestId]);
+  }, [currentPath, hadPage, loadPage, prefetchProjectData, requestId]);
+
+  // The project data of a page shown for the first time is requested as soon as the project is known from the
+  // path, without waiting for the page; the wait after the page answer then shares these requests.
+  const projects = useGlobalStore(selectProjects);
+
+  useEffect(() => {
+    if (hadPage || !isLoading) {
+      return;
+    }
+
+    const project = findProjectOfPath(projects, currentPath);
+
+    if (!project) {
+      return;
+    }
+
+    void prefetchProjectData(project.id, project.url === currentPath);
+  }, [currentPath, hadPage, isLoading, prefetchProjectData, projects]);
 
   // useEffect(() => {
   //   console.log("page", { page });
@@ -103,20 +149,25 @@ export const Page = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page?.id]);
 
+  // Until the first content is complete, nothing of the page is shown (it may already be in the store).
+  const isAwaitingContent = isLoading && !hadPage;
+  const shownPage = isAwaitingContent ? undefined : page;
+  useShowPageBelowHeader(shownPage);
+
   return (
     <Box
-      className={`page template-${page?.template?.name || "unknown"}`}
+      className={`page template-${shownPage?.template?.name || "unknown"}${isAwaitingContent ? " is-awaiting-content" : ""}`}
       data-testid="page"
       sx={pageStyles}
     >
       {page?.id && <SeoHeaders page={page}></SeoHeaders>}
 
-      <ProjectPage page={page}>
+      <ProjectPage page={shownPage}>
         <LoadingOverlay
           visible={isLoading}
-          onlyProgress={!!page?.id}
+          onlyProgress={!!shownPage?.id}
         ></LoadingOverlay>
-        <PageContents page={page}></PageContents>
+        <PageContents page={shownPage}></PageContents>
       </ProjectPage>
 
       {isError(loadResponse) && (
@@ -125,7 +176,7 @@ export const Page = () => {
         />
       )}
 
-      <Breadcrumbs items={page?.breadcrumbs}></Breadcrumbs>
+      <Breadcrumbs items={shownPage?.breadcrumbs}></Breadcrumbs>
     </Box>
   );
 };

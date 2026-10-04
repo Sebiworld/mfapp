@@ -5,6 +5,7 @@ import { ContentBlockGalleryDto } from "@models/content/content-block-gallery-dt
 import { ContentGalleryGrid } from "./galleryTypes/ContentGalleryGrid";
 import { ContentGalleryMasonry } from "./galleryTypes/ContentGalleryMasonry";
 import { ContentGallerySlider } from "./galleryTypes/contentGallerySlider/ContentGallerySlider";
+import { useGalleryImageLink } from "./useGalleryImageLink";
 
 const sliderTypes = ["slider", "panorama_slider", "featured_slider"];
 
@@ -13,6 +14,10 @@ export interface ContentGalleryProps {
 }
 
 export const ContentGallery: React.FC<ContentGalleryProps> = ({ block }) => {
+  const { containerRef, openIndex, onLightboxClose } = useGalleryImageLink(
+    block?.id
+  );
+
   const classes: string = useMemo(() => {
     if (!block?.id) {
       return "";
@@ -43,23 +48,37 @@ export const ContentGallery: React.FC<ContentGalleryProps> = ({ block }) => {
         <ContentGallerySlider
           images={block.images}
           galleryType={block.gallery_type}
+          openIndex={openIndex}
+          onClose={onLightboxClose}
         />
       );
     }
 
     if (block.gallery_type === "grid") {
-      return <ContentGalleryGrid images={block.images} />;
+      return (
+        <ContentGalleryGrid
+          images={block.images}
+          openIndex={openIndex}
+          onClose={onLightboxClose}
+        />
+      );
     }
 
-    return <ContentGalleryMasonry images={block.images} />;
-  }, [block]);
+    return (
+      <ContentGalleryMasonry
+        images={block.images}
+        openIndex={openIndex}
+        onClose={onLightboxClose}
+      />
+    );
+  }, [block, onLightboxClose, openIndex]);
 
   if (!block?.id) {
     return null;
   }
 
   return (
-    <Box className={classes} sx={contentGalleryStyles}>
+    <Box ref={containerRef} className={classes} sx={contentGalleryStyles}>
       {gallery}
     </Box>
   );

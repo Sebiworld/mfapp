@@ -13,7 +13,19 @@ declare module "@mui/material/Button" {
 
 export const MuiButtonOverwrites: Components<Theme> = {
   MuiButton: {
+    // The design system is flat: no shadows on buttons, at rest or on hover.
+    defaultProps: {
+      disableElevation: true,
+    },
+
     styleOverrides: {
+      // MUI hovers to primary.dark (#c2410c), where black text drops to about 4:1; the 600 step keeps about 6:1.
+      containedPrimary: {
+        "&:hover": {
+          backgroundColor: "var(--mf-palette-primary-600)",
+        },
+      },
+
       root: {
         fontWeight: "bold",
         textTransform: "none",

@@ -7,7 +7,8 @@ export const mfPrimary: ExtendedPaletteColor = {
   light: mfOrange[300],
   main: mfOrange[500],
   dark: mfOrange[700],
-  contrastText: "var(--mf-palette-common-white)",
+  // White on Fabrik Orange is about 2.3:1; black reaches about 9:1.
+  contrastText: "var(--mf-palette-common-black)",
 };
 
 export const mfPrimaryLight: ExtendedPaletteColor = {

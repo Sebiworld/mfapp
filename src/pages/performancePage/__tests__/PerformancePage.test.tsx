@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import userEvent from "@testing-library/user-event";
 import { render, screen, waitFor, within } from "@testing-library/react";
 import { createMemoryRouter, RouterProvider } from "react-router";
@@ -8,9 +8,11 @@ import { PerformanceDetailDto } from "@models/utility-types/performance-detail-d
 import { ProjectRoleDto } from "@models/project-role/project-role-dto.model";
 import { useGlobalStore } from "@src/store/global.store";
 import { projectRolesStoreActions } from "@src/store/projectRoles/projectRoles.actions";
-import { PerformancePage } from "../PerformancePage";
+import { Suspense } from "react";
+import { CatchAllPage } from "@src/routing/CatchAllPage";
 import { performancePageStyles } from "../performancePage.styles";
 import { nextPerformanceCardStyles } from "@components/nextPerformanceCard/nextPerformanceCard.styles";
+import { clearProjectDetailsPrefetch } from "@api/prefetch/projectDetailsPrefetch";
 import "@utils/i18n/i18n";
 
 // Runs before the imports so all date formatters are created under a non-Berlin process zone.
@@ -21,6 +23,10 @@ vi.hoisted(() => {
 const loadPerformance = vi.fn();
 vi.mock("@api/hooks/usePerformancesApi", () => ({
   usePerformancesApi: () => ({ loadPerformance }),
+}));
+const loadProjectDetails = vi.fn();
+vi.mock("@api/hooks/useProjectsApi", () => ({
+  useProjectsApi: () => ({ loadProjectDetails }),
 }));
 vi.mock("@src/context/appContext/useAppContext", () => ({
   useAppContext: () => ({}),
@@ -138,14 +144,17 @@ const renderPage = (path = "/projekte/annie/vorstellungen/7") => {
   const router = createMemoryRouter(
     [
       {
-        path: "projekte/:projectName/vorstellungen/:performanceId",
+        // The app's catch-all route, which picks the performance page by path.
+        path: "*",
         element: (
           <ThemeProvider
             theme={{ [THEME_ID]: mfTheme }}
             noSsr
             defaultMode="light"
           >
-            <PerformancePage />
+            <Suspense fallback={null}>
+              <CatchAllPage />
+            </Suspense>
           </ThemeProvider>
         ),
       },
@@ -182,16 +191,68 @@ const nowAt = (seconds: number, offsetMs = 0): void => {
 };
 
 describe("PerformancePage", () => {
+  // The route loads the page lazily; loading it once up front keeps the first test within the query timeouts.
+  beforeAll(async () => {
+    await import("../PerformancePage");
+  });
+
   beforeEach(() => {
     vi.useFakeTimers({ toFake: ["Date"] });
     nowAt(START, -86_400_000);
     projectRolesStoreActions.resetSlice();
+    clearProjectDetailsPrefetch();
+    loadProjectDetails.mockReset();
+    loadProjectDetails.mockResolvedValue(true);
   });
 
   afterEach(() => {
     // @ts-expect-error jsdom provides no matchMedia; restore that state.
     delete window.matchMedia;
     vi.useRealTimers();
+  });
+
+  describe("loading", () => {
+    it("keeps the footer below the first screen until the performance is shown", async () => {
+      let resolvePerformance: (data: PerformanceDetailDto) => void = () =>
+        undefined;
+      loadPerformance.mockReturnValue(
+        new Promise<PerformanceDetailDto>((resolve) => {
+          resolvePerformance = resolve;
+        })
+      );
+
+      renderPage();
+
+      const frame = await screen.findByTestId("performance-page");
+      expect(frame).toHaveClass("is-awaiting-content");
+      expect(getComputedStyle(frame).minHeight).toBe("calc(100vh + 6vw)");
+
+      resolvePerformance(performance());
+      await screen.findByTestId("performance-content");
+      expect(screen.getByTestId("performance-page")).not.toHaveClass(
+        "is-awaiting-content"
+      );
+    });
+
+    it("shows the performance together with the project data, so the sidebar does not push it down", async () => {
+      let resolveDetails: (data: true) => void = () => undefined;
+      loadProjectDetails.mockReturnValue(
+        new Promise<true>((resolve) => {
+          resolveDetails = resolve;
+        })
+      );
+      loadPerformance.mockResolvedValue(performance());
+
+      renderPage();
+
+      await waitFor(() => {
+        expect(loadProjectDetails).toHaveBeenCalledWith(1);
+      });
+      expect(screen.queryByTestId("performance-content")).toBeNull();
+
+      resolveDetails(true);
+      await screen.findByTestId("performance-content");
+    });
   });
 
   describe("upcoming performance", () => {

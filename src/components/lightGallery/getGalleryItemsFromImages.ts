@@ -1,4 +1,4 @@
-import { MFApi } from "@api/axios/mfApi";
+import { getImageFileUrl } from "@components/lazyPicture/getImageFileUrl";
 import { getImageVariantUrls } from "@components/lazyPicture/getImageVariantUrls";
 import { ImageDto } from "@models/image-dto.model";
 import { isValidArray } from "@utils/functions/isValidArray";
@@ -32,9 +32,7 @@ export const getGalleryItemsFromImages = (
       output.subHtml = image.caption;
     }
 
-    const fileUrl = MFApi.getFileByIdUrl(image.page_id, {
-      file: image.basename,
-    });
+    const fileUrl = getImageFileUrl(image);
     output.src = fileUrl;
     output.downloadUrl = fileUrl;
 

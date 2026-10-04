@@ -3,6 +3,7 @@ import { useLightGallery } from "@components/lightGallery/useLightGallery";
 import { ContentBlockImageDto } from "@models/content/content-block-image-dto.model";
 import { Box, Button } from "@mui/material";
 import React, { useMemo } from "react";
+import { useGalleryImageLink } from "./contentGallery/useGalleryImageLink";
 
 export interface ContentImageProps {
   block: ContentBlockImageDto;
@@ -29,20 +30,25 @@ export const ContentImage: React.FC<ContentImageProps> = ({ block }) => {
   }, [block]);
 
   const image = block.image;
+  const { containerRef, openIndex, onLightboxClose } = useGalleryImageLink(
+    block?.id
+  );
+  const images = useMemo(() => [image], [image]);
 
-  const { ref: lightGalleryRef, element: lightGalleryElement } =
-    useLightGallery({
-      images: [image],
-    });
+  const { openGallery, element: lightGalleryElement } = useLightGallery({
+    images,
+    openIndex,
+    onClose: onLightboxClose,
+  });
 
   return (
-    <Box className={classes}>
+    <Box ref={containerRef} className={classes}>
       {lightGalleryElement}
       <Button
         key={`${image.page_id}#${image.basename}`}
         className="image-button"
         onClick={() => {
-          lightGalleryRef?.current?.openGallery();
+          openGallery();
         }}
       >
         <LazyPicture

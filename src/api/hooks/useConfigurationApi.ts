@@ -1,3 +1,4 @@
+import { SessionChangedError, watchSession } from "@api/session/watchSession";
 import { GetMenuesResponse } from "@api/axios/configApi";
 import { MFApi } from "@api/axios/mfApi";
 import { ConfigurationDto } from "@models/utility-types/configuration-dto.model";
@@ -31,7 +32,12 @@ export const useConfigurationApi = (): UseConfigurationApiOutput => {
           hash: params?.hash,
         };
 
+        const isSameSession = watchSession();
         const response = await MFApi.getConfiguration(requestParams);
+
+        if (!isSameSession()) {
+          return new SessionChangedError();
+        }
 
         if (response.status === 204) {
           return true;
@@ -66,7 +72,12 @@ export const useConfigurationApi = (): UseConfigurationApiOutput => {
           hash: params?.hash,
         };
 
+        const isSameSession = watchSession();
         const response = await MFApi.getMenues(requestParams);
+
+        if (!isSameSession()) {
+          return new SessionChangedError();
+        }
 
         if (response.status === 204) {
           return true;
@@ -88,11 +99,10 @@ export const useConfigurationApi = (): UseConfigurationApiOutput => {
   );
 
   /**
-   * Initializes configuration & menu data
+   * Initializes configuration & menu data; the two requests do not depend on each other.
    */
   const initialize = useCallback(async () => {
-    await loadConfigurationParams({});
-    await loadMenues({});
+    await Promise.all([loadConfigurationParams({}), loadMenues({})]);
 
     initializationStoreActions.setPartInitialized("configuration");
   }, [loadConfigurationParams, loadMenues]);

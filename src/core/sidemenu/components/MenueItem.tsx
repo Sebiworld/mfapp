@@ -1,6 +1,6 @@
 import { Box, ListItem, ListItemButton, ListItemIcon } from "@mui/material";
 import { NavigationItemDto } from "@models/navigation-item-dto.model";
-import { IonIcon } from "@ionic/react";
+import { AppIcon } from "@components/appIcon/AppIcon";
 import { Link } from "react-router";
 import { parseHtml } from "@utils/functions/parseHtml";
 import { useMemo } from "react";
@@ -28,7 +28,7 @@ export const MenueItem = ({ item, onClick }: MenueItemProps) => {
       >
         {item.ionicon && (
           <ListItemIcon>
-            <IonIcon aria-hidden="true" icon={item.ionicon}></IonIcon>
+            <AppIcon name={item.ionicon}></AppIcon>
           </ListItemIcon>
         )}
         <Box component="span" className="nav-item-title">

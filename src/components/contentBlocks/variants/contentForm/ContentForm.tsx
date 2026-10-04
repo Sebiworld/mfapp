@@ -12,6 +12,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { Alert, AlertTitle, Box, Button } from "@mui/material";
 import { FormValidationResponseDto } from "@models/utility-types/form-validation-response-dto.model";
 import axios from "axios";
+import { getFormSubmitError } from "./functions/getFormSubmitError";
 import { toast } from "react-toastify";
 import { zod } from "@utils/i18n/i18n";
 import { superRefineIsNotEmpty } from "@utils/functions/zod/superRefineIsNotEmpty";
@@ -269,20 +270,30 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
     FormValidationResponseDto | undefined
   >(undefined);
 
+  const [submitError, setSubmitError] = useState<FormMessage | undefined>(
+    undefined
+  );
+
   const [loading, setLoading] = useState<boolean>(false);
   const onSubmit: SubmitHandler<FormData> = useCallback(
-    async (data) => {
+    async (data, event) => {
       if (loading) {
         return;
       }
 
+      // Spam trap: empty for people, bots tend to fill every input they find.
+      const honeypot = (
+        event?.target as HTMLFormElement | undefined
+      )?.elements?.namedItem("website") as HTMLInputElement | null | undefined;
+
       setLoading(true);
+      setSubmitError(undefined);
 
       try {
         const response = await pageApi.submitPageForm(
           currentPath,
           block.form.form_origin,
-          data
+          { ...data, website: honeypot?.value ?? "" }
         );
 
         if (response?.status !== 200) {
@@ -328,13 +339,23 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
         }
 
         if (axios.isAxiosError(error)) {
-          toast.error(
-            t("error.general_message_code", {
-              message: error.message,
-              code: error.code,
-            }),
-            { toastId: "form_submit_error" }
-          );
+          const submitErrorMessage = getFormSubmitError(error, t);
+
+          if (submitErrorMessage) {
+            setSubmitError({
+              id: "submit-error",
+              type: "error",
+              ...submitErrorMessage,
+            });
+          } else {
+            toast.error(
+              t("error.general_message_code", {
+                message: error.message,
+                code: error.code,
+              }),
+              { toastId: "form_submit_error" }
+            );
+          }
 
           setFormValidationResponse(error.response?.data);
         } else {
@@ -360,7 +381,12 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
     ]
   );
 
-  const formValidationError = formValidationResponse?.error;
+  const formValidationError = useMemo(():
+    { [key: string]: string } | undefined => {
+    const error = formValidationResponse?.error;
+
+    return isValidObject(error) ? error : undefined;
+  }, [formValidationResponse?.error]);
   const formValidationSuccess = formValidationResponse?.success;
 
   const formState = useMemo((): undefined | "error" | "success" => {
@@ -368,7 +394,7 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
       return "success";
     }
 
-    if (formValidationError) {
+    if (formValidationError || submitError) {
       return "error";
     }
 
@@ -380,7 +406,12 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
     }
 
     return undefined;
-  }, [formValidationError, formValidationSuccess, localFormErrors]);
+  }, [
+    formValidationError,
+    formValidationSuccess,
+    localFormErrors,
+    submitError,
+  ]);
 
   const formMessages = useMemo((): FormMessage[] => {
     const output: FormMessage[] = [];
@@ -395,6 +426,10 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
           message: t("error.form_error.description"),
         });
       }
+    }
+
+    if (submitError) {
+      output.push(submitError);
     }
 
     if (isValidObject(formValidationError)) {
@@ -418,7 +453,13 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
     }
 
     return output;
-  }, [formValidationError, formValidationSuccess, localFormErrors, t]);
+  }, [
+    formValidationError,
+    formValidationSuccess,
+    localFormErrors,
+    submitError,
+    t,
+  ]);
 
   if (!groupedFields?.fields?.length) {
     return null;
@@ -457,6 +498,16 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
           },
         }}
       ></ContentFormInputCheckbox>
+
+      <Box className="hp-website" aria-hidden="true">
+        <input
+          type="text"
+          name="website"
+          defaultValue=""
+          tabIndex={-1}
+          autoComplete="off"
+        />
+      </Box>
 
       {!!formMessages?.length && (
         <Box className="form-messages">

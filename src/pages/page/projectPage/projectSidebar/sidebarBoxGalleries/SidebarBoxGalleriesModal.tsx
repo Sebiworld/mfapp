@@ -20,8 +20,15 @@ export const SidebarBoxGalleriesModal: React.FC<
   const { t } = useTranslation();
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  // The lightbox lives outside the modal: while it is shown, the modal must not take the focus or the Escape key.
+  const [isLightboxOpen, setIsLightboxOpen] = useState<boolean>(false);
+
+  const onLightboxOpen = useCallback(() => {
+    setIsLightboxOpen(true);
+  }, []);
 
   const onClose = useCallback(() => {
+    setIsLightboxOpen(false);
     setIsOpen(false);
   }, []);
 
@@ -44,6 +51,8 @@ export const SidebarBoxGalleriesModal: React.FC<
         data-testid="sidebar-box-galleries-modal"
         open={isOpen}
         onClose={onClose}
+        disableEnforceFocus={isLightboxOpen}
+        disableEscapeKeyDown={isLightboxOpen}
       >
         <Paper className="modal-container" variant="outlined">
           <Box className="modal-header">
@@ -64,6 +73,7 @@ export const SidebarBoxGalleriesModal: React.FC<
             <SidebarBoxGalleries
               data={data}
               showTitle={false}
+              onLightboxOpen={onLightboxOpen}
               onClose={onClose}
               type={type}
             ></SidebarBoxGalleries>

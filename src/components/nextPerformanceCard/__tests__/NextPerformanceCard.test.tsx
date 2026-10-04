@@ -10,6 +10,7 @@ import {
 import { PerformanceDetailDto } from "@models/utility-types/performance-detail-dto.model";
 import { ProjectRoleDto } from "@models/project-role/project-role-dto.model";
 import { useGlobalStore } from "@src/store/global.store";
+import { clearNextPerformancesPrefetch } from "@api/prefetch/nextPerformancesPrefetch";
 import { NextPerformanceCard } from "../NextPerformanceCard";
 import { nextPerformanceCardStyles } from "../nextPerformanceCard.styles";
 import "@utils/i18n/i18n";
@@ -165,7 +166,7 @@ const flush = async (ms = 0): Promise<void> => {
 
 const renderCard = async (
   props: Parameters<typeof NextPerformanceCard>[0] = { projectId: 5 }
-): Promise<void> => {
+): Promise<{ unmount: () => void }> => {
   const router = createMemoryRouter(
     [
       {
@@ -184,8 +185,10 @@ const renderCard = async (
     { initialEntries: ["/"] }
   );
 
-  render(<RouterProvider router={router} />);
+  const { unmount } = render(<RouterProvider router={router} />);
   await flush();
+
+  return { unmount };
 };
 
 const tabbable = (root: HTMLElement): HTMLElement[] =>
@@ -201,6 +204,7 @@ const unit = (name: string, root: HTMLElement = card()): string =>
 describe("NextPerformanceCard", () => {
   beforeEach(() => {
     vi.useFakeTimers();
+    clearNextPerformancesPrefetch();
     setReducedMotion(false);
     portraitRenders.count = 0;
     useGlobalStore.setState({ projects: {} });
@@ -238,6 +242,66 @@ describe("NextPerformanceCard", () => {
     await renderCard();
 
     expect(screen.queryByTestId("next-performance-card")).toBeNull();
+  });
+
+  it("retries a failed load when the browser comes back online", async () => {
+    vi.setSystemTime(START * 1000);
+    loadNextPerformances.mockResolvedValueOnce(new Error("offline"));
+
+    await renderCard();
+
+    expect(screen.queryByTestId("next-performance-card")).toBeNull();
+    expect(loadNextPerformances).toHaveBeenCalledTimes(1);
+
+    await act(async () => {
+      window.dispatchEvent(new Event("online"));
+    });
+    await flush();
+
+    expect(loadNextPerformances).toHaveBeenCalledTimes(2);
+    expect(screen.getByTestId("next-performance-card")).toBeInTheDocument();
+  });
+
+  it("retries a failed load once after the delay, and not again", async () => {
+    vi.setSystemTime(START * 1000);
+    loadNextPerformances.mockResolvedValue(new Error("offline"));
+
+    await renderCard();
+    expect(loadNextPerformances).toHaveBeenCalledTimes(1);
+
+    await flush(14_000);
+    expect(loadNextPerformances).toHaveBeenCalledTimes(1);
+
+    await flush(1_000);
+    expect(loadNextPerformances).toHaveBeenCalledTimes(2);
+
+    await flush(60_000);
+    expect(loadNextPerformances).toHaveBeenCalledTimes(2);
+
+    loadNextPerformances.mockImplementation(async () =>
+      serverAnswer([FIRST, SECOND])
+    );
+    await act(async () => {
+      window.dispatchEvent(new Event("online"));
+    });
+    await flush();
+
+    expect(screen.getByTestId("next-performance-card")).toBeInTheDocument();
+  });
+
+  it("stops retrying when unmounted", async () => {
+    vi.setSystemTime(START * 1000);
+    loadNextPerformances.mockResolvedValueOnce(new Error("offline"));
+
+    const { unmount } = await renderCard();
+
+    unmount();
+    await act(async () => {
+      window.dispatchEvent(new Event("online"));
+    });
+    await flush(60_000);
+
+    expect(loadNextPerformances).toHaveBeenCalledTimes(1);
   });
 
   it("counts down to the next performance with admission, casts and links", async () => {
@@ -1157,5 +1221,151 @@ describe("NextPerformanceCard", () => {
 
       expect(getComputedStyle(card()).maxWidth).toBe("800px");
     });
+  });
+});
+
+describe("NextPerformanceCard as a strip", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    setReducedMotion(false);
+    useGlobalStore.setState({ projects: {} });
+    loadNextPerformances.mockImplementation(async () =>
+      serverAnswer([FIRST, SECOND])
+    );
+    loadPerformance.mockResolvedValue(detail());
+  });
+
+  afterEach(() => {
+    // @ts-expect-error jsdom provides no matchMedia; restore that state.
+    delete window.matchMedia;
+    vi.unstubAllGlobals();
+    vi.useRealTimers();
+  });
+
+  it("puts the actions before the filmstrip, so they sit beside the info and the tab order follows", async () => {
+    vi.setSystemTime(START * 1000);
+    await renderCard({ projectId: 5, strip: true });
+
+    const [anna] = within(screen.getByTestId("filmstrip")).getAllByRole(
+      "button"
+    );
+
+    expect(tabbable(card())).toEqual([
+      screen.getByTestId("next-performance-link"),
+      anna,
+    ]);
+  });
+
+  it("marks the card as a strip only when asked to", async () => {
+    vi.setSystemTime((START - DAY) * 1000);
+    const { unmount } = await renderCard({ showProject: true, strip: true });
+
+    expect(card()).toHaveClass("is-strip");
+    unmount();
+
+    await renderCard({ showProject: true });
+
+    expect(card()).not.toHaveClass("is-strip");
+  });
+
+  it("puts the info beside countdown and actions on medium screens, with status and filmstrip across", () => {
+    // Cast: the sx object is only read here as a plain tree of selectors.
+    const styles = nextPerformanceCardStyles(mfTheme) as unknown as Record<
+      string,
+      Record<string, Record<string, Record<string, unknown>>>
+    >;
+    const strip = styles["&.is-strip"][mfTheme.breakpoints.up("md")];
+
+    expect(strip).toMatchObject({
+      display: "grid",
+      gridTemplateColumns: "minmax(0, 1fr) auto",
+    });
+    expect(strip[".card-body"]).toMatchObject({ display: "contents" });
+    expect(strip[".card-status"]).toMatchObject({ gridColumn: "1 / -1" });
+    expect(strip[".filmstrip"]).toMatchObject({ gridColumn: "1 / -1" });
+    expect(strip[".card-info"]).toMatchObject({ gridRow: "2 / span 2" });
+    expect(strip[".countdown"]).toMatchObject({ gridColumn: "2" });
+    expect(strip[".card-actions"]).toMatchObject({ gridColumn: "2" });
+  });
+
+  it("puts info, countdown and actions in one row on large screens", () => {
+    // Cast: the sx object is only read here as a plain tree of selectors.
+    const styles = nextPerformanceCardStyles(mfTheme) as unknown as Record<
+      string,
+      Record<string, Record<string, Record<string, unknown>>>
+    >;
+    const strip = styles["&.is-strip"][mfTheme.breakpoints.up("lg")];
+
+    expect(strip).toMatchObject({
+      gridTemplateColumns: "minmax(0, 1fr) auto auto",
+    });
+    expect(strip[".card-info"]).toMatchObject({ gridRow: "auto" });
+    expect(strip[".countdown"]).toMatchObject({ gridColumn: "auto" });
+    expect(strip[".card-actions"]).toMatchObject({
+      gridColumn: "3",
+      flexDirection: "column",
+    });
+  });
+});
+
+describe("NextPerformanceCard type sizes", () => {
+  // Cast: the sx object is only read here as a plain tree of selectors.
+  const styles = nextPerformanceCardStyles(mfTheme) as unknown as Record<
+    string,
+    unknown
+  >;
+
+  /**
+   * Collects every font size in a style tree, with the selector path that sets it.
+   * @param node - style tree or value
+   * @param path - selectors leading to the node
+   * @returns pairs of path and font size
+   */
+  const fontSizes = (node: unknown, path = ""): [string, string][] => {
+    if (!node || typeof node !== "object") {
+      return [];
+    }
+
+    return Object.entries(node).flatMap(([key, value]) =>
+      key === "fontSize" && typeof value === "string"
+        ? [[path, value] as [string, string]]
+        : fontSizes(value, `${path} ${key}`)
+    );
+  };
+
+  it("sets no text smaller than 0.75rem, so units and labels stay readable", () => {
+    const tooSmall = fontSizes(styles).filter(([, size]) => {
+      const rem = /^([\d.]+)rem$/.exec(size);
+
+      return !!rem && parseFloat(rem[1]) < 0.75;
+    });
+
+    expect(tooSmall).toEqual([]);
+  });
+
+  it("sets the date one step below the subtitle on larger screens", () => {
+    const info = styles[".card-info"] as Record<
+      string,
+      Record<string, unknown>
+    >;
+
+    expect(info[".card-date"].fontSize).toBe("1.25rem");
+    expect(info[".card-subtitle"].fontSize).toBe(
+      "clamp(1.25rem, 2.4vw, 1.5rem)"
+    );
+  });
+
+  it("uses the label size for status and countdown label", () => {
+    const status = styles[".card-status"] as Record<
+      string,
+      Record<string, unknown>
+    >;
+    const countdown = styles[".countdown"] as Record<
+      string,
+      Record<string, unknown>
+    >;
+
+    expect(status[".status-text"].fontSize).toBe("0.875rem");
+    expect(countdown[".countdown-label"].fontSize).toBe("0.875rem");
   });
 });

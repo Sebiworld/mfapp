@@ -6,6 +6,7 @@ import { mfTheme } from "@styles/theme/mfTheme";
 import { PageDtoVariant } from "@models/page/page-dto-variant.model";
 import { SectionDtoVariant } from "@models/section/section-dto-variant.model";
 import { PageContents } from "../PageContents";
+import { pageContentsStyles } from "../pageContents.styles";
 import "@utils/i18n/i18n";
 
 vi.mock("@components/nextPerformanceCard/NextPerformanceCard", () => ({
@@ -66,6 +67,7 @@ describe("PageContents with the next performance card", () => {
     );
 
     expect(order()).toEqual([
+      "home-heading",
       "sections:hero",
       "next-performance-card",
       "sections:pages-grid",
@@ -74,7 +76,12 @@ describe("PageContents with the next performance card", () => {
       JSON.parse(
         screen.getByTestId("next-performance-card").dataset.props ?? "{}"
       )
-    ).toEqual({ showProject: true, centered: true, maxDaysAhead: 30 });
+    ).toEqual({
+      showProject: true,
+      centered: true,
+      strip: true,
+      maxDaysAhead: 30,
+    });
   });
 
   it("puts the card first on a home page without leading hero", () => {
@@ -88,6 +95,7 @@ describe("PageContents with the next performance card", () => {
     );
 
     expect(order()).toEqual([
+      "home-heading",
       "next-performance-card",
       "sections:pages-grid,hero",
     ]);
@@ -124,5 +132,39 @@ describe("PageContents with the next performance card", () => {
 
     expect(screen.queryByTestId("next-performance-card")).toBeNull();
     expect(screen.getByTestId("sections")).toHaveTextContent("hero");
+  });
+});
+
+describe("PageContents heading", () => {
+  it("gives the home page a level-one heading, which its sections and hero do not provide", () => {
+    render(
+      <PageContents
+        page={page({
+          template: { id: 1, name: "home", label: "Home" },
+          sections: [section(1, "hero")],
+        })}
+      />
+    );
+
+    expect(
+      screen.getByRole("heading", { level: 1, name: "Musical-Fabrik e.V." })
+    ).toBeInTheDocument();
+  });
+});
+
+describe("PageContents styles", () => {
+  it("limits the hero height from medium screens on once the strip card is shown, so the card fits in the first screen", () => {
+    // Cast: the sx function is only read here as a plain tree of selectors.
+    const styles = (
+      pageContentsStyles as unknown as (
+        theme: typeof mfTheme
+      ) => Record<string, Record<string, Record<string, unknown>>>
+    )(mfTheme);
+    const rule =
+      styles["&:has(.next-performance-card.is-strip) .section-hero"];
+
+    expect(rule[mfTheme.breakpoints.up("md")]).toHaveProperty(
+      "--hero-max-height"
+    );
   });
 });

@@ -22,7 +22,10 @@ export const footerStyles: SxProps<Theme> = (theme) => ({
     textAlign: "center",
     backgroundImage: "none",
 
+    // Within the text measure; balanced lines keep a single word from standing alone on the last one.
     "&>p": {
+      maxWidth: "38em",
+      textWrap: "balance",
       marginLeft: "auto",
       marginRight: "auto",
     },

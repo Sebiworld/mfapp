@@ -24,6 +24,7 @@ import { FormValidationResponseDto } from "@models/utility-types/form-validation
 import Check from "@mui/icons-material/Check";
 import { autocompleteNamesMap } from "../functions/autocompleteNamesMap";
 import { parseHtml } from "@utils/functions/parseHtml";
+import { getColumnSpanStyle } from "../functions/getColumnSpanStyle";
 
 export interface ContentFormInputProps {
   item: FormInputVariant | FormElementDto;
@@ -562,6 +563,7 @@ export const ContentFormInput: React.FC<ContentFormInputProps> = ({
       required={item?.required}
       error={Boolean(errors?.[item.name])}
       className={classes}
+      style={getColumnSpanStyle(item.columnWidth)}
     >
       {!noLabel ? (
         <FormLabel

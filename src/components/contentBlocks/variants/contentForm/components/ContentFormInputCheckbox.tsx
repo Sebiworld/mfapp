@@ -5,6 +5,7 @@ import { Box, Checkbox, FormControl, FormControlLabel } from "@mui/material";
 import { FormValidationResponseDto } from "@models/utility-types/form-validation-response-dto.model";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { parseHtml } from "@utils/functions/parseHtml";
+import { getColumnSpanStyle } from "../functions/getColumnSpanStyle";
 
 export interface ContentFormInputCheckboxProps {
   item: FormInputCheckbox;
@@ -112,6 +113,7 @@ export const ContentFormInputCheckbox: React.FC<
       required={item?.required}
       error={Boolean(errors?.[item.name])}
       className={classes}
+      style={getColumnSpanStyle(item.columnWidth)}
       // helperText={(errors?.[item.name]?.message as string) || ""}
     >
       {control ? (

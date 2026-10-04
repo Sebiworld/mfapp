@@ -1,3 +1,4 @@
+import { SessionChangedError, watchSession } from "@api/session/watchSession";
 import { MFApi } from "@api/axios/mfApi";
 import { GetPageListResponse } from "@api/axios/pageApi";
 import { PageDtoVariant } from "@models/page/page-dto-variant.model";
@@ -26,7 +27,12 @@ export const usePagesApi = (): UsePagesApiOutput => {
   const loadPage = useCallback(
     async (path: string): Promise<PageDtoVariant | true | Error> => {
       try {
+        const isSameSession = watchSession();
         const response = await MFApi.getPage(path);
+
+        if (!isSameSession()) {
+          return new SessionChangedError();
+        }
 
         if (response.status === 204) {
           return true;
@@ -62,10 +68,15 @@ export const usePagesApi = (): UsePagesApiOutput => {
           templates: params?.templates,
         };
 
+        const isSameSession = watchSession();
         const response = await MFApi.getPageListItems(
           params?.projectId,
           requestParams
         );
+
+        if (!isSameSession()) {
+          return new SessionChangedError();
+        }
 
         if (response.status === 204) {
           return true;

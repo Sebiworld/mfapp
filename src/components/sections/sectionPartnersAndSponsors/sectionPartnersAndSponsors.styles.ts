@@ -1,5 +1,10 @@
 import { SxProps, Theme } from "@mui/material";
 
+const DIM = 0.85;
+const DIMMED_TILE = `color-mix(in srgb, var(--mf-palette-light-100) ${DIM * 100}%, black)`;
+// 255 minus the dimmed tile (light-100 is rgb(253, 253, 253)), what the inverted logos sit on.
+const INVERTED_DIMMED_TILE = "rgb(40, 40, 40)";
+
 export const sectionPartnersAndSponsorsStyles: SxProps<Theme> = (theme) => ({
   "&.section.section": {
     backgroundColor: theme.vars.palette.background.paper,
@@ -65,10 +70,20 @@ export const sectionPartnersAndSponsorsStyles: SxProps<Theme> = (theme) => ({
         img: {
           width: "100%",
         },
+      },
+    },
 
-        // The logos are images with a white background baked in; dimmed, the white tiles no longer glare on black.
+    // The logos are images with a white background baked in; dimmed, the white tiles no longer glare on black.
+    // Each logo gets exactly one filter, set on the img itself: nested filters on the tile and its wrapper are
+    // composed wrongly by iOS Safari. The tile colour is therefore set directly instead of being filtered.
+    "&.partners-list": {
+      ".list-item .item-wrapper": {
         ...theme.applyStyles("dark", {
-          filter: "brightness(0.85)",
+          backgroundColor: DIMMED_TILE,
+
+          img: {
+            filter: `brightness(${DIM})`,
+          },
         }),
       },
     },
@@ -82,22 +97,46 @@ export const sectionPartnersAndSponsorsStyles: SxProps<Theme> = (theme) => ({
         },
       },
 
-      ".list-item": {
-        filter: "grayscale(100%)",
-        transition: "filter 0.5s",
-
-        "&:hover, &:focus": {
-          filter: "none",
+      ".list-item .item-wrapper": {
+        img: {
+          filter: "grayscale(100%)",
         },
 
-        // Grey logos on white turn into light logos on dark tiles; hover and focus still show the original.
+        // Grey logos on white turn into light logos on dark tiles (the inverse of the dimmed partner tile).
         ...theme.applyStyles("dark", {
-          filter: "grayscale(100%) invert(100%)",
+          backgroundColor: INVERTED_DIMMED_TILE,
+          borderColor: "rgba(0, 0, 0, 0.12)",
 
-          "&:hover, &:focus": {
-            filter: "none",
+          img: {
+            filter: `brightness(${DIM}) grayscale(100%) invert(100%)`,
           },
         }),
+      },
+
+      // Touch devices keep the grey logos; hover is sticky there and would leave a logo in colour after a tap.
+      "@media (hover: hover)": {
+        ".list-item .item-wrapper": {
+          transition: "background-color 0.5s, border-color 0.5s",
+
+          img: {
+            transition: "filter 0.5s",
+          },
+        },
+
+        ".list-item:hover .item-wrapper, .list-item:focus-visible .item-wrapper": {
+          img: {
+            filter: "none",
+          },
+
+          ...theme.applyStyles("dark", {
+            backgroundColor: DIMMED_TILE,
+            borderColor: "rgba(255, 255, 255, 0.12)",
+
+            img: {
+              filter: `brightness(${DIM})`,
+            },
+          }),
+        },
       },
     },
   },

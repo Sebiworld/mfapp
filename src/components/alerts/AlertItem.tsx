@@ -2,7 +2,7 @@ import React, { ReactNode, useMemo, useState } from "react";
 
 import { Alert, AlertTitle, Box } from "@mui/material";
 import { AlertDto } from "@models/utility-types/alert-dto.model.ts";
-import { IonIcon } from "@ionic/react";
+import { AppIcon } from "@components/appIcon/AppIcon";
 import { parseHtml } from "@utils/functions/parseHtml";
 
 export interface AlertItemProps {
@@ -26,7 +26,7 @@ export const AlertItem: React.FC<AlertItemProps> = ({ alert, action }) => {
 
   const icon = useMemo(() => {
     if (alert.icon && alert.icon !== "no") {
-      return <IonIcon aria-hidden="true" icon={alert.icon}></IonIcon>;
+      return <AppIcon name={alert.icon}></AppIcon>;
     }
 
     if (alert.icon === "no") {

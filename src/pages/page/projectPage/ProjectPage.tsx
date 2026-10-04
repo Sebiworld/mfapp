@@ -9,6 +9,7 @@ import {
   selectProjectPageDetails,
 } from "@src/store/projects/projects.selectors";
 import { LazyPicture } from "@components/lazyPicture/LazyPicture";
+import { LazyPictureSize } from "@components/lazyPicture/components/LazyPictureWithoutFallback";
 import { Link } from "react-router";
 import { useShallow } from "zustand/shallow";
 import { Alerts } from "@components/alerts/Alerts";
@@ -16,7 +17,23 @@ import { AlertDto } from "@models/utility-types/alert-dto.model";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { configurationStoreActions } from "@src/store/configuration/configuration.actions";
 import { useProjectsApi } from "@api/hooks/useProjectsApi";
+import { loadSharedProjectDetails } from "@api/prefetch/projectDetailsPrefetch";
 import { parseHtml } from "@utils/functions/parseHtml";
+
+/** The project header image spans the viewport up to the 1600px content limit; widest first. */
+const PROJECT_IMAGE_SIZES: LazyPictureSize[] = [
+  { media: "xl-up", width: 1600 },
+  { media: "lg-up", width: 1536 },
+  { media: "md-up", width: 1200 },
+  { media: "sm-up", width: 900 },
+  { width: 600 },
+];
+
+/** The header image is the largest visible element on load, so it must not wait for lazy loading. */
+const PROJECT_IMAGE_PROPS = {
+  loading: "eager",
+  fetchPriority: "high",
+} as const;
 
 export interface ProjectPageProps {
   page?: Pick<PageDto, "project_id" | "alerts">;
@@ -49,7 +66,8 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({ page, children }) => {
       return;
     }
 
-    loadProjectDetails(projectPage.id);
+    // Shared with the page, which may have started this request before its first render.
+    void loadSharedProjectDetails(loadProjectDetails, projectPage.id);
   }, [loadProjectDetails, projectPage?.id]);
 
   const pageStyles = useMemo((): SxProps<Theme> => {
@@ -98,60 +116,65 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({ page, children }) => {
     return parseHtml(projectPage.short_description);
   }, [projectPage]);
 
-  if (!projectPage?.id) {
-    return (
-      <>
-        {!!alerts?.length && <Alerts alerts={alerts}></Alerts>}
-        {children}
-      </>
-    );
-  }
+  const project = projectPage?.id ? projectPage : undefined;
 
+  // One element tree for every page, with or without project: the project arrives after the page on a first
+  // visit, and a different tree would mount the page contents (and their requests) a second time.
   return (
-    <Box className="project-page" data-testid="project-page" sx={pageStyles}>
-      <Box className="project-header" data-testid="project-header">
-        <Box
-          className="main-image aspect-ratio ar-3-1"
-          component={Link}
-          to={projectPage.url}
-        >
-          <LazyPicture
-            image={projectPage.main_image}
-            className="ar-content"
-          ></LazyPicture>
-        </Box>
-
-        <Box className="project-subheader">
-          {projectPage?.info_overlay && (
-            <Paper color="projectPrimary" className="project-teaser">
-              {infoOverlay}
-            </Paper>
-          )}
-
-          <Box className="project-meta">
-            <Typography className="project-title" variant="h3">
-              {title}
-            </Typography>
-
-            {projectPage.short_description && (
-              <Typography className="project-description">
-                {shortDescription}
-              </Typography>
-            )}
+    <Box
+      className={project ? "project-page" : undefined}
+      data-testid={project ? "project-page" : undefined}
+      sx={project ? pageStyles : undefined}
+    >
+      {project && (
+        <Box className="project-header" data-testid="project-header">
+          <Box
+            className="main-image aspect-ratio ar-3-1"
+            component={Link}
+            to={project.url}
+          >
+            <LazyPicture
+              image={project.main_image}
+              className="ar-content"
+              sizes={PROJECT_IMAGE_SIZES}
+              imageProps={PROJECT_IMAGE_PROPS}
+            ></LazyPicture>
           </Box>
 
-          <Box className="project-menu empty"></Box>
-        </Box>
-      </Box>
+          <Box className="project-subheader">
+            {project.info_overlay && (
+              <Paper color="projectPrimary" className="project-teaser">
+                {infoOverlay}
+              </Paper>
+            )}
 
-      <Box className="layout-wrapper">
-        <Box className="project-sidebar-wrapper">
-          <ProjectSidebar project={projectPage}></ProjectSidebar>
+            <Box className="project-meta">
+              <Typography className="project-title" variant="h3">
+                {title}
+              </Typography>
+
+              {project.short_description && (
+                <Typography className="project-description">
+                  {shortDescription}
+                </Typography>
+              )}
+            </Box>
+
+            <Box className="project-menu empty"></Box>
+          </Box>
         </Box>
+      )}
+
+      <Box className={project ? "layout-wrapper" : undefined}>
+        {project && (
+          <Box className="project-sidebar-wrapper">
+            <ProjectSidebar project={project}></ProjectSidebar>
+          </Box>
+        )}
 
         <Box
-          className="project-main-content"
-          data-testid="project-main-content"
+          className={project ? "project-main-content" : undefined}
+          data-testid={project ? "project-main-content" : undefined}
         >
           {!!alerts?.length && <Alerts alerts={alerts}></Alerts>}
 

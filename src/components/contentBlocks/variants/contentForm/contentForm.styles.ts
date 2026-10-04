@@ -109,6 +109,18 @@ export const contentFormStyles: SxProps<Theme> = (theme) => ({
     visibility: "hidden",
   },
 
+  // Spam trap: off-screen instead of display:none, which bots tend to skip.
+  ".hp-website": {
+    position: "absolute",
+    left: "-10000px",
+    top: "auto",
+    width: "1px",
+    height: "1px",
+    overflow: "hidden",
+    opacity: 0,
+    pointerEvents: "none",
+  },
+
   ".form-messages": {
     position: "relative",
     display: "flex",

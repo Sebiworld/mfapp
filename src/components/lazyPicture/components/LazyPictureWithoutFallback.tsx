@@ -1,4 +1,3 @@
-import { MFApi } from "@api/axios/mfApi";
 import { ImageDto } from "@models/image-dto.model";
 import { ComponentPropsWithoutRef, useMemo, useState } from "react";
 import { Box } from "@mui/material";
@@ -9,6 +8,8 @@ import { uniqBy } from "lodash";
 import { lazyPictureWithoutFallbackStyles } from "./lazyPictureWithoutFallback.styles";
 import { mediaPlaceholders } from "../mediaPlaceholders";
 import { LazyPictureSecureWithoutFallback } from "./LazyPictureSecureWithoutFallback";
+import { getImageFileUrl } from "../getImageFileUrl";
+import { capImageSize } from "../capImageSize";
 
 export interface LazyPictureSize {
   media?: string;
@@ -54,28 +55,15 @@ export const LazyPictureWithoutFallback: React.FC<
     }
 
     return uniqBy(sizes, "media").map((size) => {
-      const urlWebp = MFApi.getFileByIdUrl(image.page_id, {
-        file: image.basename,
-        width: size.width,
-        height: size.height,
-        webp: true,
-      });
-      const urlWebp2x = MFApi.getFileByIdUrl(image.page_id, {
-        file: image.basename,
-        width: size.width ? size.width * 2 : undefined,
-        height: size.height ? size.height * 2 : undefined,
-        webp: true,
-      });
-      const url = MFApi.getFileByIdUrl(image.page_id, {
-        file: image.basename,
-        width: size.width,
-        height: size.height,
-      });
-      const url2x = MFApi.getFileByIdUrl(image.page_id, {
-        file: image.basename,
-        width: size.width ? size.width * 2 : undefined,
-        height: size.height ? size.height * 2 : undefined,
-      });
+      const size1x = capImageSize(image, size, 1);
+      const size2x = capImageSize(image, size, 2);
+      const has2x =
+        size2x.width !== size1x.width || size2x.height !== size1x.height;
+
+      const urlWebp = getImageFileUrl(image, { ...size1x, webp: true });
+      const urlWebp2x = getImageFileUrl(image, { ...size2x, webp: true });
+      const url = getImageFileUrl(image, size1x);
+      const url2x = getImageFileUrl(image, size2x);
 
       const media = size.media
         ? mediaPlaceholders[size.media] ?? size.media
@@ -85,12 +73,12 @@ export const LazyPictureWithoutFallback: React.FC<
         <React.Fragment key={size.media || "default"}>
           <source
             media={media}
-            srcSet={`${urlWebp} 1x, ${urlWebp2x} 2x`}
+            srcSet={has2x ? `${urlWebp} 1x, ${urlWebp2x} 2x` : urlWebp}
             type="image/webp"
           />
           <source
             media={media}
-            srcSet={`${url} 1x, ${url2x} 2x`}
+            srcSet={has2x ? `${url} 1x, ${url2x} 2x` : url}
             type={getMimetypeForExtension(image.ext)}
           />
         </React.Fragment>
@@ -108,11 +96,8 @@ export const LazyPictureWithoutFallback: React.FC<
     const width = defaultSize ? defaultSize?.width : sizeWithoutMedia?.width;
     const height = defaultSize ? defaultSize?.height : sizeWithoutMedia?.height;
 
-    return MFApi.getFileByIdUrl(image.page_id, {
-      file: image.basename,
-      width,
-      height,
-      // authorization: "Bearer " + accessToken,
+    return getImageFileUrl(image, {
+      ...capImageSize(image, { width, height }, 1),
     });
   }, [defaultSize, image, sizes]);
 

@@ -40,7 +40,7 @@ export const useGlobalStore = create<GlobalStore>()(
         partialize: (state) =>
           Object.fromEntries(
             Object.entries(state).filter(
-              ([key]) => !["intializedParts"].includes(key)
+              ([key]) => !["intializedParts", "sessionVersion"].includes(key)
             )
           ),
       }

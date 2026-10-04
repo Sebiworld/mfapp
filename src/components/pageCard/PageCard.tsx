@@ -13,7 +13,8 @@ import { PageCardDto } from "@models/page/page-card-dto.model";
 import { pageCardStyles } from "./pageCard.styles";
 import { HeadingLevel } from "@models/utility-types/heading-level.model";
 import { LazyPicture } from "@components/lazyPicture/LazyPicture";
-import { IonIcon } from "@ionic/react";
+import { LazyPictureSize } from "@components/lazyPicture/components/LazyPictureWithoutFallback";
+import { AppIcon } from "@components/appIcon/AppIcon";
 import { Link } from "react-router";
 import { parseHtml } from "@utils/functions/parseHtml";
 import { convertHtmlEntities } from "@utils/functions/convertHtmlEntities";
@@ -21,6 +22,15 @@ import { trimWords } from "@utils/functions/trimWords";
 
 /** Longest card title, in characters, that goes into the accessible name of the card's link. */
 const LINK_LABEL_TITLE_LIMIT = 60;
+
+/** Card image widths per breakpoint (single column on small screens, aside or multi-column grids above); widest first. */
+const PAGE_CARD_IMAGE_SIZES: LazyPictureSize[] = [
+  { media: "xl-up", width: 600 },
+  { media: "lg-up", width: 350 },
+  { media: "md-up", width: 500 },
+  { media: "sm-up", width: 450 },
+  { width: 600 },
+];
 
 export interface PageCardProps {
   card: PageCardDto;
@@ -86,10 +96,13 @@ export const PageCard: React.FC<PageCardProps> = ({
       <Box className="aspect-ratio ar-2-1">
         <Box className="ar-content">
           {image ? (
-            <LazyPicture image={image}></LazyPicture>
+            <LazyPicture
+              image={image}
+              sizes={PAGE_CARD_IMAGE_SIZES}
+            ></LazyPicture>
           ) : (
             <img
-              src="img/mf-bg.jpg"
+              src="/img/mf-bg.jpg"
               alt="Musical-Fabrik Platzhalterbild"
               loading="lazy"
             />
@@ -157,7 +170,7 @@ export const PageCard: React.FC<PageCardProps> = ({
                 : undefined
             }
             startIcon={
-              <IonIcon aria-hidden="true" icon={"logo-facebook"}></IonIcon>
+              <AppIcon name="logo-facebook"></AppIcon>
             }
           >
             {t("page_card.btn_more_on_facebook")}

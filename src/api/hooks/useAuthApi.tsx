@@ -2,7 +2,6 @@ import { MFApi } from "@api/axios/mfApi";
 import { UserDto } from "@models/user-dto.model";
 import { authStoreActions } from "@src/store/auth/auth.actions";
 import {
-  selectAccessToken,
   selectCurrentUser,
   selectRefreshToken,
   selectUserHash,
@@ -10,16 +9,30 @@ import {
 import { selectConfigurationParams } from "@src/store/configuration/configuration.selectors";
 import { useGlobalStore } from "@src/store/global.store";
 import { initializationStoreActions } from "@src/store/initialization/initialization.actions";
-import { useCallback } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useReset } from "./useReset";
 import { sleep } from "@utils/functions/sleep";
+import { isError } from "@utils/functions/isError";
+import { SessionChangedError, watchSession } from "@api/session/watchSession";
+
+/**
+ * Tells whether the backend answered with another account than the logged-in one in the store (e.g. a store
+ * changed by hand, or another tab that logged in meanwhile). A stored guest or no stored user is no change.
+ * @param storedUser User in the store before the request.
+ * @param loadedUser User the backend answered with.
+ * @returns `true` when the stored logged-in account and the answered account differ.
+ */
+const isOtherAccount = (
+  storedUser: UserDto | undefined,
+  loadedUser: UserDto
+): boolean => !!storedUser?.isLoggedIn && storedUser.id !== loadedUser.id;
 
 interface UseAuthApiOutput {
   loadUser: () => Promise<UserDto | true | Error>;
-  renewAccess: () => Promise<string | false>;
+  renewAccess: (refreshToken?: string) => Promise<string | false>;
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => Promise<boolean>;
   registration: (
@@ -38,26 +51,39 @@ interface UseAuthApiOutput {
 export const useAuthApi = (): UseAuthApiOutput => {
   const { t } = useTranslation();
 
-  const userHash = useGlobalStore(selectUserHash);
   const config = useGlobalStore(selectConfigurationParams);
   const refreshTokenFromStore = useGlobalStore(selectRefreshToken);
-  const accessTokenFromStore = useGlobalStore(selectAccessToken);
   const user = useGlobalStore(selectCurrentUser);
   // Primitive copies keep the registration callbacks stable when only other user fields change.
   const userName = user?.name;
   const userNickname = user?.nickname;
 
   const { reset } = useReset();
+  // `loadUser` must keep its identity, so it reaches the current `reset` through a ref.
+  const resetRef = useRef(reset);
 
+  useEffect(() => {
+    resetRef.current = reset;
+  }, [reset]);
+
+  // Reads the hash at call time and stays the same function for the whole visit: the app initialization depends
+  // on it and must not start again when the user or the token changes.
   const loadUser = useCallback(async (): Promise<UserDto | true | Error> => {
     try {
       const params: { [key: string]: unknown } = {};
-      const hash = userHash;
+      const storedUser = selectCurrentUser(useGlobalStore.getState());
+      const hash = selectUserHash(useGlobalStore.getState());
       if (hash) {
         params.hash = hash;
       }
 
+      const isSameSession = watchSession();
       const response = await MFApi.getCurrentUser(params);
+
+      // The answer belongs to a session that has ended meanwhile (e.g. a logout): it must not bring its user back.
+      if (!isSameSession()) {
+        return new SessionChangedError();
+      }
 
       if (response.status === 204) {
         return true;
@@ -69,13 +95,18 @@ export const useAuthApi = (): UseAuthApiOutput => {
 
       authStoreActions.setUser(response.data);
 
-      return response.data ?? true;
+      // Data and views of the previous account must not stay: start a new session that keeps the new tokens and
+      // user. The reset itself does not load the user again, so it cannot repeat.
+      if (isOtherAccount(storedUser, response.data)) {
+        await resetRef.current(false);
+      }
+
+      return response.data;
     } catch (error) {
       console.error("Error in data fetch:", error);
       return error as Error;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userHash, accessTokenFromStore]);
+  }, []);
 
   const renewAccess = useCallback(
     async (refreshToken?: string) => {
@@ -128,7 +159,11 @@ export const useAuthApi = (): UseAuthApiOutput => {
 
         await reset(false);
 
-        const loadedUser = (await loadUser()) as UserDto;
+        // An unchanged user answers 204: the user loaded during the renewal is already in the store.
+        const loadUserResult = await loadUser();
+        const loadedUser = isError(loadUserResult)
+          ? undefined
+          : selectCurrentUser(useGlobalStore.getState());
         if (!loadedUser?.id) {
           throw new Error("No valid user object found after login.");
         }
@@ -192,9 +227,7 @@ export const useAuthApi = (): UseAuthApiOutput => {
       }
     }
 
-    authStoreActions.resetSlice();
-    await sleep(1000);
-
+    // Tokens, user and the data loaded with them go at once, so nothing of the account stays visible.
     await reset();
 
     return true;

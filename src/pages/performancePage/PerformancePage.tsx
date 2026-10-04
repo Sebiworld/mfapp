@@ -1,5 +1,5 @@
 import { FC, Fragment, useEffect, useMemo, useState } from "react";
-import { useLocation, useParams, Link } from "react-router";
+import { useLocation, Link } from "react-router";
 import { useTranslation } from "react-i18next";
 import { Box, Button, Chip, Paper, Typography } from "@mui/material";
 import { Page } from "@pages/page/Page";
@@ -19,6 +19,7 @@ import { ErrorResponseDto } from "@models/error-response-dto.model";
 import { PerformanceDetailDto } from "@models/utility-types/performance-detail-dto.model";
 import { AxiosError } from "axios";
 import { formatBerlinDate } from "@utils/functions/formatBerlinDate";
+import { getPerformanceIdFromPath } from "@utils/functions/getPerformanceIdFromPath";
 import { isError } from "@utils/functions/isError";
 import { parseHtml } from "@utils/functions/parseHtml";
 import { PerformanceVisitInfo } from "./components/PerformanceVisitInfo";
@@ -30,8 +31,21 @@ import {
   getPerformanceStatus,
 } from "./functions/getPerformanceTimes";
 import { performancePageStyles } from "./performancePage.styles";
+import { awaitingContentStyles } from "@pages/page/page.styles";
+import {
+  findProjectOfPath,
+  usePrefetchProjectData,
+} from "@api/hooks/usePrefetchProjectData";
+import { useGlobalStore } from "@src/store/global.store";
+import { selectProjects } from "@src/store/projects/projects.selectors";
 
 const CLOCK_INTERVAL_MS = 30_000;
+
+/** Keeps the footer below the first screen while the performance loads, like on CMS pages. */
+const performancePageFrameStyles = {
+  "&.is-awaiting-content": awaitingContentStyles,
+};
+
 /** One shared empty list keeps the filmstrip input stable while nothing is loaded. */
 const NO_FILMSTRIP_ITEMS: FilmstripItem[] = [];
 
@@ -82,6 +96,7 @@ const PerformanceView: FC<PerformanceViewProps> = ({ performanceId }) => {
   const { t } = useTranslation();
   const location = useLocation();
   const { loadPerformance } = usePerformancesApi();
+  const prefetchProjectData = usePrefetchProjectData();
   const appContext = useAppContext();
 
   const [result, setResult] = useState<LoadResult | null>(null);
@@ -93,6 +108,11 @@ const PerformanceView: FC<PerformanceViewProps> = ({ performanceId }) => {
     const load = async () => {
       const response = await loadPerformance(performanceId);
 
+      // The project sidebar would push the performance down when its data arrives after it.
+      if (isCurrent && !isError(response) && response.project?.id) {
+        await prefetchProjectData(response.project.id, false);
+      }
+
       if (isCurrent) {
         setResult({ id: performanceId, response });
       }
@@ -103,7 +123,23 @@ const PerformanceView: FC<PerformanceViewProps> = ({ performanceId }) => {
     return () => {
       isCurrent = false;
     };
-  }, [loadPerformance, performanceId]);
+  }, [loadPerformance, performanceId, prefetchProjectData]);
+
+  // The project is known from the path before the performance answers, so its data is requested right away.
+  const projects = useGlobalStore(selectProjects);
+  const isLoading = result?.id !== performanceId;
+
+  useEffect(() => {
+    if (!isLoading) {
+      return;
+    }
+
+    const project = findProjectOfPath(projects, location.pathname);
+
+    if (project) {
+      void prefetchProjectData(project.id, false);
+    }
+  }, [isLoading, location.pathname, prefetchProjectData, projects]);
 
   useEffect(() => {
     const timer = setInterval(() => setNow(Date.now()), CLOCK_INTERVAL_MS);
@@ -111,7 +147,6 @@ const PerformanceView: FC<PerformanceViewProps> = ({ performanceId }) => {
     return () => clearInterval(timer);
   }, []);
 
-  const isLoading = result?.id !== performanceId;
   const response = isLoading ? null : result.response;
   const performance = response && !isError(response) ? response : null;
 
@@ -166,7 +201,11 @@ const PerformanceView: FC<PerformanceViewProps> = ({ performanceId }) => {
   const status = performance ? getPerformanceStatus(performance, now) : null;
 
   return (
-    <Box className="page template-performance" data-testid="performance-page">
+    <Box
+      className={`page template-performance${isLoading ? " is-awaiting-content" : ""}`}
+      data-testid="performance-page"
+      sx={performancePageFrameStyles}
+    >
       {seoPage && <SeoHeaders page={seoPage} />}
 
       <ProjectPage
@@ -274,15 +313,16 @@ const PerformanceView: FC<PerformanceViewProps> = ({ performanceId }) => {
 };
 
 /**
- * Performance page below a project path. Ids that are not numeric belong to regular pages and are handed to
- * the generic page renderer.
+ * Performance page below a project path of any depth. Paths without a numeric id belong to regular pages and are
+ * handed to the generic page renderer.
  */
 export const PerformancePage: FC = () => {
-  const { performanceId } = useParams();
+  const { pathname } = useLocation();
+  const performanceId = getPerformanceIdFromPath(pathname);
 
-  if (!performanceId || !/^\d+$/.test(performanceId)) {
+  if (performanceId === null) {
     return <Page />;
   }
 
-  return <PerformanceView performanceId={Number(performanceId)} />;
+  return <PerformanceView performanceId={performanceId} />;
 };

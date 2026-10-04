@@ -39,7 +39,12 @@ const setAreCookiesAllowed = (value: boolean | null) => {
   });
 };
 
-const resetApp = (includeAuth?: boolean) => {
+/**
+ * Removes all data loaded for the current session and starts a new session version, so views holding such data
+ * start over (see `sessionVersion`).
+ * @param includeAuth `false` keeps tokens and user (login, where they already belong to the new session).
+ */
+const resetApp = (includeAuth?: boolean): void => {
   if (includeAuth !== false) {
     authStoreActions.resetSlice();
   }
@@ -48,6 +53,11 @@ const resetApp = (includeAuth?: boolean) => {
   pagesStoreActions.resetSlice();
   projectsStoreActions.resetSlice();
   projectRolesStoreActions.resetSlice();
+
+  useGlobalStore.setState((state) => {
+    state.sessionVersion = (state.sessionVersion ?? 0) + 1;
+    return state;
+  });
 };
 
 export const initializationStoreActions = {

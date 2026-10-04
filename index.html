@@ -23,8 +23,25 @@ https://github.com/Sebiworld/musical-fabrik.de
 
     <meta name="msapplication-tap-highlight" content="no" />
 
+    <!-- The font rules are injected by the app bundle; preloading the two faces used above the fold
+         starts their download with the document instead of after the bundle has run. -->
+    <link
+      rel="preload"
+      href="/assets/fonts/aileron/Aileron-Light.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/assets/fonts/aileron/Aileron-Bold.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
     <!-- For old IEs -->
-    <link rel="shortcut icon" href="favicons/favicon.ico" />
+    <link rel="shortcut icon" href="/assets/favicons/favicon.ico" />
 
     <!-- For new browsers - multisize ico  -->
     <link

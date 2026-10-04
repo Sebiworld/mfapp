@@ -13,6 +13,10 @@ import { ListContainerPageDto } from "@models/page/list-container-page-dto.model
 import React from "react";
 import { parseHtml } from "@utils/functions/parseHtml";
 import { NextPerformanceCard } from "@components/nextPerformanceCard/NextPerformanceCard";
+import {
+  GalleryImageLinkContext,
+  getGalleryImageSlots,
+} from "@components/contentBlocks/variants/contentGallery/galleryImageLink";
 
 /** The home page only points to performances that are at most this many days away. */
 const HOME_MAX_DAYS_AHEAD = 30;
@@ -109,6 +113,11 @@ export const PageContents: React.FC<PagesContentsProps> = ({ page }) => {
     );
   }, [authors, defaultPage?.datetime_from, t]);
 
+  const galleryImageSlots = useMemo(
+    () => getGalleryImageSlots(defaultPage?.contents),
+    [defaultPage?.contents]
+  );
+
   // On the home page the next performance card follows a leading hero, which sits below the translucent header.
   const homeHero =
     page?.template?.name === "home" &&
@@ -165,7 +174,9 @@ export const PageContents: React.FC<PagesContentsProps> = ({ page }) => {
           {!!defaultPage.intro && <Box className="intro">{intro}</Box>}
 
           {!!defaultPage?.contents?.length && (
-            <ContentBlocks blocks={defaultPage.contents}></ContentBlocks>
+            <GalleryImageLinkContext.Provider value={galleryImageSlots}>
+              <ContentBlocks blocks={defaultPage.contents}></ContentBlocks>
+            </GalleryImageLinkContext.Provider>
           )}
         </Paper>
       )}

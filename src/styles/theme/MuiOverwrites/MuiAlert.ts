@@ -1,11 +1,10 @@
 import { Components, Theme } from "@mui/material/styles";
 
 declare module "@mui/material/Alert" {
-  // 'primary' | 'secondary' | 'tertiary' | 'success' | 'warning' | 'danger' | 'dark' | 'medium' | 'light' | 'lighter' | 'transparent';
+  // 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'dark' | 'medium' | 'light' | 'lighter' | 'transparent';
   interface AlertPropsColorOverrides {
     primary: true;
     secondary: true;
-    tertiary: true;
     success: true;
     warning: true;
     danger: true;

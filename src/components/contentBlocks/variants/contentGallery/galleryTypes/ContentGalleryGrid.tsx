@@ -6,15 +6,22 @@ import { useLightGallery } from "@components/lightGallery/useLightGallery";
 
 export interface ContentGalleryGridProps {
   images: ImageDto[];
+  /** Image to open the lightbox at without a click; `null` while there is none. */
+  openIndex?: number | null;
+  /** Called when the lightbox is closed. */
+  onClose?: () => void;
 }
 
 export const ContentGalleryGrid: React.FC<ContentGalleryGridProps> = ({
   images,
+  openIndex,
+  onClose,
 }) => {
-  const { ref: lightGalleryRef, element: lightGalleryElement } =
-    useLightGallery({
-      images,
-    });
+  const { openGallery, element: lightGalleryElement } = useLightGallery({
+    images,
+    openIndex,
+    onClose,
+  });
 
   return (
     <>
@@ -27,7 +34,7 @@ export const ContentGalleryGrid: React.FC<ContentGalleryGridProps> = ({
             className="image-button"
             title={`${image?.description || "Bild"} in Galerie öffnen`}
             onClick={() => {
-              lightGalleryRef?.current?.openGallery(index);
+              openGallery(index);
             }}
           >
             <LazyPicture

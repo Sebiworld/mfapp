@@ -10,19 +10,15 @@ import { GlobalStylesElement } from "@styles/global/GlobalStylesElement";
 import "react-toastify/dist/ReactToastify.css";
 import { useGlobalStore } from "./store/global.store";
 import { selectIsInitialized } from "./store/initialization/initialization.selectors";
-import { useEffect } from "react";
 import { useHandleRegistrationConfirm } from "@utils/hooks/useHandleRegistrationConfirm";
 import { useReloadOnNewVersion } from "@utils/hooks/useReloadOnNewVersion";
 import { mfTheme } from "@styles/theme/mfTheme";
 import { CssBaseline, Typography } from "@mui/material";
 
-import * as ionIcons from "ionicons/icons";
-import { addIcons } from "ionicons";
 import { ScrollRestoration } from "react-router";
-import { useInitialization } from "@api/hooks/useInitialization";
+import { useInitializeApp } from "@api/hooks/useInitialization";
 import { selectIsMaintenanceModeActive } from "./store/configuration/configuration.selectors";
 import { AppContextPage } from "./context/appContext/AppContextPage";
-addIcons(ionIcons);
 
 export const App = () => {
   const isInitialized = useGlobalStore(selectIsInitialized);
@@ -31,11 +27,7 @@ export const App = () => {
 
   const isMaintenanceModeActive = useGlobalStore(selectIsMaintenanceModeActive);
 
-  const { initialize } = useInitialization();
-
-  useEffect(() => {
-    void initialize();
-  }, [initialize]);
+  useInitializeApp();
 
   return (
     <>

@@ -3,8 +3,18 @@ import { Link } from "react-router";
 import { Box, Typography } from "@mui/material";
 import { SectionPagesGridDto } from "@models/section/section-pages-grid-dto.model";
 import { LazyPicture } from "@components/lazyPicture/LazyPicture";
+import { LazyPictureSize } from "@components/lazyPicture/components/LazyPictureWithoutFallback";
 import { parseHtml } from "@utils/functions/parseHtml";
 import { pagesMosaicStyles } from "./pagesMosaic.styles";
+
+/** Tile image widths per breakpoint (two columns below `md`, three above); widest first. */
+const MOSAIC_TILE_IMAGE_SIZES: LazyPictureSize[] = [
+  { media: "xl-up", width: 800 },
+  { media: "lg-up", width: 500 },
+  { media: "md-up", width: 400 },
+  { media: "sm-up", width: 900 },
+  { width: 600 },
+];
 
 export interface PagesMosaicProps {
   section: SectionPagesGridDto;
@@ -33,6 +43,7 @@ export const PagesMosaic: FC<PagesMosaicProps> = ({ section }) => {
                 image={{ ...image, description: "", caption: undefined }}
                 placeholder={false}
                 className="tile-image"
+                sizes={MOSAIC_TILE_IMAGE_SIZES}
               ></LazyPicture>
             )}
 

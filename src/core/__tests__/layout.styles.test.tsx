@@ -48,4 +48,23 @@ describe("layout styles", () => {
       "--surface-"
     );
   });
+
+  it("keeps room for the fixed header on the route's own element, not above it", () => {
+    const mainContent = renderWithLastChapter("default");
+    const page = mainContent.querySelector(".page") as HTMLElement;
+
+    expect(getComputedStyle(page).borderTopWidth).toBe("var(--header-offset)");
+    expect(
+      getComputedStyle(mainContent).getPropertyValue("--header-offset")
+    ).toMatch(/^var\(--header-height, ?64px\)$/);
+  });
+
+  it("drops the header room below a translucent header", () => {
+    const mainContent = renderWithLastChapter("default");
+    mainContent.classList.add("below-translucent-header");
+
+    expect(
+      getComputedStyle(mainContent).getPropertyValue("--header-offset")
+    ).toBe("0px");
+  });
 });

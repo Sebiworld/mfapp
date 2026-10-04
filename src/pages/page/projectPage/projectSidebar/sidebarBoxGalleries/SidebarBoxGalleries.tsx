@@ -15,12 +15,16 @@ export interface SidebarBoxGalleriesProps {
   data?: SidebarBoxGalleriesData;
   type?: string;
   showTitle?: boolean;
+  /** Called when the gallery's lightbox opens. */
+  onLightboxOpen?: () => void;
+  /** Called when the box is left: after the lightbox closed, or on the link to all galleries. */
   onClose?: () => void;
 }
 
 export const SidebarBoxGalleries: React.FC<SidebarBoxGalleriesProps> = ({
   data,
   showTitle,
+  onLightboxOpen,
   onClose,
 }) => {
   const { t } = useTranslation();
@@ -55,6 +59,7 @@ export const SidebarBoxGalleries: React.FC<SidebarBoxGalleriesProps> = ({
             <ContentGallerySlider
               images={gallery.images as ImageDto[]}
               detailLink={gallery.url}
+              onOpen={onLightboxOpen}
               onClose={onClose}
             />
           </Box>

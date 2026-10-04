@@ -1,12 +1,12 @@
 import { Button } from "@mui/material";
 import React from "react";
-import { Link } from "react-router";
+import { Link, To } from "react-router";
 
 // Import Swiper styles
 import "swiper/css/bundle";
 
 export interface ContentGallerySliderItemButtonProps {
-  detailLink?: string;
+  detailLink?: To;
   onClick?: () => void;
   children: React.ReactNode;
   [key: string]: unknown;
@@ -20,7 +20,8 @@ export const ContentGallerySliderItemButton: React.FC<
       <Button
         className="gallery-link"
         component={Link}
-        to={{ pathname: detailLink }}
+        to={detailLink}
+        onClick={onClick}
         {...props}
       >
         {children}

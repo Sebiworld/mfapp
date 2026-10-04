@@ -8,7 +8,17 @@ import { SectionHero } from "../SectionHero";
 import { sectionHeroStyles } from "../section-hero.styles";
 
 vi.mock("@components/lazyPicture/LazyPicture", () => ({
-  LazyPicture: () => <img alt="" />,
+  LazyPicture: (props: {
+    imageProps?: { loading?: string; fetchPriority?: string };
+    sizes?: { width?: number }[];
+  }) => (
+    <img
+      alt=""
+      data-loading={props.imageProps?.loading}
+      data-priority={props.imageProps?.fetchPriority}
+      data-widths={props.sizes?.map((size) => size.width).join(",")}
+    />
+  ),
 }));
 vi.mock("@components/contentBlocks/ContentBlocks", () => ({
   ContentBlocks: () => null,
@@ -63,5 +73,13 @@ describe("SectionHero", () => {
     expect(image["@media (prefers-reduced-motion: reduce)"]).toEqual({
       transition: "none",
     });
+  });
+
+  it("loads the hero image eagerly with high priority and offers a width per breakpoint", () => {
+    const img = renderHero(2.34).querySelector("img") as HTMLElement;
+
+    expect(img.dataset.loading).toBe("eager");
+    expect(img.dataset.priority).toBe("high");
+    expect(img.dataset.widths).toBe("1920,1536,1200,900,600");
   });
 });

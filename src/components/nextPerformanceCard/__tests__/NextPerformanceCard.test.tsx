@@ -10,6 +10,7 @@ import {
 import { PerformanceDetailDto } from "@models/utility-types/performance-detail-dto.model";
 import { ProjectRoleDto } from "@models/project-role/project-role-dto.model";
 import { useGlobalStore } from "@src/store/global.store";
+import { clearNextPerformancesPrefetch } from "@api/prefetch/nextPerformancesPrefetch";
 import { NextPerformanceCard } from "../NextPerformanceCard";
 import { nextPerformanceCardStyles } from "../nextPerformanceCard.styles";
 import "@utils/i18n/i18n";
@@ -203,6 +204,7 @@ const unit = (name: string, root: HTMLElement = card()): string =>
 describe("NextPerformanceCard", () => {
   beforeEach(() => {
     vi.useFakeTimers();
+    clearNextPerformancesPrefetch();
     setReducedMotion(false);
     portraitRenders.count = 0;
     useGlobalStore.setState({ projects: {} });

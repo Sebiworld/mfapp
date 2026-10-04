@@ -4,6 +4,7 @@ import React, { useMemo } from "react";
 import ReactPlayer from "react-player";
 import { contentYoutubeVideoStyles } from "./contentYoutubeVideo.styles";
 import { VideoPlaceholder } from "./components/VideoPlaceholder";
+import { useGalleryImageLink } from "@components/contentBlocks/variants/contentGallery/useGalleryImageLink";
 
 export interface ContentYoutubeVideoProps {
   block: ContentBlockYoutubeVideoDto;
@@ -31,12 +32,15 @@ export const ContentYoutubeVideo: React.FC<ContentYoutubeVideoProps> = ({
     return output.join(" ");
   }, [block]);
 
+  // A link to the placeholder image only scrolls to the video; there is no lightbox for it.
+  const { containerRef } = useGalleryImageLink(block?.id);
+
   if (!block.video_id) {
     return null;
   }
 
   return (
-    <Box className={classes} sx={contentYoutubeVideoStyles}>
+    <Box ref={containerRef} className={classes} sx={contentYoutubeVideoStyles}>
       <Box className="player-wrapper aspect-ratio ar-16-9">
         <Box className="player-container ar-content">
           <ReactPlayer

@@ -1,11 +1,10 @@
 import { Components, Theme } from "@mui/material/styles";
 
 declare module "@mui/material/Snackbar" {
-  // 'primary' | 'secondary' | 'tertiary' | 'success' | 'warning' | 'danger' | 'dark' | 'medium' | 'light' | 'lighter' | 'transparent';
+  // 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'dark' | 'medium' | 'light' | 'lighter' | 'transparent';
   interface MuiSnackbarPropsColorOverrides {
     primary: true;
     secondary: true;
-    tertiary: true;
     success: true;
     warning: true;
     danger: true;

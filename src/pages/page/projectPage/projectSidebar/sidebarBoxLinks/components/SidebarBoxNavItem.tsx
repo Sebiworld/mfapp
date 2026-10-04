@@ -9,8 +9,7 @@ import { Link as RouterLink } from "react-router";
 import { parseHtml } from "@utils/functions/parseHtml";
 import { NavigationItemDto } from "@models/navigation-item-dto.model";
 import { useMemo } from "react";
-import { link } from "ionicons/icons";
-import { IonIcon } from "@ionic/react";
+import { AppIcon } from "@components/appIcon/AppIcon";
 
 export interface SidebarBoxNavItemProps {
   item: NavigationItemDto;
@@ -40,7 +39,7 @@ export const SidebarBoxNavItem: React.FC<SidebarBoxNavItemProps> = ({
         onClick={onClick}
       >
         <ListItemIcon>
-          <IonIcon aria-hidden="true" icon={link}></IonIcon>
+          <AppIcon name="link"></AppIcon>
         </ListItemIcon>
 
         <ListItemText>

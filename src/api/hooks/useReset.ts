@@ -5,6 +5,8 @@ import { useConfigurationApi } from "./useConfigurationApi";
 import { usePagesApi } from "./usePagesApi";
 import { useProjectsApi } from "./useProjectsApi";
 import { useProjectRolesApi } from "./useProjectRolesApi";
+import { clearNextPerformancesPrefetch } from "@api/prefetch/nextPerformancesPrefetch";
+import { clearProjectDetailsPrefetch } from "@api/prefetch/projectDetailsPrefetch";
 
 interface UseResetOutput {
   reset: (includeAuth?: boolean) => Promise<void>;
@@ -37,6 +39,10 @@ export const useReset = (): UseResetOutput => {
    */
   const reset = useCallback(
     async (includeAuth?: boolean) => {
+      // The shared requests were sent with the previous session's credentials.
+      clearNextPerformancesPrefetch();
+      clearProjectDetailsPrefetch();
+
       // Reset everything:
       initializationStoreActions.resetApp(includeAuth);
 

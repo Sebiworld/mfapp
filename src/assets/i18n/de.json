@@ -15,6 +15,7 @@
       "lets-go": "Los geht's!",
       "confirm": "Bestätigen",
       "back": "Zurück",
+      "previous": "Zurück",
       "forward": "Weiter",
       "cancel": "Abbrechen",
       "submit": "Abschicken",
@@ -24,6 +25,7 @@
       "done": "Ok",
       "clear": "Zurücksetzen",
       "login": "Anmelden",
+      "open": "Öffnen",
       "download": "Herunterladen",
       "save": "Speichern",
       "load-more": "Mehr laden"
@@ -36,6 +38,10 @@
     "general_label_x": "Fehler: {{x}}",
     "general_message_code": "Ein Fehler ist aufgetreten. {{message}} [Fehlercode {{code}}]",
     "form_checkbox_required": "Bitte bestätigen.",
+    "form_too_many_requests": "Es wurden zu viele Formulare in kurzer Zeit abgeschickt. Bitte versuchen Sie es später noch einmal. Ihre Eingaben bleiben erhalten.",
+    "form_already_submitted": "Dieses Formular wurde mit denselben Angaben bereits abgeschickt.",
+    "form_rejected": "Ihre Eingaben konnten nicht angenommen werden. Bitte laden Sie die Seite neu und versuchen Sie es noch einmal.",
+    "form_save_failed": "Ihre Eingaben konnten leider nicht gespeichert werden. Bitte versuchen Sie es später noch einmal.",
 
     "form_error": {
       "title": "Formularfehler",

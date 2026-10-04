@@ -10,7 +10,6 @@ import { Thumbs, Pagination, Virtual } from "swiper/modules";
 
 // Import Swiper styles
 import "swiper/css/bundle";
-import { LightGallery } from "lightgallery/lightgallery";
 import { ContentGallerySliderItem } from "./ContentGallerySliderItem";
 import { useTranslation } from "react-i18next";
 import { useEffect, useRef, useState } from "react";
@@ -19,9 +18,9 @@ interface ContentGallerySliderDefaultProps {
   images: ImageDto[];
   activeIndex: number;
   setActiveIndex: React.Dispatch<React.SetStateAction<number>>;
-  lightGalleryRef: React.RefObject<LightGallery | null>;
+  openGallery: (index: number) => void;
   detailLink?: string;
-  onClose?: () => void;
+  onLinkClick?: () => void;
 }
 
 export const ContentGallerySliderDefault: React.FC<
@@ -29,10 +28,10 @@ export const ContentGallerySliderDefault: React.FC<
 > = ({
   images,
   setActiveIndex,
-  lightGalleryRef,
+  openGallery,
   activeIndex,
   detailLink,
-  onClose,
+  onLinkClick,
 }) => {
   const { t } = useTranslation();
   const swiperElRef = useRef<SwiperRef | null>(null);
@@ -80,9 +79,9 @@ export const ContentGallerySliderDefault: React.FC<
             <ContentGallerySliderItem
               index={index}
               image={image}
-              lightGalleryRef={lightGalleryRef}
-              onClose={onClose}
+              openGallery={openGallery}
               detailLink={detailLink}
+              onLinkClick={onLinkClick}
             />
           </SwiperSlide>
         ))}

@@ -4,6 +4,11 @@ import { NextPerformancesDto } from "@models/utility-types/next-performances-dto
 import { isError } from "@utils/functions/isError";
 import { useSecondClock } from "@utils/hooks/useSecondClock";
 import {
+  getNextPerformancesPrefetch,
+  loadSharedNextPerformances,
+  NextPerformancesResult,
+} from "@api/prefetch/nextPerformancesPrefetch";
+import {
   getNextPerformanceCardState,
   getNextPerformanceCardStateKey,
   NextPerformanceCardState,
@@ -24,8 +29,28 @@ interface UseNextPerformanceCardOutput {
 }
 
 /**
+ * Returns the data of a finished, fresh shared request (see `loadSharedNextPerformances`) for the project, so
+ * the card can render with it at once.
+ * @param projectId Project page id, or none for all projects.
+ * @returns The loaded data, or `null` while there is none.
+ */
+const getPrefetchedData = (
+  projectId: number | undefined
+): LoadedData | null => {
+  const result = getNextPerformancesPrefetch(projectId)?.result;
+
+  if (!result || result === true || isError(result)) {
+    return null;
+  }
+
+  return { projectId, response: result };
+};
+
+/**
  * Loads the current and next performance and derives the card state from a clock that ticks every second.
  * The data is kept in component state only: it describes a moment in time and must not outlive the visit.
+ * The first load shares its request with the app initialization (`loadSharedNextPerformances`); when that one
+ * has already finished, the card renders with its data from the first render on.
  * Whenever the phase or the shown performance changes, the data is loaded again (with its hash, so an
  * unchanged answer costs a 204). A failed load is retried when the browser comes back online and once after
  * a short delay.
@@ -39,18 +64,32 @@ export const useNextPerformanceCard = (
 ): UseNextPerformanceCardOutput => {
   const { loadNextPerformances } = usePerformancesApi();
   const nowMs = useSecondClock();
-  const [loaded, setLoaded] = useState<LoadedData | null>(null);
+  const [loaded, setLoaded] = useState<LoadedData | null>(() =>
+    getPrefetchedData(projectId)
+  );
   const [loadFailed, setLoadFailed] = useState(false);
-  const hashRef = useRef<{ projectId: number | undefined; hash: string }>(null);
+  const hashRef = useRef<{ projectId: number | undefined; hash: string }>(
+    loaded ? { projectId, hash: loaded.response.hash } : null
+  );
 
   const load = useCallback(
-    async (isCurrent: () => boolean): Promise<void> => {
-      const lastHash = hashRef.current;
-      const hash =
-        lastHash && lastHash.projectId === projectId
-          ? lastHash.hash
-          : undefined;
-      const response = await loadNextPerformances(projectId, hash);
+    async (isCurrent: () => boolean, isFirstLoad = false): Promise<void> => {
+      let response: NextPerformancesResult;
+
+      if (isFirstLoad) {
+        response = await loadSharedNextPerformances(
+          loadNextPerformances,
+          projectId
+        );
+      } else {
+        const lastHash = hashRef.current;
+        const hash =
+          lastHash && lastHash.projectId === projectId
+            ? lastHash.hash
+            : undefined;
+
+        response = await loadNextPerformances(projectId, hash);
+      }
 
       if (!isCurrent()) {
         return;
@@ -76,7 +115,7 @@ export const useNextPerformanceCard = (
   useEffect(() => {
     let isCurrent = true;
 
-    void load(() => isCurrent);
+    void load(() => isCurrent, true);
 
     return () => {
       isCurrent = false;

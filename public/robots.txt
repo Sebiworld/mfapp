@@ -1,2 +1,7 @@
 User-agent: *
-Disallow: /
+Allow: /backend/api/
+Allow: /backend/site/assets/files/
+Allow: /backend/sitemap.xml
+Disallow: /backend/
+
+Sitemap: https://www.musical-fabrik.de/sitemap.xml

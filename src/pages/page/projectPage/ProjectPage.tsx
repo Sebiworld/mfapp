@@ -19,6 +19,8 @@ import { configurationStoreActions } from "@src/store/configuration/configuratio
 import { useProjectsApi } from "@api/hooks/useProjectsApi";
 import { loadSharedProjectDetails } from "@api/prefetch/projectDetailsPrefetch";
 import { parseHtml } from "@utils/functions/parseHtml";
+import { convertHtmlEntities } from "@utils/functions/convertHtmlEntities";
+import { useTranslation } from "react-i18next";
 
 /** The project header image spans the viewport up to the 1600px content limit; widest first. */
 const PROJECT_IMAGE_SIZES: LazyPictureSize[] = [
@@ -36,11 +38,15 @@ const PROJECT_IMAGE_PROPS = {
 } as const;
 
 export interface ProjectPageProps {
-  page?: Pick<PageDto, "project_id" | "alerts">;
+  /** `template` decides the title level: only the project start page has no heading of its own. */
+  page?: Pick<PageDto, "project_id" | "alerts"> & {
+    template?: { name?: string };
+  };
   children?: React.ReactNode;
 }
 
 export const ProjectPage: React.FC<ProjectPageProps> = ({ page, children }) => {
+  const { t } = useTranslation();
   const { loadProjectDetails } = useProjectsApi();
 
   const projectPage = useGlobalStore(
@@ -100,6 +106,19 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({ page, children }) => {
     return parseHtml(projectPage.title);
   }, [projectPage]);
 
+  // The header image link has no text of its own, so the project title names it.
+  const mainImageLinkLabel = useMemo(() => {
+    if (!projectPage?.title) {
+      return undefined;
+    }
+
+    const plainTitle = convertHtmlEntities(
+      projectPage.title.replace(/<[^>]*>/g, "")
+    ).trim();
+
+    return t("project_page.main_image_link", { title: plainTitle });
+  }, [projectPage, t]);
+
   const infoOverlay = useMemo(() => {
     if (!projectPage?.info_overlay) {
       return null;
@@ -117,6 +136,7 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({ page, children }) => {
   }, [projectPage]);
 
   const project = projectPage?.id ? projectPage : undefined;
+  const isProjectStartPage = page?.template?.name === "project";
 
   // One element tree for every page, with or without project: the project arrives after the page on a first
   // visit, and a different tree would mount the page contents (and their requests) a second time.
@@ -132,6 +152,7 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({ page, children }) => {
             className="main-image aspect-ratio ar-3-1"
             component={Link}
             to={project.url}
+            aria-label={mainImageLinkLabel}
           >
             <LazyPicture
               image={project.main_image}
@@ -149,7 +170,11 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({ page, children }) => {
             )}
 
             <Box className="project-meta">
-              <Typography className="project-title" variant="h3">
+              <Typography
+                className="project-title"
+                variant="h3"
+                component={isProjectStartPage ? "h1" : "h3"}
+              >
                 {title}
               </Typography>
 

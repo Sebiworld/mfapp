@@ -6,10 +6,15 @@ import { useGlobalStore } from "@src/store/global.store";
 import { convertHtmlEntities } from "@utils/functions/convertHtmlEntities";
 import { trimWords } from "@utils/functions/trimWords";
 import { publisherLdJson, publisherLongLdJson } from "@utils/ldJson/publisher";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { Article, WebPage, WithContext } from "schema-dts";
 import { formatISO } from "date-fns";
 import { isValidArray } from "@utils/functions/isValidArray";
+import { getPageSeo } from "@utils/functions/getPageSeo";
+import { getCanonicalUrl } from "@utils/functions/getCanonicalUrl";
+
+const SITE_SUFFIX = "Musical-Fabrik e.V.";
+const SITE_TITLE_SUFFIX = ` | ${SITE_SUFFIX}`;
 
 export interface SeoHeadersProps {
   page: PageDto;
@@ -21,21 +26,37 @@ export interface SeoHeadersProps {
 export const SeoHeaders: React.FC<SeoHeadersProps> = ({ page }) => {
   const configurationParams = useGlobalStore(selectConfigurationParams);
 
+  const seo = useMemo(() => getPageSeo(page?.seo), [page]);
+
+  // The API title is finished (suffix included); only the fallback gets the site suffix.
   const title = useMemo(() => {
-    if (page?.seo?.title) {
-      return `${convertHtmlEntities(page.seo.title)} | Musical-Fabrik`;
+    if (seo.title) {
+      return convertHtmlEntities(seo.title);
     }
 
     if (page?.title) {
-      return `${convertHtmlEntities(page?.title)} | Musical-Fabrik`;
+      return `${convertHtmlEntities(page.title)} | ${SITE_SUFFIX}`;
     }
 
-    return "Musical-Fabrik";
-  }, [page]);
+    return SITE_SUFFIX;
+  }, [page, seo]);
+
+  // Title without the site suffix, for structured data that names the page itself.
+  const bareTitle = useMemo(() => {
+    if (page?.title) {
+      return convertHtmlEntities(page.title);
+    }
+
+    return title.endsWith(SITE_TITLE_SUFFIX)
+      ? title.slice(0, -SITE_TITLE_SUFFIX.length)
+      : title;
+  }, [page, title]);
+
+  const canonical = useMemo(() => getCanonicalUrl(seo), [seo]);
 
   const description = useMemo(() => {
-    if (page?.seo?.description) {
-      return convertHtmlEntities(page.seo.description);
+    if (seo.description) {
+      return convertHtmlEntities(seo.description);
     }
 
     const pageIntro = (page as unknown as { intro: string })?.intro;
@@ -48,22 +69,17 @@ export const SeoHeaders: React.FC<SeoHeadersProps> = ({ page }) => {
     }
 
     return "";
-  }, [page, configurationParams]);
+  }, [page, seo, configurationParams]);
 
-  const imageUrl = useMemo(() => {
+  // Without an own image the static preview image of index.html stays.
+  const imageUrl = seo.image || "";
+
+  const structuredImageUrl = useMemo(() => {
     const mainImageUrl = (page as unknown as { main_image?: ImageDto })
       ?.main_image?.http_url;
-    if (mainImageUrl && typeof mainImageUrl === "string") {
-      return mainImageUrl;
-    }
 
-    const globalMainImageUrl = configurationParams?.main_image?.http_url;
-    if (globalMainImageUrl && typeof globalMainImageUrl === "string") {
-      return globalMainImageUrl;
-    }
-
-    return "";
-  }, [page, configurationParams]);
+    return imageUrl || (typeof mainImageUrl === "string" ? mainImageUrl : "");
+  }, [page, imageUrl]);
 
   const structuredData = useMemo(() => {
     if (!page?.id) {
@@ -74,7 +90,7 @@ export const SeoHeaders: React.FC<SeoHeadersProps> = ({ page }) => {
       const output: WithContext<WebPage> = {
         "@context": "https://schema.org",
         "@type": "WebPage",
-        url: page.httpUrl,
+        url: canonical,
         name: "Musical-Fabrik e. V.",
         description: description,
         publisher: publisherLdJson,
@@ -86,8 +102,8 @@ export const SeoHeaders: React.FC<SeoHeadersProps> = ({ page }) => {
       const output: WithContext<WebPage> = {
         "@context": "https://schema.org",
         "@type": "WebPage",
-        url: page.httpUrl,
-        name: `${title} (eine Produktion der Musical-Fabrik e. V.)`,
+        url: canonical,
+        name: `${bareTitle} (eine Produktion der Musical-Fabrik e. V.)`,
         description: description,
         publisher: publisherLdJson,
       };
@@ -106,10 +122,10 @@ export const SeoHeaders: React.FC<SeoHeadersProps> = ({ page }) => {
         dateModified: formatISO(articlePage.modified * 1000),
         description: articlePage.intro,
         publisher: publisherLdJson,
-        url: page.httpUrl,
+        url: canonical,
         mainEntityOfPage: {
           "@type": "WebPage",
-          "@id": "https://google.com/article",
+          "@id": canonical,
         },
       };
 
@@ -138,13 +154,48 @@ export const SeoHeaders: React.FC<SeoHeadersProps> = ({ page }) => {
         };
       }
 
-      if (imageUrl) {
-        output.image = imageUrl;
+      if (structuredImageUrl) {
+        output.image = structuredImageUrl;
       }
 
       return output;
     }
-  }, [description, page, title, imageUrl]);
+  }, [description, page, bareTitle, structuredImageUrl, canonical]);
+
+  // index.html carries static fallbacks for crawlers that do not run scripts.
+  // While this component renders its own value for a tag, the static one is
+  // taken out so the head never holds two values for the same tag; it comes
+  // back when the value goes away (navigation to a page without one, unmount).
+  useEffect(() => {
+    const replaced = [
+      "title",
+      "og:title",
+      "og:type",
+      "og:site_name",
+      "twitter:card",
+      ...(description ? ["description", "og:description"] : []),
+      ...(imageUrl ? ["og:image", "og:image:width", "og:image:height"] : []),
+    ];
+    if (!configurationParams?.site_name) {
+      replaced.splice(replaced.indexOf("og:site_name"), 1);
+    }
+
+    const removed: Element[] = [];
+    for (const key of replaced) {
+      for (const element of document.querySelectorAll(
+        `[data-static-seo="${key}"]`
+      )) {
+        element.remove();
+        removed.push(element);
+      }
+    }
+
+    return () => {
+      for (const element of removed) {
+        document.head.appendChild(element);
+      }
+    };
+  }, [description, imageUrl, configurationParams?.site_name]);
 
   return (
     <>
@@ -154,9 +205,10 @@ export const SeoHeaders: React.FC<SeoHeadersProps> = ({ page }) => {
       <meta name="twitter:title" content={title} />
 
       {/* Canonical Link */}
-      {page?.seo?.canonical && (
-        <link rel="canonical" href={page.seo.canonical} />
-      )}
+      <link rel="canonical" href={canonical} />
+
+      {/* Robots */}
+      {seo.noindex === true && <meta name="robots" content="noindex" />}
 
       {/* Author */}
       {configurationParams?.author && (
@@ -166,13 +218,8 @@ export const SeoHeaders: React.FC<SeoHeadersProps> = ({ page }) => {
       {/* Site-name */}
       {configurationParams?.site_name && (
         <>
-          <meta name="site_name" content={configurationParams.site_name} />
           <meta
             property="og:site_name"
-            content={configurationParams.site_name}
-          />
-          <meta
-            name="twitter:site_name"
             content={configurationParams.site_name}
           />
         </>
@@ -190,7 +237,6 @@ export const SeoHeaders: React.FC<SeoHeadersProps> = ({ page }) => {
       {/* Image */}
       {imageUrl && (
         <>
-          <meta name="image" content={imageUrl} />
           <meta property="og:image" content={imageUrl} />
           <meta name="twitter:image" content={imageUrl} />
         </>
@@ -198,13 +244,9 @@ export const SeoHeaders: React.FC<SeoHeadersProps> = ({ page }) => {
 
       {/* Other Meta Tags */}
       <meta property="og:type" content="website" />
-      <meta property="twitter:card" content="summary" />
-      {page?.httpUrl && (
-        <>
-          <meta property="og:url" content={page.httpUrl} />
-          <meta property="twitter:url" content={page.httpUrl} />
-        </>
-      )}
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta property="og:url" content={canonical} />
+      <meta name="twitter:url" content={canonical} />
 
       {!!structuredData && (
         <script

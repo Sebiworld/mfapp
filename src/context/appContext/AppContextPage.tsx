@@ -119,7 +119,7 @@ export const AppContextPage: FC<AppContextPageProps> = ({ children }) => {
                 Nein
               </Button>
               <span className="spacer"></span>
-              <Link component={RouterLink} to="/datenschutz">
+              <Link component={RouterLink} to="/datenschutz/">
                 mehr zum Datenschutz
               </Link>
             </>

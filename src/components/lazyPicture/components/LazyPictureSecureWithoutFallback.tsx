@@ -69,7 +69,7 @@ export const LazyPictureSecureWithoutFallback: React.FC<
 
       <img
         ref={imageRef}
-        alt={image.description}
+        alt={image.description ?? ""}
         width={image.width}
         height={image.height}
         loading="lazy"

@@ -14,5 +14,4 @@ export const autocompleteNamesMap: { [key: string]: string } = {
   password: "current-password",
   new_password: "new-password",
   website: "url",
-  iban: "iban"
 };

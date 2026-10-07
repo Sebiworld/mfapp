@@ -25,11 +25,35 @@ const renderCard = (fields: Record<string, unknown>): void => {
 };
 
 describe("PageCard", () => {
+  it("starts the accessible name of each link with its visible text", () => {
+    renderCard({ title: "Chorgesang" });
+
+    const link = screen.getByRole("link");
+
+    expect(link.getAttribute("aria-label")).toContain(
+      link.textContent as string
+    );
+  });
+
+  it("starts the accessible name of the Facebook link with its visible text", () => {
+    renderCard({
+      title: "Probenwochenende",
+      external_type: "Facebook",
+      external_link: "https://facebook.com/post/1",
+    });
+
+    const link = screen.getByRole("link");
+
+    expect(
+      link.getAttribute("aria-label")?.startsWith(link.textContent as string)
+    ).toBe(true);
+  });
+
   it("names the more link after the card, so a list of cards has distinct link names", () => {
     renderCard({ title: "Chorgesang &amp; Ensemble" });
 
     expect(
-      screen.getByRole("link", { name: "Mehr zu „Chorgesang & Ensemble“" })
+      screen.getByRole("link", { name: "Mehr dazu…: „Chorgesang & Ensemble“" })
     ).toHaveAttribute("href", "/bereiche/chor/");
   });
 
@@ -42,7 +66,7 @@ describe("PageCard", () => {
 
     expect(
       screen.getByRole("link", {
-        name: "Auf Facebook: „Probenwochenende in der Musicalfabrik“",
+        name: "Mehr dazu auf Facebook…: „Probenwochenende in der Musicalfabrik“",
       })
     ).toHaveAttribute("href", "https://facebook.com/post/1");
   });

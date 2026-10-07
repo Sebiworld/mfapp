@@ -1,4 +1,12 @@
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import {
+  afterEach,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from "vitest";
 import userEvent from "@testing-library/user-event";
 import { render, screen, waitFor, within } from "@testing-library/react";
 import { createMemoryRouter, RouterProvider } from "react-router";
@@ -361,6 +369,54 @@ describe("PerformancePage", () => {
       await show(performance({ ticket_url: null }));
 
       expect(screen.queryByTestId("ticket-button")).not.toBeInTheDocument();
+    });
+  });
+
+  describe("search metadata", () => {
+    const eventJson = (): Record<string, unknown> | null => {
+      const script = [
+        ...document.querySelectorAll('script[type="application/ld+json"]'),
+      ].find((element) => element.textContent?.includes('"Event"'));
+
+      return script ? JSON.parse(script.textContent ?? "") : null;
+    };
+
+    it("renders the event and takes title and canonical from seo", async () => {
+      await show(
+        performance({
+          seo: {
+            title: "Abendvorstellung – Annie | Musical-Fabrik e.V.",
+            canonical:
+              "https://www.example.test/projekte/annie/vorstellungen/7/",
+            noindex: true,
+          },
+        })
+      );
+
+      expect(eventJson()).toMatchObject({
+        "@type": "Event",
+        name: "Abendvorstellung – Annie",
+        startDate: "2026-10-10T19:30:00+02:00",
+        endDate: "2026-10-10T22:00:00+02:00",
+      });
+      expect(document.title).toBe(
+        "Abendvorstellung – Annie | Musical-Fabrik e.V."
+      );
+      expect(
+        document.head.querySelector('link[rel="canonical"]')
+      ).toHaveAttribute(
+        "href",
+        "https://www.example.test/projekte/annie/vorstellungen/7/"
+      );
+      expect(
+        document.head.querySelector('meta[name="robots"]')
+      ).toHaveAttribute("content", "noindex");
+    });
+
+    it("renders no event without a start", async () => {
+      await show(performance({ timestamp: null }));
+
+      expect(eventJson()).toBeNull();
     });
   });
 

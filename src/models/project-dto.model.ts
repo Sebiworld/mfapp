@@ -6,6 +6,7 @@ import { PageDto } from "./page/page-dto.model";
 import { AlertDto } from "./utility-types/alert-dto.model";
 import { IconLinkDto } from "./utility-types/icon-link-dto.model";
 import { PerformanceDto } from "./utility-types/performance-dto.model";
+import { SeoDto } from "./utility-types/seo-dto.model";
 import { SponsorDto } from "./utility-types/sponsor-dto.model";
 
 export interface ProjectDto extends BasicPageDto {
@@ -31,6 +32,7 @@ export interface ProjectDetailsDto extends ProjectDto {
   main_navigation?: NavigationItemDto[];
   alerts?: AlertDto[];
   hash?: string;
+  seo?: SeoDto;
 }
 
 export interface ProjectGeneralDataBlock {

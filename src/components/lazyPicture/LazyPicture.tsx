@@ -35,7 +35,7 @@ export const LazyPicture: React.FC<LazyPictureProps> = ({
     }
 
     if (typeof placeholder === "string") {
-      return <img src={placeholder} className={classes} loading="lazy" />;
+      return <img src={placeholder} alt="" className={classes} loading="lazy" />;
     }
 
     if (placeholder?.basename) {
@@ -44,7 +44,9 @@ export const LazyPicture: React.FC<LazyPictureProps> = ({
       );
     }
 
-    return <img src="/img/mf-bg.jpg" className={classes} loading="lazy" />;
+    return (
+      <img src="/img/mf-bg.jpg" alt="" className={classes} loading="lazy" />
+    );
   }
 
   return (

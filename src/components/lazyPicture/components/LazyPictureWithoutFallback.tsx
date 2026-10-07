@@ -130,7 +130,7 @@ export const LazyPictureWithoutFallback: React.FC<
       {children}
 
       <img
-        alt={image.description}
+        alt={image.description ?? ""}
         src={fileUrl}
         width={image.width}
         height={image.height}

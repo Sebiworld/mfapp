@@ -21,6 +21,20 @@ export interface ErrorCardProps {
   errorResponse: AxiosError<ErrorResponseDto>;
 }
 
+/**
+ * Gives the error the page's main landmark; `display: contents` keeps the layout of the card unchanged.
+ * @param children The error card or alert.
+ */
+const ErrorLandmark = ({
+  children,
+}: {
+  children: React.ReactNode;
+}): React.ReactElement => (
+  <Box component="main" sx={{ display: "contents" }}>
+    {children}
+  </Box>
+);
+
 export const ErrorCard = ({ errorResponse }: ErrorCardProps) => {
   const { t, i18n } = useTranslation();
 
@@ -40,41 +54,83 @@ export const ErrorCard = ({ errorResponse }: ErrorCardProps) => {
 
   if (errorCode === "not_found_exception") {
     return (
-      <Card sx={errorCardStyles} className="error-card">
-        <Box className="card-image aspect-ratio ar-16-9">
-          <img
-            className="ar-content"
-            src="/img/not-found.webp"
-            alt={t(`error.${errorCode}.title`)}
-          />
-        </Box>
+      <ErrorLandmark>
+        {/* Unknown addresses must not end up in search results. */}
+        <title>{t("error.not_found_exception.seo_title")}</title>
+        <meta name="robots" content="noindex" />
 
-        <CardContent>
-          <Typography
-            gutterBottom
-            variant="h5"
-            component="div"
-            className="card-title"
-          >
-            {t(`error.${errorCode}.title`)}
-          </Typography>
+        <Card sx={errorCardStyles} className="error-card">
+          <Box className="card-image aspect-ratio ar-16-9">
+            <img
+              className="ar-content"
+              src="/img/not-found.webp"
+              alt={t(`error.${errorCode}.title`)}
+            />
+          </Box>
 
-          <Typography variant="body2" sx={{ color: "text.secondary" }}>
-            {t(`error.${errorCode}.description`)}
-          </Typography>
-        </CardContent>
+          <CardContent>
+            <Typography
+              gutterBottom
+              variant="h5"
+              component="h1"
+              className="card-title"
+            >
+              {t(`error.${errorCode}.title`)}
+            </Typography>
 
-        <CardActions>
-          <Button variant="contained" color="contrast" component={Link} to="/" startIcon={<ArrowBack />}>
-            {t("general.actions.back-to-home")}
-          </Button>
-        </CardActions>
-      </Card>
+            <Typography variant="body2" sx={{ color: "text.secondary" }}>
+              {t(`error.${errorCode}.description`)}
+            </Typography>
+          </CardContent>
+
+          <CardActions>
+            <Button
+              variant="contained"
+              color="contrast"
+              component={Link}
+              to="/"
+              startIcon={<ArrowBack />}
+            >
+              {t("general.actions.back-to-home")}
+            </Button>
+          </CardActions>
+        </Card>
+      </ErrorLandmark>
     );
   }
 
   if (i18n.exists(`error.${errorCode}`)) {
     return (
+      <ErrorLandmark>
+        <Alert
+          // startDecorator={<WarningIcon fontSize="large" />}
+          sx={errorCardStyles}
+          className="error-alert"
+          color="error"
+        >
+          <Box className="alert-content">
+            <AlertTitle className="alert-title" component="h1">
+              {t(`error.${errorCode}.title`)}
+            </AlertTitle>
+
+            <Typography className="alert-content">
+              {t(`error.${errorCode}.description`)}
+            </Typography>
+
+            <Box className="alert-footer">
+              <Button color="light" component={Link} to="/">
+                {t("general.actions.back-to-home")}
+              </Button>
+            </Box>
+          </Box>
+        </Alert>
+      </ErrorLandmark>
+    );
+  }
+
+  // Default Error alert
+  return (
+    <ErrorLandmark>
       <Alert
         // startDecorator={<WarningIcon fontSize="large" />}
         sx={errorCardStyles}
@@ -82,12 +138,12 @@ export const ErrorCard = ({ errorResponse }: ErrorCardProps) => {
         color="error"
       >
         <Box className="alert-content">
-          <AlertTitle className="alert-title">
-            {t(`error.${errorCode}.title`)}
+          <AlertTitle className="alert-title" component="h1">
+            {t(`error.default_error.title`)}
           </AlertTitle>
 
           <Typography className="alert-content">
-            {t(`error.${errorCode}.description`)}
+            {t(`error.default_error.description`)}
           </Typography>
 
           <Box className="alert-footer">
@@ -97,32 +153,6 @@ export const ErrorCard = ({ errorResponse }: ErrorCardProps) => {
           </Box>
         </Box>
       </Alert>
-    );
-  }
-
-  // Default Error alert
-  return (
-    <Alert
-      // startDecorator={<WarningIcon fontSize="large" />}
-      sx={errorCardStyles}
-      className="error-alert"
-      color="error"
-    >
-      <Box className="alert-content">
-        <AlertTitle className="alert-title">
-          {t(`error.default_error.title`)}
-        </AlertTitle>
-
-        <Typography className="alert-content">
-          {t(`error.default_error.description`)}
-        </Typography>
-
-        <Box className="alert-footer">
-          <Button color="light" component={Link} to="/">
-            {t("general.actions.back-to-home")}
-          </Button>
-        </Box>
-      </Box>
-    </Alert>
+    </ErrorLandmark>
   );
 };

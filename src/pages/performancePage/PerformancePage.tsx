@@ -20,7 +20,9 @@ import { PerformanceDetailDto } from "@models/utility-types/performance-detail-d
 import { AxiosError } from "axios";
 import { formatBerlinDate } from "@utils/functions/formatBerlinDate";
 import { getPerformanceIdFromPath } from "@utils/functions/getPerformanceIdFromPath";
+import { getPageSeo } from "@utils/functions/getPageSeo";
 import { isError } from "@utils/functions/isError";
+import { buildPerformanceEvent } from "@utils/ldJson/performanceEvent";
 import { parseHtml } from "@utils/functions/parseHtml";
 import { PerformanceVisitInfo } from "./components/PerformanceVisitInfo";
 import { PerformanceRoles } from "./components/PerformanceRoles";
@@ -63,30 +65,38 @@ const getSeasonIds = (performance: PerformanceDetailDto): number[] =>
   (performance.seasons ?? []).map((season) => season.id);
 
 /**
- * Builds the page object the shared SEO component reads.
+ * Builds the page object the shared SEO component reads. Without a usable `seo` from the API (older stored
+ * responses) title and description are derived from the performance itself.
  * @param performance The loaded performance.
  * @param title Display title of the performance.
  * @param pathname Current path.
  * @param description Short description for search results.
+ * @returns Page object for `SeoHeaders`.
  */
 const buildSeoPage = (
   performance: PerformanceDetailDto,
   title: string,
   pathname: string,
   description: string
-): PageDto => ({
-  id: performance.id,
-  name: String(performance.id),
-  language: "de",
-  url: pathname,
-  httpUrl: `${window.location.origin}${pathname}`,
-  template: { id: 0, name: "performance", label: "Aufführung" },
-  created: 0,
-  modified: 0,
-  title,
-  project_id: performance.project.id,
-  seo: { title: `${title} – ${performance.project.title}`, description },
-});
+): PageDto => {
+  const seo = getPageSeo(performance.seo);
+
+  return {
+    id: performance.id,
+    name: String(performance.id),
+    language: "de",
+    url: pathname,
+    httpUrl: `${window.location.origin}${pathname}`,
+    template: { id: 0, name: "performance", label: "Aufführung" },
+    created: 0,
+    modified: 0,
+    title: `${title} – ${performance.project.title}`,
+    project_id: performance.project.id,
+    seo: seo.title
+      ? seo
+      : { ...seo, description: seo.description || description },
+  };
+};
 
 interface PerformanceViewProps {
   performanceId: number;
@@ -180,6 +190,12 @@ const PerformanceView: FC<PerformanceViewProps> = ({ performanceId }) => {
     return buildSeoPage(performance, title, location.pathname, description);
   }, [location.pathname, performance, title]);
 
+  const eventLdJson = useMemo(() => {
+    const event = performance ? buildPerformanceEvent(performance) : null;
+
+    return event ? JSON.stringify(event).replace(/</g, "\\u003c") : null;
+  }, [performance]);
+
   // Built once per loaded performance, so the clock does not repaint the band.
   const filmstripItems = useMemo(
     () =>
@@ -207,6 +223,12 @@ const PerformanceView: FC<PerformanceViewProps> = ({ performanceId }) => {
       sx={performancePageFrameStyles}
     >
       {seoPage && <SeoHeaders page={seoPage} />}
+      {eventLdJson && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: eventLdJson }}
+        />
+      )}
 
       <ProjectPage
         page={performance ? { project_id: performance.project.id } : undefined}

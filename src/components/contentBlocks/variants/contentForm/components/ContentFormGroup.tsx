@@ -71,6 +71,7 @@ export const ContentFormGroup: React.FC<ContentFormGroupProps> = ({
       {hasLabel && (
         <Typography
           variant="h3"
+          component="h2"
           id={labelId}
           className="form-group-label layout-block"
         >

@@ -23,8 +23,10 @@ const partners = (styles["&.partners-list"] ?? {}) as StyleTree;
 const sponsorWrapper = (sponsors[WRAPPER] ?? {}) as StyleTree;
 const partnerWrapper = (partners[WRAPPER] ?? {}) as StyleTree;
 const hoverRule = ((sponsors[HOVER_MEDIA] ?? {}) as StyleTree)[
-  ".list-item:hover .item-wrapper, .list-item:focus-visible .item-wrapper"
+  ".list-item:hover .item-wrapper"
 ] as StyleTree | undefined;
+const revealedRule = sponsors[".list-item.revealed .item-wrapper"] as StyleTree | undefined;
+const REDUCED = "@media (prefers-reduced-motion: reduce)";
 
 const filterOf = (tree: unknown): string =>
   String((tree as { filter?: unknown }).filter ?? "");
@@ -54,17 +56,27 @@ describe("partners and sponsors styles", () => {
     expect(filterOf(img)).not.toContain("invert");
   });
 
-  it("switches sponsor logos to their original only where hover exists", () => {
-    // Nothing outside the media query reacts to hover or focus.
-    expect(Object.keys(sponsors).filter((k) => k !== HOVER_MEDIA && /hover|focus/.test(k))).toEqual([]);
-    expect(Object.keys(sponsorWrapper).filter((k) => /hover|focus/.test(k))).toEqual([]);
-    expect(filterOf(hoverRule?.img)).toBe("none");
-    expect(Object.keys(hoverRule ?? {})).toContain(DARK);
+  it("switches sponsor logos to their original on hover (only where hover exists) and while revealed by a tap", () => {
+    // Nothing outside the media query reacts to hover.
+    expect(Object.keys(sponsors).filter((k) => k !== HOVER_MEDIA && /hover/.test(k))).toEqual([]);
+    expect(Object.keys(sponsorWrapper).filter((k) => /hover/.test(k))).toEqual([]);
+    for (const rule of [hoverRule, revealedRule]) {
+      expect(filterOf(rule?.img)).toBe("none");
+      expect(Object.keys(rule ?? {})).toContain(DARK);
+      expect(filterOf(((rule?.[DARK] ?? {}) as StyleTree).img)).toContain("brightness(");
+    }
   });
 
-  it("animates the logo colour only where hover exists", () => {
-    const mediaWrapper = ((sponsors[HOVER_MEDIA] ?? {}) as StyleTree)[WRAPPER] as StyleTree | undefined;
-    expect(String((mediaWrapper?.img as unknown as { transition?: string } | undefined)?.transition)).toContain("filter");
-    expect(JSON.stringify(sponsorWrapper)).not.toContain("transition");
+  it("animates the logo colour everywhere, but not with reduced motion", () => {
+    expect(String((sponsorWrapper.img as unknown as { transition?: string }).transition)).toContain("filter");
+    expect(String((sponsorWrapper as unknown as { transition?: string }).transition)).toContain("background-color");
+    const reduced = (sponsorWrapper[REDUCED] ?? {}) as unknown as { transition?: string; img?: { transition?: string } };
+    expect(reduced.transition).toBe("none");
+    expect(reduced.img?.transition).toBe("none");
+  });
+
+  it("shows a focus ring on the sponsor tile for keyboard users", () => {
+    const focus = sponsorWrapper["&:focus-visible"] as unknown as { outline?: string } | undefined;
+    expect(String(focus?.outline)).toContain("solid");
   });
 });

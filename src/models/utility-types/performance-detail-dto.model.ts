@@ -5,6 +5,7 @@ import {
   ProjectRolesContainerDto,
 } from "@models/project-role/project-role-dto.model";
 import { ProjectSeasonDto } from "@models/project-role/project-season-dto.model";
+import { SeoDto } from "./seo-dto.model";
 import { CastDto, CategoryDto, SeasonDto } from "./performance-dto.model";
 
 export interface PerformanceLocationDto {
@@ -55,5 +56,6 @@ export interface PerformanceDetailDto {
   categories: CategoryDto[];
   location: PerformanceLocationDto | null;
   roles: PerformanceRolesDto;
+  seo?: SeoDto;
   hash: string;
 }

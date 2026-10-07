@@ -106,3 +106,25 @@ describe("LazyPicture", () => {
     expect(img.getAttribute("fetchpriority")).toBe("high");
   });
 });
+
+describe("LazyPicture placeholder", () => {
+  it("marks the placeholder images as decorative", () => {
+    const { container, rerender } = render(
+      <LazyPicture placeholder="/img/portrait.jpg" />
+    );
+
+    expect(container.querySelector("img")).toHaveAttribute("alt", "");
+
+    rerender(<LazyPicture />);
+
+    expect(container.querySelector("img")).toHaveAttribute("alt", "");
+  });
+
+  it("marks an image without description as decorative", () => {
+    const { container } = render(
+      <LazyPicture image={makeImage({ description: undefined })} />
+    );
+
+    expect(container.querySelector("img")).toHaveAttribute("alt", "");
+  });
+});

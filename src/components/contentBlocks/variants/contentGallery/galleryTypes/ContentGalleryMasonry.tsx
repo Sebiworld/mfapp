@@ -1,9 +1,11 @@
 import { Box, Button } from "@mui/material";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { ImageDto } from "@models/image-dto.model";
 import Masonry from "@mui/lab/Masonry";
 import { LazyPicture } from "@components/lazyPicture/LazyPicture";
 import { useLightGallery } from "@components/lightGallery/useLightGallery";
+import { getImageAspectRatio } from "./getImageAspectRatio";
 
 export interface ContentGalleryMasonryProps {
   images: ImageDto[];
@@ -18,6 +20,7 @@ export const ContentGalleryMasonry: React.FC<ContentGalleryMasonryProps> = ({
   openIndex,
   onClose,
 }) => {
+  const { t } = useTranslation();
   const { openGallery, element: lightGalleryElement } = useLightGallery({
     images,
     openIndex,
@@ -37,6 +40,21 @@ export const ContentGalleryMasonry: React.FC<ContentGalleryMasonryProps> = ({
             <Button
               key={`${image.page_id}#${image.basename}`}
               className="image-button"
+              sx={{
+                display: "block",
+                width: "100%",
+                aspectRatio: String(getImageAspectRatio(image)),
+              }}
+              aria-label={t(
+                image.description
+                  ? "gallery.open_image_described"
+                  : "gallery.open_image",
+                {
+                  position: index + 1,
+                  total: images.length,
+                  description: image.description,
+                }
+              )}
               onClick={() => {
                 openGallery(index);
               }}

@@ -53,7 +53,8 @@
     },
     "not_found_exception": {
       "title": "Seite nicht gefunden (404)",
-      "description": "Die angeforderte Seite wurde leider nicht gefunden."
+      "description": "Die angeforderte Seite wurde leider nicht gefunden.",
+      "seo_title": "Seite nicht gefunden | Musical-Fabrik e.V."
     }
   },
 
@@ -184,12 +185,21 @@
   "pages_grid": {
     "see_all": "Alle ansehen"
   },
+  "gallery": {
+    "open_image": "Bild {{position}} von {{total}} öffnen",
+    "open_image_described": "Bild {{position}} von {{total}} öffnen: {{description}}"
+  },
+
+  "project_page": {
+    "main_image_link": "Zum Projekt {{title}}"
+  },
+
   "page_card": {
     "facebook_title": "Musical-Fabrik e.V. auf Facebook:",
     "btn_more": "Mehr dazu…",
-    "btn_more_label": "Mehr zu „{{title}}“",
+    "btn_more_label": "Mehr dazu…: „{{title}}“",
     "btn_more_on_facebook": "Mehr dazu auf Facebook…",
-    "btn_more_on_facebook_label": "Auf Facebook: „{{title}}“"
+    "btn_more_on_facebook_label": "Mehr dazu auf Facebook…: „{{title}}“"
   },
 
   "project": {

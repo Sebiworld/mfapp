@@ -126,7 +126,7 @@ export const ProjectRolePortrait: FC<ProjectRolePortraitProps> = ({
         /> */}
 
         <CardContent>
-          <Typography className="portrait-title" variant="h6">
+          <Typography className="portrait-title" variant="h6" component="h4">
             {title}
           </Typography>
 

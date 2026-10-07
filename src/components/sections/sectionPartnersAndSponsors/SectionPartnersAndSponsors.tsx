@@ -8,10 +8,10 @@ import { LazyPictureSize } from "@components/lazyPicture/components/LazyPictureW
 import { useTranslation } from "react-i18next";
 import { SectionSpacer } from "@components/sectionSpacer/SectionSpacer";
 import { Alerts } from "@components/alerts/Alerts";
+import { SponsorTile } from "./SponsorTile";
 
-/** Logo tiles are at most 272px (partners) and 178px (sponsors) wide at every breakpoint. */
+/** Partner tiles are at most 272px wide at every breakpoint. */
 const PARTNER_IMAGE_SIZES: LazyPictureSize[] = [{ width: 300 }];
-const SPONSOR_IMAGE_SIZES: LazyPictureSize[] = [{ width: 200 }];
 
 export interface SectionPartnersAndSponsorsProps {
   section: SectionPartnersAndSponsorsDto;
@@ -92,25 +92,9 @@ export const SectionPartnersAndSponsors: React.FC<
           </Typography>
 
           <Box className="list">
-            {section.sponsors?.map((sponsor) => {
-              return (
-                <Box
-                  key={sponsor.id}
-                  className="list-item sponsor partner aspect-ratio ar-1-1"
-                >
-                  <Card variant="outlined" className="item-wrapper ar-content">
-                    <Box className="item-content">
-                      {!!sponsor?.image && (
-                        <LazyPicture
-                          image={sponsor.image}
-                          sizes={SPONSOR_IMAGE_SIZES}
-                        ></LazyPicture>
-                      )}
-                    </Box>
-                  </Card>
-                </Box>
-              );
-            })}
+            {section.sponsors?.map((sponsor) => (
+              <SponsorTile key={sponsor.id} sponsor={sponsor}></SponsorTile>
+            ))}
           </Box>
         </Box>
       )}

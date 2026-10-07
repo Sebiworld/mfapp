@@ -79,7 +79,7 @@ export const Header = () => {
               </Box>
             </Box>
 
-            <Box component="nav" className="container-middle"></Box>
+            <Box className="container-middle"></Box>
 
             <Box component="nav" className="container-right">
               {isValidArray(primaryNavigation) &&

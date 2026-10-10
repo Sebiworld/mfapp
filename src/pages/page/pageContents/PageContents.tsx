@@ -17,6 +17,10 @@ import {
   GalleryImageLinkContext,
   getGalleryImageSlots,
 } from "@components/contentBlocks/variants/contentGallery/galleryImageLink";
+import { PageUnlockForm } from "../pageUnlockForm/PageUnlockForm";
+import { PageUnlockContext } from "@src/context/pageUnlock/PageUnlockContext";
+import { useGlobalStore } from "@src/store/global.store";
+import { selectPageUnlockKey } from "@src/store/pageUnlocks/pageUnlocks.selectors";
 
 /** The home page only points to performances that are at most this many days away. */
 const HOME_MAX_DAYS_AHEAD = 30;
@@ -34,10 +38,18 @@ const ListContainer = React.lazy(() =>
 
 export interface PagesContentsProps {
   page?: PageDtoVariant;
+  /** Called after a locked page was opened with its password, to request it again; resolves with whether it opened. */
+  onUnlocked?: () => Promise<boolean>;
 }
 
-export const PageContents: React.FC<PagesContentsProps> = ({ page }) => {
+export const PageContents: React.FC<PagesContentsProps> = ({
+  page,
+  onUnlocked,
+}) => {
   const { t } = useTranslation();
+  const isLocked = page?.locked === true;
+  const storedUnlockKey = useGlobalStore(selectPageUnlockKey(page?.id));
+  const unlockKey = isLocked ? undefined : storedUnlockKey;
 
   // useEffect(() => {
   //   console.log("page", page);
@@ -171,12 +183,19 @@ export const PageContents: React.FC<PagesContentsProps> = ({ page }) => {
             </Box>
           )}
 
+          {isLocked && (
+            <PageUnlockForm pageId={page.id} onUnlocked={onUnlocked} />
+          )}
+
           {!!defaultPage.intro && <Box className="intro">{intro}</Box>}
 
+          {/* The key only reaches the page's own blocks: lists, sections and roles below show other pages. */}
           {!!defaultPage?.contents?.length && (
-            <GalleryImageLinkContext.Provider value={galleryImageSlots}>
-              <ContentBlocks blocks={defaultPage.contents}></ContentBlocks>
-            </GalleryImageLinkContext.Provider>
+            <PageUnlockContext.Provider value={unlockKey}>
+              <GalleryImageLinkContext.Provider value={galleryImageSlots}>
+                <ContentBlocks blocks={defaultPage.contents}></ContentBlocks>
+              </GalleryImageLinkContext.Provider>
+            </PageUnlockContext.Provider>
           )}
         </Paper>
       )}

@@ -17,6 +17,24 @@ import {
 } from "lightgallery/lg-events";
 import type { LightGallery } from "lightgallery/lightgallery";
 import { getGalleryItemsFromImages } from "./getGalleryItemsFromImages";
+import { usePageUnlockKey } from "@src/context/pageUnlock/PageUnlockContext";
+
+/** Class Matomo's link tracking skips; download links carrying a page key must not end up in the statistics. */
+const TRACKING_IGNORE_CLASS = "matomo_ignore";
+
+/**
+ * Excludes the download link of a lightbox from link tracking while its files carry a page key.
+ * @param instance lightGallery instance whose toolbar holds the link.
+ * @param unlockKey Key of the surrounding protected page, if any.
+ */
+const markDownloadLink = (
+  instance: LightGallery | null,
+  unlockKey: string | undefined
+): void => {
+  const link = instance?.outer?.get()?.querySelector(".lg-download");
+
+  link?.classList.toggle(TRACKING_IGNORE_CLASS, !!unlockKey);
+};
 
 const LightGalleryWithPlugins = lazy(() =>
   import("./LightGalleryWithPlugins").then((m) => ({
@@ -63,7 +81,12 @@ export const useLightGallery = ({
   const [isRequested, setIsRequested] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number>(0);
 
-  const builtItems = useMemo(() => getGalleryItemsFromImages(images), [images]);
+  const unlockKey = usePageUnlockKey();
+  const unlockKeyRef = useRef(unlockKey);
+  const builtItems = useMemo(
+    () => getGalleryItemsFromImages(images, unlockKey),
+    [images, unlockKey]
+  );
   const builtItemsKey = useMemo(
     () => JSON.stringify(builtItems ?? null),
     [builtItems]
@@ -89,6 +112,7 @@ export const useLightGallery = ({
 
     const instance = detail.instance;
     lightGalleryRef.current = instance;
+    markDownloadLink(instance, unlockKeyRef.current);
 
     // The init event fires inside the constructor; open once the setup has finished. In development React sets
     // the gallery up twice: only the instance that is still current opens and takes the pending index.
@@ -160,6 +184,11 @@ export const useLightGallery = ({
   useEffect(() => {
     lightGalleryRef?.current?.refresh();
   }, [galleryItems]);
+
+  useEffect(() => {
+    unlockKeyRef.current = unlockKey;
+    markDownloadLink(lightGalleryRef.current, unlockKey);
+  }, [unlockKey]);
 
   useEffect(() => {
     if (onIndexChange) {

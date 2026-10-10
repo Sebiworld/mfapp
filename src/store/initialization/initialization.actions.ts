@@ -2,6 +2,7 @@ import { authStoreActions } from "../auth/auth.actions";
 import { configurationStoreActions } from "../configuration/configuration.actions";
 import { useGlobalStore } from "../global.store";
 import { pagesStoreActions } from "../pages/pages.actions";
+import { pageUnlocksStoreActions } from "../pageUnlocks/pageUnlocks.actions";
 import { projectRolesStoreActions } from "../projectRoles/projectRoles.actions";
 import { projectsStoreActions } from "../projects/projects.actions";
 
@@ -47,6 +48,7 @@ const setAreCookiesAllowed = (value: boolean | null) => {
 const resetApp = (includeAuth?: boolean): void => {
   if (includeAuth !== false) {
     authStoreActions.resetSlice();
+    pageUnlocksStoreActions.removeSignedInPageUnlocks();
   }
 
   configurationStoreActions.resetSlice();

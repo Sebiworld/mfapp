@@ -10,6 +10,7 @@ import { mediaPlaceholders } from "../mediaPlaceholders";
 import { LazyPictureSecureWithoutFallback } from "./LazyPictureSecureWithoutFallback";
 import { getImageFileUrl } from "../getImageFileUrl";
 import { capImageSize } from "../capImageSize";
+import { usePageUnlockKey } from "@src/context/pageUnlock/PageUnlockContext";
 
 export interface LazyPictureSize {
   media?: string;
@@ -43,6 +44,7 @@ export const LazyPictureWithoutFallback: React.FC<
   children,
 }) => {
   const [hasError, setHasError] = useState(false);
+  const unlockKey = usePageUnlockKey();
 
   const sources = useMemo(() => {
     if (
@@ -60,13 +62,21 @@ export const LazyPictureWithoutFallback: React.FC<
       const has2x =
         size2x.width !== size1x.width || size2x.height !== size1x.height;
 
-      const urlWebp = getImageFileUrl(image, { ...size1x, webp: true });
-      const urlWebp2x = getImageFileUrl(image, { ...size2x, webp: true });
-      const url = getImageFileUrl(image, size1x);
-      const url2x = getImageFileUrl(image, size2x);
+      const urlWebp = getImageFileUrl(
+        image,
+        { ...size1x, webp: true },
+        unlockKey
+      );
+      const urlWebp2x = getImageFileUrl(
+        image,
+        { ...size2x, webp: true },
+        unlockKey
+      );
+      const url = getImageFileUrl(image, size1x, unlockKey);
+      const url2x = getImageFileUrl(image, size2x, unlockKey);
 
       const media = size.media
-        ? mediaPlaceholders[size.media] ?? size.media
+        ? (mediaPlaceholders[size.media] ?? size.media)
         : undefined;
 
       return (
@@ -84,7 +94,7 @@ export const LazyPictureWithoutFallback: React.FC<
         </React.Fragment>
       );
     });
-  }, [image, sizes]);
+  }, [image, sizes, unlockKey]);
 
   const fileUrl = useMemo((): string | undefined => {
     if (!image?.basename) {
@@ -96,10 +106,12 @@ export const LazyPictureWithoutFallback: React.FC<
     const width = defaultSize ? defaultSize?.width : sizeWithoutMedia?.width;
     const height = defaultSize ? defaultSize?.height : sizeWithoutMedia?.height;
 
-    return getImageFileUrl(image, {
-      ...capImageSize(image, { width, height }, 1),
-    });
-  }, [defaultSize, image, sizes]);
+    return getImageFileUrl(
+      image,
+      { ...capImageSize(image, { width, height }, 1) },
+      unlockKey
+    );
+  }, [defaultSize, image, sizes, unlockKey]);
 
   if (!image?.basename) {
     return;

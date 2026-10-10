@@ -6,6 +6,9 @@ import {
   LazyPictureWithoutFallback,
   LazyPictureWithoutFallbackProps,
 } from "./components/LazyPictureWithoutFallback";
+import { lazyPictureWithoutFallbackStyles } from "./components/lazyPictureWithoutFallback.styles";
+
+const DEFAULT_PLACEHOLDER = "/img/mf-bg.jpg";
 
 export interface LazyPictureProps extends LazyPictureWithoutFallbackProps {
   placeholder?: false | string | ImageDto;
@@ -34,18 +37,32 @@ export const LazyPicture: React.FC<LazyPictureProps> = ({
       return;
     }
 
-    if (typeof placeholder === "string") {
-      return <img src={placeholder} alt="" className={classes} loading="lazy" />;
-    }
-
-    if (placeholder?.basename) {
-      return (
-        <LazyPictureWithoutFallback className={classes} image={placeholder} />
-      );
-    }
-
+    // The placeholder gets the same figure and picture shell as a real image, so the same width rules apply.
     return (
-      <img src="/img/mf-bg.jpg" alt="" className={classes} loading="lazy" />
+      <Box
+        component="figure"
+        className={classes}
+        sx={lazyPictureStyles}
+        {...figureProps}
+      >
+        {placeholder &&
+        typeof placeholder !== "string" &&
+        placeholder.basename ? (
+          <LazyPictureWithoutFallback image={placeholder} />
+        ) : (
+          <Box component="picture" sx={lazyPictureWithoutFallbackStyles}>
+            <img
+              src={
+                typeof placeholder === "string"
+                  ? placeholder
+                  : DEFAULT_PLACEHOLDER
+              }
+              alt=""
+              loading="lazy"
+            />
+          </Box>
+        )}
+      </Box>
     );
   }
 

@@ -4,11 +4,16 @@ import { useCallback, useEffect, useMemo, useRef } from "react";
 import React from "react";
 import { ContentFilesItemProps } from "./ContentFilesItem";
 import { getMimetypeForExtension } from "@utils/functions/mimetype/getMimetypeForExtension";
+import {
+  usePageUnlockKey,
+  withUnlockKey,
+} from "@src/context/pageUnlock/PageUnlockContext";
 
 export const ContentFilesAudioplayerSecure: React.FC<ContentFilesItemProps> = ({
   file,
 }) => {
   const audioplayerRef = useRef<HTMLAudioElement>(null);
+  const unlockKey = usePageUnlockKey();
 
   const mimetype = useMemo(() => {
     if (file.ext) {
@@ -29,9 +34,7 @@ export const ContentFilesAudioplayerSecure: React.FC<ContentFilesItemProps> = ({
 
     const response = await MFApi.getFileById(
       file.page_id,
-      {
-        file: file.basename,
-      },
+      withUnlockKey({ file: file.basename }, unlockKey),
       { responseType: "blob" }
     );
 
@@ -41,7 +44,7 @@ export const ContentFilesAudioplayerSecure: React.FC<ContentFilesItemProps> = ({
     // Update the source of the image.
     audioplayerRef.current.src = objectUrl;
     audioplayerRef.current.onload = () => URL.revokeObjectURL(objectUrl);
-  }, [file]);
+  }, [file, unlockKey]);
 
   useEffect(() => {
     void loadBase64File();

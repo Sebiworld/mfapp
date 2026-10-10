@@ -5,8 +5,15 @@ import { isValidArray } from "@utils/functions/isValidArray";
 import { getMimetypeForExtension } from "@utils/functions/mimetype/getMimetypeForExtension";
 import { GalleryItem } from "lightgallery/lg-utils";
 
+/**
+ * Builds the lightbox items (file, thumbnail and responsive sources) of images.
+ * @param images Images of the gallery.
+ * @param unlockKey Key of the password protected page the images belong to, if any.
+ * @returns One item per image, or `undefined` without images.
+ */
 export const getGalleryItemsFromImages = (
-  images: ImageDto[]
+  images: ImageDto[],
+  unlockKey?: string
 ): GalleryItem[] | undefined => {
   if (!isValidArray(images) || !images.length) {
     return undefined;
@@ -32,25 +39,29 @@ export const getGalleryItemsFromImages = (
       output.subHtml = image.caption;
     }
 
-    const fileUrl = getImageFileUrl(image);
+    const fileUrl = getImageFileUrl(image, {}, unlockKey);
     output.src = fileUrl;
     output.downloadUrl = fileUrl;
 
-    const imageUrls = getImageVariantUrls(image, {
-      thumb: { height: 300 },
-      webp500px1x: { width: 500, webp: true },
-      webp500px2x: { width: 1000, webp: true },
-      normal500px1x: { width: 500 },
-      normal500px2x: { width: 1000 },
-      webp800px1x: { width: 800, webp: true },
-      webp800px2x: { width: 1600, webp: true },
-      normal800px1x: { width: 800 },
-      normal800px2x: { width: 1600 },
-      webp1x: { width: 1200, webp: true },
-      webp2x: { width: 2400, webp: true },
-      normal1x: { width: 1200 },
-      normal2x: { width: 2400 },
-    });
+    const imageUrls = getImageVariantUrls(
+      image,
+      {
+        thumb: { height: 300 },
+        webp500px1x: { width: 500, webp: true },
+        webp500px2x: { width: 1000, webp: true },
+        normal500px1x: { width: 500 },
+        normal500px2x: { width: 1000 },
+        webp800px1x: { width: 800, webp: true },
+        webp800px2x: { width: 1600, webp: true },
+        normal800px1x: { width: 800 },
+        normal800px2x: { width: 1600 },
+        webp1x: { width: 1200, webp: true },
+        webp2x: { width: 2400, webp: true },
+        normal1x: { width: 1200 },
+        normal2x: { width: 2400 },
+      },
+      unlockKey
+    );
 
     output.thumb = imageUrls.thumb;
 

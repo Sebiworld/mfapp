@@ -1,5 +1,6 @@
 import { MFApi } from "@api/axios/mfApi";
 import { ImageDto } from "@models/image-dto.model";
+import { withUnlockKey } from "@src/context/pageUnlock/PageUnlockContext";
 
 /**
  * Builds the cache token of an image file from its modification time and size.
@@ -30,15 +31,23 @@ export const getImageVersion = (
  *
  * @param image Image object as delivered by the API.
  * @param params Variant parameters such as `width`, `height` or `webp`.
+ * @param unlockKey Key of the password protected page the image belongs to; without one no `unlock` is added.
  * @returns Absolute file URL.
  */
 export const getImageFileUrl = (
   image: ImageDto,
-  params: { [key: string]: unknown } = {}
+  params: { [key: string]: unknown } = {},
+  unlockKey?: string
 ): string => {
-  return MFApi.getFileByIdUrl(image.page_id, {
-    file: image.basename,
-    ...params,
-    v: getImageVersion(image),
-  });
+  return MFApi.getFileByIdUrl(
+    image.page_id,
+    withUnlockKey(
+      {
+        file: image.basename,
+        ...params,
+        v: getImageVersion(image),
+      },
+      unlockKey
+    )
+  );
 };

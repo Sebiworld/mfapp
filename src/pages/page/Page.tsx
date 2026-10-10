@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { pageStyles } from "./page.styles";
 // import WarningIcon from "@mui/icons-material/Warning";
 import { useGlobalStore } from "@src/store/global.store";
@@ -7,7 +7,10 @@ import { ProjectPage } from "./projectPage/ProjectPage";
 import { LoadingOverlay } from "@components/loadingOverlay/LoadingOverlay";
 import { Box } from "@mui/material";
 import { useLocation } from "react-router";
-import { selectPage } from "@src/store/pages/pages.selectors";
+import {
+  isShowableStoredPage,
+  selectPage,
+} from "@src/store/pages/pages.selectors";
 import { SeoHeaders } from "@components/SeoHeaders";
 import { Breadcrumbs } from "@components/breadcrumbs/Breadcrumbs";
 import { useAppContext } from "@src/context/appContext/useAppContext";
@@ -38,12 +41,36 @@ export const Page = () => {
   const [request, setRequest] = useState({
     path: currentPath,
     id: 0,
-    hadPage: !!page?.id,
+    hadPage: isShowableStoredPage(page),
   });
 
   if (request.path !== currentPath) {
-    setRequest({ path: currentPath, id: request.id + 1, hadPage: !!page?.id });
+    setRequest({
+      path: currentPath,
+      id: request.id + 1,
+      hadPage: isShowableStoredPage(page),
+    });
   }
+
+  // Settles the promise of `reloadPage` once the next request has an answer. Starting a request ends the one before,
+  // so the next answer that arrives always belongs to the reload.
+  const reloadWaiter = useRef<((isOpen: boolean) => void) | null>(null);
+
+  // Requests the shown page again (after it was opened with its password); the locked view stays until then.
+  // Resolves with whether the page arrived open, so the password form can be used again otherwise.
+  const reloadPage = useCallback(
+    (): Promise<boolean> =>
+      new Promise((resolve) => {
+        reloadWaiter.current?.(false);
+        reloadWaiter.current = resolve;
+        setRequest((current) => ({
+          ...current,
+          id: current.id + 1,
+          hadPage: true,
+        }));
+      }),
+    []
+  );
 
   const requestId = request.id;
   const hadPage = request.hadPage;
@@ -77,6 +104,11 @@ export const Page = () => {
 
       if (isCurrent) {
         setLoadResult({ requestId, response });
+
+        const isOpen =
+          response !== true && !isError(response) && response?.locked !== true;
+        reloadWaiter.current?.(isOpen);
+        reloadWaiter.current = null;
       }
     };
 
@@ -167,7 +199,7 @@ export const Page = () => {
           visible={isLoading}
           onlyProgress={!!shownPage?.id}
         ></LoadingOverlay>
-        <PageContents page={shownPage}></PageContents>
+        <PageContents page={shownPage} onUnlocked={reloadPage}></PageContents>
       </ProjectPage>
 
       {isError(loadResponse) && (

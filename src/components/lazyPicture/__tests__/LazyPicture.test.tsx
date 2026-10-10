@@ -109,15 +109,20 @@ describe("LazyPicture", () => {
 
 describe("LazyPicture placeholder", () => {
   it("marks the placeholder images as decorative", () => {
-    const { container, rerender } = render(
-      <LazyPicture placeholder="/img/portrait.jpg" />
+    const withString = render(<LazyPicture placeholder="/img/portrait.jpg" />);
+
+    expect(withString.container.querySelector("img")).toHaveAttribute(
+      "alt",
+      ""
     );
+    withString.unmount();
 
-    expect(container.querySelector("img")).toHaveAttribute("alt", "");
+    const withDefault = render(<LazyPicture />);
 
-    rerender(<LazyPicture />);
-
-    expect(container.querySelector("img")).toHaveAttribute("alt", "");
+    expect(withDefault.container.querySelector("img")).toHaveAttribute(
+      "alt",
+      ""
+    );
   });
 
   it("marks an image without description as decorative", () => {
@@ -126,5 +131,52 @@ describe("LazyPicture placeholder", () => {
     );
 
     expect(container.querySelector("img")).toHaveAttribute("alt", "");
+  });
+});
+
+describe("LazyPicture placeholder shell", () => {
+  const shellOf = (container: HTMLElement): string[] => {
+    const figure = container.firstElementChild!;
+    const picture = figure.querySelector(":scope > picture");
+
+    return [
+      figure.tagName,
+      figure.classList.contains("lazy-picture") ? "lazy-picture" : "",
+      picture ? "picture" : "",
+      picture?.querySelector(":scope > img") ? "img" : "",
+    ];
+  };
+
+  it("wraps every placeholder like a real image", () => {
+    const real = render(<LazyPicture image={makeImage()} />);
+    const expected = shellOf(real.container);
+    real.unmount();
+
+    const byString = render(<LazyPicture placeholder="/img/portrait.jpg" />);
+    expect(shellOf(byString.container)).toEqual(expected);
+    byString.unmount();
+
+    const byDefault = render(<LazyPicture />);
+    expect(shellOf(byDefault.container)).toEqual(expected);
+    byDefault.unmount();
+
+    const byImage = render(<LazyPicture placeholder={makeImage()} />);
+    expect(shellOf(byImage.container)).toEqual(expected);
+  });
+
+  it("keeps the caller class on the figure and limits the image width", () => {
+    const { container } = render(<LazyPicture className="ar-content" />);
+    const figure = container.querySelector("figure")!;
+    const img = figure.querySelector("img")!;
+
+    expect(figure).toHaveClass("lazy-picture", "ar-content");
+    expect(img).toHaveAttribute("src", "/img/mf-bg.jpg");
+    expect(getComputedStyle(img).maxWidth).toBe("100%");
+  });
+
+  it("renders nothing when the placeholder is disabled", () => {
+    const { container } = render(<LazyPicture placeholder={false} />);
+
+    expect(container).toBeEmptyDOMElement();
   });
 });

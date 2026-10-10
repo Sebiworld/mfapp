@@ -5,11 +5,16 @@ import React from "react";
 import { ContentFilesItemProps } from "./ContentFilesItem";
 import { getMimetypeForExtension } from "@utils/functions/mimetype/getMimetypeForExtension";
 import { ContentFilesAudioplayerSecure } from "./ContentFilesAudioplayerSecure";
+import {
+  usePageUnlockKey,
+  withUnlockKey,
+} from "@src/context/pageUnlock/PageUnlockContext";
 
 export const ContentFilesAudioplayer: React.FC<ContentFilesItemProps> = ({
   file,
 }) => {
   const [hasError, setHasError] = useState(false);
+  const unlockKey = usePageUnlockKey();
 
   const mimetype = useMemo(() => {
     if (file.ext) {
@@ -24,10 +29,11 @@ export const ContentFilesAudioplayer: React.FC<ContentFilesItemProps> = ({
       return;
     }
 
-    return MFApi.getFileByIdUrl(file.page_id, {
-      file: file.basename,
-    });
-  }, [file.basename, file.page_id]);
+    return MFApi.getFileByIdUrl(
+      file.page_id,
+      withUnlockKey({ file: file.basename }, unlockKey)
+    );
+  }, [file.basename, file.page_id, unlockKey]);
 
   if (!file?.basename) {
     return;

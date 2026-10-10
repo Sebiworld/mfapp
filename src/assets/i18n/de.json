@@ -120,6 +120,15 @@
     "published-on-by": "Veröffentlicht am <time datetime='{{date_raw}}' class='publish-date'>{{date}}</time> von <strong class='authors'>{{authors}}</strong>"
   },
 
+  "page_unlock": {
+    "notice": "Diese Seite ist passwortgeschützt. Bitte gib das Passwort ein, um sie anzuzeigen.",
+    "password": "Passwort",
+    "submit": "Entsperren",
+    "wrong_password": "Das Passwort ist falsch.",
+    "too_many_requests": "Zu viele Versuche. Bitte versuch es später noch einmal.",
+    "error": "Die Seite konnte nicht entsperrt werden. Bitte versuch es später noch einmal."
+  },
+
   "home": {
     "title": "Home",
     "menu": "Home",

@@ -7,6 +7,9 @@ import { pagesStoreActions } from "@src/store/pages/pages.actions";
 import { getFilterHash } from "@src/store/pages/pages.selectors";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { useCallback } from "react";
+import { useGlobalStore } from "@src/store/global.store";
+import { pageUnlocksStoreActions } from "@src/store/pageUnlocks/pageUnlocks.actions";
+import { selectPageUnlockKey } from "@src/store/pageUnlocks/pageUnlocks.selectors";
 
 interface UsePagesApiOutput {
   loadPage: (path: string) => Promise<PageDtoVariant | true | Error>;
@@ -23,12 +26,55 @@ interface UsePagesApiOutput {
   initialize: () => Promise<void>;
 }
 
+/**
+ * Keeps the key store in line with a page response: a key delivered with an opened page is kept (it comes from the
+ * account when it differs from the stored one), and a page that stays locked drops its key, since the API no longer
+ * accepts it (password changed). The password form is shown again then, without another request.
+ * @param page Page as delivered by the API.
+ */
+const storeUnlockOfResponse = (page: PageDtoVariant): void => {
+  if (!page?.id) {
+    return;
+  }
+
+  if (page.locked) {
+    pageUnlocksStoreActions.removePageUnlock(page.id);
+    return;
+  }
+
+  if (!page.unlock_key || typeof page.expires !== "number") {
+    return;
+  }
+
+  const stored = useGlobalStore.getState().pageUnlocks?.[page.id];
+
+  if (stored?.key === page.unlock_key) {
+    return;
+  }
+
+  pageUnlocksStoreActions.setPageUnlock(
+    page.id,
+    page.unlock_key,
+    page.expires,
+    "account"
+  );
+};
+
 export const usePagesApi = (): UsePagesApiOutput => {
   const loadPage = useCallback(
     async (path: string): Promise<PageDtoVariant | true | Error> => {
       try {
+        pageUnlocksStoreActions.removeExpiredPageUnlocks();
+
         const isSameSession = watchSession();
-        const response = await MFApi.getPage(path);
+        const storedId = useGlobalStore.getState().pages[path]?.id;
+        const sentKey = selectPageUnlockKey(storedId)(
+          useGlobalStore.getState()
+        );
+        let response = await MFApi.getPage(
+          path,
+          sentKey ? { unlock: sentKey } : undefined
+        );
 
         if (!isSameSession()) {
           return new SessionChangedError();
@@ -38,9 +84,31 @@ export const usePagesApi = (): UsePagesApiOutput => {
           return true;
         }
 
-        const page = response.data as PageDtoVariant;
+        let page = response.data as PageDtoVariant | undefined;
 
-        pagesStoreActions.addPage(path, page);
+        // Without a stored copy the id is only known now; a key kept for it is sent once more.
+        const laterKey = page?.locked
+          ? selectPageUnlockKey(page.id)(useGlobalStore.getState())
+          : undefined;
+
+        if (page?.locked && laterKey && laterKey !== sentKey) {
+          response = await MFApi.getPage(path, { unlock: laterKey });
+
+          if (!isSameSession()) {
+            return new SessionChangedError();
+          }
+
+          if (response.status === 204) {
+            return true;
+          }
+
+          page = response.data as PageDtoVariant | undefined;
+        }
+
+        if (page) {
+          storeUnlockOfResponse(page);
+          pagesStoreActions.addPage(path, page);
+        }
 
         return page ?? true;
       } catch (error) {

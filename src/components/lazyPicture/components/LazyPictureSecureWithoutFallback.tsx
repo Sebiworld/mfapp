@@ -4,6 +4,10 @@ import { Box } from "@mui/material";
 import React from "react";
 import { lazyPictureWithoutFallbackStyles } from "./lazyPictureWithoutFallback.styles";
 import { LazyPictureWithoutFallbackProps } from "./LazyPictureWithoutFallback";
+import {
+  usePageUnlockKey,
+  withUnlockKey,
+} from "@src/context/pageUnlock/PageUnlockContext";
 
 export const LazyPictureSecureWithoutFallback: React.FC<
   LazyPictureWithoutFallbackProps
@@ -17,6 +21,7 @@ export const LazyPictureSecureWithoutFallback: React.FC<
   children,
 }) => {
   const imageRef = useRef<HTMLImageElement>(null);
+  const unlockKey = usePageUnlockKey();
 
   const loadBase64Image = useCallback(async (): Promise<string | undefined> => {
     if (!image?.basename) {
@@ -34,11 +39,7 @@ export const LazyPictureSecureWithoutFallback: React.FC<
 
     const response = await MFApi.getFileById(
       image.page_id,
-      {
-        file: image.basename,
-        width,
-        height,
-      },
+      withUnlockKey({ file: image.basename, width, height }, unlockKey),
       { responseType: "blob" }
     );
 
@@ -48,7 +49,7 @@ export const LazyPictureSecureWithoutFallback: React.FC<
     // Update the source of the image.
     imageRef.current.src = objectUrl;
     imageRef.current.onload = () => URL.revokeObjectURL(objectUrl);
-  }, [defaultSize, image, sizes]);
+  }, [defaultSize, image, sizes, unlockKey]);
 
   useEffect(() => {
     void loadBase64Image();

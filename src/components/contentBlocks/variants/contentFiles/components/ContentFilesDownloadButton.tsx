@@ -6,6 +6,10 @@ import { ContentFilesItemProps } from "./ContentFilesItem";
 import { Button, Dialog } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { DownloadFileDialog } from "@utils/components/dialog/DownloadFileDialog";
+import {
+  usePageUnlockKey,
+  withUnlockKey,
+} from "@src/context/pageUnlock/PageUnlockContext";
 
 export const ContentFilesDownloadButton: React.FC<ContentFilesItemProps> = ({
   file,
@@ -16,6 +20,7 @@ export const ContentFilesDownloadButton: React.FC<ContentFilesItemProps> = ({
     number | undefined
   >(undefined);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const unlockKey = usePageUnlockKey();
 
   const handleDownloadFile = useCallback(async () => {
     setIsDialogOpen(true);
@@ -24,9 +29,7 @@ export const ContentFilesDownloadButton: React.FC<ContentFilesItemProps> = ({
     try {
       const res = await MFApi.getFileById(
         file.page_id,
-        {
-          file: file.basename,
-        },
+        withUnlockKey({ file: file.basename }, unlockKey),
         {
           responseType: "blob",
           onDownloadProgress: (progressEvent) => {
@@ -44,7 +47,7 @@ export const ContentFilesDownloadButton: React.FC<ContentFilesItemProps> = ({
     } catch (error) {
       console.error("Error downloading file:", error);
     }
-  }, [file.basename, file.page_id]);
+  }, [file.basename, file.page_id, unlockKey]);
 
   const handleCloseDialog = useCallback(() => {
     setIsDialogOpen(false);

@@ -7,9 +7,29 @@ import {
 } from "lodash";
 import { isValidArray } from "@utils/functions/isValidArray";
 import md5 from "blueimp-md5";
+import { PageDtoVariant } from "@models/page/page-dto-variant.model";
+import { nowInSeconds } from "../pageUnlocks/pageUnlocks.selectors";
 
 export const selectPage = (path: string) => (state: GlobalStore) =>
   state.pages[path];
+
+/**
+ * Tells whether a stored copy may be shown while its page is requested again. A copy opened with a key that has
+ * expired by the device clock may not: its content must not appear before the server has answered.
+ * @param page Stored copy of the page.
+ * @param now Unix seconds to compare `expires` with.
+ * @returns `true` for a copy with an id that was not opened with an expired key.
+ */
+export const isShowableStoredPage = (
+  page: PageDtoVariant | undefined,
+  now: number = nowInSeconds()
+): boolean => {
+  if (!page?.id) {
+    return false;
+  }
+
+  return !(typeof page.expires === "number" && !(page.expires > now));
+};
 
 export const getFilterHash = (templates?: string[], sortBy?: string[]) => {
   const sortOrderKey = isValidArray(sortBy)

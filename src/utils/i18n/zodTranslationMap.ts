@@ -4,30 +4,26 @@ export const zodTranslationMap = {
       invalid_type: "{{expected}} erwartet, {{received}} erhalten",
       invalid_type_received_undefined: "Darf nicht leer sein",
       invalid_type_received_null: "Darf nicht leer sein",
-      invalid_literal: "Ungültiger Literalwert, {{expected}} erwartet",
+      invalid_value_single: "Ungültiger Literalwert, {{- expected}} erwartet",
+      invalid_value: "Ungültiger Enum-Wert. {{- options}} erwartet",
       unrecognized_keys: "Unbekannte Schlüssel im Objekt: {{- keys}}",
       invalid_union: "Ungültige Eingabe",
       invalid_union_discriminator:
         "Ungültiger Diskriminatorwert, {{- options}} erwartet",
-      invalid_enum_value:
-        "Ungültiger Enum-Wert. {{- options}} erwartet, '{{received}}' erhalten",
-      invalid_arguments: "Ungültige Funktionsargumente",
-      invalid_return_type: "Ungültiger Funktionsrückgabewert",
-      invalid_date: "Ungültiges Datum",
       custom: "Ungültige Eingabe",
-      invalid_intersection_types:
-        "Schnittmengenergebnisse konnten nicht zusammengeführt werden",
-      not_multiple_of: "Diese Zahl muss ein Vielfaches von {{multipleOf}} sein",
-      not_finite: "Diese Zahl muss endlich sein",
-      invalid_string: {
-        email: "Ungültige {{validation}}",
-        url: "Ungültige {{validation}}",
-        uuid: "Ungültige {{validation}}",
-        cuid: "Ungültige {{validation}}",
+      not_multiple_of: "Diese Zahl muss ein Vielfaches von {{divisor}} sein",
+      invalid_key: "Ungültige Eingabe",
+      invalid_element: "Ungültige Eingabe",
+      invalid_format: {
+        default: "Ungültig",
+        email: "Ungültige {{format}}",
+        url: "Ungültige {{format}}",
+        uuid: "Ungültige {{format}}",
+        cuid: "Ungültige {{format}}",
         regex: "Ungültig",
-        datetime: "Ungültiger {{validation}}",
-        startsWith: 'Ungültige Eingabe: Muss mit "{{startsWith}}" beginnen',
-        endsWith: 'Ungültige Eingabe: Muss mit "{{endsWith}}" enden',
+        datetime: "Ungültiger {{format}}",
+        starts_with: 'Ungültige Eingabe: Muss mit "{{- prefix}}" beginnen',
+        ends_with: 'Ungültige Eingabe: Muss mit "{{- suffix}}" enden',
       },
       too_small: {
         array: {
@@ -95,7 +91,7 @@ export const zodTranslationMap = {
         },
       },
     },
-    validations: {
+    formats: {
       email: "E-Mail-Adresse",
       url: "URL",
       uuid: "UUID",

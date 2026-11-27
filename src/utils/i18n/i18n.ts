@@ -13,7 +13,6 @@ const resources = {
 };
 
 i18n.use(initReactI18next).init({
-  showSupportNotice: false,
   resources,
   lng: "de",
 
@@ -21,6 +20,6 @@ i18n.use(initReactI18next).init({
     escapeValue: false,
   },
 });
-z.setErrorMap(makeZodI18nMap({ ns: ["zod", "customZod"] }));
+z.config({ customError: makeZodI18nMap({ ns: ["zod", "customZod"] }) });
 
 export { i18n, z as zod };

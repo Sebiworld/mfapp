@@ -213,7 +213,12 @@ const PerformanceView: FC<PerformanceViewProps> = ({ performanceId }) => {
       ))
     : [];
 
-  const durationLabel = performance ? getDurationLabel(performance, t) : null;
+  const durationLabel = performance
+    ? getDurationLabel(
+        performance,
+        (key, options) => t(key, options ?? {}) as string
+      )
+    : null;
   const status = performance ? getPerformanceStatus(performance, now) : null;
 
   return (

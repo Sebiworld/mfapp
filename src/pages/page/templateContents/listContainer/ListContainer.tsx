@@ -18,6 +18,7 @@ import { listContainerStyles } from "./listContainer.styles";
 import { usePagesApi } from "@api/hooks/usePagesApi";
 import { selectPageCards } from "@src/store/pages/pages.selectors";
 import { GetPageListResponse } from "@api/axios/pageApi";
+import { getScrollBehavior } from "@utils/functions/getScrollBehavior";
 
 const pageSize = 12;
 
@@ -109,7 +110,7 @@ export const ListContainer: FC<ListContainerProps> = ({ page, templates }) => {
       setTotalCount(response.totalNumber);
 
       containerRef.current?.scrollIntoView({
-        behavior: "smooth",
+        behavior: getScrollBehavior(),
         block: "start",
       });
     },

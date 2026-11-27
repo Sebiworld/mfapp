@@ -1,5 +1,14 @@
 import { SxProps, Theme } from "@mui/material";
 
+/**
+ * Soft white light for the tile spotlight.
+ * @param x Horizontal centre of the light, as a CSS length or custom property.
+ * @param y Vertical centre of the light, as a CSS length or custom property.
+ * @returns The `background` value of the light layer.
+ */
+const spotlightBackground = (x: string, y: string): string =>
+  `radial-gradient(circle at ${x} ${y}, rgba(255, 255, 255, 0.45), transparent 45%)`;
+
 // The tiles are the only children and all links, so the `-of-type` selectors count them like `-child` ones would;
 // emotion flags the `-child` forms as unsafe for server rendering.
 export const pagesMosaicStyles: SxProps<Theme> = (theme) => ({
@@ -41,6 +50,53 @@ export const pagesMosaicStyles: SxProps<Theme> = (theme) => ({
     "&:focus-visible": {
       outlineOffset: "-4px",
     },
+
+    // Spotlight between photo and title bar; `usePointerSpotlight` moves it with the mouse.
+    "&::after": {
+      content: '""',
+      position: "absolute",
+      inset: 0,
+      zIndex: 1,
+      pointerEvents: "none",
+      background: spotlightBackground(
+        "var(--spot-x, 50%)",
+        "var(--spot-y, 50%)"
+      ),
+      mixBlendMode: "soft-light",
+      opacity: 0,
+      transition: "opacity 300ms var(--mf-ease-out)",
+    },
+
+    // Keyboard focus has no pointer position: the light stands in the middle.
+    "&:focus-visible::after": {
+      background: spotlightBackground("50%", "50%"),
+      opacity: 1,
+    },
+
+    // Touch has no hover; a tap would leave the light and the zoom stuck on the tile.
+    "@media (hover: hover) and (pointer: fine)": {
+      "&:hover::after": {
+        opacity: 1,
+        transitionDuration: "200ms",
+      },
+
+      "&:hover .tile-image": {
+        transform: "scale(1.03)",
+        transition: "transform 450ms var(--mf-spring)",
+      },
+    },
+
+    // Reduced motion: no zoom and a light that does not follow the mouse, only the fade stays.
+    "@media (prefers-reduced-motion: reduce)": {
+      "&::after, &:focus-visible::after": {
+        background: spotlightBackground("50%", "50%"),
+      },
+
+      ".tile-image, &:hover .tile-image": {
+        transform: "none",
+        transition: "none",
+      },
+    },
   },
 
   [theme.breakpoints.up("md")]: {
@@ -61,6 +117,7 @@ export const pagesMosaicStyles: SxProps<Theme> = (theme) => ({
     position: "absolute",
     inset: 0,
     margin: 0,
+    transition: "transform 300ms var(--mf-ease-out)",
 
     "img, picture": {
       display: "block",
@@ -70,10 +127,10 @@ export const pagesMosaicStyles: SxProps<Theme> = (theme) => ({
     },
   },
 
-  // Black bar in the bottom left corner, so the title reads on any photo.
+  // Black bar in the bottom left corner, so the title reads on any photo; it lies above the spotlight.
   ".tile-title": {
     position: "absolute",
-    zIndex: 1,
+    zIndex: 2,
     left: 0,
     bottom: 0,
     maxWidth: "100%",

@@ -26,6 +26,7 @@ import { isError } from "@utils/functions/isError";
 import { ErrorResponseDto } from "@models/error-response-dto.model";
 import { AxiosError } from "axios";
 import { ErrorCard } from "@components/errorCard/ErrorCard";
+import { getScrollBehavior } from "@utils/functions/getScrollBehavior";
 
 export const Page = () => {
   const location = useLocation();
@@ -158,7 +159,7 @@ export const Page = () => {
       setTimeout(() => {
         document
           .getElementById(lastHash.current)
-          ?.scrollIntoView({ behavior: "smooth", block: "start" });
+          ?.scrollIntoView({ behavior: getScrollBehavior(), block: "start" });
         lastHash.current = "";
       }, 100);
     }

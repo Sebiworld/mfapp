@@ -33,6 +33,8 @@ import "@utils/i18n/i18n";
 vi.mock("react-toastify", () => ({
   toast: { success: vi.fn(), error: vi.fn() },
   ToastContainer: () => null,
+  Slide: () => null,
+  cssTransition: () => () => null,
 }));
 
 // Mounts per component instance, to tell a re-render from a new mount.
@@ -143,7 +145,12 @@ const adapter: AxiosAdapter = async (config) => {
     await hold;
   }
 
-  if (url === "/auth" && method === "GET" && account === ACCOUNT_A && holdAuthOfA) {
+  if (
+    url === "/auth" &&
+    method === "GET" &&
+    account === ACCOUNT_A &&
+    holdAuthOfA
+  ) {
     const hold = holdAuthOfA;
     holdAuthOfA = null;
     await hold;

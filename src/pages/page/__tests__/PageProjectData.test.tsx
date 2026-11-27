@@ -44,7 +44,11 @@ vi.mock("@components/SeoHeaders", () => ({ SeoHeaders: () => null }));
 vi.mock("@src/context/appContext/useAppContext", () => ({
   useAppContext: () => ({}),
 }));
-vi.mock("react-toastify", () => ({ ToastContainer: () => null }));
+vi.mock("react-toastify", () => ({
+  ToastContainer: () => null,
+  Slide: () => null,
+  cssTransition: () => () => null,
+}));
 vi.mock("@core/header/Header", () => ({ Header: () => null }));
 vi.mock("@core/footer/Footer", () => ({ Footer: () => null }));
 

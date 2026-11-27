@@ -7,7 +7,11 @@ import { PageDtoVariant } from "@models/page/page-dto-variant.model";
 import { Layout } from "../Layout";
 import { useShowPageBelowHeader } from "../header/useTranslucentHeader";
 
-vi.mock("react-toastify", () => ({ ToastContainer: () => null }));
+vi.mock("react-toastify", () => ({
+  ToastContainer: () => null,
+  Slide: () => null,
+  cssTransition: () => () => null,
+}));
 vi.mock("../header/Header", () => ({ Header: () => null }));
 vi.mock("../footer/Footer", () => ({ Footer: () => null }));
 

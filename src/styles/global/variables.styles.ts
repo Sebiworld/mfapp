@@ -21,10 +21,21 @@ import { mfSecondary } from "@styles/theme/paletteColors/mfSecondary";
 //   projectPrimary: true;
 // }
 
+// Shared motion curves. The spring is a sampled curve with a visible overshoot, tuned for about 580 ms.
+const EASE_OUT = "cubic-bezier(0.23, 1, 0.32, 1)";
+const EASE_DRAWER = "cubic-bezier(0.32, 0.72, 0, 1)";
+const SPRING =
+  "linear(0, 0.06, 0.2, 0.371, 0.541, 0.692, 0.815, 0.907, 0.972, 1.013, 1.036, 1.045, 1.045, 1.041, 1.033, 1.025, 1.018, 1.011, 1.006, 1.003, 1, 0.999, 0.998, 0.998, 1)";
+
 export const globalVariablesStyles: Interpolation<Theme>[] = [
   {
     ":root": {
       "--mf-radius-sm": 0,
+
+      // Motion
+      "--mf-ease-out": EASE_OUT,
+      "--mf-ease-drawer": EASE_DRAWER,
+      "--mf-spring": SPRING,
 
       // Custom alert colors
       "--mf-palette-Alert-primaryFilledBg": "var(--mf-palette-primary-500)",
@@ -64,6 +75,19 @@ export const globalVariablesStyles: Interpolation<Theme>[] = [
         "var(--mf-palette-projectPrimary-800)",
       "--mf-palette-Alert-projectPrimaryIconColor":
         "var(--mf-palette-projectPrimary-500)",
+    },
+
+    // Shared fade for elements that appear late, e.g. the loading card.
+    "@keyframes mf-fade-in": {
+      from: { opacity: 0 },
+      to: { opacity: 1 },
+    },
+
+    // Browsers without linear() would drop every transition that uses the spring; ease out instead.
+    "@supports not (transition-timing-function: linear(0, 1))": {
+      ":root": {
+        "--mf-spring": EASE_OUT,
+      },
     },
   },
 ];

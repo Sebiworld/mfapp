@@ -63,7 +63,7 @@
   },
 
   "splash": {
-    "1": "Die Website wird initialisiert…",
+    "1": "Die Website wird geladen…",
     "2": "Projekte werden geladen…",
     "3": "Inhalte werden abgerufen…",
     "4": "Musicals werden geschrieben…",
@@ -103,7 +103,12 @@
   "sidemenu": {
     "home": "Startseite",
     "settings": "Einstellungen",
-    "menu": "Menü"
+    "menu": "Menü",
+    "close": "Menü schließen"
+  },
+  "theme_select": {
+    "to_dark": "Dunkles Farbschema einschalten",
+    "to_light": "Helles Farbschema einschalten"
   },
 
   "footer": {

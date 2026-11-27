@@ -21,7 +21,7 @@ import { isValidObject } from "@utils/functions/isValidObject";
 import ClearIcon from "@mui/icons-material/Clear";
 import CheckIcon from "@mui/icons-material/Check";
 import { SectionFormDto } from "@models/section/section-form.model";
-import { useReward } from "react-rewards";
+import { useMotionSafeReward } from "@utils/hooks/useMotionSafeReward";
 import { useGlobalStore } from "@src/store/global.store";
 import { useLocation } from "react-router";
 import { selectProjects } from "@src/store/projects/projects.selectors";
@@ -59,7 +59,7 @@ export const ContentForm: React.FC<ContentTextProps> = ({ block }) => {
   }, [loadedProjects]);
 
   const rewardId = useId();
-  const { reward, isAnimating: isRewardAnimating } = useReward(
+  const { reward, isAnimating: isRewardAnimating } = useMotionSafeReward(
     rewardId,
     "balloons",
     {

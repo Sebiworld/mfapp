@@ -4,6 +4,7 @@ import { createMemoryRouter, RouterProvider } from "react-router";
 import { THEME_ID, ThemeProvider } from "@mui/material/styles";
 import { mfTheme } from "@styles/theme/mfTheme";
 import { PageDtoVariant } from "@models/page/page-dto-variant.model";
+import { isContentPending } from "@core/splashScreen/splashSignal";
 import { Page } from "../Page";
 
 const loadPage = vi.fn();
@@ -92,6 +93,25 @@ describe("Page", () => {
       findLoad(pending, "/kurse").resolve(true);
     });
     expect(screen.queryByTestId("loading-overlay")).not.toBeInTheDocument();
+  });
+
+  it("holds the splash only until the first answer, also when it is an error or empty", async () => {
+    for (const answer of [new Error("not found"), true] as const) {
+      const pending = deferLoads();
+      const { unmount } = renderPage("/kurse");
+
+      await waitFor(() => {
+        expect(pending).toHaveLength(1);
+      });
+      expect(isContentPending()).toBe(true);
+
+      await act(async () => {
+        findLoad(pending, "/kurse").resolve(answer);
+      });
+      expect(isContentPending()).toBe(false);
+
+      unmount();
+    }
   });
 
   it("keeps room for a whole screen until the first content of the page arrives", async () => {

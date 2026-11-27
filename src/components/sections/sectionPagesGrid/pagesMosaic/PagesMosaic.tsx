@@ -5,6 +5,7 @@ import { SectionPagesGridDto } from "@models/section/section-pages-grid-dto.mode
 import { LazyPicture } from "@components/lazyPicture/LazyPicture";
 import { LazyPictureSize } from "@components/lazyPicture/components/LazyPictureWithoutFallback";
 import { parseHtml } from "@utils/functions/parseHtml";
+import { usePointerSpotlight } from "@utils/hooks/usePointerSpotlight";
 import { pagesMosaicStyles } from "./pagesMosaic.styles";
 
 /** Tile image widths per breakpoint (two columns below `md`, three above); widest first. */
@@ -22,10 +23,13 @@ export interface PagesMosaicProps {
 
 /**
  * Shows the cards of a section as poster tiles within the content width: every tile is the card image with its title
- * on a black bar, and the whole tile links to the page. Intros stay on the linked pages.
+ * on a black bar, and the whole tile links to the page. Intros stay on the linked pages. A soft spotlight follows the
+ * mouse over a tile (`usePointerSpotlight`).
  * @param section Section whose cards fill the mosaic.
  */
 export const PagesMosaic: FC<PagesMosaicProps> = ({ section }) => {
+  const spotlight = usePointerSpotlight();
+
   return (
     <Box
       className="pages-mosaic"
@@ -36,7 +40,12 @@ export const PagesMosaic: FC<PagesMosaicProps> = ({ section }) => {
         const image = card.card_image || card.main_image;
 
         return (
-          <Link key={card.id} to={card.url} className="mosaic-tile">
+          <Link
+            key={card.id}
+            to={card.url}
+            className="mosaic-tile"
+            {...spotlight}
+          >
             {/* The title names the link, so the image is decorative here; a tile without image keeps its dark fill. */}
             {!!image && (
               <LazyPicture

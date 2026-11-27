@@ -39,6 +39,7 @@ import {
 } from "@mui/lab";
 import { Link as RouterLink } from "react-router";
 import { parseHtml } from "@utils/functions/parseHtml";
+import { ModalTransition } from "@components/modals/ModalTransition";
 
 /** Slides are 300px wide at every breakpoint. */
 const SLIDE_IMAGE_SIZES: LazyPictureSize[] = [{ width: 300 }];
@@ -183,91 +184,94 @@ export const FeaturedSlider: React.FC<FeaturedSliderProps> = ({ section }) => {
         data-testid="section-featured-slider-modal"
         open={isOpen}
         onClose={onClose}
+        closeAfterTransition
         sx={featuredSliderModalStyles}
       >
-        <Paper className="modal-container" variant="outlined">
-          <Box className="modal-header">
-            <Box className="title"></Box>
+        <ModalTransition in={isOpen}>
+          <Paper className="modal-container" variant="outlined">
+            <Box className="modal-header">
+              <Box className="title"></Box>
 
-            <Box className="actions">
-              <IconButton
-                title={t("general.actions.close")}
-                onClick={onClose}
-                className="close-button"
-              >
-                <CloseIcon />
-              </IconButton>
+              <Box className="actions">
+                <IconButton
+                  title={t("general.actions.close")}
+                  onClick={onClose}
+                  className="close-button"
+                >
+                  <CloseIcon />
+                </IconButton>
+              </Box>
             </Box>
-          </Box>
 
-          <Box className="modal-content">
-            <Timeline position="right">
-              {section.cards?.map((card) => {
-                const image = card.card_image || card.main_image;
+            <Box className="modal-content">
+              <Timeline position="right">
+                {section.cards?.map((card) => {
+                  const image = card.card_image || card.main_image;
 
-                return (
-                  <TimelineItem key={card.id}>
-                    {!!card.info_overlay && (
-                      <TimelineOppositeContent color="text.secondary">
-                        {parseHtml(card.info_overlay)}
-                      </TimelineOppositeContent>
-                    )}
+                  return (
+                    <TimelineItem key={card.id}>
+                      {!!card.info_overlay && (
+                        <TimelineOppositeContent color="text.secondary">
+                          {parseHtml(card.info_overlay)}
+                        </TimelineOppositeContent>
+                      )}
 
-                    <TimelineSeparator>
-                      <TimelineConnector />
+                      <TimelineSeparator>
+                        <TimelineConnector />
 
-                      <TimelineDot color="primary" variant="outlined">
-                        {!!image && (
-                          <LazyPicture
-                            image={{
-                              ...image,
-                              description: image.description || card.title,
-                            }}
-                            imageProps={{
-                              "data-swiper-material-scale": 1.5,
-                              "data-swiper-material-slide-size": "100%",
-                            }}
-                            sizes={[{ width: 120 }]}
-                          ></LazyPicture>
+                        <TimelineDot color="primary" variant="outlined">
+                          {!!image && (
+                            <LazyPicture
+                              image={{
+                                ...image,
+                                description: image.description || card.title,
+                              }}
+                              imageProps={{
+                                "data-swiper-material-scale": 1.5,
+                                "data-swiper-material-slide-size": "100%",
+                              }}
+                              sizes={[{ width: 120 }]}
+                            ></LazyPicture>
+                          )}
+                        </TimelineDot>
+
+                        <TimelineConnector />
+                      </TimelineSeparator>
+
+                      <TimelineContent sx={{ py: "12px", px: 2 }}>
+                        {card.title && (
+                          <Typography
+                            variant="h6"
+                            className="title"
+                            component="span"
+                          >
+                            {parseHtml(card.title)}
+                          </Typography>
                         )}
-                      </TimelineDot>
 
-                      <TimelineConnector />
-                    </TimelineSeparator>
+                        {card.description && (
+                          <Box className="description">
+                            {parseHtml(card.description)}
+                          </Box>
+                        )}
 
-                    <TimelineContent sx={{ py: "12px", px: 2 }}>
-                      {card.title && (
-                        <Typography
-                          variant="h6"
-                          className="title"
-                          component="span"
+                        <Button
+                          component={RouterLink}
+                          to={card.url}
+                          color="contrast"
+                          variant="contained"
+                          size="small"
                         >
-                          {parseHtml(card.title)}
-                        </Typography>
-                      )}
-
-                      {card.description && (
-                        <Box className="description">
-                          {parseHtml(card.description)}
-                        </Box>
-                      )}
-
-                      <Button
-                        component={RouterLink}
-                        to={card.url}
-                        color="contrast"
-                        variant="contained"
-                        size="small"
-                      >
-                        Mehr dazu...
-                      </Button>
-                    </TimelineContent>
-                  </TimelineItem>
-                );
-              })}
-            </Timeline>
-          </Box>
-        </Paper>
+                          Mehr dazu...
+                        </Button>
+                      </TimelineContent>
+                    </TimelineItem>
+                  );
+                })}
+              </Timeline>
+            </Box>
+          </Paper>
+        </ModalTransition>
       </Modal>
     </>
   );

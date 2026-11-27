@@ -3,14 +3,12 @@ import { projectPageStyles } from "./projectPage.styles";
 import { useGlobalStore } from "@src/store/global.store";
 import { useEffect, useMemo } from "react";
 import { ProjectSidebar } from "./projectSidebar/ProjectSidebar";
+import { ProjectHeaderImage } from "./projectHeaderImage/ProjectHeaderImage";
 import { Box, Paper, SxProps, Theme, Typography } from "@mui/material";
 import {
   selectProjectCssVars,
   selectProjectPageDetails,
 } from "@src/store/projects/projects.selectors";
-import { LazyPicture } from "@components/lazyPicture/LazyPicture";
-import { LazyPictureSize } from "@components/lazyPicture/components/LazyPictureWithoutFallback";
-import { Link } from "react-router";
 import { useShallow } from "zustand/shallow";
 import { Alerts } from "@components/alerts/Alerts";
 import { AlertDto } from "@models/utility-types/alert-dto.model";
@@ -21,21 +19,6 @@ import { loadSharedProjectDetails } from "@api/prefetch/projectDetailsPrefetch";
 import { parseHtml } from "@utils/functions/parseHtml";
 import { convertHtmlEntities } from "@utils/functions/convertHtmlEntities";
 import { useTranslation } from "react-i18next";
-
-/** The project header image spans the viewport up to the 1600px content limit; widest first. */
-const PROJECT_IMAGE_SIZES: LazyPictureSize[] = [
-  { media: "xl-up", width: 1600 },
-  { media: "lg-up", width: 1536 },
-  { media: "md-up", width: 1200 },
-  { media: "sm-up", width: 900 },
-  { width: 600 },
-];
-
-/** The header image is the largest visible element on load, so it must not wait for lazy loading. */
-const PROJECT_IMAGE_PROPS = {
-  loading: "eager",
-  fetchPriority: "high",
-} as const;
 
 export interface ProjectPageProps {
   /** `template` decides the title level: only the project start page has no heading of its own. */
@@ -148,19 +131,7 @@ export const ProjectPage: React.FC<ProjectPageProps> = ({ page, children }) => {
     >
       {project && (
         <Box className="project-header" data-testid="project-header">
-          <Box
-            className="main-image aspect-ratio ar-3-1"
-            component={Link}
-            to={project.url}
-            aria-label={mainImageLinkLabel}
-          >
-            <LazyPicture
-              image={project.main_image}
-              className="ar-content"
-              sizes={PROJECT_IMAGE_SIZES}
-              imageProps={PROJECT_IMAGE_PROPS}
-            ></LazyPicture>
-          </Box>
+          <ProjectHeaderImage project={project} label={mainImageLinkLabel} />
 
           <Box className="project-subheader">
             {project.info_overlay && (

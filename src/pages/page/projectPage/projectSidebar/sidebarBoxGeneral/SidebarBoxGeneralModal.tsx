@@ -5,6 +5,7 @@ import { Box, Button, IconButton, Modal, Paper } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { SidebarBoxGeneral } from "./SidebarBoxGeneral";
 import { useCallback, useState } from "react";
+import { ModalTransition } from "@components/modals/ModalTransition";
 
 export interface SidebarBoxGeneralModalProps {
   data?: ProjectGeneralDataBlock[];
@@ -39,30 +40,33 @@ export const SidebarBoxGeneralModal: React.FC<SidebarBoxGeneralModalProps> = ({
         data-testid="sidebar-box-general-modal"
         open={isOpen}
         onClose={onClose}
+        closeAfterTransition
       >
-        <Paper className="modal-container" variant="outlined">
-          <Box className="modal-header">
-            <Box className="title">{t("project.general_data")}</Box>
+        <ModalTransition in={isOpen}>
+          <Paper className="modal-container" variant="outlined">
+            <Box className="modal-header">
+              <Box className="title">{t("project.general_data")}</Box>
 
-            <Box className="actions">
-              <IconButton
-                title={t("general.actions.close")}
-                onClick={onClose}
-                className="close-button"
-              >
-                <CloseIcon />
-              </IconButton>
+              <Box className="actions">
+                <IconButton
+                  title={t("general.actions.close")}
+                  onClick={onClose}
+                  className="close-button"
+                >
+                  <CloseIcon />
+                </IconButton>
+              </Box>
             </Box>
-          </Box>
 
-          <Box className="modal-content">
-            <SidebarBoxGeneral
-              data={data}
-              showTitle={false}
-              onClose={onClose}
-            ></SidebarBoxGeneral>
-          </Box>
-        </Paper>
+            <Box className="modal-content">
+              <SidebarBoxGeneral
+                data={data}
+                showTitle={false}
+                onClose={onClose}
+              ></SidebarBoxGeneral>
+            </Box>
+          </Paper>
+        </ModalTransition>
       </Modal>
     </>
   );

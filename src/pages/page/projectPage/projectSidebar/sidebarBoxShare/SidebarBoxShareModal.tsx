@@ -5,6 +5,7 @@ import { Box, Button, IconButton, Modal, Paper } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useCallback, useState } from "react";
 import { SidebarBoxShare } from "./SidebarBoxShare";
+import { ModalTransition } from "@components/modals/ModalTransition";
 
 export interface SidebarBoxShareModalProps {
   data?: IconLinkDto[];
@@ -39,30 +40,33 @@ export const SidebarBoxShareModal: React.FC<SidebarBoxShareModalProps> = ({
         data-testid="sidebar-box-share-modal"
         open={isOpen}
         onClose={onClose}
+        closeAfterTransition
       >
-        <Paper className="modal-container" variant="outlined">
-          <Box className="modal-header">
-            <Box className="title">{t("project.share")}</Box>
+        <ModalTransition in={isOpen}>
+          <Paper className="modal-container" variant="outlined">
+            <Box className="modal-header">
+              <Box className="title">{t("project.share")}</Box>
 
-            <Box className="actions">
-              <IconButton
-                title={t("general.actions.close")}
-                onClick={onClose}
-                className="close-button"
-              >
-                <CloseIcon />
-              </IconButton>
+              <Box className="actions">
+                <IconButton
+                  title={t("general.actions.close")}
+                  onClick={onClose}
+                  className="close-button"
+                >
+                  <CloseIcon />
+                </IconButton>
+              </Box>
             </Box>
-          </Box>
 
-          <Box className="modal-content">
-            <SidebarBoxShare
-              data={data}
-              showTitle={false}
-              onClose={onClose}
-            ></SidebarBoxShare>
-          </Box>
-        </Paper>
+            <Box className="modal-content">
+              <SidebarBoxShare
+                data={data}
+                showTitle={false}
+                onClose={onClose}
+              ></SidebarBoxShare>
+            </Box>
+          </Paper>
+        </ModalTransition>
       </Modal>
     </>
   );

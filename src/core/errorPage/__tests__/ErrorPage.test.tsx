@@ -84,4 +84,15 @@ describe("ErrorPage", () => {
     expect(reload).not.toHaveBeenCalled();
     expect(screen.getByTestId("error-page")).toBeInTheDocument();
   });
+
+  it("removes the static splash so it does not cover the page", async () => {
+    const splash = document.createElement("div");
+    splash.id = "mf-boot-splash";
+    document.body.appendChild(splash);
+
+    await renderWithError(new Error("Cannot read properties of undefined"));
+
+    expect(screen.getByTestId("error-page")).toBeInTheDocument();
+    expect(document.getElementById("mf-boot-splash")).toBeNull();
+  });
 });

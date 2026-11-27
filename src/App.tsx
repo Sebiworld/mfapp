@@ -5,6 +5,8 @@ import { ThemeProvider, THEME_ID } from "@mui/material/styles";
 
 import { Layout } from "@core/Layout";
 import { SplashScreen } from "@core/splashScreen/SplashScreen";
+import { markSplashGone } from "@core/splashScreen/splashSignal";
+import { useSplashHold } from "@core/splashScreen/useSplashHold";
 import { GlobalStylesElement } from "@styles/global/GlobalStylesElement";
 
 import "react-toastify/dist/ReactToastify.css";
@@ -29,6 +31,8 @@ export const App = () => {
 
   useInitializeApp();
 
+  const isSplashHeld = useSplashHold(isInitialized);
+
   return (
     <>
       <ThemeProvider theme={{ [THEME_ID]: mfTheme }} noSsr defaultMode="light">
@@ -40,11 +44,11 @@ export const App = () => {
 
           {!isMaintenanceModeActive && <Layout />}
 
-          <SplashScreen visible={!isInitialized}></SplashScreen>
+          <SplashScreen visible={isSplashHeld} onExited={markSplashGone} />
 
           <SplashScreen
             visible={isMaintenanceModeActive}
-            showProgressBar={false}
+            variant="maintenance"
             message={
               <>
                 <Typography variant="h6" className="title">
@@ -57,7 +61,7 @@ export const App = () => {
                 </Typography>
               </>
             }
-          ></SplashScreen>
+          />
         </LocalizationProvider>
       </ThemeProvider>
     </>

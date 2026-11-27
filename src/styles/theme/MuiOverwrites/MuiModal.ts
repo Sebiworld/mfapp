@@ -1,7 +1,36 @@
+import { keyframes } from "@emotion/react";
 import { Components, Theme } from "@mui/material/styles";
+
+// Keyframes rather than transitions: the fade of `ModalTransition` writes its own inline `transition`.
+const modalEnter = keyframes`
+  from {
+    transform: scale(0.97);
+  }
+  to {
+    transform: scale(1);
+  }
+`;
+
+const modalExit = keyframes`
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(0.98);
+  }
+`;
+
+/** Fade of the backdrop, the same as the dialog's (`ModalTransition`): 200 ms in, 150 ms out. */
+const BACKDROP_TRANSITION = { enter: 200, exit: 150 };
 
 export const MuiModalOverwrites: Components<Theme> = {
   MuiModal: {
+    defaultProps: {
+      slotProps: {
+        backdrop: { transitionDuration: BACKDROP_TRANSITION },
+      },
+    },
+
     styleOverrides: {
       root: () => ({
         display: "flex",
@@ -122,6 +151,24 @@ export const MuiModalOverwrites: Components<Theme> = {
 
           ".MuiModalClose-root": {
             margin: 0,
+          },
+
+          // Set by `ModalTransition`; dialogs without it neither scale nor fade. After the entrance no transform
+          // stays behind, so the open dialog is no containing block for fixed content.
+          '&[data-motion="enter"]': {
+            animation: `${modalEnter} 300ms var(--mf-spring) backwards`,
+          },
+
+          // Holds the end state until the modal removes the dialog.
+          '&[data-motion="exit"]': {
+            animation: `${modalExit} 150ms var(--mf-ease-out) both`,
+          },
+
+          // Reduced motion: only the fade of `ModalTransition` remains.
+          "@media (prefers-reduced-motion: reduce)": {
+            "&[data-motion]": {
+              animation: "none",
+            },
           },
         },
       }),

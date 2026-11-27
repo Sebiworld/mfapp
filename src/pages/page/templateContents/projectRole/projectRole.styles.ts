@@ -225,7 +225,7 @@ export const projectRoleStyles: SxProps<Theme> = (theme) => ({
       gap: "8px",
     },
 
-    ".MuiCardActionArea-root": {
+    ".portrait-body": {
       display: "flex",
       flexDirection: "column",
 

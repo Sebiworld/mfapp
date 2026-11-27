@@ -1,4 +1,5 @@
 import { Box, useColorScheme } from "@mui/material";
+import type { ReactElement } from "react";
 import { sectionSpacerStyles } from "./sectionSpacer.styles";
 
 interface SectionSpacerProps {
@@ -13,7 +14,7 @@ export const SectionSpacer = ({
   logo,
   logoColor,
   color,
-}: SectionSpacerProps) => {
+}: SectionSpacerProps): ReactElement => {
   const { mode } = useColorScheme();
 
   if (

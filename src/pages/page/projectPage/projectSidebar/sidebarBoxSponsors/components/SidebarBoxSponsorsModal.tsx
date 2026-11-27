@@ -5,6 +5,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Box, Button, IconButton, Modal, Paper } from "@mui/material";
 import { useCallback, useState } from "react";
 import { SidebarBoxSponsors } from "../SidebarBoxSponsors";
+import { ModalTransition } from "@components/modals/ModalTransition";
 
 export interface SidebarBoxSponsorsModalProps {
   data?: SponsorDto[];
@@ -40,31 +41,34 @@ export const SidebarBoxSponsorsModal: React.FC<
         data-testid="sidebar-box-sponsors-modal"
         open={isOpen}
         onClose={onClose}
+        closeAfterTransition
       >
-        <Paper className="modal-container" variant="outlined">
-          <Box className="modal-header">
-            <Box className="title">{t(`project.${type}`)}</Box>
+        <ModalTransition in={isOpen}>
+          <Paper className="modal-container" variant="outlined">
+            <Box className="modal-header">
+              <Box className="title">{t(`project.${type}`)}</Box>
 
-            <Box className="actions">
-              <IconButton
-                title={t("general.actions.close")}
-                onClick={onClose}
-                className="close-button"
-              >
-                <CloseIcon />
-              </IconButton>
+              <Box className="actions">
+                <IconButton
+                  title={t("general.actions.close")}
+                  onClick={onClose}
+                  className="close-button"
+                >
+                  <CloseIcon />
+                </IconButton>
+              </Box>
             </Box>
-          </Box>
 
-          <Box className="modal-content">
-            <SidebarBoxSponsors
-              data={data}
-              type={type}
-              showTitle={false}
-              onClose={onClose}
-            ></SidebarBoxSponsors>
-          </Box>
-        </Paper>
+            <Box className="modal-content">
+              <SidebarBoxSponsors
+                data={data}
+                type={type}
+                showTitle={false}
+                onClose={onClose}
+              ></SidebarBoxSponsors>
+            </Box>
+          </Paper>
+        </ModalTransition>
       </Modal>
     </>
   );

@@ -58,5 +58,32 @@ export const toastifyStyles: Interpolation<Theme>[] = [
       // used to control the opacity of the progress trail
       "--toastify-color-progress-bgo": "0.2",
     },
+
+    // Fade without movement for reduced motion (`TOAST_FADE` in `toastTransition.ts`); `both` keeps a leaving
+    // toast hidden until react-toastify removes it.
+    ".mf-toast-fade-in": {
+      animation: "mf-toast-fade-in 200ms var(--mf-ease-out) both",
+    },
+
+    ".mf-toast-fade-out": {
+      animation: "mf-toast-fade-out 150ms var(--mf-ease-out) both",
+    },
+
+    // react-toastify zooms the icon in on its own; with reduced motion the icon simply stands.
+    "@media (prefers-reduced-motion: reduce)": {
+      ".Toastify__toast-icon.Toastify--animate-icon": {
+        animation: "none",
+      },
+    },
+
+    "@keyframes mf-toast-fade-in": {
+      from: { opacity: 0 },
+      to: { opacity: 1 },
+    },
+
+    "@keyframes mf-toast-fade-out": {
+      from: { opacity: 1 },
+      to: { opacity: 0 },
+    },
   },
 ];

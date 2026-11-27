@@ -11,7 +11,7 @@ import { Box, Button, IconButton, Link, List, Paper } from "@mui/material";
 import { useGlobalStore } from "@src/store/global.store";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { useCallback, useId } from "react";
-import { useReward } from "react-rewards";
+import { useMotionSafeReward } from "@utils/hooks/useMotionSafeReward";
 import { Link as RouterLink } from "react-router";
 import { selectMenues } from "@src/store/configuration/configuration.selectors";
 import { ToolbarNavItem } from "@components/ToolbarNavItem";
@@ -23,7 +23,7 @@ export const Footer = () => {
   const currentDate = useCurrentDate(1000 * 60);
 
   const rewardId = useId();
-  const { reward, isAnimating: isRewardAnimating } = useReward(
+  const { reward, isAnimating: isRewardAnimating } = useMotionSafeReward(
     rewardId,
     "balloons",
     {

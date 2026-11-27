@@ -5,6 +5,7 @@ import { NavigationItemDto } from "@models/navigation-item-dto.model";
 import CloseIcon from "@mui/icons-material/Close";
 import { useCallback, useState } from "react";
 import { SidebarBoxLinks } from "../SidebarBoxLinks";
+import { ModalTransition } from "@components/modals/ModalTransition";
 
 export interface SidebarBoxLinksModalProps {
   navItems?: NavigationItemDto[];
@@ -39,30 +40,33 @@ export const SidebarBoxLinksModal: React.FC<SidebarBoxLinksModalProps> = ({
         data-testid="sidebar-box-links-modal"
         open={isOpen}
         onClose={onClose}
+        closeAfterTransition
       >
-        <Paper className="modal-container" variant="outlined">
-          <Box className="modal-header">
-            <Box className="title">{t("project.links")}</Box>
+        <ModalTransition in={isOpen}>
+          <Paper className="modal-container" variant="outlined">
+            <Box className="modal-header">
+              <Box className="title">{t("project.links")}</Box>
 
-            <Box className="actions">
-              <IconButton
-                title={t("general.actions.close")}
-                onClick={onClose}
-                className="close-button"
-              >
-                <CloseIcon />
-              </IconButton>
+              <Box className="actions">
+                <IconButton
+                  title={t("general.actions.close")}
+                  onClick={onClose}
+                  className="close-button"
+                >
+                  <CloseIcon />
+                </IconButton>
+              </Box>
             </Box>
-          </Box>
 
-          <Box className="modal-content">
-            <SidebarBoxLinks
-              navItems={navItems}
-              showTitle={false}
-              onClose={onClose}
-            ></SidebarBoxLinks>
-          </Box>
-        </Paper>
+            <Box className="modal-content">
+              <SidebarBoxLinks
+                navItems={navItems}
+                showTitle={false}
+                onClose={onClose}
+              ></SidebarBoxLinks>
+            </Box>
+          </Paper>
+        </ModalTransition>
       </Modal>
     </>
   );

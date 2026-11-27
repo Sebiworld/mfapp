@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { ProjectPortraitDto } from "@models/project-role/project-portrait-dto.model";
 import { ProjectRolePortrait } from "../ProjectRolePortrait";
 
@@ -41,5 +41,27 @@ describe("ProjectRolePortrait name", () => {
     );
     expect(titleHtml({ title: "Name_mit_Strich" })).toBe("Name_mit_Strich");
     expect(titleHtml({ title: "", title_separable: "" })).toBe("");
+  });
+});
+
+describe("ProjectRolePortrait body", () => {
+  it("offers no click area while the portrait has no target", () => {
+    const { container } = render(
+      <ProjectRolePortrait portrait={portrait({ url: "/x/" })} />
+    );
+
+    expect(container.querySelector(".MuiCardActionArea-root")).toBeNull();
+    expect(screen.queryByRole("button")).toBeNull();
+    expect(container.querySelector(".portrait-body")).not.toBeNull();
+  });
+
+  it("offers no click area for a portrait without url either", () => {
+    const { container } = render(
+      <ProjectRolePortrait portrait={portrait({})} />
+    );
+
+    expect(container.querySelector(".MuiCardActionArea-root")).toBeNull();
+    expect(screen.queryByRole("button")).toBeNull();
+    expect(container.querySelector(".portrait-body")).not.toBeNull();
   });
 });

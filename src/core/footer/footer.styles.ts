@@ -50,7 +50,6 @@ export const footerStyles: SxProps<Theme> = (theme) => ({
       justifyContent: "center",
       flexWrap: "wrap",
       gap: "4px",
-      transition: "all 0.4s ease-in",
       marginTop: "8px",
 
       ".btn": {

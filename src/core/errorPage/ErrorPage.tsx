@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useLayoutEffect, useState } from "react";
 import { Box, Button, CssBaseline, Link, Typography } from "@mui/material";
 import { THEME_ID, ThemeProvider } from "@mui/material/styles";
 import { useRouteError } from "react-router";
@@ -9,6 +9,7 @@ import {
   reloadOnceForLoadError,
 } from "@utils/functions/reloadOnLoadError";
 import { errorPageStyles } from "./errorPage.styles";
+import { removeBootSplash } from "@core/splashScreen/bootSplash";
 
 /**
  * Error page for the root route. Replaces the app shell, so it brings its own theme. A failed code load
@@ -22,6 +23,12 @@ export const ErrorPage: FC = () => {
   const [isReloading] = useState(
     () => isLoadError(error) && reloadOnceForLoadError()
   );
+
+  // The static splash only goes once the app's own splash mounts; when rendering fails before that, it would stay
+  // on top of this page.
+  useLayoutEffect(() => {
+    removeBootSplash();
+  }, []);
 
   useEffect(() => {
     if (import.meta.env.DEV) {

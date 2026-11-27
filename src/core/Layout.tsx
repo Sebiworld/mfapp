@@ -10,6 +10,7 @@ import { Outlet } from "react-router";
 import { selectSessionVersion } from "@src/store/initialization/initialization.selectors";
 import { TranslucentHeaderContext } from "./header/useTranslucentHeader";
 import { useMemo, useState } from "react";
+import { useToastTransition } from "./toastTransition";
 
 /**
  * App shell with header, page content and footer.
@@ -22,6 +23,7 @@ import { useMemo, useState } from "react";
  */
 export const Layout = () => {
   const theme = useColorTheme();
+  const toastTransition = useToastTransition();
   const sessionVersion = useGlobalStore(selectSessionVersion);
   const [isHeaderTranslucent, setHeaderTranslucent] = useState(false);
   const translucentHeader = useMemo(
@@ -46,7 +48,7 @@ export const Layout = () => {
         </Box>
       </Box>
 
-      <ToastContainer theme={theme} />
+      <ToastContainer theme={theme} transition={toastTransition} />
     </TranslucentHeaderContext.Provider>
   );
 };

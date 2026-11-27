@@ -8,7 +8,7 @@ import { Box, Card, CardContent, Typography } from "@mui/material";
 import { getRandomNumberBetween } from "@utils/functions/getRandomNumberBetween";
 import { isValidArray } from "@utils/functions/isValidArray";
 import { FC, useMemo } from "react";
-import { ProjectRolePortraitActionWrapper } from "./ProjectRolePortraitActionWrapper";
+import { ProjectRolePortraitBody } from "./ProjectRolePortraitBody";
 import { parseHtml } from "@utils/functions/parseHtml";
 import { getSeparableTitle } from "@utils/functions/getSeparableTitle";
 import { ProjectRolePortraitDescriptionItem } from "./ProjectRolePortraitDescriptionItem";
@@ -100,7 +100,7 @@ export const ProjectRolePortrait: FC<ProjectRolePortraitProps> = ({
 
   return (
     <Card data-testid="project-role-portrait" className="project-role-portrait">
-      <ProjectRolePortraitActionWrapper portrait={portrait}>
+      <ProjectRolePortraitBody>
         <Box className="portrait-image aspect-ratio ar-3-4">
           <LazyPicture
             className="ar-content"
@@ -137,7 +137,7 @@ export const ProjectRolePortrait: FC<ProjectRolePortraitProps> = ({
             />
           ))}
         </CardContent>
-      </ProjectRolePortraitActionWrapper>
+      </ProjectRolePortraitBody>
     </Card>
   );
 };

@@ -8,6 +8,25 @@ export const globalContentStyles: Interpolation<Theme>[] = [
       scrollPaddingTop: "72px",
     },
 
+    "@media (prefers-reduced-motion: reduce)": {
+      html: {
+        scrollBehavior: "auto",
+      },
+    },
+
+    // Colour scheme switch: the old page stays put while the new one is revealed by a growing circle (clip-path,
+    // set by startColorModeTransition), or cross-fades quickly with reduced motion.
+    "html.vt-circle::view-transition-old(root), html.vt-circle::view-transition-new(root)":
+      {
+        animation: "none",
+        mixBlendMode: "normal",
+      },
+
+    "html.vt-fade::view-transition-old(root), html.vt-fade::view-transition-new(root)":
+      {
+        animationDuration: "150ms",
+      },
+
     // MUI removes the outline of its buttons and links; currentColor keeps the ring readable on light, dark and
     // orange surfaces alike.
     "a, button, [role='button'], [tabindex]:not([tabindex='-1'])": {

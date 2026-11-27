@@ -7,7 +7,9 @@ import {
   LinearProgress,
   Typography,
 } from "@mui/material";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
+import { useSplashGone } from "@core/splashScreen/useSplashGone";
+import { registerContentPending } from "@core/splashScreen/splashSignal";
 
 interface LoadingOverlayProps {
   overlay?: boolean;
@@ -21,6 +23,7 @@ export const LoadingOverlay = ({
   onlyProgress,
 }: LoadingOverlayProps) => {
   const { t } = useTranslation();
+  const isSplashGone = useSplashGone();
 
   const loaderType = useMemo(() => {
     if (onlyProgress) {
@@ -34,13 +37,24 @@ export const LoadingOverlay = ({
     return "is-box";
   }, [onlyProgress, overlay]);
 
+  // A card (not just the progress bar) means there is no content yet: the splash waits for it to end.
+  const isFirstLoad = Boolean(visible) && !onlyProgress;
+
+  useEffect(() => {
+    if (!isFirstLoad) {
+      return;
+    }
+
+    return registerContentPending();
+  }, [isFirstLoad]);
+
   if (!visible) {
     return null;
   }
 
   return (
     <Box
-      className={`loading-overlay ${loaderType}`}
+      className={`loading-overlay ${loaderType}${isSplashGone ? "" : " is-waiting"}`}
       data-testid="loading-overlay"
       sx={loadingOverlayStyles}
     >

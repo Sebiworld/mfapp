@@ -8,6 +8,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { SidebarBoxGalleries } from "./SidebarBoxGalleries";
 
 type SidebarBoxGalleriesData = ProjectDetailsDto["images"];
+import { ModalTransition } from "@components/modals/ModalTransition";
 
 export interface SidebarBoxGalleriesModalProps {
   data?: SidebarBoxGalleriesData;
@@ -51,34 +52,37 @@ export const SidebarBoxGalleriesModal: React.FC<
         data-testid="sidebar-box-galleries-modal"
         open={isOpen}
         onClose={onClose}
+        closeAfterTransition
         disableEnforceFocus={isLightboxOpen}
         disableEscapeKeyDown={isLightboxOpen}
       >
-        <Paper className="modal-container" variant="outlined">
-          <Box className="modal-header">
-            <Box className="title">{t("project.galleries.title")}</Box>
+        <ModalTransition in={isOpen}>
+          <Paper className="modal-container" variant="outlined">
+            <Box className="modal-header">
+              <Box className="title">{t("project.galleries.title")}</Box>
 
-            <Box className="actions">
-              <IconButton
-                title={t("general.actions.close")}
-                onClick={onClose}
-                className="close-button"
-              >
-                <CloseIcon />
-              </IconButton>
+              <Box className="actions">
+                <IconButton
+                  title={t("general.actions.close")}
+                  onClick={onClose}
+                  className="close-button"
+                >
+                  <CloseIcon />
+                </IconButton>
+              </Box>
             </Box>
-          </Box>
 
-          <Box className="modal-content">
-            <SidebarBoxGalleries
-              data={data}
-              showTitle={false}
-              onLightboxOpen={onLightboxOpen}
-              onClose={onClose}
-              type={type}
-            ></SidebarBoxGalleries>
-          </Box>
-        </Paper>
+            <Box className="modal-content">
+              <SidebarBoxGalleries
+                data={data}
+                showTitle={false}
+                onLightboxOpen={onLightboxOpen}
+                onClose={onClose}
+                type={type}
+              ></SidebarBoxGalleries>
+            </Box>
+          </Paper>
+        </ModalTransition>
       </Modal>
     </>
   );

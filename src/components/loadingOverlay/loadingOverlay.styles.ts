@@ -1,10 +1,25 @@
 import { SxProps } from "@mui/material";
 
+/**
+ * The card and the progress bar appear only after 300 ms: a fast answer shows no loading state at all. With reduced
+ * motion the delay stays and only the fade goes. The 300 ms count from the moment the splash screen is gone, so the
+ * card does not show up under the fading splash; `is-waiting` keeps it hidden until then.
+ */
 export const loadingOverlayStyles: SxProps = {
   display: "flex",
   position: "relative",
   justifyContent: "center",
   padding: "32px",
+  animation: "mf-fade-in 200ms var(--mf-ease-out) 300ms both",
+
+  "@media (prefers-reduced-motion: reduce)": {
+    animation: "mf-fade-in 1ms linear 300ms both",
+  },
+
+  "&.is-waiting": {
+    animation: "none",
+    opacity: 0,
+  },
 
   "&.is-progress": {
     padding: 0,

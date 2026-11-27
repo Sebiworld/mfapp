@@ -10,7 +10,7 @@ import { secretCodePageStyles } from "./secretCodePage.styles";
 import { Alert, Box, Button, LinearProgress, Typography } from "@mui/material";
 import EmergencyIcon from "@mui/icons-material/Emergency";
 import TagIcon from "@mui/icons-material/Tag";
-import { useReward } from "react-rewards";
+import { useMotionSafeReward } from "@utils/hooks/useMotionSafeReward";
 import { useGlobalStore } from "@src/store/global.store";
 import { selectProjects } from "@src/store/projects/projects.selectors";
 import { isValidObject } from "@utils/functions/isValidObject";
@@ -45,20 +45,21 @@ export const SecretCodePage = () => {
   }, [loadedProjects]);
 
   const starRewardId = useId();
-  const { reward: starReward, isAnimating: starRewardIsAnimating } = useReward(
-    starRewardId,
-    "confetti",
+  const { reward: starReward, isAnimating: starRewardIsAnimating } =
+    useMotionSafeReward(starRewardId, "confetti", {
+      position: "absolute",
+      colors: projectColors,
+    });
+
+  const successRewardId = useId();
+  const { reward: successReward } = useMotionSafeReward(
+    successRewardId,
+    "balloons",
     {
       position: "absolute",
       colors: projectColors,
     }
   );
-
-  const successRewardId = useId();
-  const { reward: successReward } = useReward(successRewardId, "balloons", {
-    position: "absolute",
-    colors: projectColors,
-  });
 
   const solution = useMemo(() => [9, 7, 4, 5], []);
   const [numbers, setNumbers] = useState<number[]>([]);

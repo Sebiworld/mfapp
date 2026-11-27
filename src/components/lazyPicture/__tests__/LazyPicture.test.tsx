@@ -1,5 +1,6 @@
-import { describe, expect, it } from "vitest";
-import { render as baseRender } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { fireEvent, render as baseRender } from "@testing-library/react";
+import { resetMatchMedia, setReducedMotion } from "@src/test/motion";
 import { THEME_ID, ThemeProvider } from "@mui/material/styles";
 import { mfTheme } from "@styles/theme/mfTheme";
 import { ImageDto } from "@models/image-dto.model";
@@ -178,5 +179,169 @@ describe("LazyPicture placeholder shell", () => {
     const { container } = render(<LazyPicture placeholder={false} />);
 
     expect(container).toBeEmptyDOMElement();
+  });
+});
+
+const JSDOM_COMPLETE = Object.getOwnPropertyDescriptor(
+  HTMLImageElement.prototype,
+  "complete"
+);
+
+/**
+ * Lets every image report whether it is complete; jsdom never loads images.
+ * @param complete Value of `HTMLImageElement.complete`.
+ */
+const setImagesComplete = (complete: boolean): void => {
+  Object.defineProperty(HTMLImageElement.prototype, "complete", {
+    configurable: true,
+    get: () => complete,
+  });
+};
+
+const JSDOM_RECT = HTMLImageElement.prototype.getBoundingClientRect;
+
+/**
+ * Places every image at a vertical position; jsdom has no layout.
+ * @param top Distance of the image from the top of the viewport in pixels.
+ */
+const setImagesTop = (top: number): void => {
+  HTMLImageElement.prototype.getBoundingClientRect = () =>
+    ({ top, bottom: top + 100, left: 0, right: 100 }) as DOMRect;
+};
+
+describe("LazyPicture fade-in", () => {
+  beforeEach(() => {
+    // Below the first screen, where a fade is wanted.
+    setImagesTop(window.innerHeight + 200);
+  });
+
+  afterEach(() => {
+    HTMLImageElement.prototype.getBoundingClientRect = JSDOM_RECT;
+
+    if (JSDOM_COMPLETE) {
+      Object.defineProperty(
+        HTMLImageElement.prototype,
+        "complete",
+        JSDOM_COMPLETE
+      );
+    }
+
+    resetMatchMedia();
+  });
+
+  it("fades in a lazy image that was not loaded yet", () => {
+    setImagesComplete(false);
+    const { container } = render(
+      <LazyPicture image={makeImage()} sizes={SIZES} />
+    );
+    const img = container.querySelector("img")!;
+
+    expect(img).toHaveClass("is-fading-in");
+    expect(img).not.toHaveClass("is-loaded");
+
+    fireEvent.load(img);
+
+    expect(img).toHaveClass("is-loaded");
+    expect(img).not.toHaveClass("is-fading-in");
+  });
+
+  it("shows a lazy image at once that already lies in the visible area", () => {
+    setImagesComplete(false);
+    setImagesTop(window.innerHeight - 1);
+    const { container } = render(
+      <LazyPicture image={makeImage()} sizes={SIZES} />
+    );
+    const img = container.querySelector("img")!;
+
+    expect(img).not.toHaveClass("is-fading-in");
+
+    fireEvent.load(img);
+
+    expect(img).not.toHaveClass("is-loaded");
+  });
+
+  it("never fades an eager image", () => {
+    setImagesComplete(false);
+    const { container } = render(
+      <LazyPicture
+        image={makeImage()}
+        sizes={SIZES}
+        imageProps={{ loading: "eager", fetchPriority: "high" }}
+      />
+    );
+    const img = container.querySelector("img")!;
+
+    expect(img).not.toHaveClass("is-fading-in");
+    expect(img.style.opacity).toBe("");
+
+    fireEvent.load(img);
+
+    expect(img).not.toHaveClass("is-loaded");
+  });
+
+  it("shows a cached image at once", () => {
+    setImagesComplete(true);
+    const { container } = render(
+      <LazyPicture image={makeImage()} sizes={SIZES} />
+    );
+    const img = container.querySelector("img")!;
+
+    expect(img).not.toHaveClass("is-fading-in");
+
+    fireEvent.load(img);
+
+    expect(img).not.toHaveClass("is-loaded");
+  });
+
+  it("shows images at once with reduced motion", () => {
+    setImagesComplete(false);
+    setReducedMotion(true);
+    const { container } = render(
+      <LazyPicture image={makeImage()} sizes={SIZES} />
+    );
+    const img = container.querySelector("img")!;
+
+    expect(img).not.toHaveClass("is-fading-in");
+
+    fireEvent.load(img);
+
+    expect(img).not.toHaveClass("is-loaded");
+  });
+
+  it("keeps the caller's load handler and class", () => {
+    setImagesComplete(false);
+    let loads = 0;
+    const { container } = render(
+      <LazyPicture
+        image={makeImage()}
+        sizes={SIZES}
+        imageProps={{
+          className: "poster",
+          onLoad: () => {
+            loads++;
+          },
+        }}
+      />
+    );
+    const img = container.querySelector("img")!;
+
+    expect(img).toHaveClass("poster", "is-fading-in");
+
+    fireEvent.load(img);
+
+    expect(loads).toBe(1);
+    expect(img).toHaveClass("poster", "is-loaded");
+  });
+
+  it("shows an image that failed to load instead of hiding it", () => {
+    setImagesComplete(false);
+    const { container } = render(
+      <LazyPicture image={makeImage()} sizes={SIZES} />
+    );
+    const img = container.querySelector("img")!;
+
+    fireEvent.error(img);
+
+    expect(img).not.toHaveClass("is-fading-in");
   });
 });

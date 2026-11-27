@@ -92,6 +92,7 @@ export const Sidemenu = ({ sidemenuOpen, setSidemenuOpen }: SidemenuProps) => {
           <Stack className="header-right">
             <IconButton
               id="close-icon"
+              aria-label={t("sidemenu.close")}
               sx={{ position: "initial" }}
               onClick={closeSidemenu}
             >

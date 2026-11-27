@@ -1,5 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
-import { render, screen, within } from "@testing-library/react";
+import { act, fireEvent, render, screen, within } from "@testing-library/react";
+import "@utils/i18n/i18n";
+import { resetMatchMedia, setReducedMotion } from "@src/test/motion";
 import { MemoryRouter } from "react-router";
 import { THEME_ID, ThemeProvider } from "@mui/material/styles";
 import { mfTheme } from "@styles/theme/mfTheme";
@@ -108,5 +110,47 @@ describe("SectionPagesGrid", () => {
 
     expect(getComputedStyle(mosaic).marginLeft).toMatch(/^0(px)?$/);
     expect(getComputedStyle(section).paddingBottom).not.toMatch(/^0(px)?$/);
+  });
+
+  it("fades the see-all dialog out before removing it", async () => {
+    // The file stands the slider in; this test needs the real one with its dialog.
+    const { FeaturedSlider } = await vi.importActual<
+      typeof import("../featuredSlider/FeaturedSlider")
+    >("../featuredSlider/FeaturedSlider");
+
+    // Swiper fills a missing `matchMedia` with a bare stub that MUI cannot listen to.
+    setReducedMotion(false);
+    render(
+      <ThemeProvider theme={{ [THEME_ID]: mfTheme }} noSsr defaultMode="light">
+        <MemoryRouter>
+          <FeaturedSlider section={buildSection("featured")} />
+        </MemoryRouter>
+      </ThemeProvider>
+    );
+
+    vi.useFakeTimers();
+
+    try {
+      fireEvent.click(screen.getByRole("button", { name: "Alle ansehen" }));
+
+      const dialog = screen.getByTestId("section-featured-slider-modal");
+      const paper = dialog.querySelector(".modal-container");
+
+      expect(paper).toHaveAttribute("data-motion", "enter");
+
+      fireEvent.click(within(dialog).getByTitle("Schließen"));
+
+      expect(screen.getByTestId("section-featured-slider-modal")).toBe(dialog);
+      expect(paper).toHaveAttribute("data-motion", "exit");
+
+      act(() => {
+        vi.advanceTimersByTime(150);
+      });
+
+      expect(screen.queryByTestId("section-featured-slider-modal")).toBeNull();
+    } finally {
+      vi.useRealTimers();
+      resetMatchMedia();
+    }
   });
 });

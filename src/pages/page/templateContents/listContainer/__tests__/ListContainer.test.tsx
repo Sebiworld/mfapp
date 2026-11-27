@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { act, render, screen, waitFor } from "@testing-library/react";
 import { createMemoryRouter, RouterProvider } from "react-router";
 import { THEME_ID, ThemeProvider } from "@mui/material/styles";
@@ -9,6 +9,7 @@ import { GetPageListResponse } from "@api/axios/pageApi";
 import { pagesStoreActions } from "@src/store/pages/pages.actions";
 import { getFilterHash } from "@src/store/pages/pages.selectors";
 import { PageCardDtoWithIndex } from "@src/store/pages/pages.store";
+import { resetMatchMedia, setReducedMotion } from "@src/test/motion";
 
 const loadPageListItems = vi.fn();
 vi.mock("@api/hooks/usePagesApi", () => ({
@@ -102,6 +103,10 @@ describe("ListContainer", () => {
     Element.prototype.scrollIntoView = scrollIntoView;
   });
 
+  afterEach(() => {
+    resetMatchMedia();
+  });
+
   it("requests the meta data and the first page on mount", async () => {
     loadPageListItems.mockResolvedValue({ totalNumber: 30 });
 
@@ -135,6 +140,23 @@ describe("ListContainer", () => {
     });
     expect(scrollIntoView.mock.contexts[0]).toBe(
       container.querySelector("#list-top")
+    );
+  });
+
+  it("jumps to the list top with reduced motion", async () => {
+    setReducedMotion(true);
+    loadPageListItems.mockResolvedValue({ totalNumber: 30 });
+
+    renderList();
+
+    await waitFor(() => {
+      expect(scrollIntoView).toHaveBeenCalledWith({
+        behavior: "auto",
+        block: "start",
+      });
+    });
+    expect(scrollIntoView).not.toHaveBeenCalledWith(
+      expect.objectContaining({ behavior: "smooth" })
     );
   });
 

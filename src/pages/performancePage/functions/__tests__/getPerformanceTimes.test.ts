@@ -170,7 +170,7 @@ describe("getDurationLabel", () => {
         timestamp: START,
         timestamp_until: minutes === null ? null : START + minutes * 60,
       },
-      (key, options) => i18n.t(key, options) as string
+      (key, options) => i18n.t(key, options ?? {}) as string
     );
 
   it("rounds to half hours with a German decimal comma", () => {
